@@ -230,7 +230,8 @@ namespace Winterdom.Viasfora.Xml {
     }
 
     private SnapshotSpan? GetTagAtPoint(SnapshotPoint point) {
-      SnapshotSpan testSpan = new SnapshotSpan(point.Snapshot, new Span(point.Position - 1, 1));
+      int pos = point.Position >= 1 ? point.Position - 1 : 0;
+      SnapshotSpan testSpan = new SnapshotSpan(point.Snapshot, new Span(pos, 1));
 
       foreach ( var tagSpan in aggregator.GetTags(testSpan) ) {
         String tagName = tagSpan.Tag.ClassificationType.Classification;

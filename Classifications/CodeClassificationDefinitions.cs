@@ -21,5 +21,8 @@ namespace Winterdom.Viasfora.Classifications {
 
     [Export, Name(Constants.VISIBILITY_CLASSIF_NAME)]
     internal static ClassificationTypeDefinition VisibilityKeywordClassificationType = null;
-  }
+
+    [Export, Name(Constants.LINE_HIGHLIGHT)]
+    internal static ClassificationTypeDefinition CurrentLineClassificationType = null;
+  } 
 }

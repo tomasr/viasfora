@@ -7,6 +7,7 @@ namespace Winterdom.Viasfora {
     public const String LINQ_CLASSIF_NAME = "Operator - LINQ";
     public const String VISIBILITY_CLASSIF_NAME = "Keyword - Visibility";
     public const String STRING_ESCAPE_CLASSIF_NAME = "String Escape Sequence";
+    public const String LINE_HIGHLIGHT = "Current Line";
 
     public const string CT_XML = "XML";
     public const string CT_XAML = "XAML";
