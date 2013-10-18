@@ -5,8 +5,8 @@ using System.Text;
 
 namespace Winterdom.Viasfora.Text {
   abstract class LanguageKeywords {
-    private Dictionary<string, string[]> keywords =
-       new Dictionary<string, string[]>();
+    private Dictionary<String, String[]> keywords =
+       new Dictionary<String, String[]>();
 
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }

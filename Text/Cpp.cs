@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Text {
     protected override String[] VisibilityDefaults {
       get { return CPP_VIS_KEYWORDS; }
     }
-    protected override string KeyName {
+    protected override String KeyName {
       get { return "Cpp"; }
     }
   }

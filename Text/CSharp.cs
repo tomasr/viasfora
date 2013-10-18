@@ -27,7 +27,7 @@ namespace Winterdom.Viasfora.Text {
     protected override String[] VisibilityDefaults {
       get { return CS_VIS_KEYWORDS; }
     }
-    protected override string KeyName {
+    protected override String KeyName {
       get { return "CSharp"; }
     }
   }

@@ -6,7 +6,7 @@ using Microsoft.Win32;
 
 namespace Winterdom.Viasfora.Text {
   static class ConfigHelp {
-    private static string REG_KEY =
+    private static String REG_KEY =
        "Software\\Winterdom\\Viasfora";
     public static String GetValue(String name, String defValue) {
       using ( RegistryKey key = Registry.CurrentUser.CreateSubKey(REG_KEY) ) {

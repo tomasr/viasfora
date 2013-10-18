@@ -14,7 +14,7 @@ using Microsoft.VisualStudio.Text.Formatting;
 
 namespace Winterdom.Viasfora.Text {
   public class CurrentLineAdornment {
-    public const string CUR_LINE_TAG = "currentLine";
+    public const String CUR_LINE_TAG = "currentLine";
     private IAdornmentLayer layer;
     private IWpfTextView view;
     private IClassificationFormatMap formatMap;

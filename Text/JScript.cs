@@ -24,7 +24,7 @@ namespace Winterdom.Viasfora.Text {
     protected override String[] VisibilityDefaults {
       get { return new String[0]; }
     }
-    protected override string KeyName {
+    protected override String KeyName {
       get { return "JScript"; }
     }
   }
