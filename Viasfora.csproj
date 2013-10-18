@@ -36,11 +36,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
-    <Compile Include="Classifications\StringEscapeSequenceClassificationDefinition.cs" />
-    <Compile Include="Classifications\VisibilityKeywordClassificationDefinition.cs" />
-    <Compile Include="Classifications\FlowControlClassificationDefinition.cs" />
-    <Compile Include="Classifications\LinqKeywordClassificationDefinition.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
     <Compile Include="EditorFormats\XmlClosingTagFormat.cs" />
