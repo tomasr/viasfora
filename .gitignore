@@ -1,4 +1,5 @@
 bin/
 obj/
+refs/*.dll
 *.user
 *.suo
