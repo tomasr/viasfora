@@ -11,3 +11,5 @@ Copy-Item $basedir\Microsoft.VisualStudio.Text.Data.dll $targetdir
 Copy-Item $basedir\Microsoft.VisualStudio.Text.Logic.dll $targetdir
 Copy-Item $basedir\Microsoft.VisualStudio.Text.UI.dll $targetdir
 Copy-Item $basedir\Microsoft.VisualStudio.Text.UI.Wpf.dll $targetdir
+Copy-Item $basedir\Microsoft.VisualStudio.Language.Intellisense.dll $targetdir
+Copy-Item $basedir\Microsoft.VisualStudio.Language.StandardClassification.dll $targetdir
