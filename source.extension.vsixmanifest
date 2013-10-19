@@ -8,6 +8,8 @@
     <Locale>1033</Locale>
     <MoreInfoUrl>http://viasfora.com/</MoreInfoUrl>
     <License>license.txt</License>
+    <Icon>viasfora-icon.png</Icon>
+    <PreviewImage>viasfora-preview.png</PreviewImage>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>Ultimate</Edition>
