@@ -49,7 +49,7 @@ namespace Winterdom.Viasfora.Text {
     }
     void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
       // the user changed something in Fonts and Colors, so
-      // recreate our addornments
+      // recreate our adornments
       this.currentHighlight = null;
       CreateDrawingObjects();
     }
@@ -100,6 +100,9 @@ namespace Winterdom.Viasfora.Text {
       return view.GetTextViewLineContainingBufferPosition(pos.BufferPosition);
     }
     private void CreateVisuals(ITextViewLine line) {
+      if ( !VsfSettings.CurrentLineHighlightEnabled ) {
+        return; // not enabled
+      }
       IWpfTextViewLineCollection textViewLines = view.TextViewLines;
       if ( textViewLines == null )
         return; // not ready yet.

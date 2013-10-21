@@ -37,6 +37,7 @@ namespace Winterdom.Viasfora.Xml {
     }
 
     public IEnumerable<ITagSpan<TextMarkerTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
+      if ( !VsfSettings.XmlMatchTagsEnabled ) yield break;
       if ( spans.Count == 0 ) yield break;
       if ( !currentSpan.HasValue ) yield break;
 
