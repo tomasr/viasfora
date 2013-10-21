@@ -5,17 +5,17 @@ using System.Text;
 
 namespace Winterdom.Viasfora.Text {
   abstract class LanguageKeywords {
-    private Dictionary<String, String[]> keywords =
-       new Dictionary<String, String[]>();
-
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }
+      set { Set("ControlFlow", value); }
     }
     public String[] Linq {
       get { return Get("Linq", LinqDefaults); }
+      set { Set("Linq", value); }
     }
     public String[] Visibility {
       get { return Get("Visibility", VisibilityDefaults); }
+      set { Set("Visibility", value); }
     }
 
     protected abstract String[] ControlFlowDefaults { get; }
@@ -24,14 +24,13 @@ namespace Winterdom.Viasfora.Text {
     protected abstract String KeyName { get; }
 
     protected String[] Get(String name, String[] defaults) {
-      if ( !keywords.ContainsKey(name) ) {
-        String[] values =
-           ConfigHelp.GetValue(KeyName + "_" + name, "").AsList();
-        if ( values == null || values.Length == 0 )
-          values = defaults;
-        keywords[name] = values;
-      }
-      return keywords[name];
+      String[] values = VsfSettings.GetValue(this.KeyName + "_" + name, null).AsList();
+      if ( values == null || values.Length == 0 )
+        values = defaults;
+      return values;
+    }
+    protected void Set(String name, IEnumerable<String> values) {
+      VsfSettings.SetValue(this.KeyName + "_" + name, values.FromList());
     }
   }
 }

@@ -12,7 +12,10 @@ namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
   [InstalledProductRegistration("#110", "#111", "1.0", IconResourceID = 400)]
   [Guid(Constants.VSPackage)]
-  [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 101, 101, true)]
+  [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 101, 102, true)]
+  [ProvideOptionPage(typeof(Options.CSharpOptionsPage), "Viasfora", "CSharp", 101, 103, true)]
+  [ProvideOptionPage(typeof(Options.CppOptionsPage), "Viasfora", "C++", 101, 104, true)]
+  [ProvideOptionPage(typeof(Options.JScriptOptionsPage), "Viasfora", "JavaScript", 101, 105, true)]
   public sealed class VsfPackage : Package {
 
     public static VsfPackage Instance { get; private set; }

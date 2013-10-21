@@ -49,6 +49,10 @@ namespace Winterdom.Viasfora {
       return String.IsNullOrEmpty(val) ? defval : Convert.ToBoolean(val);
     }
 
+    public static String GetValue(String name, String defValue) {
+      String val = settings.Get(name);
+      return String.IsNullOrEmpty(val) ? defValue : val;
+    }
     public static void SetValue(String name, object value) {
       if ( value != null ) {
         settings.Set(name, Convert.ToString(value));

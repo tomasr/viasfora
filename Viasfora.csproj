@@ -53,6 +53,7 @@
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Design\StringListConverter.cs" />
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
     <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
     <Compile Include="EditorFormats\XmlClosingTagFormat.cs" />
@@ -60,6 +61,15 @@
     <Compile Include="EditorFormats\VisibilityKeywordFormat.cs" />
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
+    <Compile Include="Options\JScriptOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\CppOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\CSharpOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Options\GeneralOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -189,6 +199,7 @@
       <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
