@@ -14,7 +14,6 @@ namespace Winterdom.Viasfora.EditorFormats {
     public VisibilityKeywordFormat() {
       this.DisplayName = Constants.VISIBILITY_CLASSIF_NAME;
       this.ForegroundColor = Colors.DimGray;
-      this.IsBold = true;
     }
   }
 }
