@@ -61,6 +61,7 @@
     <Compile Include="EditorFormats\VisibilityKeywordFormat.cs" />
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
+    <Compile Include="Guids.cs" />
     <Compile Include="Options\JScriptOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>

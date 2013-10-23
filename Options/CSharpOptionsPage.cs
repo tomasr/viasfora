@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Design;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Options {
+  [Guid(Guids.CSharpOptions)]
   public class CSharpOptionsPage : DialogPage {
     private CSharp language = new CSharp();
 
