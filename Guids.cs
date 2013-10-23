@@ -11,5 +11,6 @@ namespace Winterdom.Viasfora {
     public const String CSharpOptions = "02061a1a-9108-448c-9c75-2a34c7e1ee4b";
     public const String CppOptions = "239690b1-521d-4af5-97e6-f3d41af0d215";
     public const String JScriptOptions = "7df14282-8e2c-4376-ac97-2bafae1cbb31";
+    public const String VBOptions = "73293572-9e3f-47d3-b135-3d43f1b17ec0";
   }
 }

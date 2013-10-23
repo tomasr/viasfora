@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Options {
-  [Guid(Guids.CSharpOptions)]
+  [Guid(Guids.VBOptions)]
   public class VBOptionsPage : DialogPage {
     private VB language = new VB();
 
