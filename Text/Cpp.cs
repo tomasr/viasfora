@@ -11,7 +11,7 @@ namespace Winterdom.Viasfora.Text {
          "break", "continue", "return", "goto", "throw"
       };
     static readonly String[] CPP_VIS_KEYWORDS = {
-         "public", "private", "protected", "internal"
+         "public", "private", "protected", "internal", "friend"
       };
     protected override String[] ControlFlowDefaults {
       get { return CPP_KEYWORDS; }
