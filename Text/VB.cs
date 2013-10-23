@@ -17,9 +17,8 @@ namespace Winterdom.Viasfora.Text {
       };
     static readonly String[] VB_LINQ_KEYWORDS = {
          "aggregate", "distinct", "equals", "from", "in",
-         "group by", "group join", "join", "let", "order by",
-         "select", "skip", "skip while", "take", "take while",
-         "where"
+         "group", "join", "let", "order", "by",
+         "skip", "take", "where"
       };
     protected override String[] ControlFlowDefaults {
       get { return VB_KEYWORDS; }
