@@ -78,7 +78,6 @@
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />
     <Compile Include="StringExtensions.cs" />
-    <Compile Include="Text\ConfigHelp.cs" />
     <Compile Include="Text\CurrentLineAdornment.cs" />
     <Compile Include="Text\CurrentLineAdornmentFactory.cs" />
     <Compile Include="Text\KeywordTagger.cs" />
