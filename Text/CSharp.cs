@@ -8,7 +8,8 @@ namespace Winterdom.Viasfora.Text {
     public const String ContentType = "CSharp";
     static readonly String[] CS_KEYWORDS = {
          "if", "else", "while", "do", "for", "foreach", 
-         "switch", "break", "continue", "return", "goto", "throw" 
+         "switch", "break", "continue", "return", "goto", "throw",
+         "yield"
       };
     static readonly String[] CS_LINQ_KEYWORDS = {
          "select", "let", "where", "join", "orderby", "group",
