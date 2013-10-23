@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 
 namespace Winterdom.Viasfora.Options {
+  [Guid(Guids.GeneralOptions)]
   public class GeneralOptionsPage : DialogPage {
-    public GeneralOptionsPage() {
-    }
 
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
