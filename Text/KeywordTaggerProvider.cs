@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora.Text {
   [Export(typeof(IViewTaggerProvider))]
   [ContentType(CSharp.ContentType)]
   [ContentType(Cpp.ContentType)]
+  [ContentType(VB.ContentType)]
   [ContentType(JScript.ContentType)]
   [ContentType(JScript.ContentTypeVS2012)]
   [TagType(typeof(ClassificationTag))]
