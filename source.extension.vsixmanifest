@@ -10,12 +10,12 @@
     <License>license.txt</License>
     <Icon>viasfora-icon.png</Icon>
     <PreviewImage>viasfora-preview.png</PreviewImage>
+    <InstalledByMsi>false</InstalledByMsi>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>Ultimate</Edition>
         <Edition>Premium</Edition>
         <Edition>Pro</Edition>
-        <Edition>IntegratedShell</Edition>
       </VisualStudio>
       <VisualStudio Version="11.0">
         <Edition>Ultimate</Edition>
@@ -30,8 +30,13 @@
     </SupportedProducts>
     <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="4.5" />
   </Identifier>
-  <References />
+  <References>
+    <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0">
+      <Name>Visual Studio MPF</Name>
+    </Reference>
+  </References>
   <Content>
+    <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
     <MefComponent>|%CurrentProject%|</MefComponent>
   </Content>
 </Vsix>

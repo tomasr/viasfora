@@ -87,9 +87,9 @@ namespace Winterdom.Viasfora.Xml {
           String text = cs.GetText();
           if ( text.EndsWith("</") ) {
             foundClosingTag = true;
-          } else if ( text == ":" && lastSpan.HasValue ) {
+          } else if ( text == ":" && lastSpan.HasValue && VsfSettings.XmlnsPrefixHighlightEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlPrefixClassification);
-          } else if ( text.IndexOf('>') >= 0 && foundClosingTag ) {
+          } else if ( text.IndexOf('>') >= 0 && foundClosingTag && VsfSettings.XmlCloseTagHighlightEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlCloseTagClassification);
             foundClosingTag = false;
           }
@@ -103,19 +103,24 @@ namespace Winterdom.Viasfora.Xml {
     private IEnumerable<ITagSpan<ClassificationTag>> ProcessXmlName(SnapshotSpan cs, bool isClosing) {
       String text = cs.GetText();
       int colon = text.IndexOf(':');
-      if ( colon < 0 && isClosing ) {
+      if ( colon < 0 && isClosing && VsfSettings.XmlCloseTagHighlightEnabled ) {
         yield return new TagSpan<ClassificationTag>(cs, xmlCloseTagClassification);
-      } else if ( colon > 0 ) {
+      } else if ( colon > 0 && VsfSettings.XmlnsPrefixHighlightEnabled ) {
         string prefix = text.Substring(0, colon);
         string name = text.Substring(colon + 1);
+
         yield return new TagSpan<ClassificationTag>(
           new SnapshotSpan(cs.Start, prefix.Length), xmlPrefixClassification);
         yield return new TagSpan<ClassificationTag>(new SnapshotSpan(
           cs.Start.Add(prefix.Length), 1), xmlDelimiterClassification);
-        if ( isClosing ) {
+
+        if ( isClosing && VsfSettings.XmlCloseTagHighlightEnabled ) {
           yield return new TagSpan<ClassificationTag>(new SnapshotSpan(
             cs.Start.Add(prefix.Length + 1), name.Length), xmlCloseTagClassification);
         }
+      } else if ( isClosing && VsfSettings.XmlCloseTagHighlightEnabled ) {
+        // XmlnsPrefix hl disabled, but we still want to highlight the closing tag
+        yield return new TagSpan<ClassificationTag>(cs, xmlCloseTagClassification);
       }
     }
 

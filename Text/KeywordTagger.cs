@@ -41,13 +41,15 @@ namespace Winterdom.Viasfora.Text {
       if ( spans.Count == 0 ) {
         yield break;
       }
-      foreach ( var tagSpan in LookForStringEscapeSequences(spans) ) {
-
-        yield return tagSpan;
-
+      if ( VsfSettings.EscapeSeqHighlightEnabled ) {
+        foreach ( var tagSpan in LookForStringEscapeSequences(spans) ) {
+          yield return tagSpan;
+        }
       }
-      foreach ( var tagSpan in LookForKeywords(spans) ) {
-        yield return tagSpan;
+      if ( VsfSettings.KeywordClassifierEnabled ) {
+        foreach ( var tagSpan in LookForKeywords(spans) ) {
+          yield return tagSpan;
+        }
       }
     }
 
