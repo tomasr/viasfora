@@ -68,7 +68,7 @@ namespace Winterdom.Viasfora.Text {
 
       // ... and from those, ones that match our keywords
       foreach ( var cs in classifiedSpans ) {
-        String text = cs.GetText();
+        String text = cs.GetText().ToLower();
         if ( keywords.ControlFlow.Contains(text) ) {
           yield return new TagSpan<ClassificationTag>(cs, keywordClassification);
         } else if ( keywords.Visibility.Contains(text) ) {
@@ -137,6 +137,8 @@ namespace Winterdom.Viasfora.Text {
         return new CSharp();
       } else if ( contentType.IsOfType(Cpp.ContentType) ) {
         return new Cpp();
+      } else if ( contentType.IsOfType(VB.ContentType) ) {
+        return new VB();
       } else if ( contentType.IsOfType(JScript.ContentType)
                || contentType.IsOfType(JScript.ContentTypeVS2012) ) {
         return new JScript();

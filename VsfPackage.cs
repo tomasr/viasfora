@@ -15,6 +15,7 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 101, 102, true)]
   [ProvideOptionPage(typeof(Options.CSharpOptionsPage), "Viasfora", "CSharp", 101, 103, true)]
   [ProvideOptionPage(typeof(Options.CppOptionsPage), "Viasfora", "C++", 101, 104, true)]
+  [ProvideOptionPage(typeof(Options.VBOptionsPage), "Viasfora", "Basic", 101, 106, true)]
   [ProvideOptionPage(typeof(Options.JScriptOptionsPage), "Viasfora", "JavaScript", 101, 105, true)]
   public sealed class VsfPackage : Package {
 

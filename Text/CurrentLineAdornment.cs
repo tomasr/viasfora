@@ -97,7 +97,11 @@ namespace Winterdom.Viasfora.Text {
       }
     }
     private ITextViewLine GetLineByPos(CaretPosition pos) {
-      return view.GetTextViewLineContainingBufferPosition(pos.BufferPosition);
+      SnapshotPoint point = pos.BufferPosition;
+      if ( point.Snapshot != view.TextSnapshot ) {
+        point = point.TranslateTo(view.TextSnapshot, PointTrackingMode.Positive);
+      }
+      return view.GetTextViewLineContainingBufferPosition(point);
     }
     private void CreateVisuals(ITextViewLine line) {
       if ( !VsfSettings.CurrentLineHighlightEnabled ) {
