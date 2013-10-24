@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class FlowControlFormat : ClassificationFormatDefinition {
     public FlowControlFormat() {
       this.DisplayName = Constants.KEYWORD_CLASSIF_NAME;
-      this.ForegroundColor = Colors.DarkMagenta;
+      this.ForegroundColor = Colors.OrangeRed;
       this.IsItalic = true;
     }
   }
