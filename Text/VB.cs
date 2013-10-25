@@ -7,7 +7,7 @@ namespace Winterdom.Viasfora.Text {
   class VB : LanguageKeywords {
     public const String ContentType = "Basic";
     static readonly String[] VB_KEYWORDS = {
-         "goto", "on error", "throw", "exit", "stop",
+         "goto", "resume", "throw", "exit", "stop",
          "do", "loop", "for", "next", "for each",
          "with", "choose", "if", "then", "else", "select",
          "case", "switch", "call", "return", "while"
