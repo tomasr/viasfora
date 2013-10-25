@@ -23,6 +23,7 @@ namespace Winterdom.Viasfora.Xml {
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       return new XmlTagger(
+         buffer,
          ClassificationRegistry,
          Aggregator.CreateTagAggregator<IClassificationTag>(buffer)
       ) as ITagger<T>;

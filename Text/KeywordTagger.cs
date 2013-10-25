@@ -10,7 +10,8 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
 
-  class KeywordTagger : ITagger<ClassificationTag> {
+  class KeywordTagger : ITagger<ClassificationTag>, IDisposable {
+    private ITextBuffer theBuffer;
     private ClassificationTag keywordClassification;
     private ClassificationTag linqClassification;
     private ClassificationTag visClassification;
@@ -24,8 +25,10 @@ namespace Winterdom.Viasfora.Text {
 #pragma warning restore 67
 
     internal KeywordTagger(
+          ITextBuffer buffer,
           IClassificationTypeRegistryService registry,
           ITagAggregator<IClassificationTag> aggregator) {
+      theBuffer = buffer;
       keywordClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.KEYWORD_CLASSIF_NAME));
       linqClassification =
@@ -34,6 +37,7 @@ namespace Winterdom.Viasfora.Text {
          new ClassificationTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
       stringEscapeClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
+      VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
       this.aggregator = aggregator;
     }
 
@@ -53,7 +57,19 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-
+    public void Dispose() {
+      if ( theBuffer != null ) {
+        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+        theBuffer = null;
+      }
+    }
+    void OnSettingsUpdated(object sender, EventArgs e) {
+      var tempEvent = TagsChanged;
+      if ( tempEvent != null ) {
+        tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(theBuffer.CurrentSnapshot, 0,
+            theBuffer.CurrentSnapshot.Length)));
+      }
+    }
 
     private IEnumerable<ITagSpan<ClassificationTag>> LookForKeywords(NormalizedSnapshotSpanCollection spans) {
       ITextSnapshot snapshot = spans[0].Snapshot;

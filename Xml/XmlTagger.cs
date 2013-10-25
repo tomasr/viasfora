@@ -11,7 +11,8 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Xml {
 
-  class XmlTagger : ITagger<ClassificationTag> {
+  class XmlTagger : ITagger<ClassificationTag>, IDisposable {
+    private ITextBuffer theBuffer;
     private ClassificationTag xmlCloseTagClassification;
     private ClassificationTag xmlPrefixClassification;
     private ClassificationTag xmlDelimiterClassification;
@@ -25,14 +26,17 @@ namespace Winterdom.Viasfora.Xml {
 #pragma warning restore 67
 
     internal XmlTagger(
+        ITextBuffer buffer,
         IClassificationTypeRegistryService registry,
         ITagAggregator<IClassificationTag> aggregator) {
+      theBuffer = buffer;
       xmlCloseTagClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.XML_CLOSING));
       xmlPrefixClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.XML_PREFIX));
       xmlDelimiterClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.DELIMITER));
+      VsfSettings.SettingsUpdated += OnSettingsUpdated;
       this.aggregator = aggregator;
     }
 
@@ -52,6 +56,20 @@ namespace Winterdom.Viasfora.Xml {
         }
       }
       return EmptyList;
+    }
+
+    public void Dispose() {
+      if ( theBuffer != null ) {
+        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+        theBuffer = null;
+      }
+    }
+    void OnSettingsUpdated(object sender, EventArgs e) {
+      var tempEvent = TagsChanged;
+      if ( tempEvent != null ) {
+        tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(theBuffer.CurrentSnapshot, 0,
+            theBuffer.CurrentSnapshot.Length)));
+      }
     }
 
     private IEnumerable<ITagSpan<ClassificationTag>> DoXML(NormalizedSnapshotSpanCollection spans) {

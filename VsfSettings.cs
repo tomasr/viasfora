@@ -14,6 +14,7 @@ namespace Winterdom.Viasfora {
     const String XML_MATCH_TAGS_ENABLED = "XmlMatchTagsEnabled";
 
     private static VsfSettingsStore settings = new VsfSettingsStore();
+    public static event EventHandler SettingsUpdated;
     
     public static bool KeywordClassifierEnabled {
       get { return GetBoolean(KEYWORD_CLASSIFIER_ENABLED, true); }
@@ -42,6 +43,9 @@ namespace Winterdom.Viasfora {
 
     public static void Save() {
       settings.Write();
+      if ( SettingsUpdated != null ) {
+        SettingsUpdated(VsfPackage.Instance, EventArgs.Empty);
+      }
     }
 
     private static bool GetBoolean(String name, bool defval) {

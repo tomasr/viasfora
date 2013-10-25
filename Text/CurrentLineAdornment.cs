@@ -35,12 +35,25 @@ namespace Winterdom.Viasfora.Text {
       view.ViewportWidthChanged += OnViewportWidthChanged;
       view.LayoutChanged += OnLayoutChanged;
       view.ViewportLeftChanged += OnViewportLeftChanged;
+      view.Closed += OnViewClosed;
+      VsfSettings.SettingsUpdated += OnSettingsUpdated;
       formatMap.ClassificationFormatMappingChanged +=
          OnClassificationFormatMappingChanged;
 
       CreateDrawingObjects();
     }
 
+    void OnSettingsUpdated(object sender, EventArgs e) {
+      RedrawAdornments();
+    }
+    void OnViewClosed(object sender, EventArgs e) {
+      view.Caret.PositionChanged -= OnCaretPositionChanged;
+      view.ViewportWidthChanged -= OnViewportWidthChanged;
+      view.LayoutChanged -= OnLayoutChanged;
+      view.ViewportLeftChanged -= OnViewportLeftChanged;
+      view.Closed -= OnViewClosed;
+      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+    }
     void OnViewportLeftChanged(object sender, EventArgs e) {
       RedrawAdornments();
     }

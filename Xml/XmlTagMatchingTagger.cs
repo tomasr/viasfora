@@ -15,7 +15,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Xml {
 
-  public class XmlTagMatchingTagger : ITagger<TextMarkerTag> {
+  public class XmlTagMatchingTagger : ITagger<TextMarkerTag>, IDisposable {
     private ITextView theView;
     private ITextBuffer theBuffer;
     private SnapshotSpan? currentSpan;
@@ -34,6 +34,7 @@ namespace Winterdom.Viasfora.Xml {
 
       this.theView.Caret.PositionChanged += CaretPositionChanged;
       this.theView.LayoutChanged += ViewLayoutChanged;
+      VsfSettings.SettingsUpdated += OnSettingsUpdated;
     }
 
     public IEnumerable<ITagSpan<TextMarkerTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
@@ -206,6 +207,19 @@ namespace Winterdom.Viasfora.Xml {
       return new SnapshotSpan(snapshot, start, end - start);
     }
 
+    public void Dispose() {
+      if ( theBuffer != null ) {
+        this.theView.Caret.PositionChanged -= CaretPositionChanged;
+        this.theView.LayoutChanged -= ViewLayoutChanged;
+        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+        theBuffer = null;
+      }
+    }
+
+    void OnSettingsUpdated(object sender, EventArgs e) {
+      UpdateAtCaretPosition(theView.Caret.Position);
+    }
+
     private void ViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       if ( e.NewSnapshot != e.OldSnapshot ) {
         UpdateAtCaretPosition(theView.Caret.Position);
@@ -225,9 +239,10 @@ namespace Winterdom.Viasfora.Xml {
       this.currentSpan = GetTagAtPoint(point.Value);
 
       var tempEvent = TagsChanged;
-      if ( tempEvent != null )
+      if ( tempEvent != null ) {
         tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(theBuffer.CurrentSnapshot, 0,
             theBuffer.CurrentSnapshot.Length)));
+      }
     }
 
     private SnapshotSpan? GetTagAtPoint(SnapshotPoint point) {
