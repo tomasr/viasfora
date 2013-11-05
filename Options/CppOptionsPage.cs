@@ -27,14 +27,14 @@ namespace Winterdom.Viasfora.Options {
 
     [LocDisplayName("Control Flow")]
     [Description("Control Flow keywords to highlight")]
-    [Category("CSharp")]
+    [Category("C/C++")]
     [Editor(Constants.STRING_COLLECTION_EDITOR, typeof(UITypeEditor))]
     [TypeConverter(typeof(Design.StringListConverter))]
     public List<String> ControlFlowKeywords { get; set; }
 
     [LocDisplayName("Visibility")]
     [Description("Visibility keywords to highlight")]
-    [Category("CSharp")]
+    [Category("C/C++")]
     [Editor(Constants.STRING_COLLECTION_EDITOR, typeof(UITypeEditor))]
     [TypeConverter(typeof(Design.StringListConverter))]
     public List<String> VisibilityKeywords { get; set; }
