@@ -53,8 +53,6 @@ namespace Winterdom.Viasfora.Xml {
       // avoid processing statements or xml declarations
       if ( text.Contains('?') ) yield break;
 
-      yield return new TagSpan<TextMarkerTag>(currentTag, new TextMarkerTag("bracehighlight"));
-
       SnapshotSpan? complementTag = null;
       if ( text.StartsWith("</") ) {
         complementTag = FindOpeningTag(current.Snapshot, currentTag.End, current.GetText());
@@ -67,6 +65,7 @@ namespace Winterdom.Viasfora.Xml {
         complementTag = FindClosingTag(current.Snapshot, currentTag.Start, searchFor);
       }
 
+      yield return new TagSpan<TextMarkerTag>(currentTag, new TextMarkerTag("bracehighlight"));
       if ( complementTag.HasValue ) {
         yield return new TagSpan<TextMarkerTag>(complementTag.Value, new TextMarkerTag("bracehighlight"));
       }
