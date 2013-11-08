@@ -65,9 +65,16 @@ namespace Winterdom.Viasfora.Xml {
         complementTag = FindClosingTag(current.Snapshot, currentTag.Start, searchFor);
       }
 
-      yield return new TagSpan<TextMarkerTag>(currentTag, new TextMarkerTag("bracehighlight"));
+      var defaultTag = new TextMarkerTag("bracehighlight");
+      var alternateTag = new TextMarkerTag("other error");
+
       if ( complementTag.HasValue ) {
-        yield return new TagSpan<TextMarkerTag>(complementTag.Value, new TextMarkerTag("bracehighlight"));
+        yield return new TagSpan<TextMarkerTag>(currentTag, defaultTag);
+        yield return new TagSpan<TextMarkerTag>(complementTag.Value, defaultTag);
+      } else {
+        // no matching tag found, or element has no content
+        yield return new TagSpan<TextMarkerTag>(currentTag, 
+          currentTag.GetText().EndsWith("/>") ? defaultTag : alternateTag);
       }
     }
 
