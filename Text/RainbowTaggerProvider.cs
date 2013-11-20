@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.Text {
 
   [Export(typeof(IViewTaggerProvider))]
   [ContentType("Text")]
-  [TagType(typeof(TextMarkerTag))]
+  [TagType(typeof(ClassificationTag))]
   public class RainbowTaggerProvider : IViewTaggerProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
@@ -20,7 +20,7 @@ namespace Winterdom.Viasfora.Text {
     internal IBufferTagAggregatorFactoryService Aggregator = null;
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
-      return new RainbowTagger(buffer, textView) as ITagger<T>;
+      return new RainbowTagger(buffer, textView, ClassificationRegistry) as ITagger<T>;
     }
   }
 

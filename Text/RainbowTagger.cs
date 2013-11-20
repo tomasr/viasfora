@@ -10,10 +10,10 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowTagger : ITagger<TextMarkerTag>, IDisposable {
+  class RainbowTagger : ITagger<ClassificationTag>, IDisposable {
     private ITextBuffer theBuffer;
     private ITextView theView;
-    private TextMarkerTag[] rainbowTags;
+    private ClassificationTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const int MAX_DEPTH = 4;
     private String braceChars = "(){}[]";
@@ -22,12 +22,13 @@ namespace Winterdom.Viasfora.Text {
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 #pragma warning restore 67
 
-    internal RainbowTagger(ITextBuffer buffer, ITextView textView) {
+    internal RainbowTagger(ITextBuffer buffer, ITextView textView, IClassificationTypeRegistryService registry) {
       this.theView = textView;
       theBuffer = buffer;
-      rainbowTags = new TextMarkerTag[MAX_DEPTH];
+      rainbowTags = new ClassificationTag[MAX_DEPTH];
       for ( int i = 0; i < MAX_DEPTH; i++ ) {
-        rainbowTags[i] = new TextMarkerTag(Constants.RAINBOW + (i + 1));
+        rainbowTags[i] = new ClassificationTag(
+          registry.GetClassificationType(Constants.RAINBOW + (i + 1)));
       }
       for ( int i = 0; i < braceChars.Length; i += 2 ) {
         braceList.Add(braceChars[i], braceChars[i + 1]);
@@ -38,7 +39,7 @@ namespace Winterdom.Viasfora.Text {
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
     }
 
-    public IEnumerable<ITagSpan<TextMarkerTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
+    public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
       //if ( !VsfSettings.XmlMatchTagsEnabled ) yield break;
       if ( spans.Count == 0 ) {
         yield break;
@@ -59,7 +60,7 @@ namespace Winterdom.Viasfora.Text {
       public int Open { get; set; }
       public int Close { get; set; }
     }
-    private IEnumerable<ITagSpan<TextMarkerTag>> LookForMatchingPairs(SnapshotPoint startPoint) {
+    private IEnumerable<ITagSpan<ClassificationTag>> LookForMatchingPairs(SnapshotPoint startPoint) {
       Stack<Pair> pairs = new Stack<Pair>();
       ITextSnapshot snapshot = startPoint.Snapshot;
       int startLine = snapshot.GetLineNumberFromPosition(startPoint.Position);
@@ -81,10 +82,10 @@ namespace Winterdom.Viasfora.Text {
       foreach ( var p in pairs ) {
         var tag = this.rainbowTags[index % MAX_DEPTH];
         var span = new SnapshotSpan(snapshot, p.Open, 1);
-        yield return new TagSpan<TextMarkerTag>(span, tag);
+        yield return new TagSpan<ClassificationTag>(span, tag);
         if ( p.Close >= 0 ) {
           span = new SnapshotSpan(snapshot, p.Close, 1);
-          yield return new TagSpan<TextMarkerTag>(span, tag);
+          yield return new TagSpan<ClassificationTag>(span, tag);
         }
         index++;
       }
