@@ -24,5 +24,18 @@ namespace Winterdom.Viasfora.Classifications {
 
     [Export, Name(Constants.LINE_HIGHLIGHT)]
     internal static ClassificationTypeDefinition CurrentLineClassificationType = null;
+
+    [Export, Name(Constants.RAINBOW_1)]
+    internal static ClassificationTypeDefinition Rainbow1ClassificationType = null;
+
+    [Export, Name(Constants.RAINBOW_2)]
+    internal static ClassificationTypeDefinition Rainbow2ClassificationType = null;
+
+    [Export, Name(Constants.RAINBOW_3)]
+    internal static ClassificationTypeDefinition Rainbow3ClassificationType = null;
+
+    [Export, Name(Constants.RAINBOW_4)]
+    internal static ClassificationTypeDefinition Rainbow4ClassificationType = null;
+
   } 
 }
