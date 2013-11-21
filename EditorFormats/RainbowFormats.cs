@@ -27,7 +27,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow2Format : ClassificationFormatDefinition {
     public Rainbow2Format() {
       this.DisplayName = Constants.RAINBOW_2;
-      this.ForegroundColor = Colors.DarkOrchid;
+      this.ForegroundColor = Colors.MediumOrchid;
     }
   }
   [Export(typeof(EditorFormatDefinition))]
@@ -38,7 +38,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow3Format : ClassificationFormatDefinition {
     public Rainbow3Format() {
       this.DisplayName = Constants.RAINBOW_3;
-      this.ForegroundColor = Colors.SeaGreen;
+      this.ForegroundColor = Colors.LimeGreen;
     }
   }
   [Export(typeof(EditorFormatDefinition))]
