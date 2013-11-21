@@ -20,7 +20,11 @@ namespace Winterdom.Viasfora.Text {
     internal IBufferTagAggregatorFactoryService Aggregator = null;
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
-      return new RainbowTagger(buffer, textView, ClassificationRegistry) as ITagger<T>;
+      return new RainbowTagger(
+        buffer, textView, 
+        ClassificationRegistry,
+        Aggregator.CreateTagAggregator<IClassificationTag>(buffer)
+        ) as ITagger<T>;
     }
   }
 

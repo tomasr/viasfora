@@ -13,18 +13,24 @@ namespace Winterdom.Viasfora.Text {
   class RainbowTagger : ITagger<ClassificationTag>, IDisposable {
     private ITextBuffer theBuffer;
     private ITextView theView;
+    private ITagAggregator<IClassificationTag> aggregator;
     private ClassificationTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
+    private HashSet<String> tagsToIgnore = new HashSet<String>();
+    private const String braceChars = "(){}[]";
     private const int MAX_DEPTH = 4;
-    private String braceChars = "(){}[]";
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 #pragma warning restore 67
 
-    internal RainbowTagger(ITextBuffer buffer, ITextView textView, IClassificationTypeRegistryService registry) {
+    internal RainbowTagger(
+          ITextBuffer buffer, ITextView textView,
+          IClassificationTypeRegistryService registry,
+          ITagAggregator<IClassificationTag> aggregator) {
       this.theView = textView;
-      theBuffer = buffer;
+      this.theBuffer = buffer;
+      this.aggregator = aggregator;
       rainbowTags = new ClassificationTag[MAX_DEPTH];
       for ( int i = 0; i < MAX_DEPTH; i++ ) {
         rainbowTags[i] = new ClassificationTag(
@@ -34,9 +40,21 @@ namespace Winterdom.Viasfora.Text {
         braceList.Add(braceChars[i], braceChars[i + 1]);
       }
 
+      tagsToIgnore.Add("comment");
+      tagsToIgnore.Add("string");
+      //tagsToIgnore.Add("keyword");
+      //tagsToIgnore.Add("identifier");
+
       this.theBuffer.Changed += BufferChanged;
       this.theView.LayoutChanged += ViewLayoutChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
+    }
+
+    public void Dispose() {
+      if ( theBuffer != null ) {
+        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+        theBuffer = null;
+      }
     }
 
     public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
@@ -60,9 +78,12 @@ namespace Winterdom.Viasfora.Text {
       public int Open { get; set; }
       public int Close { get; set; }
     }
+
     private IEnumerable<ITagSpan<ClassificationTag>> LookForMatchingPairs(SnapshotPoint startPoint) {
       Stack<Pair> pairs = new Stack<Pair>();
       ITextSnapshot snapshot = startPoint.Snapshot;
+
+      var toIgnore = FindTagSpansToIgnore(startPoint).ToList();
       int startLine = snapshot.GetLineNumberFromPosition(startPoint.Position);
 
       for ( int lineNr = startLine; lineNr < snapshot.LineCount; lineNr++ ) {
@@ -70,6 +91,9 @@ namespace Winterdom.Viasfora.Text {
         String text = line.GetText();
         for ( int i = 0; i < line.Length; i++ ) {
           char ch = text[i];
+          if ( ShouldIgnore(line.Start + i, toIgnore) ) {
+            continue;
+          }
           if ( IsOpeningBrace(ch) ) {
             pairs.Push(new Pair { Brace = ch, Open = line.Start + i, Close = -1 });
           } else if ( IsClosingBrace(ch) ) {
@@ -91,6 +115,15 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
+    private bool ShouldIgnore(int position, List<SnapshotSpan> toIgnore) {
+      foreach ( var span in toIgnore ) {
+        if ( span.Contains(position) ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     private void MatchBrace(Stack<Pair> pairs, char ch, int pos) {
       foreach ( var p in pairs ) {
         if ( p.Close < 0 && braceList[p.Brace] == ch ) {
@@ -108,12 +141,21 @@ namespace Winterdom.Viasfora.Text {
       return braceList.ContainsKey(ch);
     }
 
-    public void Dispose() {
-      if ( theBuffer != null ) {
-        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-        theBuffer = null;
-      }
+    private IEnumerable<SnapshotSpan> FindTagSpansToIgnore(SnapshotPoint startPoint) {
+      ITextSnapshot snapshot = startPoint.Snapshot;
+      SnapshotSpan totalSpan = new SnapshotSpan(startPoint, snapshot.Length - startPoint.Position);
+
+      var query = from mappingTagSpan in aggregator.GetTags(totalSpan)
+                  let name = mappingTagSpan.Tag.ClassificationType.Classification.ToLower()
+                  where tagsToIgnore.Contains(name)
+                  select mappingTagSpan.Span;
+      var classifiedSpans = from mappedSpan in query
+                            let cs = mappedSpan.GetSpans(snapshot)
+                            where cs.Count > 0
+                            select cs[0];
+      return classifiedSpans;
     }
+
     void OnSettingsUpdated(object sender, EventArgs e) {
       UpdateTags();
     }
