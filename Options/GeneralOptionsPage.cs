@@ -15,6 +15,7 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
       VsfSettings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
+      VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
       VsfSettings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
       VsfSettings.XmlCloseTagHighlightEnabled = XmlCloseTagHighlightEnabled;
       VsfSettings.XmlMatchTagsEnabled = XmlMatchTagsEnabled;
@@ -25,6 +26,7 @@ namespace Winterdom.Viasfora.Options {
       CurrentLineHighlightEnabled = VsfSettings.CurrentLineHighlightEnabled;
       KeywordClassifierEnabled = VsfSettings.KeywordClassifierEnabled;
       EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
+      RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
       XmlnsPrefixHighlightEnabled = VsfSettings.XmlnsPrefixHighlightEnabled;
       XmlCloseTagHighlightEnabled = VsfSettings.XmlCloseTagHighlightEnabled;
       XmlMatchTagsEnabled = VsfSettings.XmlMatchTagsEnabled;
@@ -46,6 +48,10 @@ namespace Winterdom.Viasfora.Options {
     [Category("Text Editor")]
     public bool CurrentLineHighlightEnabled { get; set; }
 
+    [LocDisplayName("Enable Rainbow Braces")]
+    [Description("Highlight matching braces using colors based on nesting")]
+    [Category("Text Editor")]
+    public bool RainbowTagsEnabled { get; set; }
 
     // XML Editor Extensions
     [LocDisplayName("Highlight XML Namespace Prefix")]

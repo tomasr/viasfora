@@ -58,7 +58,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      //if ( !VsfSettings.XmlMatchTagsEnabled ) yield break;
+      if ( !VsfSettings.RainbowTagsEnabled ) yield break;
       if ( spans.Count == 0 ) {
         yield break;
       }

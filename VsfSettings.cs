@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora {
     const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
     const String XML_MATCH_TAGS_ENABLED = "XmlMatchTagsEnabled";
+    const String RAINBOW_TAGS_ENABLED = "RainbowTagsEnabled";
 
     private static VsfSettingsStore settings = new VsfSettingsStore();
     public static event EventHandler SettingsUpdated;
@@ -39,6 +40,10 @@ namespace Winterdom.Viasfora {
     public static bool CurrentLineHighlightEnabled {
       get { return GetBoolean(CURRENT_LINE_ENABLED, false); }
       set { SetValue(CURRENT_LINE_ENABLED, value); }
+    }
+    public static bool RainbowTagsEnabled {
+      get { return GetBoolean(RAINBOW_TAGS_ENABLED, true); }
+      set { SetValue(RAINBOW_TAGS_ENABLED, value); }
     }
 
     public static void Save() {
