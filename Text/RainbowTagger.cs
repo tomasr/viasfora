@@ -75,6 +75,7 @@ namespace Winterdom.Viasfora.Text {
 
     class Pair {
       public char Brace { get; set; }
+      public int Depth { get; set; }
       public int Open { get; set; }
       public int Close { get; set; }
     }
@@ -86,6 +87,7 @@ namespace Winterdom.Viasfora.Text {
       var toIgnore = FindTagSpansToIgnore(startPoint).ToList();
       int startLine = snapshot.GetLineNumberFromPosition(startPoint.Position);
 
+      int depth = 0;
       for ( int lineNr = startLine; lineNr < snapshot.LineCount; lineNr++ ) {
         ITextSnapshotLine line = snapshot.GetLineFromLineNumber(lineNr);
         String text = line.GetText();
@@ -95,23 +97,26 @@ namespace Winterdom.Viasfora.Text {
             continue;
           }
           if ( IsOpeningBrace(ch) ) {
-            pairs.Push(new Pair { Brace = ch, Open = line.Start + i, Close = -1 });
+            pairs.Push(new Pair {
+              Brace = ch, Depth = depth,
+              Open = line.Start + i, Close = -1
+            });
+            depth++;
           } else if ( IsClosingBrace(ch) ) {
-            MatchBrace(pairs, ch, line.Start + i);
+            if ( MatchBrace(pairs, ch, line.Start + i) )
+              depth--;
           }
         }
       }
 
-      int index = 0;
       foreach ( var p in pairs ) {
-        var tag = this.rainbowTags[index % MAX_DEPTH];
+        var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
         var span = new SnapshotSpan(snapshot, p.Open, 1);
         yield return new TagSpan<ClassificationTag>(span, tag);
         if ( p.Close >= 0 ) {
           span = new SnapshotSpan(snapshot, p.Close, 1);
           yield return new TagSpan<ClassificationTag>(span, tag);
         }
-        index++;
       }
     }
 
@@ -124,13 +129,14 @@ namespace Winterdom.Viasfora.Text {
       return false;
     }
 
-    private void MatchBrace(Stack<Pair> pairs, char ch, int pos) {
+    private bool MatchBrace(Stack<Pair> pairs, char ch, int pos) {
       foreach ( var p in pairs ) {
         if ( p.Close < 0 && braceList[p.Brace] == ch ) {
           p.Close = pos;
-          break;
+          return true;
         }
       }
+      return false;
     }
 
     private bool IsClosingBrace(char ch) {
