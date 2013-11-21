@@ -66,7 +66,9 @@ namespace Winterdom.Viasfora.Text {
       if ( !IsSupported(snapshot.ContentType) ) {
         yield break;
       }
-      foreach ( var tagSpan in LookForMatchingPairs(new SnapshotPoint(snapshot, 0)) ) {
+      SnapshotPoint startPoint = new SnapshotPoint(snapshot, 0);
+      //SnapshotPoint startPoint = new SnapshotPoint(snapshot, spans[0].Start);
+      foreach ( var tagSpan in LookForMatchingPairs(startPoint) ) {
         yield return tagSpan;
       }
     }
@@ -82,6 +84,21 @@ namespace Winterdom.Viasfora.Text {
       Stack<Pair> pairs = new Stack<Pair>();
       ITextSnapshot snapshot = startPoint.Snapshot;
 
+      FindBracePairs(startPoint, pairs);
+
+      foreach ( var p in pairs ) {
+        var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
+        var span = new SnapshotSpan(snapshot, p.Open, 1);
+        yield return new TagSpan<ClassificationTag>(span, tag);
+        if ( p.Close >= 0 ) {
+          span = new SnapshotSpan(snapshot, p.Close, 1);
+          yield return new TagSpan<ClassificationTag>(span, tag);
+        }
+      }
+    }
+
+    private void FindBracePairs(SnapshotPoint startPoint, Stack<Pair> pairs)  {
+      ITextSnapshot snapshot = startPoint.Snapshot;
       var toIgnore = FindTagSpansToIgnore(startPoint).ToList();
       int startLine = snapshot.GetLineNumberFromPosition(startPoint.Position);
 
@@ -104,16 +121,6 @@ namespace Winterdom.Viasfora.Text {
             if ( MatchBrace(pairs, ch, line.Start + i) )
               depth--;
           }
-        }
-      }
-
-      foreach ( var p in pairs ) {
-        var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
-        var span = new SnapshotSpan(snapshot, p.Open, 1);
-        yield return new TagSpan<ClassificationTag>(span, tag);
-        if ( p.Close >= 0 ) {
-          span = new SnapshotSpan(snapshot, p.Close, 1);
-          yield return new TagSpan<ClassificationTag>(span, tag);
         }
       }
     }
@@ -161,23 +168,23 @@ namespace Winterdom.Viasfora.Text {
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
-      UpdateTags();
+      UpdateTags(theBuffer.CurrentSnapshot, 0);
     }
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
-      UpdateTags();
+      UpdateTags(e.After, e.Changes[0].NewSpan.Start);
     }
     private void ViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       if ( e.NewSnapshot != e.OldSnapshot ) {
-        UpdateTags();
+        UpdateTags(e.NewSnapshot, 0);
       }
     }
 
-    private void UpdateTags() {
+    private void UpdateTags(ITextSnapshot snapshot, int startPosition) {
       var tempEvent = TagsChanged;
       if ( tempEvent != null ) {
-        tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(theBuffer.CurrentSnapshot, 0,
-            theBuffer.CurrentSnapshot.Length)));
+        tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(snapshot, startPosition,
+            snapshot.Length - startPosition)));
       }
     }
 
