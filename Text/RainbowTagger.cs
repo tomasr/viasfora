@@ -66,10 +66,8 @@ namespace Winterdom.Viasfora.Text {
       if ( !IsSupported(snapshot.ContentType) ) {
         yield break;
       }
-      if ( true /*VsfSettings.EscapeSeqHighlightEnabled*/ ) {
-        foreach ( var tagSpan in LookForMatchingPairs(new SnapshotPoint(snapshot, 0)) ) {
-          yield return tagSpan;
-        }
+      foreach ( var tagSpan in LookForMatchingPairs(new SnapshotPoint(snapshot, 0)) ) {
+        yield return tagSpan;
       }
     }
 
