@@ -11,6 +11,7 @@ namespace Winterdom.Viasfora.Text {
     private ITextSnapshotLine currentLine;
     private int pos;
     private int status;
+    private char quoteChar;
     private const int ST_NORMAL = 0x00;
     private const int ST_COMMENT = 0x01;
     private const int ST_STRING = 0x02;
@@ -54,9 +55,11 @@ namespace Winterdom.Viasfora.Text {
             } else if ( pos > 0 && text[pos - 1] == '/' && text[pos] == '*' ) {
               // multiline comment
               this.status = ST_COMMENT | ST_MULTILINE;
-            } else if ( text[pos] == '"' ) {
+            } else if ( IsQuote(text[pos]) ) {
+              this.quoteChar = text[pos];
               this.status = ST_STRING;
-            } else if ( pos > 0 && text[pos - 1] == '@' && text[pos] == '"' ) {
+            } else if ( pos > 0 && text[pos - 1] == '@' && IsQuote(text[pos])) {
+              this.quoteChar = text[pos];
               this.status = ST_STRING | ST_MULTILINE;
             } 
             break;
@@ -67,7 +70,7 @@ namespace Winterdom.Viasfora.Text {
             break;
           case ST_STRING:
           case ST_STRING | ST_MULTILINE:
-            if ( text[pos] == '"' ) {
+            if ( text[pos] == quoteChar ) {
               if ( !(pos > 0 && text[pos-1] == '\\') ) {
                 this.status = ST_NORMAL;
               }
@@ -78,6 +81,9 @@ namespace Winterdom.Viasfora.Text {
       return null;
     }
 
+    private bool IsQuote(char ch) {
+      return ch == '"' || ch == '\'';
+    }
     private bool IsBrace(char ch) {
       return this.braceChars.IndexOf(ch) >= 0;
     }
