@@ -22,8 +22,7 @@ namespace Winterdom.Viasfora.Text {
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       return new RainbowTagger(
         buffer, textView, 
-        ClassificationRegistry,
-        Aggregator.CreateTagAggregator<IClassificationTag>(buffer)
+        ClassificationRegistry
         ) as ITagger<T>;
     }
   }

@@ -13,11 +13,9 @@ namespace Winterdom.Viasfora.Text {
   class RainbowTagger : ITagger<ClassificationTag>, IDisposable {
     private ITextBuffer theBuffer;
     private ITextView theView;
-    private ITagAggregator<IClassificationTag> aggregator;
     private ClassificationTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
-    private HashSet<String> tagsToIgnore = new HashSet<String>();
-    private const String braceChars = "(){}[]";
+    private const String BRACE_CHARS = "(){}[]";
     private const int MAX_DEPTH = 4;
 
 #pragma warning disable 67
@@ -26,24 +24,17 @@ namespace Winterdom.Viasfora.Text {
 
     internal RainbowTagger(
           ITextBuffer buffer, ITextView textView,
-          IClassificationTypeRegistryService registry,
-          ITagAggregator<IClassificationTag> aggregator) {
+          IClassificationTypeRegistryService registry) {
       this.theView = textView;
       this.theBuffer = buffer;
-      this.aggregator = aggregator;
       rainbowTags = new ClassificationTag[MAX_DEPTH];
       for ( int i = 0; i < MAX_DEPTH; i++ ) {
         rainbowTags[i] = new ClassificationTag(
           registry.GetClassificationType(Constants.RAINBOW + (i + 1)));
       }
-      for ( int i = 0; i < braceChars.Length; i += 2 ) {
-        braceList.Add(braceChars[i], braceChars[i + 1]);
+      for ( int i = 0; i < BRACE_CHARS.Length; i += 2 ) {
+        braceList.Add(BRACE_CHARS[i], BRACE_CHARS[i + 1]);
       }
-
-      tagsToIgnore.Add("comment");
-      tagsToIgnore.Add("string");
-      //tagsToIgnore.Add("keyword");
-      //tagsToIgnore.Add("identifier");
 
       this.theBuffer.Changed += BufferChanged;
       this.theView.LayoutChanged += ViewLayoutChanged;
@@ -99,39 +90,27 @@ namespace Winterdom.Viasfora.Text {
 
     private void FindBracePairs(SnapshotPoint startPoint, Stack<Pair> pairs)  {
       ITextSnapshot snapshot = startPoint.Snapshot;
-      var toIgnore = FindTagSpansToIgnore(startPoint).ToList();
-      int startLine = snapshot.GetLineNumberFromPosition(startPoint.Position);
 
       int depth = 0;
-      for ( int lineNr = startLine; lineNr < snapshot.LineCount; lineNr++ ) {
-        ITextSnapshotLine line = snapshot.GetLineFromLineNumber(lineNr);
-        String text = line.GetText();
-        for ( int i = 0; i < line.Length; i++ ) {
-          char ch = text[i];
-          if ( ShouldIgnore(line.Start + i, toIgnore) ) {
-            continue;
-          }
+      BraceExtractor extractor =  new BraceExtractor(startPoint, BRACE_CHARS);
+      while ( true ) {
+        SnapshotPoint? pt = extractor.NextBrace();
+        if ( pt.HasValue ) {
+          char ch = pt.Value.GetChar();
           if ( IsOpeningBrace(ch) ) {
             pairs.Push(new Pair {
               Brace = ch, Depth = depth,
-              Open = line.Start + i, Close = -1
+              Open = pt.Value.Position, Close = -1
             });
             depth++;
           } else if ( IsClosingBrace(ch) ) {
-            if ( MatchBrace(pairs, ch, line.Start + i) )
+            if ( MatchBrace(pairs, ch, pt.Value.Position) )
               depth--;
           }
+        } else {
+          break;
         }
       }
-    }
-
-    private bool ShouldIgnore(int position, List<SnapshotSpan> toIgnore) {
-      foreach ( var span in toIgnore ) {
-        if ( span.Contains(position) ) {
-          return true;
-        }
-      }
-      return false;
     }
 
     private bool MatchBrace(Stack<Pair> pairs, char ch, int pos) {
@@ -150,21 +129,6 @@ namespace Winterdom.Viasfora.Text {
 
     private bool IsOpeningBrace(char ch) {
       return braceList.ContainsKey(ch);
-    }
-
-    private IEnumerable<SnapshotSpan> FindTagSpansToIgnore(SnapshotPoint startPoint) {
-      ITextSnapshot snapshot = startPoint.Snapshot;
-      SnapshotSpan totalSpan = new SnapshotSpan(startPoint, snapshot.Length - startPoint.Position);
-
-      var query = from mappingTagSpan in aggregator.GetTags(totalSpan)
-                  let name = mappingTagSpan.Tag.ClassificationType.Classification.ToLower()
-                  where tagsToIgnore.Contains(name)
-                  select mappingTagSpan.Span;
-      var classifiedSpans = from mappedSpan in query
-                            let cs = mappedSpan.GetSpans(snapshot)
-                            where cs.Count > 0
-                            select cs[0];
-      return classifiedSpans;
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
@@ -196,4 +160,82 @@ namespace Winterdom.Viasfora.Text {
     }
   }
 
+  class BraceExtractor {
+    private ITextSnapshot snapshot;
+    private String braceChars;
+    private ITextSnapshotLine currentLine;
+    private int pos;
+    private int status;
+    private const int ST_NORMAL = 0x00;
+    private const int ST_COMMENT = 0x01;
+    private const int ST_STRING = 0x02;
+    private const int ST_MULTILINE = 0x80;
+
+    public BraceExtractor(SnapshotPoint startPoint, String braceChars) {
+      this.snapshot = startPoint.Snapshot;
+      this.currentLine = this.snapshot.GetLineFromPosition(startPoint.Position);
+      this.braceChars = braceChars;
+      this.pos = 0;
+      this.status = ST_NORMAL;
+    }
+
+    public SnapshotPoint? NextBrace() {
+      while ( currentLine != null ) {
+        SnapshotPoint? pt = this.NextBraceInLine();
+        if ( pt != null ) {
+          return pt;
+        }
+        if ( currentLine.LineNumber < snapshot.LineCount - 1 ) {
+          currentLine = this.snapshot.GetLineFromLineNumber(currentLine.LineNumber+1);
+          pos = 0;
+        } else {
+          currentLine = null;
+        }
+      }
+      return null;
+    }
+
+    private SnapshotPoint? NextBraceInLine() {
+      String text = currentLine.GetText();
+      for ( ; pos < currentLine.Length; pos++ ) {
+        switch ( this.status ) {
+          case ST_NORMAL:
+            if ( IsBrace(text[pos]) ) {
+              return new SnapshotPoint(this.snapshot, currentLine.Start + pos++);
+            }
+            if ( pos > 0 && text[pos - 1] == '/' && text[pos] == '/' ) {
+              // single line comment, ignore the rest
+              pos = currentLine.Length;
+            } else if ( pos > 0 && text[pos - 1] == '/' && text[pos] == '*' ) {
+              // multiline comment
+              this.status = ST_COMMENT | ST_MULTILINE;
+            } else if ( text[pos] == '"' ) {
+              this.status = ST_STRING;
+            } else if ( pos > 0 && text[pos - 1] == '@' && text[pos] == '"' ) {
+              this.status = ST_STRING | ST_MULTILINE;
+            } 
+            break;
+          case ST_COMMENT | ST_MULTILINE:
+            if ( pos > 0 && text[pos - 1] == '*' && text[pos] == '/' ) {
+              this.status = ST_NORMAL;
+            }
+            break;
+          case ST_STRING:
+          case ST_STRING | ST_MULTILINE:
+            if ( text[pos] == '"' ) {
+              if ( !(pos > 0 && text[pos-1] == '\\') ) {
+                this.status = ST_NORMAL;
+              }
+            }
+            break;
+        }
+      }
+      return null;
+    }
+
+    private bool IsBrace(char ch) {
+      return this.braceChars.IndexOf(ch) >= 0;
+    }
+
+  }
 }
