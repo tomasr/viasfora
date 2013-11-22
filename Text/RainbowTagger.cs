@@ -36,15 +36,18 @@ namespace Winterdom.Viasfora.Text {
         braceList.Add(BRACE_CHARS[i], BRACE_CHARS[i + 1]);
       }
 
-      this.theBuffer.Changed += BufferChanged;
-      this.theView.LayoutChanged += ViewLayoutChanged;
+      this.theBuffer.Changed += this.BufferChanged;
+      this.theView.LayoutChanged += this.ViewLayoutChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
     }
 
     public void Dispose() {
       if ( theBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+        theView.LayoutChanged -= ViewLayoutChanged;
+        theBuffer.Changed -= this.BufferChanged;
         theBuffer = null;
+        theView = null;
       }
     }
 
@@ -136,7 +139,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
-      UpdateTags(e.After, e.Changes[0].NewSpan.Start);
+      //UpdateTags(e.After, e.Changes[0].NewSpan.Start);
     }
     private void ViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       if ( e.NewSnapshot != e.OldSnapshot ) {
