@@ -17,6 +17,7 @@ namespace Winterdom.Viasfora.Text {
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const String BRACE_CHARS = "(){}[]";
     private const int MAX_DEPTH = 4;
+    private List<ITagSpan<ClassificationTag>> braceTags = new List<ITagSpan<ClassificationTag>>();
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
@@ -39,6 +40,8 @@ namespace Winterdom.Viasfora.Text {
       this.theBuffer.Changed += this.BufferChanged;
       this.theView.LayoutChanged += this.ViewLayoutChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
+
+      UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
     }
 
     public void Dispose() {
@@ -61,11 +64,29 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       SnapshotPoint startPoint = new SnapshotPoint(snapshot, 0);
+      foreach ( var tagSpan in braceTags ) {
+        if ( tagSpan.Span.Snapshot != snapshot ) {
+          yield return new TagSpan<ClassificationTag>(
+            tagSpan.Span.TranslateTo(snapshot, SpanTrackingMode.EdgeExclusive),
+            tagSpan.Tag);
+        } else {
+          yield return tagSpan;
+        }
+      }
+    }
+
+
+    private void UpdateBraceList(SnapshotPoint startPoint) {
+      braceTags.Clear();
+      ITextSnapshot snapshot = startPoint.Snapshot;
+      if ( !IsSupported(snapshot.ContentType) ) {
+        return;
+      }
       //SnapshotPoint startPoint = new SnapshotPoint(snapshot, spans[0].Start);
       BraceExtractor extractor =  new BraceExtractor(startPoint, BRACE_CHARS);
       var braces = extractor.All();
       foreach ( var tagSpan in LookForMatchingPairs(snapshot, braces) ) {
-        yield return tagSpan;
+        braceTags.Add(tagSpan);
       }
     }
 
@@ -121,11 +142,26 @@ namespace Winterdom.Viasfora.Text {
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
       //UpdateTags(e.After, e.Changes[0].NewSpan.Start);
+      foreach ( var change in e.Changes ) {
+        if ( TextContainsBrace(change.NewText) || TextContainsBrace(change.OldText) ) {
+          UpdateBraceList(new SnapshotPoint(e.After, 0));
+          UpdateTags(e.After, 0);
+        }
+      }
     }
+
     private void ViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       if ( e.NewSnapshot != e.OldSnapshot ) {
         UpdateTags(e.NewSnapshot, 0);
       }
+    }
+
+    private bool TextContainsBrace(String change) {
+      foreach ( char ch in BRACE_CHARS ) {
+        if ( change.Contains(ch) )
+          return true;
+      }
+      return false;
     }
 
     private void UpdateTags(ITextSnapshot snapshot, int startPosition) {
