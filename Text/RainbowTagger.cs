@@ -60,9 +60,6 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( !IsSupported(snapshot.ContentType) ) {
-        yield break;
-      }
       SnapshotPoint startPoint = new SnapshotPoint(snapshot, 0);
       foreach ( var tagSpan in braceTags ) {
         if ( tagSpan.Span.Snapshot != snapshot ) {
@@ -79,10 +76,7 @@ namespace Winterdom.Viasfora.Text {
     private void UpdateBraceList(SnapshotPoint startPoint) {
       braceTags.Clear();
       ITextSnapshot snapshot = startPoint.Snapshot;
-      if ( !IsSupported(snapshot.ContentType) ) {
-        return;
-      }
-      //SnapshotPoint startPoint = new SnapshotPoint(snapshot, spans[0].Start);
+
       BraceExtractor extractor =  new BraceExtractor(startPoint, BRACE_CHARS);
       var braces = extractor.All();
       foreach ( var tagSpan in LookForMatchingPairs(snapshot, braces) ) {
@@ -170,13 +164,6 @@ namespace Winterdom.Viasfora.Text {
         tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(snapshot, startPosition,
             snapshot.Length - startPosition)));
       }
-    }
-
-    private bool IsSupported(IContentType contentType) {
-      return contentType.IsOfType(CSharp.ContentType)
-          || contentType.IsOfType(Cpp.ContentType)
-          || contentType.IsOfType(JScript.ContentType)
-          || contentType.IsOfType(JScript.ContentTypeVS2012);
     }
   }
 }

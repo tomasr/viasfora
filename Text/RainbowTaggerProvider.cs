@@ -11,7 +11,10 @@ using Microsoft.VisualStudio.Utilities;
 namespace Winterdom.Viasfora.Text {
 
   [Export(typeof(IViewTaggerProvider))]
-  [ContentType("Text")]
+  [ContentType(CSharp.ContentType)]
+  [ContentType(Cpp.ContentType)]
+  [ContentType(JScript.ContentType)]
+  [ContentType(JScript.ContentTypeVS2012)]
   [TagType(typeof(ClassificationTag))]
   public class RainbowTaggerProvider : IViewTaggerProvider {
     [Import]
