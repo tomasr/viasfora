@@ -62,7 +62,9 @@ namespace Winterdom.Viasfora.Text {
       }
       SnapshotPoint startPoint = new SnapshotPoint(snapshot, 0);
       //SnapshotPoint startPoint = new SnapshotPoint(snapshot, spans[0].Start);
-      foreach ( var tagSpan in LookForMatchingPairs(startPoint) ) {
+      BraceExtractor extractor =  new BraceExtractor(startPoint, BRACE_CHARS);
+      var braces = extractor.All();
+      foreach ( var tagSpan in LookForMatchingPairs(snapshot, braces) ) {
         yield return tagSpan;
       }
     }
@@ -74,56 +76,35 @@ namespace Winterdom.Viasfora.Text {
       public int Close { get; set; }
     }
 
-    private IEnumerable<ITagSpan<ClassificationTag>> LookForMatchingPairs(SnapshotPoint startPoint) {
+    private IEnumerable<ITagSpan<ClassificationTag>> LookForMatchingPairs(
+          ITextSnapshot snapshot, IEnumerable<SnapshotPoint> braces) {
       Stack<Pair> pairs = new Stack<Pair>();
-      ITextSnapshot snapshot = startPoint.Snapshot;
 
-      FindBracePairs(startPoint, pairs);
-
-      foreach ( var p in pairs ) {
-        var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
-        var span = new SnapshotSpan(snapshot, p.Open, 1);
-        yield return new TagSpan<ClassificationTag>(span, tag);
-        if ( p.Close >= 0 ) {
-          span = new SnapshotSpan(snapshot, p.Close, 1);
+      foreach ( var pt in braces ) {
+        char ch = pt.GetChar();
+        if ( IsOpeningBrace(ch) ) {
+          Pair p = new Pair {
+            Brace = ch, Depth = pairs.Count,
+            Open = pt.Position
+          };
+          pairs.Push(p);
+          // yield opening brace
+          var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
+          var span = new SnapshotSpan(snapshot, p.Open, 1);
           yield return new TagSpan<ClassificationTag>(span, tag);
-        }
-      }
-    }
-
-    private void FindBracePairs(SnapshotPoint startPoint, Stack<Pair> pairs)  {
-      ITextSnapshot snapshot = startPoint.Snapshot;
-
-      int depth = 0;
-      BraceExtractor extractor =  new BraceExtractor(startPoint, BRACE_CHARS);
-      while ( true ) {
-        SnapshotPoint? pt = extractor.NextBrace();
-        if ( pt.HasValue ) {
-          char ch = pt.Value.GetChar();
-          if ( IsOpeningBrace(ch) ) {
-            pairs.Push(new Pair {
-              Brace = ch, Depth = depth,
-              Open = pt.Value.Position, Close = -1
-            });
-            depth++;
-          } else if ( IsClosingBrace(ch) ) {
-            if ( MatchBrace(pairs, ch, pt.Value.Position) )
-              depth--;
+        } else if ( IsClosingBrace(ch) ) {
+          if ( pairs.Count > 0 ) {
+            Pair p = pairs.Peek();
+            if ( braceList[p.Brace] == ch ) {
+              // yield closing brace
+              pairs.Pop();
+              var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
+              var span = new SnapshotSpan(snapshot, pt.Position, 1);
+              yield return new TagSpan<ClassificationTag>(span, tag);
+            }
           }
-        } else {
-          break;
         }
       }
-    }
-
-    private bool MatchBrace(Stack<Pair> pairs, char ch, int pos) {
-      foreach ( var p in pairs ) {
-        if ( p.Close < 0 && braceList[p.Brace] == ch ) {
-          p.Close = pos;
-          return true;
-        }
-      }
-      return false;
     }
 
     private bool IsClosingBrace(char ch) {

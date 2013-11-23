@@ -25,6 +25,16 @@ namespace Winterdom.Viasfora.Text {
       this.status = ST_NORMAL;
     }
 
+    public IEnumerable<SnapshotPoint> All() {
+      while ( true ) {
+        SnapshotPoint? pt = NextBrace();
+        if ( pt.HasValue ) {
+          yield return pt.Value;
+        } else {
+          break;
+        }
+      }
+    }
     public SnapshotPoint? NextBrace() {
       while ( currentLine != null ) {
         SnapshotPoint? pt = this.NextBraceInLine();
@@ -47,7 +57,9 @@ namespace Winterdom.Viasfora.Text {
         switch ( this.status ) {
           case ST_NORMAL:
             if ( IsBrace(text[pos]) ) {
-              return new SnapshotPoint(this.snapshot, currentLine.Start + pos++);
+              var ret = new SnapshotPoint(this.snapshot, currentLine.Start + pos);
+              pos++;
+              return ret;
             }
             if ( pos > 0 && text[pos - 1] == '/' && text[pos] == '/' ) {
               // single line comment, ignore the rest
