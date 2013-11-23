@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow1Format : ClassificationFormatDefinition {
     public Rainbow1Format() {
       this.DisplayName = Constants.RAINBOW_1;
-      this.ForegroundColor = Colors.Firebrick;
+      this.ForegroundColor = Colors.Crimson;
     }
   }
   [Export(typeof(EditorFormatDefinition))]
