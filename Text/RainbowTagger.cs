@@ -29,6 +29,7 @@ namespace Winterdom.Viasfora.Text {
       this.theView = textView;
       this.theBuffer = buffer;
       rainbowTags = new ClassificationTag[MAX_DEPTH];
+
       for ( int i = 0; i < MAX_DEPTH; i++ ) {
         rainbowTags[i] = new ClassificationTag(
           registry.GetClassificationType(Constants.RAINBOW + (i + 1)));
@@ -72,7 +73,6 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-
     private void UpdateBraceList(SnapshotPoint startPoint) {
       braceTags.Clear();
       ITextSnapshot snapshot = startPoint.Snapshot;
@@ -88,7 +88,6 @@ namespace Winterdom.Viasfora.Text {
       public char Brace { get; set; }
       public int Depth { get; set; }
       public int Open { get; set; }
-      public int Close { get; set; }
     }
 
     private IEnumerable<ITagSpan<ClassificationTag>> LookForMatchingPairs(
@@ -107,16 +106,14 @@ namespace Winterdom.Viasfora.Text {
           var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
           var span = new SnapshotSpan(snapshot, p.Open, 1);
           yield return new TagSpan<ClassificationTag>(span, tag);
-        } else if ( IsClosingBrace(ch) ) {
-          if ( pairs.Count > 0 ) {
-            Pair p = pairs.Peek();
-            if ( braceList[p.Brace] == ch ) {
-              // yield closing brace
-              pairs.Pop();
-              var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
-              var span = new SnapshotSpan(snapshot, pt.Position, 1);
-              yield return new TagSpan<ClassificationTag>(span, tag);
-            }
+        } else if ( IsClosingBrace(ch) && pairs.Count > 0 ) {
+          Pair p = pairs.Peek();
+          if ( braceList[p.Brace] == ch ) {
+            // yield closing brace
+            pairs.Pop();
+            var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
+            var span = new SnapshotSpan(snapshot, pt.Position, 1);
+            yield return new TagSpan<ClassificationTag>(span, tag);
           }
         }
       }
@@ -135,7 +132,6 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
-      //UpdateTags(e.After, e.Changes[0].NewSpan.Start);
       foreach ( var change in e.Changes ) {
         if ( TextContainsBrace(change.NewText) || TextContainsBrace(change.OldText) ) {
           UpdateBraceList(new SnapshotPoint(e.After, 0));
