@@ -50,7 +50,8 @@ namespace Winterdom.Viasfora.Xml {
         } else if ( fileType.IsOfType(Constants.CT_XAML) ) {
           if ( language == null ) language = new XamlMarkup();
           return DoXAMLorHTML(spans);
-        } else if ( fileType.IsOfType(Constants.CT_HTML) ) {
+        } else if ( fileType.IsOfType(Constants.CT_HTML) 
+                 || fileType.IsOfType(Constants.CT_HTMLX) ) {
           if ( language == null ) language = new HtmlMarkup();
           return DoXAMLorHTML(spans);
         }

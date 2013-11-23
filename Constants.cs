@@ -23,6 +23,8 @@ namespace Winterdom.Viasfora {
     public const String CT_XML = "XML";
     public const String CT_XAML = "XAML";
     public const String CT_HTML = "HTML";
+    // VS213 HTML Editor
+    public const String CT_HTMLX = "htmlx";
     public const String XML_CLOSING = "XMLCloseTag";
     public const String XML_PREFIX = "XMLPrefix";
     // I'd prefer "XML Delimiter" here, but no way to
