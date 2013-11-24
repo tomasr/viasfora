@@ -94,7 +94,7 @@ namespace Winterdom.Viasfora.Text {
 
       fillBrush = format.BackgroundBrush;
       Brush penBrush = format.ForegroundBrush;
-      borderPen = new Pen(penBrush, 0.5);
+      borderPen = new Pen(penBrush, 1.5);
       borderPen.Freeze();
       RedrawAdornments();
     }
@@ -130,7 +130,7 @@ namespace Winterdom.Viasfora.Text {
       );
 
       if ( NeedsNewImage(rc) ) {
-        Geometry g = new RectangleGeometry(rc, 1.0, 1.0);
+        Geometry g = new RectangleGeometry(rc, 0.5, 0.5);
         GeometryDrawing drawing = new GeometryDrawing(fillBrush, borderPen, g);
         drawing.Freeze();
         DrawingImage drawingImage = new DrawingImage(drawing);
