@@ -15,12 +15,11 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(Cpp.ContentType)]
   [ContentType(JScript.ContentType)]
   [ContentType(JScript.ContentTypeVS2012)]
+  [TextViewRole(PredefinedTextViewRoles.Document)]
   [TagType(typeof(ClassificationTag))]
   public class RainbowTaggerProvider : IViewTaggerProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
-    [Import]
-    internal IBufferTagAggregatorFactoryService Aggregator = null;
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       return new RainbowTagger(

@@ -91,7 +91,7 @@ namespace Winterdom.Viasfora.Text {
           yield return new TagSpan<ClassificationTag>(cs, visClassification);
         } else if ( keywords.Linq.Contains(text) ) {
           yield return new TagSpan<ClassificationTag>(cs, linqClassification);
-        }
+        } 
       }
     }
 

@@ -17,7 +17,8 @@ namespace Winterdom.Viasfora.Text {
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const String BRACE_CHARS = "(){}[]";
     private const int MAX_DEPTH = 4;
-    private List<ITagSpan<ClassificationTag>> braceTags = new List<ITagSpan<ClassificationTag>>();
+    private List<ITagSpan<ClassificationTag>> braceTags = null;
+    private object updateLock = new object();
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
@@ -39,7 +40,6 @@ namespace Winterdom.Viasfora.Text {
       }
 
       this.theBuffer.Changed += this.BufferChanged;
-      this.theView.LayoutChanged += this.ViewLayoutChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
 
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
@@ -48,7 +48,6 @@ namespace Winterdom.Viasfora.Text {
     public void Dispose() {
       if ( theBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-        theView.LayoutChanged -= ViewLayoutChanged;
         theBuffer.Changed -= this.BufferChanged;
         theBuffer = null;
         theView = null;
@@ -61,26 +60,44 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ITextSnapshot snapshot = spans[0].Snapshot;
-      SnapshotPoint startPoint = new SnapshotPoint(snapshot, 0);
       foreach ( var tagSpan in braceTags ) {
         if ( tagSpan.Span.Snapshot != snapshot ) {
-          yield return new TagSpan<ClassificationTag>(
-            tagSpan.Span.TranslateTo(snapshot, SpanTrackingMode.EdgeExclusive),
-            tagSpan.Tag);
+          var span = tagSpan.Span.TranslateTo(snapshot, SpanTrackingMode.EdgeExclusive);
+          yield return new TagSpan<ClassificationTag>(span, tagSpan.Tag);
         } else {
           yield return tagSpan;
         }
       }
     }
 
+    private bool ContainedIn(SnapshotSpan span, NormalizedSnapshotSpanCollection spans) {
+      foreach ( var sp in spans ) {
+        if ( span.IntersectsWith(sp) ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     private void UpdateBraceList(SnapshotPoint startPoint) {
-      braceTags.Clear();
+      var newTags = new List<ITagSpan<ClassificationTag>>();
       ITextSnapshot snapshot = startPoint.Snapshot;
 
-      BraceExtractor extractor =  new BraceExtractor(startPoint, BRACE_CHARS);
+      // we always recalculate the tags from the start, but we
+      // only notify of changes from startPoint - end
+      BraceExtractor extractor =  new BraceExtractor(
+        new SnapshotPoint(snapshot, 0), BRACE_CHARS);
       var braces = extractor.All();
       foreach ( var tagSpan in LookForMatchingPairs(snapshot, braces) ) {
-        braceTags.Add(tagSpan);
+        newTags.Add(tagSpan);
+      }
+      SynchronousUpdate(startPoint, newTags);
+    }
+
+    private void SynchronousUpdate(SnapshotPoint startPoint, List<ITagSpan<ClassificationTag>> newTags) {
+      lock ( updateLock ) {
+        this.braceTags = newTags;
+        NotifyUpdateTags(startPoint.Snapshot, startPoint.Position);
       }
     }
 
@@ -128,21 +145,16 @@ namespace Winterdom.Viasfora.Text {
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
-      UpdateTags(theBuffer.CurrentSnapshot, 0);
+      this.UpdateBraceList(new SnapshotPoint(this.theBuffer.CurrentSnapshot, 0));
     }
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
-      foreach ( var change in e.Changes ) {
-        if ( TextContainsBrace(change.NewText) || TextContainsBrace(change.OldText) ) {
-          UpdateBraceList(new SnapshotPoint(e.After, 0));
-          UpdateTags(e.After, 0);
+      if ( VsfSettings.RainbowTagsEnabled ) {
+        foreach ( var change in e.Changes ) {
+          if ( TextContainsBrace(change.NewText) || TextContainsBrace(change.OldText) ) {
+            UpdateBraceList(new SnapshotPoint(e.After, e.Changes[0].NewSpan.Start));
+          }
         }
-      }
-    }
-
-    private void ViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
-      if ( e.NewSnapshot != e.OldSnapshot ) {
-        UpdateTags(e.NewSnapshot, 0);
       }
     }
 
@@ -154,7 +166,7 @@ namespace Winterdom.Viasfora.Text {
       return false;
     }
 
-    private void UpdateTags(ITextSnapshot snapshot, int startPosition) {
+    private void NotifyUpdateTags(ITextSnapshot snapshot, int startPosition) {
       var tempEvent = TagsChanged;
       if ( tempEvent != null ) {
         tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(snapshot, startPosition,
