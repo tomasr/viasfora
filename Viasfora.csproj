@@ -80,6 +80,7 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Text\BraceExtractor.cs" />
+    <Compile Include="Text\CBasedLanguage.cs" />
     <Compile Include="Text\LanguageInfo.cs" />
     <Compile Include="Text\RainbowTagger.cs" />
     <Compile Include="Text\RainbowTaggerProvider.cs" />

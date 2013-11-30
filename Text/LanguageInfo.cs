@@ -18,6 +18,14 @@ namespace Winterdom.Viasfora.Text {
       set { Set("Visibility", value); }
     }
 
+    public abstract String BraceList { get; }
+    public abstract bool IsSingleLineCommentStart(String text, int pos);
+    public abstract bool IsMultiLineCommentStart(String text, int pos);
+    public abstract bool IsMultiLineCommentEnd(String text, int pos);
+    public abstract bool IsSingleLineStringStart(String text, int pos, out char quote);
+    public abstract bool IsMultiLineStringStart(String text, int pos, out char quote);
+    public abstract bool IsStringEnd(String text, int pos, char quote);
+
     protected abstract String[] ControlFlowDefaults { get; }
     protected abstract String[] LinqDefaults { get; }
     protected abstract String[] VisibilityDefaults { get; }

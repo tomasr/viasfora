@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Text {
-  class CSharp : LanguageInfo {
+  class CSharp : CBasedLanguage {
     public const String ContentType = "CSharp";
     static readonly String[] CS_KEYWORDS = {
          "if", "else", "while", "do", "for", "foreach", 
