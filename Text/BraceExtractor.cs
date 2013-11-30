@@ -12,15 +12,17 @@ namespace Winterdom.Viasfora.Text {
     private int pos;
     private int status;
     private char quoteChar;
+    private LanguageInfo language;
     private const int ST_NORMAL = 0x00;
     private const int ST_COMMENT = 0x01;
     private const int ST_STRING = 0x02;
     private const int ST_MULTILINE = 0x80;
 
-    public BraceExtractor(SnapshotPoint startPoint, String braceChars) {
+    public BraceExtractor(SnapshotPoint startPoint, LanguageInfo language) {
       this.snapshot = startPoint.Snapshot;
       this.currentLine = this.snapshot.GetLineFromPosition(startPoint.Position);
-      this.braceChars = braceChars;
+      this.language = language;
+      this.braceChars = language.BraceList;
       this.pos = 0;
       this.status = ST_NORMAL;
     }
@@ -61,31 +63,27 @@ namespace Winterdom.Viasfora.Text {
               pos++;
               return ret;
             }
-            if ( pos > 0 && text[pos - 1] == '/' && text[pos] == '/' ) {
+            if ( language.IsSingleLineCommentStart(text, pos) ) {
               // single line comment, ignore the rest
               pos = currentLine.Length;
-            } else if ( pos > 0 && text[pos - 1] == '/' && text[pos] == '*' ) {
+            } else if ( language.IsMultiLineCommentStart(text, pos) ) {
               // multiline comment
               this.status = ST_COMMENT | ST_MULTILINE;
-            } else if ( IsQuote(text[pos]) ) {
-              this.quoteChar = text[pos];
+            } else if ( language.IsSingleLineStringStart(text, pos, out quoteChar) ) {
               this.status = ST_STRING;
-            } else if ( pos > 0 && text[pos - 1] == '@' && IsQuote(text[pos])) {
-              this.quoteChar = text[pos];
+            } else if ( language.IsMultiLineStringStart(text, pos, out quoteChar) ) {
               this.status = ST_STRING | ST_MULTILINE;
             } 
             break;
           case ST_COMMENT | ST_MULTILINE:
-            if ( pos > 0 && text[pos - 1] == '*' && text[pos] == '/' ) {
+            if ( language.IsMultiLineCommentEnd(text, pos) ) {
               this.status = ST_NORMAL;
             }
             break;
           case ST_STRING:
           case ST_STRING | ST_MULTILINE:
-            if ( text[pos] == quoteChar ) {
-              if ( !(pos > 0 && text[pos-1] == '\\') ) {
-                this.status = ST_NORMAL;
-              }
+            if ( language.IsStringEnd(text, pos, quoteChar) ) {
+              this.status = ST_NORMAL;
             }
             break;
         }
@@ -93,9 +91,6 @@ namespace Winterdom.Viasfora.Text {
       return null;
     }
 
-    private bool IsQuote(char ch) {
-      return ch == '"' || ch == '\'';
-    }
     private bool IsBrace(char ch) {
       return this.braceChars.IndexOf(ch) >= 0;
     }

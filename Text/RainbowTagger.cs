@@ -15,9 +15,9 @@ namespace Winterdom.Viasfora.Text {
     private ITextView theView;
     private ClassificationTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
-    private const String BRACE_CHARS = "(){}[]";
     private const int MAX_DEPTH = 4;
     private List<ITagSpan<ClassificationTag>> braceTags = null;
+    private LanguageInfo language;
     private object updateLock = new object();
 
 #pragma warning disable 67
@@ -35,11 +35,11 @@ namespace Winterdom.Viasfora.Text {
         rainbowTags[i] = new ClassificationTag(
           registry.GetClassificationType(Constants.RAINBOW + (i + 1)));
       }
-      for ( int i = 0; i < BRACE_CHARS.Length; i += 2 ) {
-        braceList.Add(BRACE_CHARS[i], BRACE_CHARS[i + 1]);
-      }
+
+      SetLanguage(buffer.ContentType);
 
       this.theBuffer.Changed += this.BufferChanged;
+      this.theBuffer.ContentTypeChanged += this.ContentTypeChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
 
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
@@ -49,6 +49,7 @@ namespace Winterdom.Viasfora.Text {
       if ( theBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
         theBuffer.Changed -= this.BufferChanged;
+        theBuffer.ContentTypeChanged -= this.ContentTypeChanged;
         theBuffer = null;
         theView = null;
       }
@@ -85,8 +86,8 @@ namespace Winterdom.Viasfora.Text {
 
       // we always recalculate the tags from the start, but we
       // only notify of changes from startPoint - end
-      BraceExtractor extractor =  new BraceExtractor(
-        new SnapshotPoint(snapshot, 0), BRACE_CHARS);
+      BraceExtractor extractor = new BraceExtractor(
+        new SnapshotPoint(snapshot, 0), language);
       var braces = extractor.All();
       foreach ( var tagSpan in LookForMatchingPairs(snapshot, braces) ) {
         newTags.Add(tagSpan);
@@ -117,7 +118,7 @@ namespace Winterdom.Viasfora.Text {
           Pair p = new Pair {
             Brace = ch, Depth = pairs.Count,
             Open = pt.Position
-          };
+         };
           pairs.Push(p);
           // yield opening brace
           var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
@@ -144,6 +145,16 @@ namespace Winterdom.Viasfora.Text {
       return braceList.ContainsKey(ch);
     }
 
+    private void SetLanguage(IContentType contentType) {
+      language = VsfPackage.LookupLanguage(contentType);
+      this.braceList.Clear();
+      String braceChars = language.BraceList;
+      for ( int i = 0; i < braceChars.Length; i += 2 ) {
+        this.braceList.Add(braceChars[i], braceChars[i + 1]);
+      }
+    }
+
+
     void OnSettingsUpdated(object sender, EventArgs e) {
       this.UpdateBraceList(new SnapshotPoint(this.theBuffer.CurrentSnapshot, 0));
     }
@@ -158,8 +169,15 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
+    private void ContentTypeChanged(object sender, ContentTypeChangedEventArgs e) {
+      if ( e.BeforeContentType.TypeName != e.AfterContentType.TypeName ) {
+        this.SetLanguage(e.AfterContentType);
+        this.UpdateBraceList(new SnapshotPoint(e.After, 0));
+      }
+    }
+
     private bool TextContainsBrace(String change) {
-      foreach ( char ch in BRACE_CHARS ) {
+      foreach ( char ch in language.BraceList ) {
         if ( change.Contains(ch) )
           return true;
       }
