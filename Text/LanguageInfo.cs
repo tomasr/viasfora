@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Text {
-  abstract class LanguageInfo {
+  public abstract class LanguageInfo {
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }
       set { Set("ControlFlow", value); }

@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -19,8 +20,25 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.JScriptOptionsPage), "Viasfora", "JavaScript", 101, 105, true)]
   public sealed class VsfPackage : Package {
 
+    private Dictionary<String, LanguageInfo> languageList;
     public static VsfPackage Instance { get; private set; }
 
+    public VsfPackage() {
+      languageList = new Dictionary<String, LanguageInfo>();
+      languageList.Add(Cpp.ContentType, new Cpp());
+      languageList.Add(CSharp.ContentType, new CSharp());
+      languageList.Add(JScript.ContentType, new JScript());
+      languageList.Add(JScript.ContentTypeVS2012, new JScript());
+      languageList.Add(VB.ContentType, new VB());
+    }
+
+    public LanguageInfo LookupLanguage(String contentType) {
+      LanguageInfo result = null;
+      if ( languageList.TryGetValue(contentType, out result) ) {
+        return result;
+      }
+      return null;
+    }
     protected override void Initialize() {
       base.Initialize();
       Instance = this;
