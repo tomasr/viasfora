@@ -32,6 +32,9 @@ namespace Winterdom.Viasfora.Text {
     protected override String KeyName {
       get { return "VB"; }
     }
+    protected override String[] ContentTypes {
+      get { return new String[] { ContentType }; }
+    }
     public override string BraceList {
       get { return "()"; }
     }

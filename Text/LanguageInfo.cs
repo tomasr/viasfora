@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
   public abstract class LanguageInfo {
@@ -26,6 +27,15 @@ namespace Winterdom.Viasfora.Text {
     public abstract bool IsMultiLineStringStart(String text, int pos, out char quote);
     public abstract bool IsStringEnd(String text, int pos, char quote);
 
+    public bool MatchesContentType(IContentType contentType) {
+      foreach ( String str in this.ContentTypes ) {
+        if ( contentType.IsOfType(str) ) 
+          return true;
+      }
+      return false;
+    }
+
+    protected abstract String[] ContentTypes { get; }
     protected abstract String[] ControlFlowDefaults { get; }
     protected abstract String[] LinqDefaults { get; }
     protected abstract String[] VisibilityDefaults { get; }

@@ -31,5 +31,8 @@ namespace Winterdom.Viasfora.Text {
     protected override String KeyName {
       get { return "CSharp"; }
     }
+    protected override String[] ContentTypes {
+      get { return new String[] { ContentType }; }
+    }
   }
 }

@@ -149,20 +149,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private LanguageInfo GetKeywordsByContentType(IContentType contentType) {
-      if ( contentType.IsOfType(CSharp.ContentType) ) {
-        return new CSharp();
-      } else if ( contentType.IsOfType(Cpp.ContentType) ) {
-        return new Cpp();
-      } else if ( contentType.IsOfType(VB.ContentType) ) {
-        return new VB();
-      } else if ( contentType.IsOfType(JScript.ContentType)
-               || contentType.IsOfType(JScript.ContentTypeVS2012) ) {
-        return new JScript();
-      }
-      // VS is calling us for the "CSharp Signature Help" content-type
-      // which we didn't ask for. Argh!!!
-      // throw new InvalidOperationException("Running into an unsupported editor");
-      return null;
+      return VsfPackage.LookupLanguage(contentType);
     }
   }
 

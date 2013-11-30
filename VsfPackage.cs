@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
 using Winterdom.Viasfora.Text;
+using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -20,22 +21,21 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.JScriptOptionsPage), "Viasfora", "JavaScript", 101, 105, true)]
   public sealed class VsfPackage : Package {
 
-    private Dictionary<String, LanguageInfo> languageList;
+    private static List<LanguageInfo> languageList;
     public static VsfPackage Instance { get; private set; }
 
-    public VsfPackage() {
-      languageList = new Dictionary<String, LanguageInfo>();
-      languageList.Add(Cpp.ContentType, new Cpp());
-      languageList.Add(CSharp.ContentType, new CSharp());
-      languageList.Add(JScript.ContentType, new JScript());
-      languageList.Add(JScript.ContentTypeVS2012, new JScript());
-      languageList.Add(VB.ContentType, new VB());
+    static VsfPackage() {
+      languageList = new List<LanguageInfo>();
+      languageList.Add(new Cpp());
+      languageList.Add(new CSharp());
+      languageList.Add(new JScript());
+      languageList.Add(new VB());
     }
 
-    public LanguageInfo LookupLanguage(String contentType) {
-      LanguageInfo result = null;
-      if ( languageList.TryGetValue(contentType, out result) ) {
-        return result;
+    public static LanguageInfo LookupLanguage(IContentType contentType) {
+      foreach ( LanguageInfo li in languageList ) {
+        if ( li.MatchesContentType(contentType) )
+          return li;
       }
       return null;
     }

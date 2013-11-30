@@ -27,5 +27,8 @@ namespace Winterdom.Viasfora.Text {
     protected override String KeyName {
       get { return "JScript"; }
     }
+    protected override String[] ContentTypes {
+      get { return new String[] { ContentType, ContentTypeVS2012 }; }
+    }
   }
 }

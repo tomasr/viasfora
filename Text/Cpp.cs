@@ -25,5 +25,8 @@ namespace Winterdom.Viasfora.Text {
     protected override String KeyName {
       get { return "Cpp"; }
     }
+    protected override String[] ContentTypes {
+      get { return new String[] { ContentType }; }
+    }
   }
 }
