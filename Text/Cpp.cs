@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Text {
-  class Cpp : LanguageKeywords {
+  class Cpp : LanguageInfo {
     public const String ContentType = "C/C++";
     static readonly String[] CPP_KEYWORDS = {
          "if", "else", "while", "do", "for", "each", "switch",

@@ -73,7 +73,7 @@ namespace Winterdom.Viasfora.Text {
 
     private IEnumerable<ITagSpan<ClassificationTag>> LookForKeywords(NormalizedSnapshotSpanCollection spans) {
       ITextSnapshot snapshot = spans[0].Snapshot;
-      LanguageKeywords keywords =
+      LanguageInfo keywords =
          GetKeywordsByContentType(snapshot.TextBuffer.ContentType);
       if ( keywords == null ) {
         yield break;
@@ -148,7 +148,7 @@ namespace Winterdom.Viasfora.Text {
       return classifiedSpans;
     }
 
-    private LanguageKeywords GetKeywordsByContentType(IContentType contentType) {
+    private LanguageInfo GetKeywordsByContentType(IContentType contentType) {
       if ( contentType.IsOfType(CSharp.ContentType) ) {
         return new CSharp();
       } else if ( contentType.IsOfType(Cpp.ContentType) ) {

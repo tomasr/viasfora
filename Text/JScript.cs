@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Text {
-  class JScript : LanguageKeywords {
+  class JScript : LanguageInfo {
     public const String ContentType = "JScript";
     public const String ContentTypeVS2012 = "JavaScript";
 
