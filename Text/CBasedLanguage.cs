@@ -45,9 +45,15 @@ namespace Winterdom.Viasfora.Text {
     }
     public override bool IsStringEnd(string text, int pos, char quote) {
       if ( text[pos] == quote ) {
-        if ( !(pos > 0 && text[pos-1] == '\\') ) {
-          return true;
+        // check the character isn't escaped
+        if ( pos > 0 && text[pos-1] == '\\' ) {
+          // check the \ isn't escaped itself!
+          if ( pos > 1 && text[pos - 2] == '\\' ) {
+            return true;
+          }
+          return false;
         }
+        return true;
       }
       return false;
     }
