@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
-  abstract class LanguageKeywords {
+  public abstract class LanguageInfo {
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }
       set { Set("ControlFlow", value); }
@@ -18,6 +19,23 @@ namespace Winterdom.Viasfora.Text {
       set { Set("Visibility", value); }
     }
 
+    public abstract String BraceList { get; }
+    public abstract bool IsSingleLineCommentStart(String text, int pos);
+    public abstract bool IsMultiLineCommentStart(String text, int pos);
+    public abstract bool IsMultiLineCommentEnd(String text, int pos);
+    public abstract bool IsSingleLineStringStart(String text, int pos, out char quote);
+    public abstract bool IsMultiLineStringStart(String text, int pos, out char quote);
+    public abstract bool IsStringEnd(String text, int pos, char quote);
+
+    public bool MatchesContentType(IContentType contentType) {
+      foreach ( String str in this.ContentTypes ) {
+        if ( contentType.IsOfType(str) ) 
+          return true;
+      }
+      return false;
+    }
+
+    protected abstract String[] ContentTypes { get; }
     protected abstract String[] ControlFlowDefaults { get; }
     protected abstract String[] LinqDefaults { get; }
     protected abstract String[] VisibilityDefaults { get; }

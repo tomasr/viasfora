@@ -15,6 +15,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(Cpp.ContentType)]
   [ContentType(JScript.ContentType)]
   [ContentType(JScript.ContentTypeVS2012)]
+  [ContentType(VB.ContentType)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   [TagType(typeof(ClassificationTag))]
   public class RainbowTaggerProvider : IViewTaggerProvider {

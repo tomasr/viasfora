@@ -73,7 +73,7 @@ namespace Winterdom.Viasfora.Text {
 
     private IEnumerable<ITagSpan<ClassificationTag>> LookForKeywords(NormalizedSnapshotSpanCollection spans) {
       ITextSnapshot snapshot = spans[0].Snapshot;
-      LanguageKeywords keywords =
+      LanguageInfo keywords =
          GetKeywordsByContentType(snapshot.TextBuffer.ContentType);
       if ( keywords == null ) {
         yield break;
@@ -148,21 +148,8 @@ namespace Winterdom.Viasfora.Text {
       return classifiedSpans;
     }
 
-    private LanguageKeywords GetKeywordsByContentType(IContentType contentType) {
-      if ( contentType.IsOfType(CSharp.ContentType) ) {
-        return new CSharp();
-      } else if ( contentType.IsOfType(Cpp.ContentType) ) {
-        return new Cpp();
-      } else if ( contentType.IsOfType(VB.ContentType) ) {
-        return new VB();
-      } else if ( contentType.IsOfType(JScript.ContentType)
-               || contentType.IsOfType(JScript.ContentTypeVS2012) ) {
-        return new JScript();
-      }
-      // VS is calling us for the "CSharp Signature Help" content-type
-      // which we didn't ask for. Argh!!!
-      // throw new InvalidOperationException("Running into an unsupported editor");
-      return null;
+    private LanguageInfo GetKeywordsByContentType(IContentType contentType) {
+      return VsfPackage.LookupLanguage(contentType);
     }
   }
 
