@@ -55,13 +55,30 @@ namespace Winterdom.Viasfora.Text {
       return false;
     }
     public override bool IsSingleLineStringStart(string text, int pos, out char quote) {
-      // F# does not have single line strings
-      quote = '\0';
+      // F# does not have single line strings, but we can use
+      // this for char literals
+      quote = '\'';
+      if ( text[pos] == '\'' ) {
+        // if this is <' this is very likely a generic parameter, so skip it
+        if ( pos > 0 && text[pos - 1] == '<' )
+          return false;
+        // this may, or may not be, a char literal
+        // so probe ahead. We're looking for:
+        // 'c' or '\b' or '\uXXXX' or '\uXXXXXXXX' 
+        if ( pos < text.Length - 2 ) {
+          if ( text[pos + 1] == '\\' ) {
+            // has to be a escape sequence
+            return true;
+          }
+          if ( text[pos + 2] == '\'' )
+            return true;
+        }
+      }
       return false;
     }
     public override bool IsMultiLineStringStart(string text, int pos, out char quote) {
       quote = '\0';
-      if ( IsQuote(text[pos]) ) {
+      if ( text[pos] == '"' ) {
         quote = text[pos];
         return true;
       }
@@ -80,10 +97,6 @@ namespace Winterdom.Viasfora.Text {
         return true;
       }
       return false;
-    }
-
-    private bool IsQuote(char ch) {
-      return ch == '\'' || ch == '"';
     }
   }
 }
