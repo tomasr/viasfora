@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Winterdom.Viasfora.Text {
   class FSharp : LanguageInfo {
-    public const String ContentType = "FSharp";
+    public const String ContentType = "F#";
     static readonly String[] KEYWORDS = {
          "if", "then", "elif", "else", "match", "with",
          "for", "do", "to", "done", "while", "rec",
