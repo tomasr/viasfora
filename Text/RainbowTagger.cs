@@ -161,11 +161,12 @@ namespace Winterdom.Viasfora.Text {
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
       if ( VsfSettings.RainbowTagsEnabled ) {
-        foreach ( var change in e.Changes ) {
+        /*foreach ( var change in e.Changes ) {
           if ( TextContainsBrace(change.NewText) || TextContainsBrace(change.OldText) ) {
             UpdateBraceList(new SnapshotPoint(e.After, e.Changes[0].NewSpan.Start));
           }
-        }
+        }*/
+            UpdateBraceList(new SnapshotPoint(e.After, e.Changes[0].NewSpan.Start));
       }
     }
 
