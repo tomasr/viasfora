@@ -26,6 +26,7 @@ namespace Winterdom.Viasfora.Text {
     public abstract bool IsSingleLineStringStart(String text, int pos, out char quote);
     public abstract bool IsMultiLineStringStart(String text, int pos, out char quote);
     public abstract bool IsStringEnd(String text, int pos, char quote);
+    public abstract bool IsSignificantSyntaxChar(char ch);
 
     public bool MatchesContentType(IContentType contentType) {
       foreach ( String str in this.ContentTypes ) {

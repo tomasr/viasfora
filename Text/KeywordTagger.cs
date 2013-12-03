@@ -62,6 +62,10 @@ namespace Winterdom.Viasfora.Text {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
         theBuffer = null;
       }
+      if ( aggregator != null ) {
+        aggregator.Dispose();
+        aggregator = null;
+      }
     }
     void OnSettingsUpdated(object sender, EventArgs e) {
       var tempEvent = TagsChanged;

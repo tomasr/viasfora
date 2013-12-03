@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
 
-  [Export(typeof(IViewTaggerProvider))]
+  [Export(typeof(ITaggerProvider))]
   [ContentType(CSharp.ContentType)]
   [ContentType(Cpp.ContentType)]
   [ContentType(JScript.ContentType)]
@@ -19,15 +19,12 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(FSharp.ContentType)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   [TagType(typeof(ClassificationTag))]
-  public class RainbowTaggerProvider : IViewTaggerProvider {
+  public class RainbowTaggerProvider : ITaggerProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
 
-    public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
-      return new RainbowTagger(
-        buffer, textView, 
-        ClassificationRegistry
-        ) as ITagger<T>;
+    public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
+      return new RainbowTagger(buffer, ClassificationRegistry) as ITagger<T>;
     }
   }
 

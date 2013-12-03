@@ -59,5 +59,16 @@ namespace Winterdom.Viasfora.Text {
     public override bool IsStringEnd(string text, int pos, char quote) {
       return text[pos] == quote;
     }
+    public override bool IsSignificantSyntaxChar(char ch) {
+      switch ( ch ) {
+        case '\'':
+        case '"':
+        case '(':
+        case ')':
+          return true;
+        default:
+          return false;
+      }
+    }
   }
 }

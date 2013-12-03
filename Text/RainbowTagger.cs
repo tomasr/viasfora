@@ -12,7 +12,6 @@ namespace Winterdom.Viasfora.Text {
 
   class RainbowTagger : ITagger<ClassificationTag>, IDisposable {
     private ITextBuffer theBuffer;
-    private ITextView theView;
     private ClassificationTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const int MAX_DEPTH = 4;
@@ -25,9 +24,8 @@ namespace Winterdom.Viasfora.Text {
 #pragma warning restore 67
 
     internal RainbowTagger(
-          ITextBuffer buffer, ITextView textView,
+          ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
-      this.theView = textView;
       this.theBuffer = buffer;
       rainbowTags = new ClassificationTag[MAX_DEPTH];
 
@@ -38,7 +36,7 @@ namespace Winterdom.Viasfora.Text {
 
       SetLanguage(buffer.ContentType);
 
-      this.theBuffer.Changed += this.BufferChanged;
+      this.theBuffer.ChangedLowPriority += this.BufferChanged;
       this.theBuffer.ContentTypeChanged += this.ContentTypeChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
 
@@ -48,10 +46,9 @@ namespace Winterdom.Viasfora.Text {
     public void Dispose() {
       if ( theBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-        theBuffer.Changed -= this.BufferChanged;
+        theBuffer.ChangedLowPriority -= this.BufferChanged;
         theBuffer.ContentTypeChanged -= this.ContentTypeChanged;
         theBuffer = null;
-        theView = null;
       }
     }
 
@@ -61,12 +58,13 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ITextSnapshot snapshot = spans[0].Snapshot;
+      if ( braceTags.Count > 0 && snapshot != braceTags[0].Span.Snapshot ) {
+        yield break;
+      }
       foreach ( var tagSpan in braceTags ) {
-        if ( tagSpan.Span.Snapshot != snapshot ) {
-          var span = tagSpan.Span.TranslateTo(snapshot, SpanTrackingMode.EdgeExclusive);
-          yield return new TagSpan<ClassificationTag>(span, tagSpan.Tag);
-        } else {
-          yield return tagSpan;
+        foreach ( var span in spans ) {
+          if ( span.OverlapsWith(tagSpan.Span) )
+            yield return tagSpan;
         }
       }
     }
@@ -161,12 +159,9 @@ namespace Winterdom.Viasfora.Text {
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
       if ( VsfSettings.RainbowTagsEnabled ) {
-        /*foreach ( var change in e.Changes ) {
-          if ( TextContainsBrace(change.NewText) || TextContainsBrace(change.OldText) ) {
-            UpdateBraceList(new SnapshotPoint(e.After, e.Changes[0].NewSpan.Start));
-          }
-        }*/
-            UpdateBraceList(new SnapshotPoint(e.After, e.Changes[0].NewSpan.Start));
+        if ( e.Changes.Count > 0 ) {
+          UpdateBraceList(new SnapshotPoint(e.After, e.Changes[0].NewSpan.Start));
+        }
       }
     }
 
@@ -177,9 +172,17 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private bool TextContainsBrace(String change) {
-      foreach ( char ch in language.BraceList ) {
-        if ( change.Contains(ch) )
+    private bool ChangeOfInterest(ITextChange change) {
+      return ChangeOfInterest(change.NewText) ||
+             ChangeOfInterest(change.OldText);
+    }
+
+    private bool ChangeOfInterest(String change) {
+      // only recalculate everything if the change
+      // contains either a brace, a quote char,
+      // or an escape char
+      foreach ( char ch in change ) {
+        if ( language.IsSignificantSyntaxChar(ch) )
           return true;
       }
       return false;
