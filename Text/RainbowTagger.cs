@@ -10,12 +10,12 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowTagger : ITagger<ClassificationTag>, IDisposable {
+  class RainbowTagger : ITagger<RainbowClassificationTag>, IDisposable {
     private ITextBuffer theBuffer;
-    private ClassificationTag[] rainbowTags;
+    private RainbowClassificationTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const int MAX_DEPTH = 4;
-    private List<ITagSpan<ClassificationTag>> braceTags = null;
+    private List<ITagSpan<RainbowClassificationTag>> braceTags = null;
     private LanguageInfo language;
     private object updateLock = new object();
 
@@ -27,10 +27,10 @@ namespace Winterdom.Viasfora.Text {
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
       this.theBuffer = buffer;
-      rainbowTags = new ClassificationTag[MAX_DEPTH];
+      rainbowTags = new RainbowClassificationTag[MAX_DEPTH];
 
       for ( int i = 0; i < MAX_DEPTH; i++ ) {
-        rainbowTags[i] = new ClassificationTag(
+        rainbowTags[i] = new RainbowClassificationTag(
           registry.GetClassificationType(Constants.RAINBOW + (i + 1)));
       }
 
@@ -52,7 +52,7 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
+    public IEnumerable<ITagSpan<RainbowClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
       if ( !VsfSettings.RainbowTagsEnabled ) yield break;
       if ( spans.Count == 0 ) {
         yield break;
@@ -62,9 +62,10 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       foreach ( var tagSpan in braceTags ) {
-        foreach ( var span in spans ) {
-          if ( span.OverlapsWith(tagSpan.Span) )
-            yield return tagSpan;
+        // only return tags that are included in 
+        // the requested spans
+        if ( ContainedIn(tagSpan.Span, spans) ) {
+          yield return tagSpan;
         }
       }
     }
@@ -79,7 +80,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint) {
-      var newTags = new List<ITagSpan<ClassificationTag>>();
+      var newTags = new List<ITagSpan<RainbowClassificationTag>>();
       ITextSnapshot snapshot = startPoint.Snapshot;
 
       // we always recalculate the tags from the start, but we
@@ -93,10 +94,14 @@ namespace Winterdom.Viasfora.Text {
       SynchronousUpdate(startPoint, newTags);
     }
 
-    private void SynchronousUpdate(SnapshotPoint startPoint, List<ITagSpan<ClassificationTag>> newTags) {
+    private void SynchronousUpdate(SnapshotPoint startPoint, List<ITagSpan<RainbowClassificationTag>> newTags) {
       lock ( updateLock ) {
         this.braceTags = newTags;
-        NotifyUpdateTags(startPoint.Snapshot, startPoint.Position);
+        // notifying other taggers that we changed
+        // turns out to be just too expensive most of the time
+        // we're a fairly lazy extension, so it's ok if remainder
+        // braces update after a second.
+        //NotifyUpdateTags(startPoint.Snapshot, startPoint.Position);
       }
     }
 
@@ -106,7 +111,7 @@ namespace Winterdom.Viasfora.Text {
       public int Open { get; set; }
     }
 
-    private IEnumerable<ITagSpan<ClassificationTag>> LookForMatchingPairs(
+    private IEnumerable<ITagSpan<RainbowClassificationTag>> LookForMatchingPairs(
           ITextSnapshot snapshot, IEnumerable<SnapshotPoint> braces) {
       Stack<Pair> pairs = new Stack<Pair>();
 
@@ -121,7 +126,7 @@ namespace Winterdom.Viasfora.Text {
           // yield opening brace
           var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
           var span = new SnapshotSpan(snapshot, p.Open, 1);
-          yield return new TagSpan<ClassificationTag>(span, tag);
+          yield return new TagSpan<RainbowClassificationTag>(span, tag);
         } else if ( IsClosingBrace(ch) && pairs.Count > 0 ) {
           Pair p = pairs.Peek();
           if ( braceList[p.Brace] == ch ) {
@@ -129,7 +134,7 @@ namespace Winterdom.Viasfora.Text {
             pairs.Pop();
             var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
             var span = new SnapshotSpan(snapshot, pt.Position, 1);
-            yield return new TagSpan<ClassificationTag>(span, tag);
+            yield return new TagSpan<RainbowClassificationTag>(span, tag);
           }
         }
       }
@@ -152,13 +157,14 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-
     void OnSettingsUpdated(object sender, EventArgs e) {
       this.UpdateBraceList(new SnapshotPoint(this.theBuffer.CurrentSnapshot, 0));
     }
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
       if ( VsfSettings.RainbowTagsEnabled ) {
+        // the snapshot changed, so we need to pretty much update
+        // everything so that it matches.
         if ( e.Changes.Count > 0 ) {
           UpdateBraceList(new SnapshotPoint(e.After, e.Changes[0].NewSpan.Start));
         }
@@ -172,28 +178,20 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private bool ChangeOfInterest(ITextChange change) {
-      return ChangeOfInterest(change.NewText) ||
-             ChangeOfInterest(change.OldText);
-    }
-
-    private bool ChangeOfInterest(String change) {
-      // only recalculate everything if the change
-      // contains either a brace, a quote char,
-      // or an escape char
-      foreach ( char ch in change ) {
-        if ( language.IsSignificantSyntaxChar(ch) )
-          return true;
-      }
-      return false;
-    }
-
     private void NotifyUpdateTags(ITextSnapshot snapshot, int startPosition) {
       var tempEvent = TagsChanged;
       if ( tempEvent != null ) {
         tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(snapshot, startPosition,
             snapshot.Length - startPosition)));
       }
+    }
+  }
+
+  // we use this so that the KeywordClassifier doesn't pick us up.
+  public class RainbowClassificationTag : IClassificationTag {
+    public IClassificationType ClassificationType { get; private set; }
+    public RainbowClassificationTag(IClassificationType type) {
+      this.ClassificationType = type;
     }
   }
 }

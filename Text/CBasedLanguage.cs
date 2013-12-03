@@ -57,25 +57,6 @@ namespace Winterdom.Viasfora.Text {
       }
       return false;
     }
-    public override bool IsSignificantSyntaxChar(char ch) {
-      switch ( ch ) {
-        case '\'':
-        case '"':
-        case '\\':
-        case '(':
-        case ')':
-        case '{':
-        case '}':
-        case '[':
-        case ']':
-        case '/':
-        case '*':
-          return true;
-        default:
-          return false;
-      }
-    }
-
     private bool IsQuote(char ch) {
       return ch == '\'' || ch == '"';
     }
