@@ -15,13 +15,15 @@ namespace Winterdom.Viasfora.Text {
     private RainbowClassificationTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const int MAX_DEPTH = 4;
-    private List<ITagSpan<RainbowClassificationTag>> braceTags = null;
     private LanguageInfo language;
+    private ITextSnapshot currentVersion;
+    private List<BracePos> bracesFound = new List<BracePos>();
     private object updateLock = new object();
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 #pragma warning restore 67
+
 
     internal RainbowTagger(
           ITextBuffer buffer,
@@ -58,21 +60,23 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( braceTags.Count > 0 && snapshot != braceTags[0].Span.Snapshot ) {
+      if ( this.bracesFound.Count <= 0 || currentVersion != snapshot ) { 
         yield break;
       }
-      foreach ( var tagSpan in braceTags ) {
+      foreach ( var brace in bracesFound ) {
         // only return tags that are included in 
         // the requested spans
-        if ( ContainedIn(tagSpan.Span, spans) ) {
-          yield return tagSpan;
+        if ( ContainedIn(brace.Position, spans) ) {
+          var span = new SnapshotSpan(snapshot, brace.Position, 1);
+          var tag = this.rainbowTags[brace.Depth % MAX_DEPTH];
+          yield return new TagSpan<RainbowClassificationTag>(span, tag);
         }
       }
     }
 
-    private bool ContainedIn(SnapshotSpan span, NormalizedSnapshotSpanCollection spans) {
+    private bool ContainedIn(int pos, NormalizedSnapshotSpanCollection spans) {
       foreach ( var sp in spans ) {
-        if ( span.IntersectsWith(sp) ) {
+        if ( sp.Contains(pos) ) {
           return true;
         }
       }
@@ -80,23 +84,16 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint) {
-      var newTags = new List<ITagSpan<RainbowClassificationTag>>();
+      List<BracePos> newList = new List<BracePos>();
       ITextSnapshot snapshot = startPoint.Snapshot;
-
-      // we always recalculate the tags from the start, but we
-      // only notify of changes from startPoint - end
-      BraceExtractor extractor = new BraceExtractor(
-        new SnapshotPoint(snapshot, 0), language);
-      var braces = extractor.All();
-      foreach ( var tagSpan in LookForMatchingPairs(snapshot, braces) ) {
-        newTags.Add(tagSpan);
-      }
-      SynchronousUpdate(startPoint, newTags);
+      this.ExtractBracesFromLastBrace(snapshot, startPoint.Position, this.bracesFound, newList);
+      currentVersion = snapshot;
+      SynchronousUpdate(startPoint, newList);
     }
 
-    private void SynchronousUpdate(SnapshotPoint startPoint, List<ITagSpan<RainbowClassificationTag>> newTags) {
+    private void SynchronousUpdate(SnapshotPoint startPoint, List<BracePos> newBraces) {
       lock ( updateLock ) {
-        this.braceTags = newTags;
+        this.bracesFound = newBraces;
         // notifying other taggers that we changed
         // turns out to be just too expensive most of the time
         // we're a fairly lazy extension, so it's ok if remainder
@@ -105,36 +102,51 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    class Pair {
+    class BracePos {
       public char Brace { get; set; }
       public int Depth { get; set; }
-      public int Open { get; set; }
+      public int Position { get; set; }
     }
 
-    private IEnumerable<ITagSpan<RainbowClassificationTag>> LookForMatchingPairs(
-          ITextSnapshot snapshot, IEnumerable<SnapshotPoint> braces) {
-      Stack<Pair> pairs = new Stack<Pair>();
-
-      foreach ( var pt in braces ) {
+    private void ExtractBracesFromLastBrace(
+          ITextSnapshot snapshot, int changePos, 
+          List<BracePos> currentBraces, List<BracePos> result) {
+      int startPosition = 0;
+      // figure out where to start parsing again
+      Stack<BracePos> pairs = new Stack<BracePos>();
+      foreach ( var r in currentBraces ) {
+        if ( r.Position >= changePos ) break;
+        if ( IsOpeningBrace(r.Brace) ) {
+          pairs.Push(r);
+        } else {
+          pairs.Pop();
+        }
+        startPosition = r.Position+1;
+        result.Add(r);
+      }
+      // now we have the state back to our original status
+      // so that we can extract the remainder of the tags
+      BraceExtractor extractor = new BraceExtractor(
+        new SnapshotPoint(snapshot, startPosition), language);
+      foreach ( var pt in extractor.All() ) {
         char ch = pt.GetChar();
         if ( IsOpeningBrace(ch) ) {
-          Pair p = new Pair {
+          BracePos p = new BracePos {
             Brace = ch, Depth = pairs.Count,
-            Open = pt.Position
-         };
+            Position = pt.Position
+          };
           pairs.Push(p);
-          // yield opening brace
-          var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
-          var span = new SnapshotSpan(snapshot, p.Open, 1);
-          yield return new TagSpan<RainbowClassificationTag>(span, tag);
+          result.Add(p);
         } else if ( IsClosingBrace(ch) && pairs.Count > 0 ) {
-          Pair p = pairs.Peek();
+          BracePos p = pairs.Peek();
           if ( braceList[p.Brace] == ch ) {
             // yield closing brace
             pairs.Pop();
-            var tag = this.rainbowTags[p.Depth % MAX_DEPTH];
-            var span = new SnapshotSpan(snapshot, pt.Position, 1);
-            yield return new TagSpan<RainbowClassificationTag>(span, tag);
+            BracePos c = new BracePos {
+              Brace = ch, Depth = p.Depth,
+              Position = pt.Position
+            };
+            result.Add(c);
           }
         }
       }
