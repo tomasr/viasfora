@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(VB.ContentType)]
   [ContentType(FSharp.ContentType)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
-  [TagType(typeof(RainbowClassificationTag))]
+  [TagType(typeof(ClassificationTag))]
   public class RainbowTaggerProvider : ITaggerProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;

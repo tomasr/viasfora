@@ -10,9 +10,9 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowTagger : ITagger<RainbowClassificationTag>, IDisposable {
+  class RainbowTagger : ITagger<ClassificationTag>, IDisposable {
     private ITextBuffer theBuffer;
-    private RainbowClassificationTag[] rainbowTags;
+    private ClassificationTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const int MAX_DEPTH = 4;
     private LanguageInfo language;
@@ -29,10 +29,10 @@ namespace Winterdom.Viasfora.Text {
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
       this.theBuffer = buffer;
-      rainbowTags = new RainbowClassificationTag[MAX_DEPTH];
+      rainbowTags = new ClassificationTag[MAX_DEPTH];
 
       for ( int i = 0; i < MAX_DEPTH; i++ ) {
-        rainbowTags[i] = new RainbowClassificationTag(
+        rainbowTags[i] = new ClassificationTag(
           registry.GetClassificationType(Constants.RAINBOW + (i + 1)));
       }
 
@@ -54,7 +54,7 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    public IEnumerable<ITagSpan<RainbowClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
+    public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
       if ( !VsfSettings.RainbowTagsEnabled ) yield break;
       if ( spans.Count == 0 ) {
         yield break;
@@ -72,7 +72,7 @@ namespace Winterdom.Viasfora.Text {
         if ( brace.Position >= startPosition ) {
           var span = new SnapshotSpan(snapshot, brace.Position, 1);
           var tag = this.rainbowTags[brace.Depth % MAX_DEPTH];
-          yield return new TagSpan<RainbowClassificationTag>(span, tag);
+          yield return new TagSpan<ClassificationTag>(span, tag);
         }
       }
     }
@@ -199,14 +199,6 @@ namespace Winterdom.Viasfora.Text {
         tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(snapshot, startPosition,
             snapshot.Length - startPosition)));
       }
-    }
-  }
-
-  // we use this so that the KeywordClassifier doesn't pick us up.
-  public class RainbowClassificationTag : IClassificationTag {
-    public IClassificationType ClassificationType { get; private set; }
-    public RainbowClassificationTag(IClassificationType type) {
-      this.ClassificationType = type;
     }
   }
 }
