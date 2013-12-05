@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using System.Windows.Threading;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -77,31 +78,22 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private bool ContainedIn(int pos, NormalizedSnapshotSpanCollection spans) {
-      foreach ( var sp in spans ) {
-        if ( sp.Contains(pos) ) {
-          return true;
-        }
-      }
-      return false;
-    }
-
     private void UpdateBraceList(SnapshotPoint startPoint) {
       List<BracePos> newList = new List<BracePos>();
       ITextSnapshot snapshot = startPoint.Snapshot;
       this.ExtractBracesFromLastBrace(snapshot, startPoint.Position, this.bracesFound, newList);
-      currentVersion = snapshot;
       SynchronousUpdate(startPoint, newList);
     }
 
     private void SynchronousUpdate(SnapshotPoint startPoint, List<BracePos> newBraces) {
       lock ( updateLock ) {
         this.bracesFound = newBraces;
+        currentVersion = startPoint.Snapshot;
         // notifying other taggers that we changed
         // turns out to be just too expensive most of the time
         // we're a fairly lazy extension, so it's ok if remainder
         // braces update after a second.
-        //NotifyUpdateTags(startPoint.Snapshot, startPoint.Position);
+        NotifyUpdateTags(startPoint.Snapshot, startPoint.Position);
       }
     }
 
