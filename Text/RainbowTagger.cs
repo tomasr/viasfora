@@ -63,10 +63,13 @@ namespace Winterdom.Viasfora.Text {
       if ( this.bracesFound.Count <= 0 || currentVersion != snapshot ) { 
         yield break;
       }
+      int startPosition = spans[0].Start;
+      int endPosition = spans[spans.Count - 1].End;
       foreach ( var brace in bracesFound ) {
         // only return tags that are included in 
         // the requested spans
-        if ( ContainedIn(brace.Position, spans) ) {
+        if ( brace.Position > endPosition ) break;
+        if ( brace.Position >= startPosition ) {
           var span = new SnapshotSpan(snapshot, brace.Position, 1);
           var tag = this.rainbowTags[brace.Depth % MAX_DEPTH];
           yield return new TagSpan<RainbowClassificationTag>(span, tag);
