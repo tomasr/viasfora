@@ -17,7 +17,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(JScript.ContentType)]
   [ContentType(JScript.ContentTypeVS2012)]
   [ContentType(FSharp.ContentType)]
-  [TagType(typeof(ClassificationTag))]
+  [TagType(typeof(KeywordTag))]
   public class KeywordTaggerProvider : IViewTaggerProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;

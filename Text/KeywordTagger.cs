@@ -10,15 +10,13 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
 
-  class KeywordTagger : ITagger<ClassificationTag>, IDisposable {
+  class KeywordTagger : ITagger<KeywordTag>, IDisposable {
     private ITextBuffer theBuffer;
-    private ClassificationTag keywordClassification;
-    private ClassificationTag linqClassification;
-    private ClassificationTag visClassification;
-    private ClassificationTag stringEscapeClassification;
+    private KeywordTag keywordClassification;
+    private KeywordTag linqClassification;
+    private KeywordTag visClassification;
+    private KeywordTag stringEscapeClassification;
     private ITagAggregator<IClassificationTag> aggregator;
-    private static readonly IList<ClassificationSpan> EmptyList =
-       new List<ClassificationSpan>();
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
@@ -30,18 +28,18 @@ namespace Winterdom.Viasfora.Text {
           ITagAggregator<IClassificationTag> aggregator) {
       theBuffer = buffer;
       keywordClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.KEYWORD_CLASSIF_NAME));
+         new KeywordTag(registry.GetClassificationType(Constants.KEYWORD_CLASSIF_NAME));
       linqClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.LINQ_CLASSIF_NAME));
+         new KeywordTag(registry.GetClassificationType(Constants.LINQ_CLASSIF_NAME));
       visClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
+         new KeywordTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
       stringEscapeClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
+         new KeywordTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
       this.aggregator = aggregator;
     }
 
-    public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
+    public IEnumerable<ITagSpan<KeywordTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
       if ( spans.Count == 0 ) {
         yield break;
       }
@@ -86,19 +84,19 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private ITagSpan<ClassificationTag> IsInterestingKeyword(LanguageInfo lang, SnapshotSpan cs) {
+    private ITagSpan<KeywordTag> IsInterestingKeyword(LanguageInfo lang, SnapshotSpan cs) {
       String text = cs.GetText().ToLower();
       if ( lang.ControlFlow.Contains(text) ) {
-        return new TagSpan<ClassificationTag>(cs, keywordClassification);
+        return new TagSpan<KeywordTag>(cs, keywordClassification);
       } else if ( lang.Visibility.Contains(text) ) {
-        return new TagSpan<ClassificationTag>(cs, visClassification);
+        return new TagSpan<KeywordTag>(cs, visClassification);
       } else if ( lang.Linq.Contains(text) ) {
-        return new TagSpan<ClassificationTag>(cs, linqClassification);
+        return new TagSpan<KeywordTag>(cs, linqClassification);
       }
       return null;
     }
 
-    private IEnumerable<ITagSpan<ClassificationTag>> ProcessEscapeSequences(SnapshotSpan cs) {
+    private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(SnapshotSpan cs) {
       String text = cs.GetText();
       // don't process verbatim strings
       if ( text.StartsWith("@") ) yield break;
@@ -118,7 +116,7 @@ namespace Winterdom.Viasfora.Text {
           if ( f == 'U' ) maxlen = 8;
           if ( len > maxlen ) len = maxlen;
           var sspan = new SnapshotSpan(cs.Snapshot, cs.Start.Position + start, len + 1);
-          yield return new TagSpan<ClassificationTag>(sspan, stringEscapeClassification);
+          yield return new TagSpan<KeywordTag>(sspan, stringEscapeClassification);
           start += len;
         }
         start++;
@@ -158,6 +156,13 @@ namespace Winterdom.Viasfora.Text {
 
     private LanguageInfo GetKeywordsByContentType(IContentType contentType) {
       return VsfPackage.LookupLanguage(contentType);
+    }
+  }
+
+  public class KeywordTag : IClassificationTag {
+    public IClassificationType ClassificationType { get; private set; }
+    public KeywordTag(IClassificationType classification) {
+      this.ClassificationType = classification;
     }
   }
 

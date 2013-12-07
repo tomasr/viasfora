@@ -11,29 +11,28 @@ using System.Windows.Threading;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowTagger : ITagger<ClassificationTag>, IDisposable {
+  class RainbowTagger : ITagger<RainbowTag>, IDisposable {
     private ITextBuffer theBuffer;
-    private ClassificationTag[] rainbowTags;
+    private RainbowTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const int MAX_DEPTH = 4;
     private LanguageInfo language;
-    private ITextSnapshot currentVersion;
-    private List<BracePos> bracesFound = new List<BracePos>();
     private object updateLock = new object();
+    private Dispatcher dispatcher;
+    private BraceCache braceCache;
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 #pragma warning restore 67
 
-
     internal RainbowTagger(
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
       this.theBuffer = buffer;
-      rainbowTags = new ClassificationTag[MAX_DEPTH];
+      rainbowTags = new RainbowTag[MAX_DEPTH];
 
       for ( int i = 0; i < MAX_DEPTH; i++ ) {
-        rainbowTags[i] = new ClassificationTag(
+        rainbowTags[i] = new RainbowTag(
           registry.GetClassificationType(Constants.RAINBOW + (i + 1)));
       }
 
@@ -42,7 +41,9 @@ namespace Winterdom.Viasfora.Text {
       this.theBuffer.ChangedLowPriority += this.BufferChanged;
       this.theBuffer.ContentTypeChanged += this.ContentTypeChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
+      this.dispatcher = Dispatcher.CurrentDispatcher;
 
+      this.braceCache = new BraceCache(buffer.CurrentSnapshot);
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
     }
 
@@ -55,69 +56,74 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      if ( !VsfSettings.RainbowTagsEnabled ) yield break;
+    public IEnumerable<ITagSpan<RainbowTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
+      if ( !VsfSettings.RainbowTagsEnabled ) {
+        yield break;
+      }
       if ( spans.Count == 0 ) {
         yield break;
       }
       ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( this.bracesFound.Count <= 0 || currentVersion != snapshot ) { 
+      if ( braceCache == null || braceCache.Snapshot != snapshot ) { 
         yield break;
       }
-      int startPosition = spans[0].Start;
-      int endPosition = spans[spans.Count - 1].End;
-      foreach ( var brace in bracesFound ) {
-        // only return tags that are included in 
-        // the requested spans
-        if ( brace.Position > endPosition ) break;
-        if ( brace.Position >= startPosition ) {
-          var span = new SnapshotSpan(snapshot, brace.Position, 1);
-          var tag = this.rainbowTags[brace.Depth % MAX_DEPTH];
-          yield return new TagSpan<ClassificationTag>(span, tag);
-        }
+      foreach ( var brace in braceCache.BracesInSpans(spans) ) {
+        var tag = rainbowTags[brace.Depth % MAX_DEPTH];
+        var span = new SnapshotSpan(snapshot, brace.Position, 1);
+        yield return new TagSpan<RainbowTag>(span, tag);
       }
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint) {
-      List<BracePos> newList = new List<BracePos>();
+      UpdateBraceList(startPoint, true);
+    }
+    private void UpdateBraceList(ITextSnapshot snapshot, INormalizedTextChangeCollection changes) {
+      bool notify = true;
+      var startPoint = new SnapshotPoint(snapshot, changes[0].NewSpan.Start);
+      UpdateBraceList(startPoint, notify);
+    }
+    private void UpdateBraceList(SnapshotPoint startPoint, bool notifyUpdate) {
       ITextSnapshot snapshot = startPoint.Snapshot;
-      this.ExtractBracesFromLastBrace(snapshot, startPoint.Position, this.bracesFound, newList);
-      SynchronousUpdate(startPoint, newList);
+      BraceCache newCache = new BraceCache(snapshot);
+      this.ExtractBracesFromLastBrace(snapshot, startPoint.Position, this.braceCache, newCache);
+      SynchronousUpdate(notifyUpdate, startPoint, newCache);
     }
 
-    private void SynchronousUpdate(SnapshotPoint startPoint, List<BracePos> newBraces) {
+    private void SynchronousUpdate(bool notify, SnapshotPoint startPoint, BraceCache newCache) {
       lock ( updateLock ) {
-        this.bracesFound = newBraces;
-        currentVersion = startPoint.Snapshot;
-        // notifying other taggers that we changed
-        // turns out to be just too expensive most of the time
-        // we're a fairly lazy extension, so it's ok if remainder
-        // braces update after a second.
-        NotifyUpdateTags(startPoint.Snapshot, startPoint.Position);
+        this.braceCache = newCache;
+        // notifying other taggers that we changed something.
+        // Unfortunately, this can be brutally slow, so
+        // just invalidate the rest of the line, and the rest
+        // will get updated "soon" (for some definition of soon)
+        if ( notify ) {
+          var line = startPoint.GetContainingLine();
+          var span = new SnapshotSpan(startPoint, line.End - startPoint);
+          dispatcher.BeginInvoke(
+            new Action<SnapshotSpan>(s => NotifyUpdateTags(s)),
+            DispatcherPriority.Background,
+            span);
+        }
       }
-    }
-
-    class BracePos {
-      public char Brace { get; set; }
-      public int Depth { get; set; }
-      public int Position { get; set; }
     }
 
     private void ExtractBracesFromLastBrace(
           ITextSnapshot snapshot, int changePos, 
-          List<BracePos> currentBraces, List<BracePos> result) {
+          BraceCache currentBraces, BraceCache newBraces) {
       int startPosition = 0;
+
       // figure out where to start parsing again
+      int lastLineNum = -1;
       Stack<BracePos> pairs = new Stack<BracePos>();
-      foreach ( var r in currentBraces ) {
+      foreach ( var r in currentBraces.AllBraces() ) {
         if ( r.Position >= changePos ) break;
         if ( IsOpeningBrace(r.Brace) ) {
           pairs.Push(r);
         } else {
           pairs.Pop();
         }
-        startPosition = r.Position+1;
-        result.Add(r);
+        startPosition = r.Position + 1;
+        newBraces.Add(r);
       }
       // now we have the state back to our original status
       // so that we can extract the remainder of the tags
@@ -131,7 +137,7 @@ namespace Winterdom.Viasfora.Text {
             Position = pt.Position
           };
           pairs.Push(p);
-          result.Add(p);
+          newBraces.Add(p);
         } else if ( IsClosingBrace(ch) && pairs.Count > 0 ) {
           BracePos p = pairs.Peek();
           if ( braceList[p.Brace] == ch ) {
@@ -141,7 +147,7 @@ namespace Winterdom.Viasfora.Text {
               Brace = ch, Depth = p.Depth,
               Position = pt.Position
             };
-            result.Add(c);
+            newBraces.Add(c);
           }
         }
       }
@@ -173,7 +179,7 @@ namespace Winterdom.Viasfora.Text {
         // the snapshot changed, so we need to pretty much update
         // everything so that it matches.
         if ( e.Changes.Count > 0 ) {
-          UpdateBraceList(new SnapshotPoint(e.After, e.Changes[0].NewSpan.Start));
+          UpdateBraceList(e.After, e.Changes);
         }
       }
     }
@@ -185,12 +191,19 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private void NotifyUpdateTags(ITextSnapshot snapshot, int startPosition) {
+    private void NotifyUpdateTags(SnapshotSpan span) {
       var tempEvent = TagsChanged;
       if ( tempEvent != null ) {
-        tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(snapshot, startPosition,
-            snapshot.Length - startPosition)));
+        tempEvent(this, new SnapshotSpanEventArgs(span));
       }
     }
   }
+
+  public class RainbowTag : IClassificationTag {
+    public IClassificationType ClassificationType { get; private set; }
+    public RainbowTag(IClassificationType classification) {
+      this.ClassificationType = classification;
+    }
+  }
+
 }
