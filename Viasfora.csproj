@@ -82,7 +82,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tags\IRainbowTag.cs" />
+    <Compile Include="Tags\KeywordTag.cs" />
+    <Compile Include="Tags\RainbowTag.cs" />
+    <Compile Include="Text\BraceCache.cs" />
     <Compile Include="Text\BraceExtractor.cs" />
+    <Compile Include="Text\BracePos.cs" />
     <Compile Include="Text\CBasedLanguage.cs" />
     <Compile Include="Text\FSharp.cs" />
     <Compile Include="Text\LanguageInfo.cs" />

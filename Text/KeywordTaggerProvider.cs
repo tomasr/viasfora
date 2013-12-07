@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -17,7 +18,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(JScript.ContentType)]
   [ContentType(JScript.ContentTypeVS2012)]
   [ContentType(FSharp.ContentType)]
-  [TagType(typeof(ClassificationTag))]
+  [TagType(typeof(KeywordTag))]
   public class KeywordTaggerProvider : IViewTaggerProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;

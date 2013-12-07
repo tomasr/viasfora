@@ -23,7 +23,7 @@ namespace Winterdom.Viasfora.Text {
       this.currentLine = this.snapshot.GetLineFromPosition(startPoint.Position);
       this.language = language;
       this.braceChars = language.BraceList;
-      this.pos = 0;
+      this.pos = startPoint.Position - currentLine.Start;
       this.status = ST_NORMAL;
     }
 

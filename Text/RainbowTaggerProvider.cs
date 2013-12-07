@@ -7,10 +7,11 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
 
-  [Export(typeof(ITaggerProvider))]
+  [Export(typeof(IViewTaggerProvider))]
   [ContentType(CSharp.ContentType)]
   [ContentType(Cpp.ContentType)]
   [ContentType(JScript.ContentType)]
@@ -18,14 +19,13 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(VB.ContentType)]
   [ContentType(FSharp.ContentType)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
-  [TagType(typeof(RainbowClassificationTag))]
-  public class RainbowTaggerProvider : ITaggerProvider {
+  [TagType(typeof(RainbowTag))]
+  public class RainbowTaggerProvider : IViewTaggerProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
 
-    public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
+    public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
       return new RainbowTagger(buffer, ClassificationRegistry) as ITagger<T>;
     }
   }
-
 }
