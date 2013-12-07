@@ -50,6 +50,11 @@ namespace Winterdom.Viasfora.Text {
       return braces;
     }
 
+    public IEnumerable<BracePos> BracesFromPosition(int position) {
+      SnapshotSpan span = new SnapshotSpan(Snapshot, position, Snapshot.Length - position);
+      return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
+    }
+
     private int FindIndexOfFirstBraceInSpan(SnapshotSpan wantedSpan) {
       int line = Snapshot.GetLineNumberFromPosition(wantedSpan.Start);
       int spanEndLine = Snapshot.GetLineNumberFromPosition(wantedSpan.End);

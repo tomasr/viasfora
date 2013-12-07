@@ -93,21 +93,13 @@ namespace Winterdom.Viasfora.Text {
     private void SynchronousUpdate(bool notify, SnapshotPoint startPoint, BraceCache newCache) {
       lock ( updateLock ) {
         this.braceCache = newCache;
-        // notifying other taggers that we changed something.
-        // Unfortunately, this can be brutally slow, so
-        // just invalidate the rest of the line now, then
-        // invalidate the rest asynchronously
+        // only invalidate the spans
+        // containing all the positions of braces from the start point, leave
+        // the rest alone
         if ( notify ) {
-          var line = startPoint.GetContainingLine();
-          var span = new SnapshotSpan(startPoint, startPoint.Snapshot.Length - startPoint);
-          NotifyUpdateTags(span);
-          /*
-          span = new SnapshotSpan(line.End, startPoint.Snapshot.Length - line.End);
-          dispatcher.BeginInvoke(
-            new Action<SnapshotSpan>(s => NotifyUpdateTags(s)),
-            DispatcherPriority.ApplicationIdle,
-            span);
-          */
+          foreach ( var brace in newCache.BracesFromPosition(startPoint.Position) ) {
+            NotifyUpdateTags(new SnapshotSpan(startPoint.Snapshot, brace.Position, 1));
+          }
         }
       }
     }
@@ -118,7 +110,6 @@ namespace Winterdom.Viasfora.Text {
       int startPosition = 0;
 
       // figure out where to start parsing again
-      int lastLineNum = -1;
       Stack<BracePos> pairs = new Stack<BracePos>();
       foreach ( var r in currentBraces.AllBraces() ) {
         if ( r.Position >= changePos ) break;

@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Text.Editor;
 
 namespace Winterdom.Viasfora.Tags {
-  public class RainbowTag : IRainbowTag {
-    public IClassificationType ClassificationType { get; private set; }
-    public RainbowTag(IClassificationType classification) {
-      this.ClassificationType = classification;
-    }
+  public interface IRainbowTag : IClassificationTag {
   }
 }
