@@ -113,8 +113,8 @@ namespace Winterdom.Viasfora.Text {
               len++;
             }
           }
-          if ( f == 'u' ) maxlen = 4;
-          if ( f == 'U' ) maxlen = 8;
+          if ( f == 'u' ) maxlen = 5;
+          if ( f == 'U' ) maxlen = 9;
           if ( len > maxlen ) len = maxlen;
           var sspan = new SnapshotSpan(cs.Snapshot, cs.Start.Position + start, len + 1);
           yield return new TagSpan<KeywordTag>(sspan, stringEscapeClassification);
