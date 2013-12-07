@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using System.Windows.Threading;
+using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -94,15 +95,19 @@ namespace Winterdom.Viasfora.Text {
         this.braceCache = newCache;
         // notifying other taggers that we changed something.
         // Unfortunately, this can be brutally slow, so
-        // just invalidate the rest of the line, and the rest
-        // will get updated "soon" (for some definition of soon)
+        // just invalidate the rest of the line now, then
+        // invalidate the rest asynchronously
         if ( notify ) {
           var line = startPoint.GetContainingLine();
-          var span = new SnapshotSpan(startPoint, line.End - startPoint);
+          var span = new SnapshotSpan(startPoint, startPoint.Snapshot.Length - startPoint);
+          NotifyUpdateTags(span);
+          /*
+          span = new SnapshotSpan(line.End, startPoint.Snapshot.Length - line.End);
           dispatcher.BeginInvoke(
             new Action<SnapshotSpan>(s => NotifyUpdateTags(s)),
-            DispatcherPriority.Background,
+            DispatcherPriority.ApplicationIdle,
             span);
+          */
         }
       }
     }
@@ -198,12 +203,4 @@ namespace Winterdom.Viasfora.Text {
       }
     }
   }
-
-  public class RainbowTag : IClassificationTag {
-    public IClassificationType ClassificationType { get; private set; }
-    public RainbowTag(IClassificationType classification) {
-      this.ClassificationType = classification;
-    }
-  }
-
 }

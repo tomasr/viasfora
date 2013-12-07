@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -156,13 +157,6 @@ namespace Winterdom.Viasfora.Text {
 
     private LanguageInfo GetKeywordsByContentType(IContentType contentType) {
       return VsfPackage.LookupLanguage(contentType);
-    }
-  }
-
-  public class KeywordTag : IClassificationTag {
-    public IClassificationType ClassificationType { get; private set; }
-    public KeywordTag(IClassificationType classification) {
-      this.ClassificationType = classification;
     }
   }
 
