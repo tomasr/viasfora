@@ -8,6 +8,9 @@ namespace Winterdom.Viasfora.Text {
     public override string BraceList {
       get { return "(){}[]"; }
     }
+    public override bool SupportsEscapeSeqs {
+      get { return true; }
+    }
 
     public override bool IsSingleLineCommentStart(string text, int pos) {
       if ( pos > 0 && text[pos - 1] == '/' && text[pos] == '/' ) {

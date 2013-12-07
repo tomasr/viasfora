@@ -44,10 +44,10 @@ namespace Winterdom.Viasfora.Text {
       if ( spans.Count == 0 ) {
         yield break;
       }
-      bool eshe = VsfSettings.EscapeSeqHighlightEnabled;
-      bool kce = VsfSettings.KeywordClassifierEnabled;
       LanguageInfo lang =
          GetKeywordsByContentType(spans[0].Snapshot.TextBuffer.ContentType);
+      bool eshe = VsfSettings.EscapeSeqHighlightEnabled && lang.SupportsEscapeSeqs;
+      bool kce = VsfSettings.KeywordClassifierEnabled;
 
       if ( kce || eshe ) {
         foreach ( var tag in GetClassifiedSpans(spans, "string", "keyword") ) {
@@ -144,6 +144,7 @@ namespace Winterdom.Viasfora.Text {
           NormalizedSnapshotSpanCollection spans, params String[] tagNames) {
       ITextSnapshot snapshot = spans[0].Snapshot;
       foreach ( var tagSpan in aggregator.GetTags(spans) ) {
+        if ( tagSpan.Tag is IRainbowTag ) continue;
         String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
         String matchingName;
         if ( HasMatchingName(tagNames, name, out matchingName) ) {

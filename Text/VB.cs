@@ -38,6 +38,9 @@ namespace Winterdom.Viasfora.Text {
     public override string BraceList {
       get { return "()"; }
     }
+    public override bool SupportsEscapeSeqs {
+      get { return false; }
+    }
 
     public override bool IsMultiLineCommentStart(string text, int pos) {
       return false;

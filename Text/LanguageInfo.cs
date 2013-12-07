@@ -20,6 +20,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public abstract String BraceList { get; }
+    public abstract bool SupportsEscapeSeqs { get; }
     public abstract bool IsSingleLineCommentStart(String text, int pos);
     public abstract bool IsMultiLineCommentStart(String text, int pos);
     public abstract bool IsMultiLineCommentEnd(String text, int pos);
