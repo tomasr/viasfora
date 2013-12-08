@@ -14,7 +14,7 @@ namespace Winterdom.Viasfora.Text {
 
   class RainbowClassifier : IClassifier, IDisposable {
     private ITextBuffer theBuffer;
-    private RainbowTag[] rainbowTags;
+    private IClassificationType[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const int MAX_DEPTH = 4;
     private LanguageInfo language;
@@ -30,11 +30,10 @@ namespace Winterdom.Viasfora.Text {
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
       this.theBuffer = buffer;
-      rainbowTags = new RainbowTag[MAX_DEPTH];
+      rainbowTags = new IClassificationType[MAX_DEPTH];
 
       for ( int i = 0; i < MAX_DEPTH; i++ ) {
-        rainbowTags[i] = new RainbowTag(
-          registry.GetClassificationType(Constants.RAINBOW + (i + 1)));
+        rainbowTags[i] = registry.GetClassificationType(Constants.RAINBOW + (i + 1));
       }
 
       SetLanguage(buffer.ContentType);
@@ -72,7 +71,7 @@ namespace Winterdom.Viasfora.Text {
       foreach ( var brace in braceCache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)) ) {
         var tag = rainbowTags[brace.Depth % MAX_DEPTH];
         var nspan = new SnapshotSpan(snapshot, brace.Position, 1);
-        result.Add(new ClassificationSpan(nspan, tag.ClassificationType));
+        result.Add(new ClassificationSpan(nspan, tag));
       }
       return result;
     }

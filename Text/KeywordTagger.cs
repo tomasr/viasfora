@@ -144,7 +144,6 @@ namespace Winterdom.Viasfora.Text {
           NormalizedSnapshotSpanCollection spans, params String[] tagNames) {
       ITextSnapshot snapshot = spans[0].Snapshot;
       foreach ( var tagSpan in aggregator.GetTags(spans) ) {
-        if ( tagSpan.Tag is IRainbowTag ) continue;
         String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
         String matchingName;
         if ( HasMatchingName(tagNames, name, out matchingName) ) {
