@@ -20,12 +20,12 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(FSharp.ContentType)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   [Name("Rainbow Classifier")]
-  public class RainbowTaggerProvider : IClassifierProvider {
+  public class RainbowClassifierProvider : IClassifierProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
 
     public IClassifier GetClassifier(ITextBuffer buffer) {
-      return new RainbowTagger(buffer, ClassificationRegistry);
+      return new RainbowClassifier(buffer, ClassificationRegistry);
     }
   }
 }

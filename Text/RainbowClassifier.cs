@@ -12,7 +12,7 @@ using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowTagger : IClassifier, IDisposable {
+  class RainbowClassifier : IClassifier, IDisposable {
     private ITextBuffer theBuffer;
     private RainbowTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
@@ -26,7 +26,7 @@ namespace Winterdom.Viasfora.Text {
     public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
 #pragma warning restore 67
 
-    internal RainbowTagger(
+    internal RainbowClassifier(
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
       this.theBuffer = buffer;
