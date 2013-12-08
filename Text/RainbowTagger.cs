@@ -12,7 +12,7 @@ using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowTagger : ITagger<RainbowTag>, IDisposable {
+  class RainbowTagger : IClassifier, IDisposable {
     private ITextBuffer theBuffer;
     private RainbowTag[] rainbowTags;
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
@@ -23,7 +23,7 @@ namespace Winterdom.Viasfora.Text {
     private BraceCache braceCache;
 
 #pragma warning disable 67
-    public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
+    public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
 #pragma warning restore 67
 
     internal RainbowTagger(
@@ -57,32 +57,36 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    public IEnumerable<ITagSpan<RainbowTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
+    public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span) {
+      List<ClassificationSpan> result = new List<ClassificationSpan>();
       if ( !VsfSettings.RainbowTagsEnabled ) {
-        yield break;
+        return result;
       }
-      if ( spans.Count == 0 ) {
-        yield break;
+      if ( span.Length == 0 ) {
+        return result;
       }
-      ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( braceCache == null || braceCache.Snapshot != snapshot ) { 
-        yield break;
+      ITextSnapshot snapshot = span.Snapshot;
+      if ( braceCache == null || braceCache.Snapshot != snapshot ) {
+        return result;
       }
-      foreach ( var brace in braceCache.BracesInSpans(spans) ) {
+      foreach ( var brace in braceCache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)) ) {
         var tag = rainbowTags[brace.Depth % MAX_DEPTH];
-        var span = new SnapshotSpan(snapshot, brace.Position, 1);
-        yield return new TagSpan<RainbowTag>(span, tag);
+        var nspan = new SnapshotSpan(snapshot, brace.Position, 1);
+        result.Add(new ClassificationSpan(nspan, tag.ClassificationType));
       }
+      return result;
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint) {
       UpdateBraceList(startPoint, true);
     }
+
     private void UpdateBraceList(ITextSnapshot snapshot, INormalizedTextChangeCollection changes) {
       bool notify = true;
       var startPoint = new SnapshotPoint(snapshot, changes[0].NewSpan.Start);
       UpdateBraceList(startPoint, notify);
     }
+
     private void UpdateBraceList(SnapshotPoint startPoint, bool notifyUpdate) {
       ITextSnapshot snapshot = startPoint.Snapshot;
       BraceCache newCache = new BraceCache(snapshot);
@@ -188,9 +192,9 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void NotifyUpdateTags(SnapshotSpan span) {
-      var tempEvent = TagsChanged;
+      var tempEvent = this.ClassificationChanged;
       if ( tempEvent != null ) {
-        tempEvent(this, new SnapshotSpanEventArgs(span));
+        tempEvent(this, new ClassificationChangedEventArgs(span));
       }
     }
   }
