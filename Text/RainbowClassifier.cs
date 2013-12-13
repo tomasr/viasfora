@@ -9,18 +9,20 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Tags;
+using System.Threading;
 
 namespace Winterdom.Viasfora.Text {
 
   class RainbowClassifier : IClassifier, IDisposable {
     private ITextBuffer theBuffer;
     private IClassificationType[] rainbowTags;
-    private Dictionary<char, char> braceList = new Dictionary<char, char>();
     private const int MAX_DEPTH = 4;
-    private LanguageInfo language;
     private object updateLock = new object();
     private Dispatcher dispatcher;
+    private DispatcherTimer dispatcherTimer;
+    private Thread timerThread;
     private BraceCache braceCache;
+    private int updatePendingFrom;
 
 #pragma warning disable 67
     public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
@@ -38,12 +40,12 @@ namespace Winterdom.Viasfora.Text {
 
       SetLanguage(buffer.ContentType);
 
+      this.updatePendingFrom = -1;
       this.theBuffer.ChangedLowPriority += this.BufferChanged;
       this.theBuffer.ContentTypeChanged += this.ContentTypeChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
       this.dispatcher = Dispatcher.CurrentDispatcher;
 
-      this.braceCache = new BraceCache(buffer.CurrentSnapshot);
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
     }
 
@@ -87,86 +89,64 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint, bool notifyUpdate) {
-      ITextSnapshot snapshot = startPoint.Snapshot;
-      BraceCache newCache = new BraceCache(snapshot);
-      this.ExtractBracesFromLastBrace(snapshot, startPoint.Position, this.braceCache, newCache);
-      SynchronousUpdate(notifyUpdate, startPoint, newCache);
+      this.braceCache.Invalidate(startPoint);
+      SynchronousUpdate(notifyUpdate, startPoint);
     }
 
-    private void SynchronousUpdate(bool notify, SnapshotPoint startPoint, BraceCache newCache) {
+    private void SynchronousUpdate(bool notify, SnapshotPoint startPoint) {
       lock ( updateLock ) {
-        this.braceCache = newCache;
         // only invalidate the spans
         // containing all the positions of braces from the start point, leave
         // the rest alone
         if ( notify ) {
-          foreach ( var brace in newCache.BracesFromPosition(startPoint.Position) ) {
+          this.updatePendingFrom = startPoint.Position;
+          ScheduleUpdate();
+          /*
+          //foreach ( var brace in newCache.BracesFromPosition(startPoint.Position) ) {
             NotifyUpdateTags(new SnapshotSpan(startPoint.Snapshot, brace.Position, 1));
           }
+          */
         }
       }
     }
 
-    private void ExtractBracesFromLastBrace(
-          ITextSnapshot snapshot, int changePos, 
-          BraceCache currentBraces, BraceCache newBraces) {
-      int startPosition = 0;
-
-      // figure out where to start parsing again
-      Stack<BracePos> pairs = new Stack<BracePos>();
-      foreach ( var r in currentBraces.AllBraces() ) {
-        if ( r.Position >= changePos ) break;
-        if ( IsOpeningBrace(r.Brace) ) {
-          pairs.Push(r);
-        } else {
-          pairs.Pop();
-        }
-        startPosition = r.Position + 1;
-        newBraces.Add(r);
+    private void ScheduleUpdate() {
+      if ( theBuffer == null ) {
+        return;
       }
-      // now we have the state back to our original status
-      // so that we can extract the remainder of the tags
-      BraceExtractor extractor = new BraceExtractor(
-        new SnapshotPoint(snapshot, startPosition), language);
-      foreach ( var pt in extractor.All() ) {
-        char ch = pt.GetChar();
-        if ( IsOpeningBrace(ch) ) {
-          BracePos p = new BracePos {
-            Brace = ch, Depth = pairs.Count,
-            Position = pt.Position
-          };
-          pairs.Push(p);
-          newBraces.Add(p);
-        } else if ( IsClosingBrace(ch) && pairs.Count > 0 ) {
-          BracePos p = pairs.Peek();
-          if ( braceList[p.Brace] == ch ) {
-            // yield closing brace
-            pairs.Pop();
-            BracePos c = new BracePos {
-              Brace = ch, Depth = p.Depth,
-              Position = pt.Position
-            };
-            newBraces.Add(c);
-          }
-        }
+      if ( dispatcherTimer == null ) {
+        dispatcherTimer = new DispatcherTimer(DispatcherPriority.ApplicationIdle, this.dispatcher);
+        dispatcherTimer.Interval = TimeSpan.FromMilliseconds(3000);
+        dispatcherTimer.Tick += OnScheduledUpdate;
+      }
+      dispatcherTimer.Stop();
+      dispatcherTimer.Start();
+    }
+
+    private void OnScheduledUpdate(object sender, EventArgs e) {
+      try {
+        if ( theBuffer == null || timerThread != null ) return;
+        timerThread = Thread.CurrentThread;
+        dispatcherTimer.Stop();
+        FireTagsChanged();
+      } catch {
+      } finally {
+        timerThread = null;
       }
     }
 
-    private bool IsClosingBrace(char ch) {
-      return braceList.Values.Contains(ch);
-    }
-
-    private bool IsOpeningBrace(char ch) {
-      return braceList.ContainsKey(ch);
+    private void FireTagsChanged() {
+      this.updatePendingFrom = -1;
+      var snapshot = braceCache.Snapshot;
+      int upd = this.updatePendingFrom;
+      var startPoint = new SnapshotPoint(snapshot, upd);
+      foreach ( var brace in braceCache.BracesFromPosition(upd) ) {
+        NotifyUpdateTags(new SnapshotSpan(snapshot, brace.Position, 1));
+      }
     }
 
     private void SetLanguage(IContentType contentType) {
-      language = VsfPackage.LookupLanguage(contentType);
-      this.braceList.Clear();
-      String braceChars = language.BraceList;
-      for ( int i = 0; i < braceChars.Length; i += 2 ) {
-        this.braceList.Add(braceChars[i], braceChars[i + 1]);
-      }
+      this.braceCache = new BraceCache(this.theBuffer.CurrentSnapshot, contentType, 10);
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
@@ -193,7 +173,10 @@ namespace Winterdom.Viasfora.Text {
     private void NotifyUpdateTags(SnapshotSpan span) {
       var tempEvent = this.ClassificationChanged;
       if ( tempEvent != null ) {
-        tempEvent(this, new ClassificationChangedEventArgs(span));
+        Action action = delegate() {
+          tempEvent(this, new ClassificationChangedEventArgs(span));
+        };
+        dispatcher.BeginInvoke(action, DispatcherPriority.ApplicationIdle);
       }
     }
   }
