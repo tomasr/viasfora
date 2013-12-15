@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
   public class BraceCache {
@@ -15,12 +16,14 @@ namespace Winterdom.Viasfora.Text {
     public ITextSnapshot Snapshot { get; private set; }
     public int LastParsedPosition { get; private set; }
     public LanguageInfo Language { get; private set; }
+    private IBraceExtractor braceExtractor;
 
     public BraceCache(ITextSnapshot snapshot, IContentType contentType, int linesToScan) {
       this.Snapshot = snapshot;
       this.linesToScan = linesToScan;
       this.LastParsedPosition = -1;
       this.Language = VsfPackage.LookupLanguage(contentType);
+      this.braceExtractor = this.Language.NewBraceExtractor();
 
       this.braceList.Clear();
       String braceChars = Language.BraceList;
@@ -83,35 +86,42 @@ namespace Winterdom.Viasfora.Text {
         if ( r.Position >= lastPoint ) break;
         if ( IsOpeningBrace(r.Brace) ) {
           pairs.Push(r);
-        } else {
+        } else if ( pairs.Count > 0 ) {
           pairs.Pop();
         }
         startPosition = r.Position + 1;
       }
       if ( lastGoodBrace < braces.Count ) {
-        braces.RemoveRange(lastGoodBrace, braces.Count - 1);
+        braces.RemoveRange(lastGoodBrace, braces.Count - lastGoodBrace);
       }
 
-      BraceExtractor extractor = new BraceExtractor(
-        new SnapshotPoint(Snapshot, startPosition), Language);
-      foreach ( var pt in extractor.All() ) {
-        char ch = pt.GetChar();
-        if ( IsOpeningBrace(ch) ) {
-          BracePos p = new BracePos {
-            Brace = ch, Depth = pairs.Count,
-            Position = pt.Position
-          };
+      ExtractBraces(pairs, startPosition);
+    }
+
+    private void ExtractBraces(Stack<BracePos> pairs, int pos) {
+      int lineNum = Snapshot.GetLineNumberFromPosition(pos);
+      while ( lineNum < Snapshot.LineCount  ) {
+        var line = Snapshot.GetLineFromLineNumber(lineNum++);
+        var lineOffset = pos > 0 ? pos - line.Start : 0;
+        ExtractFromLine(pairs, line, lineOffset);
+        pos = 0;
+      }
+    }
+
+    private void ExtractFromLine(Stack<BracePos> pairs, ITextSnapshotLine line, int lineOffset) {
+      var lc = new LineChars(line, lineOffset);
+      var bracesInLine = this.braceExtractor.Extract(lc).ToArray();
+      foreach ( var cp in bracesInLine ) {
+        if ( IsOpeningBrace(cp) ) {
+          BracePos p = cp.AsBrace(pairs.Count);
           pairs.Push(p);
           Add(p);
-        } else if ( IsClosingBrace(ch) && pairs.Count > 0 ) {
+        } else if ( IsClosingBrace(cp) && pairs.Count > 0 ) {
           BracePos p = pairs.Peek();
-          if ( braceList[p.Brace] == ch ) {
+          if ( braceList[p.Brace] == cp.Char ) {
             // yield closing brace
             pairs.Pop();
-            BracePos c = new BracePos {
-              Brace = ch, Depth = p.Depth,
-              Position = pt.Position
-            };
+            BracePos c = cp.AsBrace(p.Depth);
             Add(c);
           }
         }

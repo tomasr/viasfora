@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
   class FSharp : LanguageInfo {
@@ -37,6 +38,9 @@ namespace Winterdom.Viasfora.Text {
     }
     public override bool SupportsEscapeSeqs {
       get { return true; }
+    }
+    public override IBraceExtractor NewBraceExtractor() {
+      return null;
     }
 
     public override bool IsSingleLineCommentStart(string text, int pos) {
