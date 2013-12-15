@@ -43,7 +43,7 @@ namespace Winterdom.Viasfora.Text {
       get { return false; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return null;
+      return new VbBraceExtractor(this);
     }
 
     public override bool IsMultiLineCommentStart(string text, int pos) {

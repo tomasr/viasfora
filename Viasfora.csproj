@@ -97,6 +97,7 @@
     <Compile Include="Util\IBraceExtractor.cs" />
     <Compile Include="Util\ITextChars.cs" />
     <Compile Include="Util\LineChars.cs" />
+    <Compile Include="Util\VbBraceExtractor.cs" />
     <Compile Include="VsfSettings.cs" />
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />
