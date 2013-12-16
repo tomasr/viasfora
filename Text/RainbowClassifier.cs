@@ -72,8 +72,7 @@ namespace Winterdom.Viasfora.Text {
       }
       foreach ( var brace in braceCache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)) ) {
         var tag = rainbowTags[brace.Depth % MAX_DEPTH];
-        var nspan = new SnapshotSpan(snapshot, brace.Position, 1);
-        result.Add(new ClassificationSpan(nspan, tag));
+        result.Add(brace.ToSpan(snapshot, tag));
       }
       return result;
     }
