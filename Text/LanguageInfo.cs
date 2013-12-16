@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
   public abstract class LanguageInfo {
@@ -21,12 +22,7 @@ namespace Winterdom.Viasfora.Text {
 
     public abstract String BraceList { get; }
     public abstract bool SupportsEscapeSeqs { get; }
-    public abstract bool IsSingleLineCommentStart(String text, int pos);
-    public abstract bool IsMultiLineCommentStart(String text, int pos);
-    public abstract bool IsMultiLineCommentEnd(String text, int pos);
-    public abstract bool IsSingleLineStringStart(String text, int pos, out char quote);
-    public abstract bool IsMultiLineStringStart(String text, int pos, out char quote);
-    public abstract bool IsStringEnd(String text, int pos, char quote);
+    public abstract IBraceExtractor NewBraceExtractor();
 
     public bool MatchesContentType(IContentType contentType) {
       foreach ( String str in this.ContentTypes ) {

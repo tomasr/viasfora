@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
   class FSharp : LanguageInfo {
@@ -38,68 +39,8 @@ namespace Winterdom.Viasfora.Text {
     public override bool SupportsEscapeSeqs {
       get { return true; }
     }
-
-    public override bool IsSingleLineCommentStart(string text, int pos) {
-      if ( pos > 0 && text[pos - 1] == '/' && text[pos] == '/' ) {
-        return true;
-      }
-      return false;
-    }
-    public override bool IsMultiLineCommentStart(string text, int pos) {
-      if ( pos > 0 && text[pos - 1] == '(' && text[pos] == '*' ) {
-        return true;
-      }
-      return false;
-    }
-    public override bool IsMultiLineCommentEnd(string text, int pos) {
-      if ( pos > 0 && text[pos - 1] == '*' && text[pos] == ')' ) {
-        return true;
-      }
-      return false;
-    }
-    public override bool IsSingleLineStringStart(string text, int pos, out char quote) {
-      // F# does not have single line strings, but we can use
-      // this for char literals
-      quote = '\'';
-      if ( text[pos] == '\'' ) {
-        // if this is <' this is very likely a generic parameter, so skip it
-        if ( pos > 0 && text[pos - 1] == '<' )
-          return false;
-        // this may, or may not be, a char literal
-        // so probe ahead. We're looking for:
-        // 'c' or '\b' or '\uXXXX' or '\uXXXXXXXX' 
-        if ( pos < text.Length - 2 ) {
-          if ( text[pos + 1] == '\\' ) {
-            // has to be a escape sequence
-            return true;
-          }
-          if ( text[pos + 2] == '\'' )
-            return true;
-        }
-      }
-      return false;
-    }
-    public override bool IsMultiLineStringStart(string text, int pos, out char quote) {
-      quote = '\0';
-      if ( text[pos] == '"' ) {
-        quote = text[pos];
-        return true;
-      }
-      return false;
-    }
-    public override bool IsStringEnd(string text, int pos, char quote) {
-      if ( text[pos] == quote ) {
-        // check the character isn't escaped
-        if ( pos > 0 && text[pos-1] == '\\' ) {
-          // check the \ isn't escaped itself!
-          if ( pos > 1 && text[pos - 2] == '\\' ) {
-            return true;
-          }
-          return false;
-        }
-        return true;
-      }
-      return false;
+    public override IBraceExtractor NewBraceExtractor() {
+      return new FSharpBraceExtractor(this);
     }
   }
 }
