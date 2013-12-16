@@ -82,18 +82,23 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tags\IRainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
-    <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Text\BraceCache.cs" />
-    <Compile Include="Text\BraceExtractor.cs" />
-    <Compile Include="Text\BracePos.cs" />
+    <Compile Include="Util\BracePos.cs" />
     <Compile Include="Text\CBasedLanguage.cs" />
     <Compile Include="Text\FSharp.cs" />
     <Compile Include="Text\LanguageInfo.cs" />
-    <Compile Include="Text\RainbowTagger.cs" />
-    <Compile Include="Text\RainbowTaggerProvider.cs" />
+    <Compile Include="Text\RainbowClassifier.cs" />
+    <Compile Include="Text\RainbowClassifierProvider.cs" />
     <Compile Include="Text\VB.cs" />
+    <Compile Include="Util\CBraceExtractor.cs" />
+    <Compile Include="Util\CharPos.cs" />
+    <Compile Include="Util\JScriptBraceExtractor.cs" />
+    <Compile Include="Util\FSharpBraceExtractor.cs" />
+    <Compile Include="Util\IBraceExtractor.cs" />
+    <Compile Include="Util\ITextChars.cs" />
+    <Compile Include="Util\LineChars.cs" />
+    <Compile Include="Util\VbBraceExtractor.cs" />
     <Compile Include="VsfSettings.cs" />
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />

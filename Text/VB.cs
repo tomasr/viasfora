@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
   class VB : LanguageInfo {
@@ -41,26 +42,8 @@ namespace Winterdom.Viasfora.Text {
     public override bool SupportsEscapeSeqs {
       get { return false; }
     }
-
-    public override bool IsMultiLineCommentStart(string text, int pos) {
-      return false;
-    }
-    public override bool IsMultiLineCommentEnd(string text, int pos) {
-      return false;
-    }
-    public override bool IsSingleLineCommentStart(string text, int pos) {
-      return text[pos] == '\'';
-    }
-    public override bool IsMultiLineStringStart(string text, int pos, out char quote) {
-      quote = '\0';
-      return false;
-    }
-    public override bool IsSingleLineStringStart(string text, int pos, out char quote) {
-      quote = '"';
-      return text[pos] == '"';
-    }
-    public override bool IsStringEnd(string text, int pos, char quote) {
-      return text[pos] == quote;
+    public override IBraceExtractor NewBraceExtractor() {
+      return new VbBraceExtractor(this);
     }
   }
 }
