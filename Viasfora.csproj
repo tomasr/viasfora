@@ -84,7 +84,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="Text\BraceCache.cs" />
-    <Compile Include="Text\BraceExtractor.cs" />
     <Compile Include="Util\BracePos.cs" />
     <Compile Include="Text\CBasedLanguage.cs" />
     <Compile Include="Text\FSharp.cs" />

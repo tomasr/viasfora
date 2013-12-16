@@ -23,12 +23,6 @@ namespace Winterdom.Viasfora.Text {
     public abstract String BraceList { get; }
     public abstract bool SupportsEscapeSeqs { get; }
     public abstract IBraceExtractor NewBraceExtractor();
-    public abstract bool IsSingleLineCommentStart(String text, int pos);
-    public abstract bool IsMultiLineCommentStart(String text, int pos);
-    public abstract bool IsMultiLineCommentEnd(String text, int pos);
-    public abstract bool IsSingleLineStringStart(String text, int pos, out char quote);
-    public abstract bool IsMultiLineStringStart(String text, int pos, out char quote);
-    public abstract bool IsStringEnd(String text, int pos, char quote);
 
     public bool MatchesContentType(IContentType contentType) {
       foreach ( String str in this.ContentTypes ) {
