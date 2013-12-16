@@ -115,7 +115,7 @@ namespace Winterdom.Viasfora.Text {
 
     private void ExtractFromLine(Stack<BracePos> pairs, ITextSnapshotLine line, int lineOffset) {
       var lc = new LineChars(line, lineOffset);
-      var bracesInLine = this.braceExtractor.Extract(lc).ToArray();
+      var bracesInLine = this.braceExtractor.Extract(lc) /*.ToArray() */;
       foreach ( var cp in bracesInLine ) {
         if ( IsOpeningBrace(cp) ) {
           BracePos p = cp.AsBrace(pairs.Count);
@@ -131,6 +131,7 @@ namespace Winterdom.Viasfora.Text {
           }
         }
       }
+      this.LastParsedPosition = line.End;
     }
 
     private void Add(BracePos brace) {
@@ -153,7 +154,7 @@ namespace Winterdom.Viasfora.Text {
     private int FindIndexOfFirstBraceInSpan(SnapshotSpan wantedSpan) {
       int line = Snapshot.GetLineNumberFromPosition(wantedSpan.Start);
       int spanEndLine = Snapshot.GetLineNumberFromPosition(wantedSpan.End);
-      for ( ; line < spanEndLine; line++ ) {
+      for ( ; line <= spanEndLine; line++ ) {
         // line contains at least one brace, return it's
         // index within the braces list
         if ( lineCache[line] >= 0 ) {
@@ -175,6 +176,10 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void InvalidateFromBraceAtIndex(int index) {
+      if ( index >= braces.Count ) {
+        // invalidating from the last one, so not much else to do
+        return;
+      }
       BracePos lastBrace = braces[index];
       // invalidate the brace list
       braces.RemoveRange(index, braces.Count - index);
