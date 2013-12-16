@@ -10,6 +10,7 @@ namespace Winterdom.Viasfora.Util {
     bool EndOfLine { get; }
     char Char();
     char NChar();
+    char NNChar();
     void Next();
     void Skip(int count);
     void SkipRemainder();

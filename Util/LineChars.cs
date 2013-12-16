@@ -37,6 +37,10 @@ namespace Winterdom.Viasfora.Util {
       return Available(2) ? text[position+1] : EOT;
     }
 
+    public char NNChar() {
+      return Available(3) ? text[position+2] : EOT;
+    }
+
     public void Next() {
       Skip(1);
     }

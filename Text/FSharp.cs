@@ -40,7 +40,7 @@ namespace Winterdom.Viasfora.Text {
       get { return true; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return null;
+      return new FSharpBraceExtractor(this);
     }
 
     public override bool IsSingleLineCommentStart(string text, int pos) {
