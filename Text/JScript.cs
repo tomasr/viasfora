@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
   class JScript : CBasedLanguage {
@@ -29,6 +30,9 @@ namespace Winterdom.Viasfora.Text {
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType, ContentTypeVS2012 }; }
+    }
+    public override IBraceExtractor NewBraceExtractor() {
+      return new JScriptBraceExtractor(this);
     }
   }
 }

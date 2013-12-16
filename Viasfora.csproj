@@ -93,6 +93,7 @@
     <Compile Include="Text\VB.cs" />
     <Compile Include="Util\CBraceExtractor.cs" />
     <Compile Include="Util\CharPos.cs" />
+    <Compile Include="Util\JScriptBraceExtractor.cs" />
     <Compile Include="Util\FSharpBraceExtractor.cs" />
     <Compile Include="Util\IBraceExtractor.cs" />
     <Compile Include="Util\ITextChars.cs" />

@@ -52,6 +52,21 @@ namespace Winterdom.Viasfora.Util {
       this.position = line.Length;
     }
 
+    public String PreviousToken() {
+      int startPos = this.Position-1;
+      // skip any whitespace
+      for ( ; startPos > 0; startPos-- ) {
+        if ( !System.Char.IsWhiteSpace(text[startPos]) )
+          break;
+      }
+      int end = startPos;
+      for ( ; startPos > 0; startPos-- ) {
+        if ( System.Char.IsWhiteSpace(text[startPos]) )
+          break;
+      }
+      return text.Substring(startPos, end - startPos + 1);
+    }
+
     private bool Available(int count) {
       return this.position + count - 1 < line.Length;
     }
