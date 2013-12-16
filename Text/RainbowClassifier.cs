@@ -100,11 +100,6 @@ namespace Winterdom.Viasfora.Text {
         if ( notify ) {
           this.updatePendingFrom = startPoint.Position;
           ScheduleUpdate();
-          /*
-          //foreach ( var brace in newCache.BracesFromPosition(startPoint.Position) ) {
-            NotifyUpdateTags(new SnapshotSpan(startPoint.Snapshot, brace.Position, 1));
-          }
-          */
         }
       }
     }
@@ -115,7 +110,7 @@ namespace Winterdom.Viasfora.Text {
       }
       if ( dispatcherTimer == null ) {
         dispatcherTimer = new DispatcherTimer(DispatcherPriority.ApplicationIdle, this.dispatcher);
-        dispatcherTimer.Interval = TimeSpan.FromMilliseconds(3000);
+        dispatcherTimer.Interval = TimeSpan.FromMilliseconds(500);
         dispatcherTimer.Tick += OnScheduledUpdate;
       }
       dispatcherTimer.Stop();
@@ -135,13 +130,13 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void FireTagsChanged() {
-      this.updatePendingFrom = -1;
       var snapshot = braceCache.Snapshot;
       int upd = this.updatePendingFrom;
       var startPoint = new SnapshotPoint(snapshot, upd);
       foreach ( var brace in braceCache.BracesFromPosition(upd) ) {
         NotifyUpdateTags(new SnapshotSpan(snapshot, brace.Position, 1));
       }
+      this.updatePendingFrom = -1;
     }
 
     private void SetLanguage(IContentType contentType) {

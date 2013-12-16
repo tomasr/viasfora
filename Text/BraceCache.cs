@@ -35,15 +35,19 @@ namespace Winterdom.Viasfora.Text {
 
 
     public void Invalidate(SnapshotPoint startPoint) {
-      var span = new SnapshotSpan(Snapshot, startPoint.Position, 
-        Snapshot.Length - startPoint.Position);
+      // the new start belongs to a different snapshot!
+      var newSnapshot = startPoint.Snapshot;
+      this.Snapshot = newSnapshot;
+      var end = new SnapshotPoint(newSnapshot, newSnapshot.Length);
+      var span = new SnapshotSpan(startPoint, end);
+      // remove everything cached after the startPoint
       int index = FindIndexOfFirstBraceInSpan(span);
       if ( index >= 0 ) {
         InvalidateFromBraceAtIndex(index);
+        // otherwise, there are no braces after startPoint
       }
-      this.Snapshot = startPoint.Snapshot;
       EnsureLineCacheCapacity(this.Snapshot.LineCount);
-      ContinueParsing(startPoint);
+      //ContinueParsing(startPoint, Snapshot.Length);
     }
 
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
@@ -73,17 +77,17 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void ExtractUntil(int position) {
-      ContinueParsing(position);
+      ContinueParsing(this.LastParsedPosition, position);
     }
 
-    private void ContinueParsing(int lastPoint) {
+    private void ContinueParsing(int lastPointParsed, int parseUntil) {
       int startPosition = 0;
       int lastGoodBrace = 0;
       // figure out where to start parsing again
       Stack<BracePos> pairs = new Stack<BracePos>();
       for ( ; lastGoodBrace < braces.Count; lastGoodBrace++ ) {
         BracePos r = braces[lastGoodBrace];
-        if ( r.Position >= lastPoint ) break;
+        if ( r.Position >= lastPointParsed ) break;
         if ( IsOpeningBrace(r.Brace) ) {
           pairs.Push(r);
         } else if ( pairs.Count > 0 ) {
@@ -95,16 +99,17 @@ namespace Winterdom.Viasfora.Text {
         braces.RemoveRange(lastGoodBrace, braces.Count - lastGoodBrace);
       }
 
-      ExtractBraces(pairs, startPosition);
+      ExtractBraces(pairs, startPosition, parseUntil);
     }
 
-    private void ExtractBraces(Stack<BracePos> pairs, int pos) {
-      int lineNum = Snapshot.GetLineNumberFromPosition(pos);
+    private void ExtractBraces(Stack<BracePos> pairs, int startOffset, int endOffset) {
+      int lineNum = Snapshot.GetLineNumberFromPosition(startOffset);
       while ( lineNum < Snapshot.LineCount  ) {
         var line = Snapshot.GetLineFromLineNumber(lineNum++);
-        var lineOffset = pos > 0 ? pos - line.Start : 0;
+        var lineOffset = startOffset > 0 ? startOffset - line.Start : 0;
         ExtractFromLine(pairs, line, lineOffset);
-        pos = 0;
+        startOffset = 0;
+        if ( line.End >= endOffset ) break;
       }
     }
 
