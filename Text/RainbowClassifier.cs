@@ -20,7 +20,6 @@ namespace Winterdom.Viasfora.Text {
     private object updateLock = new object();
     private Dispatcher dispatcher;
     private DispatcherTimer dispatcherTimer;
-    private Thread timerThread;
     private BraceCache braceCache;
     private int updatePendingFrom;
 
@@ -118,14 +117,11 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void OnScheduledUpdate(object sender, EventArgs e) {
+      if ( theBuffer == null ) return;
       try {
-        if ( theBuffer == null || timerThread != null ) return;
-        timerThread = Thread.CurrentThread;
         dispatcherTimer.Stop();
         FireTagsChanged();
       } catch {
-      } finally {
-        timerThread = null;
       }
     }
 

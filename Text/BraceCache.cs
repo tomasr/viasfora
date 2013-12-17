@@ -30,7 +30,7 @@ namespace Winterdom.Viasfora.Text {
       for ( int i = 0; i < braceChars.Length; i += 2 ) {
         this.braceList.Add(braceChars[i], braceChars[i + 1]);
       }
-      EnsureLineCacheCapacity(snapshot.LineCount);
+      EnsureLineCacheCapacity(snapshot.LineCount, 0);
     }
 
 
@@ -38,15 +38,18 @@ namespace Winterdom.Viasfora.Text {
       // the new start belongs to a different snapshot!
       var newSnapshot = startPoint.Snapshot;
       this.Snapshot = newSnapshot;
+
       var end = new SnapshotPoint(newSnapshot, newSnapshot.Length);
       var span = new SnapshotSpan(startPoint, end);
       // remove everything cached after the startPoint
       int index = FindIndexOfFirstBraceInSpan(span);
       if ( index >= 0 ) {
-        InvalidateFromBraceAtIndex(index);
+        InvalidateFromBraceAtIndex(newSnapshot, index);
+      } else {
         // otherwise, there are no braces after startPoint
+        int startLine = newSnapshot.GetLineNumberFromPosition(startPoint.Position);
+        EnsureLineCacheCapacity(this.Snapshot.LineCount, startLine);
       }
-      EnsureLineCacheCapacity(this.Snapshot.LineCount);
       //ContinueParsing(startPoint, Snapshot.Length);
     }
 
@@ -165,17 +168,17 @@ namespace Winterdom.Viasfora.Text {
       return -1;
     }
 
-    private void EnsureLineCacheCapacity(int capacity) {
+    private void EnsureLineCacheCapacity(int capacity, int lastKnownLine) {
       if ( lineCache.Count > capacity ) {
         lineCache.RemoveRange(capacity, lineCache.Count - capacity);
       }
       lineCache.Capacity = capacity;
-      for ( int i = lineCache.Count; i < capacity; i++ ) {
+      for ( int i = lastKnownLine; i < capacity; i++ ) {
         lineCache.Add(-1);
       }
     }
 
-    private void InvalidateFromBraceAtIndex(int index) {
+    private void InvalidateFromBraceAtIndex(ITextSnapshot snapshot, int index) {
       if ( index >= braces.Count ) {
         // invalidating from the last one, so not much else to do
         return;
@@ -185,13 +188,14 @@ namespace Winterdom.Viasfora.Text {
       braces.RemoveRange(index, braces.Count - index);
 
       // invalidate the line cache
-      int line = Snapshot.GetLineNumberFromPosition(lastBrace.Position);
+      // notice we can only clear the current line entry
+      // if the brace being invalidated from is actually
+      // the first in that line
+      int line = snapshot.GetLineNumberFromPosition(lastBrace.Position);
       if ( lineCache[line] == index ) {
         lineCache[line] = -1;
       }
-      for ( ++line; line < lineCache.Count; line++ ) {
-        lineCache[line] = -1;
-      }
+      EnsureLineCacheCapacity(snapshot.LineCount, line+1);
       // lastBrace isn't on our cache anymore
       if ( braces.Count > 0 ) {
         this.LastParsedPosition = braces[braces.Count - 1].Position;

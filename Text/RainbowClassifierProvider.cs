@@ -25,7 +25,10 @@ namespace Winterdom.Viasfora.Text {
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
 
     public IClassifier GetClassifier(ITextBuffer buffer) {
-      return new RainbowClassifier(buffer, ClassificationRegistry);
+      return buffer.Properties.GetOrCreateSingletonProperty(
+        () => { 
+          return new RainbowClassifier(buffer, ClassificationRegistry);
+        });
     }
   }
 }
