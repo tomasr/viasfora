@@ -8,8 +8,6 @@ using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
   public class BraceCache {
-
-    private int linesToScan;
     private List<BracePos> braces = new List<BracePos>();
     private List<int> lineCache = new List<int>();
     private Dictionary<char, char> braceList = new Dictionary<char, char>();
@@ -18,9 +16,8 @@ namespace Winterdom.Viasfora.Text {
     public LanguageInfo Language { get; private set; }
     private IBraceExtractor braceExtractor;
 
-    public BraceCache(ITextSnapshot snapshot, IContentType contentType, int linesToScan) {
+    public BraceCache(ITextSnapshot snapshot, IContentType contentType) {
       this.Snapshot = snapshot;
-      this.linesToScan = linesToScan;
       this.LastParsedPosition = -1;
       this.Language = VsfPackage.LookupLanguage(contentType);
       this.braceExtractor = this.Language.NewBraceExtractor();

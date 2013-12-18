@@ -136,7 +136,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void SetLanguage(IContentType contentType) {
-      this.braceCache = new BraceCache(this.theBuffer.CurrentSnapshot, contentType, 10);
+      this.braceCache = new BraceCache(this.theBuffer.CurrentSnapshot, contentType);
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
