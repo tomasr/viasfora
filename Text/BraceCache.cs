@@ -55,7 +55,7 @@ namespace Winterdom.Viasfora.Text {
 
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
       foreach ( var wantedSpan in spans ) {
-        EnsureLinesInSpan(wantedSpan);
+        EnsureLinesInPreferredSpan(wantedSpan);
         int startIndex = FindIndexOfFirstBraceInSpan(wantedSpan);
         if ( startIndex < 0 ) {
           continue;
@@ -71,6 +71,19 @@ namespace Winterdom.Viasfora.Text {
     public IEnumerable<BracePos> BracesFromPosition(int position) {
       SnapshotSpan span = new SnapshotSpan(Snapshot, position, Snapshot.Length - position);
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
+    }
+
+    // We don't want to parse the document in small spans
+    // as it is to expensive, so force a larger span if
+    // necessary
+    private void EnsureLinesInPreferredSpan(SnapshotSpan span) {
+      const int MIN_SPAN_LEN = 100;
+      var realSpan = span;
+      if ( span.Length < MIN_SPAN_LEN ) {
+        int end = Math.Min(span.Snapshot.Length, span.Start + MIN_SPAN_LEN);
+        realSpan = new SnapshotSpan(span.Start, end - span.Start);
+      }
+      EnsureLinesInSpan(realSpan);
     }
 
     private void EnsureLinesInSpan(SnapshotSpan span) {
