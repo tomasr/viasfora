@@ -77,7 +77,7 @@ namespace Winterdom.Viasfora.Text {
       const int MIN_SPAN_LEN = 100;
       var realSpan = span;
       if ( span.Length < MIN_SPAN_LEN ) {
-        int end = Math.Min(span.Snapshot.Length, span.Start + MIN_SPAN_LEN);
+        int end = Math.Min(span.Snapshot.Length, span.Start.Position + MIN_SPAN_LEN);
         realSpan = new SnapshotSpan(span.Start, end - span.Start);
       }
       EnsureLinesInSpan(realSpan);
@@ -131,7 +131,7 @@ namespace Winterdom.Viasfora.Text {
       var bracesInLine = this.braceExtractor.Extract(lc) /*.ToArray() */;
       foreach ( var cp in bracesInLine ) {
         if ( IsOpeningBrace(cp) ) {
-          BracePos p = cp.AsBrace(pairs.Count);
+          BracePos p = cp.AsBrace(line.LineNumber, pairs.Count);
           pairs.Push(p);
           Add(p);
         } else if ( IsClosingBrace(cp) && pairs.Count > 0 ) {
@@ -139,7 +139,7 @@ namespace Winterdom.Viasfora.Text {
           if ( braceList[p.Brace] == cp.Char ) {
             // yield closing brace
             pairs.Pop();
-            BracePos c = cp.AsBrace(p.Depth);
+            BracePos c = cp.AsBrace(line.LineNumber, p.Depth);
             Add(c);
           }
         }
@@ -150,10 +150,9 @@ namespace Winterdom.Viasfora.Text {
     private void Add(BracePos brace) {
       // if this brace is on a new line
       // store its position in the line cache
-      int thisLineNum = Snapshot.GetLineNumberFromPosition(brace.Position);
+      int thisLineNum = brace.LineNumber;
       if ( braces.Count > 0 ) {
-        int lastPosition = braces[braces.Count - 1].Position;
-        int lastLineNum = Snapshot.GetLineNumberFromPosition(lastPosition);
+        int lastLineNum = braces[braces.Count - 1].LineNumber;
         if ( lastLineNum != thisLineNum ) {
           lineCache[thisLineNum] = braces.Count;
         }

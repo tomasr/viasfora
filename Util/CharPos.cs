@@ -20,8 +20,8 @@ namespace Winterdom.Viasfora.Util {
       this.position = pos;
     }
 
-    public BracePos AsBrace(int depth) {
-      return new BracePos(Char, Position, depth);
+    public BracePos AsBrace(int line, int depth) {
+      return new BracePos(Char, Position, line, depth);
     }
 
     public static implicit operator char(CharPos cp) {
