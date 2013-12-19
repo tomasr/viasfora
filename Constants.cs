@@ -9,6 +9,7 @@ namespace Winterdom.Viasfora {
     public const String STRING_ESCAPE_CLASSIF_NAME = "Viasfora String Escape Sequence";
     public const String LINE_HIGHLIGHT = "Viasfora Current Line";
 
+    public const int MAX_RAINBOW_DEPTH = 4;
     public const String RAINBOW = "Viasfora Rainbow Brace ";
     public const String RAINBOW_1 = RAINBOW + "1";
     public const String RAINBOW_2 = RAINBOW + "2";

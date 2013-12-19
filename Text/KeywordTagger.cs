@@ -17,6 +17,7 @@ namespace Winterdom.Viasfora.Text {
     private KeywordTag linqClassification;
     private KeywordTag visClassification;
     private KeywordTag stringEscapeClassification;
+    private IClassificationType[] rainbowTypes;
     private ITagAggregator<IClassificationTag> aggregator;
     private StringComparer comparer;
 
@@ -37,6 +38,8 @@ namespace Winterdom.Viasfora.Text {
          new KeywordTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
       stringEscapeClassification =
          new KeywordTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
+      rainbowTypes = RainbowClassifier.GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
+
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
       this.aggregator = aggregator;
       this.comparer = StringComparer.CurrentCultureIgnoreCase;
@@ -54,6 +57,8 @@ namespace Winterdom.Viasfora.Text {
       ITextSnapshot snapshot = spans[0].Snapshot;
       if ( kce || eshe ) {
         foreach ( var tagSpan in aggregator.GetTags(spans) ) {
+          if ( this.rainbowTypes.Contains(tagSpan.Tag.ClassificationType) )
+            continue;
           String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
           if ( eshe && name.Contains("string") ) {
             var span = tagSpan.GetSpan(snapshot);

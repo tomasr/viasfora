@@ -16,7 +16,6 @@ namespace Winterdom.Viasfora.Text {
   class RainbowClassifier : IClassifier, IDisposable {
     private ITextBuffer theBuffer;
     private IClassificationType[] rainbowTags;
-    private const int MAX_DEPTH = 4;
     private object updateLock = new object();
     private Dispatcher dispatcher;
     private DispatcherTimer dispatcherTimer;
@@ -31,11 +30,7 @@ namespace Winterdom.Viasfora.Text {
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
       this.theBuffer = buffer;
-      rainbowTags = new IClassificationType[MAX_DEPTH];
-
-      for ( int i = 0; i < MAX_DEPTH; i++ ) {
-        rainbowTags[i] = registry.GetClassificationType(Constants.RAINBOW + (i + 1));
-      }
+      this.rainbowTags = GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
 
       SetLanguage(buffer.ContentType);
 
@@ -46,6 +41,14 @@ namespace Winterdom.Viasfora.Text {
       this.dispatcher = Dispatcher.CurrentDispatcher;
 
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
+    }
+
+    public static IClassificationType[] GetRainbows(IClassificationTypeRegistryService registry, int max) {
+      var result = new IClassificationType[max];
+      for ( int i = 0; i < max; i++ ) {
+        result[i] = registry.GetClassificationType(Constants.RAINBOW + (i + 1));
+      }
+      return result;
     }
 
     public void Dispose() {
@@ -70,7 +73,7 @@ namespace Winterdom.Viasfora.Text {
         return result;
       }
       foreach ( var brace in braceCache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)) ) {
-        var tag = rainbowTags[brace.Depth % MAX_DEPTH];
+        var tag = rainbowTags[brace.Depth % Constants.MAX_RAINBOW_DEPTH];
         result.Add(brace.ToSpan(snapshot, tag));
       }
       return result;
