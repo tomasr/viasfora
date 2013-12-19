@@ -51,18 +51,27 @@ namespace Winterdom.Viasfora.Text {
       bool eshe = VsfSettings.EscapeSeqHighlightEnabled && lang.SupportsEscapeSeqs;
       bool kce = VsfSettings.KeywordClassifierEnabled;
 
+      ITextSnapshot snapshot = spans[0].Snapshot;
       if ( kce || eshe ) {
-        foreach ( var tag in GetClassifiedSpans(spans, "string", "keyword") ) {
-          if ( eshe && tag.Item1 == "string" ) {
-            // Extract escape sequences from string
-            foreach ( var escapeTag in ProcessEscapeSequences(tag.Item2) ) {
-              yield return escapeTag;
+        foreach ( var tagSpan in aggregator.GetTags(spans) ) {
+          String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
+          if ( eshe && name.Contains("string") ) {
+            var span = tagSpan.GetSpan(snapshot);
+            if ( !span.IsEmpty ) {
+              foreach ( var escapeTag in ProcessEscapeSequences(span) ) {
+                yield return escapeTag;
+              }
             }
-          } else if ( kce && tag.Item1 == "keyword" ) {
-            // Is this one of the keywords we care about?
-            var result = IsInterestingKeyword(lang, tag.Item2);
-            if ( result != null ) {
-              yield return result;
+          }
+
+          if ( kce && name.Contains("keyword") ) {
+            var span = tagSpan.GetSpan(snapshot);
+            if ( !span.IsEmpty ) {
+              // Is this one of the keywords we care about?
+              var result = IsInterestingKeyword(lang, span);
+              if ( result != null ) {
+                yield return result;
+              }
             }
           }
         }
@@ -131,35 +140,8 @@ namespace Winterdom.Viasfora.Text {
       return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
     }
 
-    private bool HasMatchingName(String[] wanted, String actual, out String match) {
-      match = null;
-      foreach ( String w in wanted ) {
-        if ( actual.Contains(w) ) {
-          match = w;
-          return true;
-        }
-      }
-      return false;
-    }
-
-    private IEnumerable<Tuple<String, SnapshotSpan>> GetClassifiedSpans(
-          NormalizedSnapshotSpanCollection spans, params String[] tagNames) {
-      ITextSnapshot snapshot = spans[0].Snapshot;
-      foreach ( var tagSpan in aggregator.GetTags(spans) ) {
-        String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
-        String matchingName;
-        if ( HasMatchingName(tagNames, name, out matchingName) ) {
-          var mappedSpans = tagSpan.Span.GetSpans(snapshot);
-          if ( mappedSpans.Count > 0 ) {
-            yield return new Tuple<String, SnapshotSpan>(matchingName, mappedSpans[0]);
-          }
-        }
-      }
-    }
-
     private LanguageInfo GetKeywordsByContentType(IContentType contentType) {
       return VsfPackage.LookupLanguage(contentType);
     }
   }
-
 }
