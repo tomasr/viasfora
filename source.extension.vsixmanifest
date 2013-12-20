@@ -11,6 +11,7 @@
     <Icon>viasfora-icon.png</Icon>
     <PreviewImage>viasfora-preview.png</PreviewImage>
     <InstalledByMsi>false</InstalledByMsi>
+    <GettingStartedGuide>http://viasfora.com/#/changelog</GettingStartedGuide>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>Ultimate</Edition>
