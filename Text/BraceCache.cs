@@ -20,18 +20,21 @@ namespace Winterdom.Viasfora.Text {
       this.Snapshot = snapshot;
       this.LastParsedPosition = -1;
       this.Language = VsfPackage.LookupLanguage(contentType);
-      this.braceExtractor = this.Language.NewBraceExtractor();
+      if ( this.Language != null ) {
+        this.braceExtractor = this.Language.NewBraceExtractor();
 
-      this.braceList.Clear();
-      String braceChars = Language.BraceList;
-      for ( int i = 0; i < braceChars.Length; i += 2 ) {
-        this.braceList.Add(braceChars[i], braceChars[i + 1]);
+        this.braceList.Clear();
+        String braceChars = Language.BraceList;
+        for ( int i = 0; i < braceChars.Length; i += 2 ) {
+          this.braceList.Add(braceChars[i], braceChars[i + 1]);
+        }
+        EnsureLineCacheCapacity(snapshot.LineCount, 0);
       }
-      EnsureLineCacheCapacity(snapshot.LineCount, 0);
     }
 
 
     public void Invalidate(SnapshotPoint startPoint) {
+      if ( this.Language == null ) return;
       // the new start belongs to a different snapshot!
       var newSnapshot = startPoint.Snapshot;
       this.Snapshot = newSnapshot;
@@ -51,6 +54,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
+      if ( this.Language == null ) yield break;
       foreach ( var wantedSpan in spans ) {
         EnsureLinesInPreferredSpan(wantedSpan);
         int startIndex = FindIndexOfFirstBraceInSpan(wantedSpan);
@@ -66,6 +70,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public IEnumerable<BracePos> BracesFromPosition(int position) {
+      if ( this.Language == null ) return new BracePos[0];
       SnapshotSpan span = new SnapshotSpan(Snapshot, position, Snapshot.Length - position);
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
     }
@@ -195,12 +200,17 @@ namespace Winterdom.Viasfora.Text {
       BracePos lastBrace = braces[index];
       // invalidate the brace list
       braces.RemoveRange(index, braces.Count - index);
+      int line = 0;
+      if ( lastBrace.Position > snapshot.Length ) {
+        line = snapshot.LineCount - 1;
+      } else {
+        line = snapshot.GetLineNumberFromPosition(lastBrace.Position);
+      }
 
       // invalidate the line cache
       // notice we can only clear the current line entry
       // if the brace being invalidated from is actually
       // the first in that line
-      int line = snapshot.GetLineNumberFromPosition(lastBrace.Position);
       if ( lineCache[line] == index ) {
         lineCache[line] = -1;
       }
