@@ -64,6 +64,7 @@ namespace Winterdom.Viasfora.Util {
         if ( System.Char.IsWhiteSpace(text[startPos]) )
           break;
       }
+      if ( startPos < 0 ) return "";
       return text.Substring(startPos, end - startPos + 1);
     }
 
