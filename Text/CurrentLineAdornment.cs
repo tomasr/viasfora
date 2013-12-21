@@ -125,8 +125,8 @@ namespace Winterdom.Viasfora.Text {
         return; // not ready yet.
       SnapshotSpan span = line.Extent;
       Rect rc = new Rect(
-         new Point(line.Left, line.TextTop),
-         new Point(Math.Max(view.ViewportRight - 2, line.Right), line.TextBottom)
+         new Point(line.TextLeft, line.TextTop),
+         new Point(Math.Max(view.ViewportRight - 2, line.TextRight), line.TextBottom)
       );
 
       if ( NeedsNewImage(rc) ) {

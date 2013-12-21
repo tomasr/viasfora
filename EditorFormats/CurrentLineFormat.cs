@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   sealed class CurrentLineFormat : ClassificationFormatDefinition {
     public CurrentLineFormat() {
       this.ForegroundColor = Colors.LightGray;
+      this.ForegroundOpacity = 0.3;
       this.BackgroundOpacity = 0.3;
     }
   }
