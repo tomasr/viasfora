@@ -7,6 +7,8 @@ using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
   public abstract class LanguageInfo {
+    private static StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
+
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }
       set { Set("ControlFlow", value); }
@@ -30,6 +32,16 @@ namespace Winterdom.Viasfora.Text {
           return true;
       }
       return false;
+    }
+
+    public bool IsControlFlowKeyword(String text) {
+      return ControlFlow.Contains(text, comparer);
+    }
+    public bool IsVisibilityKeyword(String text) {
+      return Visibility.Contains(text, comparer);
+    }
+    public bool IsLinqKeyword(String text) {
+      return Linq.Contains(text, comparer);
     }
 
     protected abstract String[] ContentTypes { get; }

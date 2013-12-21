@@ -19,7 +19,6 @@ namespace Winterdom.Viasfora.Text {
     private KeywordTag stringEscapeClassification;
     private IClassificationType[] rainbowTypes;
     private ITagAggregator<IClassificationTag> aggregator;
-    private StringComparer comparer;
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
@@ -42,7 +41,6 @@ namespace Winterdom.Viasfora.Text {
 
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
       this.aggregator = aggregator;
-      this.comparer = StringComparer.CurrentCultureIgnoreCase;
     }
 
     public IEnumerable<ITagSpan<KeywordTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
@@ -100,11 +98,11 @@ namespace Winterdom.Viasfora.Text {
     private ITagSpan<KeywordTag> IsInterestingKeyword(LanguageInfo lang, SnapshotSpan cs) {
       if ( cs.IsEmpty ) return null;
       String text = cs.GetText();
-      if ( lang.ControlFlow.Contains(text, comparer) ) {
+      if ( lang.IsControlFlowKeyword(text) ) {
         return new TagSpan<KeywordTag>(cs, keywordClassification);
-      } else if ( lang.Visibility.Contains(text, comparer) ) {
+      } else if ( lang.IsVisibilityKeyword(text) ) {
         return new TagSpan<KeywordTag>(cs, visClassification);
-      } else if ( lang.Linq.Contains(text, comparer) ) {
+      } else if ( lang.IsLinqKeyword(text) ) {
         return new TagSpan<KeywordTag>(cs, linqClassification);
       }
       return null;
