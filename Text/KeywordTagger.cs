@@ -49,35 +49,31 @@ namespace Winterdom.Viasfora.Text {
       if ( spans.Count == 0 ) {
         yield break;
       }
-      LanguageInfo lang =
-         GetKeywordsByContentType(spans[0].Snapshot.TextBuffer.ContentType);
+      LanguageInfo lang = GetKeywordsByContentType(theBuffer.ContentType);
       bool eshe = VsfSettings.EscapeSeqHighlightEnabled && lang.SupportsEscapeSeqs;
       bool kce = VsfSettings.KeywordClassifierEnabled;
+      if ( !(kce || eshe) ) {
+        yield break;
+      }
 
       ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( kce || eshe ) {
-        foreach ( var tagSpan in aggregator.GetTags(spans) ) {
-          if ( this.rainbowTypes.Contains(tagSpan.Tag.ClassificationType) )
-            continue;
-          String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
-          if ( eshe && name.Contains("string") ) {
-            var span = tagSpan.GetSpan(snapshot);
-            if ( !span.IsEmpty ) {
-              foreach ( var escapeTag in ProcessEscapeSequences(span) ) {
-                yield return escapeTag;
-              }
-            }
+      foreach ( var tagSpan in aggregator.GetTags(spans) ) {
+        if ( this.rainbowTypes.Contains(tagSpan.Tag.ClassificationType) )
+          continue;
+        String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
+        if ( eshe && name.Contains("string") ) {
+          var span = tagSpan.GetSpan(snapshot);
+          foreach ( var escapeTag in ProcessEscapeSequences(span) ) {
+            yield return escapeTag;
           }
+        }
 
-          if ( kce && name.Contains("keyword") ) {
-            var span = tagSpan.GetSpan(snapshot);
-            if ( !span.IsEmpty ) {
-              // Is this one of the keywords we care about?
-              var result = IsInterestingKeyword(lang, span);
-              if ( result != null ) {
-                yield return result;
-              }
-            }
+        if ( kce && name.Contains("keyword") ) {
+          var span = tagSpan.GetSpan(snapshot);
+          // Is this one of the keywords we care about?
+          var result = IsInterestingKeyword(lang, span);
+          if ( result != null ) {
+            yield return result;
           }
         }
       }
@@ -102,6 +98,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private ITagSpan<KeywordTag> IsInterestingKeyword(LanguageInfo lang, SnapshotSpan cs) {
+      if ( cs.IsEmpty ) return null;
       String text = cs.GetText();
       if ( lang.ControlFlow.Contains(text, comparer) ) {
         return new TagSpan<KeywordTag>(cs, keywordClassification);
@@ -114,6 +111,8 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(SnapshotSpan cs) {
+      if ( cs.IsEmpty ) yield break;
+
       String text = cs.GetText();
       // don't process verbatim strings
       if ( text.StartsWith("@") || text.StartsWith("<") ) yield break;
