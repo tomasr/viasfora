@@ -43,12 +43,12 @@ namespace Winterdom.Viasfora.Xml {
       TextExtent extent = FindExtentAtPoint(subjectTriggerPoint);
 
       if ( CheckForPrefixTag(tagAggregator, extent.Span) ) {
-        String text = extent.Span.GetText();
+        String prefix = extent.Span.GetText();
         String url = FindNSUri(extent.Span, GetDocText(extent.Span));
         applicableToSpan = currentSnapshot.CreateTrackingSpan(
           extent.Span, SpanTrackingMode.EdgeInclusive
         );
-        quickInfoContent.Add(CreateInfoText(text, url));
+        quickInfoContent.Add(CreateInfoText(prefix, url));
       }
     }
 
@@ -138,5 +138,4 @@ namespace Winterdom.Viasfora.Xml {
     }
 
   }
-
 }
