@@ -116,7 +116,7 @@ namespace Winterdom.Viasfora.Text {
     private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(SnapshotSpan cs) {
       String text = cs.GetText();
       // don't process verbatim strings
-      if ( text.StartsWith("@") ) yield break;
+      if ( text.StartsWith("@") || text.StartsWith("<") ) yield break;
       int start = 1;
       while ( start < text.Length - 2 ) {
         if ( text[start] == '\\' ) {
