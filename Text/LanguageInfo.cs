@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
-  abstract class LanguageKeywords {
+  public abstract class LanguageInfo {
+    private static StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
+
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }
       set { Set("ControlFlow", value); }
@@ -18,6 +22,29 @@ namespace Winterdom.Viasfora.Text {
       set { Set("Visibility", value); }
     }
 
+    public abstract String BraceList { get; }
+    public abstract bool SupportsEscapeSeqs { get; }
+    public abstract IBraceExtractor NewBraceExtractor();
+
+    public bool MatchesContentType(IContentType contentType) {
+      foreach ( String str in this.ContentTypes ) {
+        if ( contentType.IsOfType(str) ) 
+          return true;
+      }
+      return false;
+    }
+
+    public bool IsControlFlowKeyword(String text) {
+      return ControlFlow.Contains(text, comparer);
+    }
+    public bool IsVisibilityKeyword(String text) {
+      return Visibility.Contains(text, comparer);
+    }
+    public bool IsLinqKeyword(String text) {
+      return Linq.Contains(text, comparer);
+    }
+
+    protected abstract String[] ContentTypes { get; }
     protected abstract String[] ControlFlowDefaults { get; }
     protected abstract String[] LinqDefaults { get; }
     protected abstract String[] VisibilityDefaults { get; }

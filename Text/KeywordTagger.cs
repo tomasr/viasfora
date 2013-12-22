@@ -7,18 +7,18 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
 
-  class KeywordTagger : ITagger<ClassificationTag>, IDisposable {
+  class KeywordTagger : ITagger<KeywordTag>, IDisposable {
     private ITextBuffer theBuffer;
-    private ClassificationTag keywordClassification;
-    private ClassificationTag linqClassification;
-    private ClassificationTag visClassification;
-    private ClassificationTag stringEscapeClassification;
+    private KeywordTag keywordClassification;
+    private KeywordTag linqClassification;
+    private KeywordTag visClassification;
+    private KeywordTag stringEscapeClassification;
+    private IClassificationType[] rainbowTypes;
     private ITagAggregator<IClassificationTag> aggregator;
-    private static readonly IList<ClassificationSpan> EmptyList =
-       new List<ClassificationSpan>();
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
@@ -30,29 +30,49 @@ namespace Winterdom.Viasfora.Text {
           ITagAggregator<IClassificationTag> aggregator) {
       theBuffer = buffer;
       keywordClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.KEYWORD_CLASSIF_NAME));
+         new KeywordTag(registry.GetClassificationType(Constants.KEYWORD_CLASSIF_NAME));
       linqClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.LINQ_CLASSIF_NAME));
+         new KeywordTag(registry.GetClassificationType(Constants.LINQ_CLASSIF_NAME));
       visClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
+         new KeywordTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
       stringEscapeClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
+         new KeywordTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
+      rainbowTypes = RainbowClassifier.GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
+
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
       this.aggregator = aggregator;
     }
 
-    public IEnumerable<ITagSpan<ClassificationTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
+    public IEnumerable<ITagSpan<KeywordTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
       if ( spans.Count == 0 ) {
         yield break;
       }
-      if ( VsfSettings.EscapeSeqHighlightEnabled ) {
-        foreach ( var tagSpan in LookForStringEscapeSequences(spans) ) {
-          yield return tagSpan;
-        }
+      LanguageInfo lang = GetKeywordsByContentType(theBuffer.ContentType);
+      bool eshe = VsfSettings.EscapeSeqHighlightEnabled && lang.SupportsEscapeSeqs;
+      bool kce = VsfSettings.KeywordClassifierEnabled;
+      if ( !(kce || eshe) ) {
+        yield break;
       }
-      if ( VsfSettings.KeywordClassifierEnabled ) {
-        foreach ( var tagSpan in LookForKeywords(spans) ) {
-          yield return tagSpan;
+
+      ITextSnapshot snapshot = spans[0].Snapshot;
+      foreach ( var tagSpan in aggregator.GetTags(spans) ) {
+        if ( this.rainbowTypes.Contains(tagSpan.Tag.ClassificationType) )
+          continue;
+        String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
+        if ( eshe && name.Contains("string") ) {
+          var span = tagSpan.GetSpan(snapshot);
+          foreach ( var escapeTag in ProcessEscapeSequences(span) ) {
+            yield return escapeTag;
+          }
+        }
+
+        if ( kce && name.Contains("keyword") ) {
+          var span = tagSpan.GetSpan(snapshot);
+          // Is this one of the keywords we care about?
+          var result = IsInterestingKeyword(lang, span);
+          if ( result != null ) {
+            yield return result;
+          }
         }
       }
     }
@@ -61,6 +81,10 @@ namespace Winterdom.Viasfora.Text {
       if ( theBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
         theBuffer = null;
+      }
+      if ( aggregator != null ) {
+        aggregator.Dispose();
+        aggregator = null;
       }
     }
     void OnSettingsUpdated(object sender, EventArgs e) {
@@ -71,59 +95,45 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private IEnumerable<ITagSpan<ClassificationTag>> LookForKeywords(NormalizedSnapshotSpanCollection spans) {
-      ITextSnapshot snapshot = spans[0].Snapshot;
-      LanguageKeywords keywords =
-         GetKeywordsByContentType(snapshot.TextBuffer.ContentType);
-      if ( keywords == null ) {
-        yield break;
+    private ITagSpan<KeywordTag> IsInterestingKeyword(LanguageInfo lang, SnapshotSpan cs) {
+      if ( cs.IsEmpty ) return null;
+      String text = cs.GetText();
+      if ( lang.IsControlFlowKeyword(text) ) {
+        return new TagSpan<KeywordTag>(cs, keywordClassification);
+      } else if ( lang.IsVisibilityKeyword(text) ) {
+        return new TagSpan<KeywordTag>(cs, visClassification);
+      } else if ( lang.IsLinqKeyword(text) ) {
+        return new TagSpan<KeywordTag>(cs, linqClassification);
       }
-
-      // find spans that the language service has already classified as keywords ...
-      var classifiedSpans = GetClassifiedSpans(spans, "keyword");
-
-      // ... and from those, ones that match our keywords
-      foreach ( var cs in classifiedSpans ) {
-        String text = cs.GetText().ToLower();
-        if ( keywords.ControlFlow.Contains(text) ) {
-          yield return new TagSpan<ClassificationTag>(cs, keywordClassification);
-        } else if ( keywords.Visibility.Contains(text) ) {
-          yield return new TagSpan<ClassificationTag>(cs, visClassification);
-        } else if ( keywords.Linq.Contains(text) ) {
-          yield return new TagSpan<ClassificationTag>(cs, linqClassification);
-        } 
-      }
+      return null;
     }
 
-    private IEnumerable<ITagSpan<ClassificationTag>> LookForStringEscapeSequences(NormalizedSnapshotSpanCollection spans) {
-      ITextSnapshot snapshot = spans[0].Snapshot;
-      var classifiedSpans = GetClassifiedSpans(spans, "string");
+    private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(SnapshotSpan cs) {
+      if ( cs.IsEmpty ) yield break;
 
-      foreach ( var cs in classifiedSpans ) {
-        String text = cs.GetText();
-        // don't process verbatim strings
-        if ( text.StartsWith("@") ) continue;
-        int start = 1;
-        while ( start < text.Length - 2 ) {
-          if ( text[start] == '\\' ) {
-            int len = 1;
-            int maxlen = Int32.MaxValue;
-            char f = text[start + 1];
-            // not perfect, but close enough for first version
-            if ( f == 'x' || f == 'X' || f == 'u' || f == 'U' ) {
-              while ( (start + len) < text.Length && IsHexDigit(text[start + len + 1]) ) {
-                len++;
-              }
+      String text = cs.GetText();
+      // don't process verbatim strings
+      if ( text.StartsWith("@") || text.StartsWith("<") ) yield break;
+      int start = 1;
+      while ( start < text.Length - 2 ) {
+        if ( text[start] == '\\' ) {
+          int len = 1;
+          int maxlen = Int32.MaxValue;
+          char f = text[start + 1];
+          // not perfect, but close enough for first version
+          if ( f == 'x' || f == 'X' || f == 'u' || f == 'U' ) {
+            while ( (start + len) < text.Length && IsHexDigit(text[start + len + 1]) ) {
+              len++;
             }
-            if ( f == 'u' ) maxlen = 4;
-            if ( f == 'U' ) maxlen = 8;
-            if ( len > maxlen ) len = maxlen;
-            var sspan = new SnapshotSpan(snapshot, cs.Start.Position + start, len + 1);
-            yield return new TagSpan<ClassificationTag>(sspan, stringEscapeClassification);
-            start += len;
           }
-          start++;
+          if ( f == 'u' ) maxlen = 5;
+          if ( f == 'U' ) maxlen = 9;
+          if ( len > maxlen ) len = maxlen;
+          var sspan = new SnapshotSpan(cs.Snapshot, cs.Start.Position + start, len + 1);
+          yield return new TagSpan<KeywordTag>(sspan, stringEscapeClassification);
+          start += len;
         }
+        start++;
       }
     }
 
@@ -132,38 +142,8 @@ namespace Winterdom.Viasfora.Text {
       return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
     }
 
-    private IEnumerable<SnapshotSpan> GetClassifiedSpans(NormalizedSnapshotSpanCollection spans, String tagName) {
-      ITextSnapshot snapshot = spans[0].Snapshot;
-      var mappedSpans =
-         from tagSpan in aggregator.GetTags(spans)
-         let name = tagSpan.Tag.ClassificationType.Classification.ToLower()
-         where name.Contains(tagName)
-         select tagSpan.Span;
-      var classifiedSpans =
-         from mappedSpan in mappedSpans
-         let cs = mappedSpan.GetSpans(snapshot)
-         where cs.Count > 0
-         select cs[0];
-
-      return classifiedSpans;
-    }
-
-    private LanguageKeywords GetKeywordsByContentType(IContentType contentType) {
-      if ( contentType.IsOfType(CSharp.ContentType) ) {
-        return new CSharp();
-      } else if ( contentType.IsOfType(Cpp.ContentType) ) {
-        return new Cpp();
-      } else if ( contentType.IsOfType(VB.ContentType) ) {
-        return new VB();
-      } else if ( contentType.IsOfType(JScript.ContentType)
-               || contentType.IsOfType(JScript.ContentTypeVS2012) ) {
-        return new JScript();
-      }
-      // VS is calling us for the "CSharp Signature Help" content-type
-      // which we didn't ask for. Argh!!!
-      // throw new InvalidOperationException("Running into an unsupported editor");
-      return null;
+    private LanguageInfo GetKeywordsByContentType(IContentType contentType) {
+      return VsfPackage.LookupLanguage(contentType);
     }
   }
-
 }

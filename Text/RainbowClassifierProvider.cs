@@ -7,26 +7,28 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
 
-  [Export(typeof(IViewTaggerProvider))]
+  [Export(typeof(IClassifierProvider))]
   [ContentType(CSharp.ContentType)]
   [ContentType(Cpp.ContentType)]
   [ContentType(JScript.ContentType)]
   [ContentType(JScript.ContentTypeVS2012)]
+  [ContentType(VB.ContentType)]
+  [ContentType(FSharp.ContentType)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
-  [TagType(typeof(ClassificationTag))]
-  public class RainbowTaggerProvider : IViewTaggerProvider {
+  [Name("Rainbow Classifier")]
+  public class RainbowClassifierProvider : IClassifierProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
 
-    public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
-      return new RainbowTagger(
-        buffer, textView, 
-        ClassificationRegistry
-        ) as ITagger<T>;
+    public IClassifier GetClassifier(ITextBuffer buffer) {
+      return buffer.Properties.GetOrCreateSingletonProperty(
+        () => { 
+          return new RainbowClassifier(buffer, ClassificationRegistry);
+        });
     }
   }
-
 }

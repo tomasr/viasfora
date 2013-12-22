@@ -3,22 +3,23 @@ using Microsoft.VisualStudio.Language.StandardClassification;
 
 namespace Winterdom.Viasfora {
   public static class Constants {
-    public const String KEYWORD_CLASSIF_NAME = "Keyword - Flow Control";
-    public const String LINQ_CLASSIF_NAME = "Operator - LINQ";
-    public const String VISIBILITY_CLASSIF_NAME = "Keyword - Visibility";
-    public const String STRING_ESCAPE_CLASSIF_NAME = "String Escape Sequence";
-    public const String LINE_HIGHLIGHT = "Current Line";
+    public const String KEYWORD_CLASSIF_NAME = "Viasfora Flow Control Keyword";
+    public const String LINQ_CLASSIF_NAME = "Viasfora Query Operator";
+    public const String VISIBILITY_CLASSIF_NAME = "Viasfora Visibility Keyword";
+    public const String STRING_ESCAPE_CLASSIF_NAME = "Viasfora String Escape Sequence";
+    public const String LINE_HIGHLIGHT = "Viasfora Current Line";
 
-    public const String RAINBOW = "Rainbow Parentheses ";
-    public const String RAINBOW_1 = "Rainbow Parentheses 1";
-    public const String RAINBOW_2 = "Rainbow Parentheses 2";
-    public const String RAINBOW_3 = "Rainbow Parentheses 3";
-    public const String RAINBOW_4 = "Rainbow Parentheses 4";
-    public const String RAINBOW_5 = "Rainbow Parentheses 5";
-    public const String RAINBOW_6 = "Rainbow Parentheses 6";
-    public const String RAINBOW_7 = "Rainbow Parentheses 7";
-    public const String RAINBOW_8 = "Rainbow Parentheses 8";
-    public const String RAINBOW_9 = "Rainbow Parentheses 9";
+    public const int MAX_RAINBOW_DEPTH = 4;
+    public const String RAINBOW = "Viasfora Rainbow Brace ";
+    public const String RAINBOW_1 = RAINBOW + "1";
+    public const String RAINBOW_2 = RAINBOW + "2";
+    public const String RAINBOW_3 = RAINBOW + "3";
+    public const String RAINBOW_4 = RAINBOW + "4";
+    public const String RAINBOW_5 = RAINBOW + "5";
+    public const String RAINBOW_6 = RAINBOW + "6";
+    public const String RAINBOW_7 = RAINBOW + "7";
+    public const String RAINBOW_8 = RAINBOW + "8";
+    public const String RAINBOW_9 = RAINBOW + "9";
 
     public const String CT_XML = "XML";
     public const String CT_XAML = "XAML";

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Text {
-  class Cpp : LanguageKeywords {
+  class Cpp : CBasedLanguage {
     public const String ContentType = "C/C++";
     static readonly String[] CPP_KEYWORDS = {
          "if", "else", "while", "do", "for", "each", "switch",
@@ -24,6 +24,9 @@ namespace Winterdom.Viasfora.Text {
     }
     protected override String KeyName {
       get { return "Cpp"; }
+    }
+    protected override String[] ContentTypes {
+      get { return new String[] { ContentType }; }
     }
   }
 }

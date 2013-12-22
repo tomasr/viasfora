@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using System.Xml;
-using System.IO;
 
 namespace Winterdom.Viasfora.Xml {
   internal class XmlQuickInfoSource : IQuickInfoSource {
@@ -40,14 +43,25 @@ namespace Winterdom.Viasfora.Xml {
       TextExtent extent = FindExtentAtPoint(subjectTriggerPoint);
 
       if ( CheckForPrefixTag(tagAggregator, extent.Span) ) {
-        String text = extent.Span.GetText();
+        String prefix = extent.Span.GetText();
         String url = FindNSUri(extent.Span, GetDocText(extent.Span));
         applicableToSpan = currentSnapshot.CreateTrackingSpan(
           extent.Span, SpanTrackingMode.EdgeInclusive
         );
-        String toolTipText = String.Format("Prefix: {0}\r\nNamespace: {1}", text, url);
-        quickInfoContent.Add(toolTipText);
+        quickInfoContent.Add(CreateInfoText(prefix, url));
       }
+    }
+
+    private FrameworkElement CreateInfoText(String xmlns, String url) {
+        var textBlock = new TextBlock();
+        textBlock.Inlines.AddRange(new Inline[] {
+          new Bold(new Run("Prefix: ")),
+          new Run(xmlns),
+          new LineBreak(),
+          new Bold(new Run("Namespace: ")),
+          new Hyperlink(new Run(url))
+        });
+        return textBlock;
     }
 
     private TextExtent FindExtentAtPoint(SnapshotPoint? subjectTriggerPoint) {
@@ -124,5 +138,4 @@ namespace Winterdom.Viasfora.Xml {
     }
 
   }
-
 }

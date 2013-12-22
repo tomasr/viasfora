@@ -30,7 +30,10 @@ namespace Winterdom.Viasfora.Text {
          ClassificationRegistry.GetClassificationType(Constants.LINE_HIGHLIGHT);
       IClassificationFormatMap map =
          FormatMapService.GetClassificationFormatMap(textView);
-      new CurrentLineAdornment(textView, map, classification);
+      textView.Properties.GetOrCreateSingletonProperty(
+        () => {
+          return new CurrentLineAdornment(textView, map, classification);
+        });
     }
   }
 }

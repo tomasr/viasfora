@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Text {
-  class CSharp : LanguageKeywords {
+  class CSharp : CBasedLanguage {
     public const String ContentType = "CSharp";
     static readonly String[] CS_KEYWORDS = {
          "if", "else", "while", "do", "for", "foreach", 
@@ -30,6 +30,9 @@ namespace Winterdom.Viasfora.Text {
     }
     protected override String KeyName {
       get { return "CSharp"; }
+    }
+    protected override String[] ContentTypes {
+      get { return new String[] { ContentType }; }
     }
   }
 }

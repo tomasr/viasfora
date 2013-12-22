@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
-  class VB : LanguageKeywords {
+  class VB : LanguageInfo {
     public const String ContentType = "Basic";
     static readonly String[] VB_KEYWORDS = {
          "goto", "resume", "throw", "exit", "stop",
@@ -31,6 +32,18 @@ namespace Winterdom.Viasfora.Text {
     }
     protected override String KeyName {
       get { return "VB"; }
+    }
+    protected override String[] ContentTypes {
+      get { return new String[] { ContentType }; }
+    }
+    public override string BraceList {
+      get { return "()"; }
+    }
+    public override bool SupportsEscapeSeqs {
+      get { return false; }
+    }
+    public override IBraceExtractor NewBraceExtractor() {
+      return new VbBraceExtractor(this);
     }
   }
 }
