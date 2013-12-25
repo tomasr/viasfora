@@ -19,6 +19,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(VB.ContentType)]
   [ContentType(FSharp.ContentType)]
   [ContentType(Sql.ContentType)]
+  [ContentType(Sql.ContentTypeAlt)]
   [ContentType(TypeScript.ContentType)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   [Name("Rainbow Classifier")]

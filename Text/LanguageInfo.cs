@@ -35,13 +35,17 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public bool IsControlFlowKeyword(String text) {
-      return ControlFlow.Contains(text, comparer);
+      return ControlFlow.Contains(TextToCompare(text), comparer);
     }
     public bool IsVisibilityKeyword(String text) {
-      return Visibility.Contains(text, comparer);
+      return Visibility.Contains(TextToCompare(text), comparer);
     }
     public bool IsLinqKeyword(String text) {
-      return Linq.Contains(text, comparer);
+      return Linq.Contains(TextToCompare(text), comparer);
+    }
+
+    protected virtual String TextToCompare(String text) {
+      return text;
     }
 
     protected abstract String[] ContentTypes { get; }

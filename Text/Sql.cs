@@ -7,6 +7,8 @@ using Winterdom.Viasfora.Util;
 namespace Winterdom.Viasfora.Text {
   class Sql : LanguageInfo {
     public const String ContentType = "Sql Server Tools";
+    public const String ContentTypeAlt = "SQL";
+
     static readonly String[] KEYWORDS = {
           "begin", "end", "break", "continue", "goto", "if",
           "else", "then", "return", "throw", "try", "catch",
@@ -40,7 +42,12 @@ namespace Winterdom.Viasfora.Text {
       return new SqlBraceExtractor(this);
     }
     protected override String[] ContentTypes {
-      get { return new String[] { ContentType }; }
+      get { return new String[] { ContentType, ContentTypeAlt }; }
+    }
+    protected override string TextToCompare(string text) {
+      // the SQL classifier will return text spans that include
+      // trailing spaces (such as "IF ")
+      return text.Trim();
     }
   }
 }
