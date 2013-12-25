@@ -16,10 +16,11 @@ namespace Winterdom.Viasfora {
   [Guid(Guids.VSPackage)]
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 101, 102, true)]
   [ProvideOptionPage(typeof(Options.CSharpOptionsPage), "Viasfora", "C#", 101, 103, true)]
-  [ProvideOptionPage(typeof(Options.CppOptionsPage), "Viasfora", "C++", 101, 104, true)]
-  [ProvideOptionPage(typeof(Options.VBOptionsPage), "Viasfora", "Basic", 101, 106, true)]
-  [ProvideOptionPage(typeof(Options.FSharpOptionsPage), "Viasfora", "F#", 101, 106, true)]
+  [ProvideOptionPage(typeof(Options.CppOptionsPage), "Viasfora", "C/C++", 101, 104, true)]
   [ProvideOptionPage(typeof(Options.JScriptOptionsPage), "Viasfora", "JavaScript", 101, 105, true)]
+  [ProvideOptionPage(typeof(Options.VBOptionsPage), "Viasfora", "Basic", 101, 106, true)]
+  [ProvideOptionPage(typeof(Options.FSharpOptionsPage), "Viasfora", "F#", 101, 107, true)]
+  [ProvideOptionPage(typeof(Options.SqlOptionsPage), "Viasfora", "SQL", 101, 108, true)]
   public sealed class VsfPackage : Package {
 
     private static List<LanguageInfo> languageList;

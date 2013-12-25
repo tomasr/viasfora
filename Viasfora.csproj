@@ -80,6 +80,9 @@
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="Options\SqlOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Options\FSharpOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
