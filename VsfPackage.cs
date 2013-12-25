@@ -21,6 +21,7 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.VBOptionsPage), "Viasfora", "Basic", 101, 106, true)]
   [ProvideOptionPage(typeof(Options.FSharpOptionsPage), "Viasfora", "F#", 101, 107, true)]
   [ProvideOptionPage(typeof(Options.SqlOptionsPage), "Viasfora", "SQL", 101, 108, true)]
+  [ProvideOptionPage(typeof(Options.TypeScriptOptionsPage), "Viasfora", "TypeScript", 101, 109, true)]
   public sealed class VsfPackage : Package {
 
     private static List<LanguageInfo> languageList;
