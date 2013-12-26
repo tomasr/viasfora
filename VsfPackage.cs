@@ -28,7 +28,8 @@ namespace Winterdom.Viasfora {
     private static List<LanguageInfo> languageList;
     public static VsfPackage Instance { get; private set; }
 
-    public bool PresentationModeEnabled { get; set; }
+    public static bool PresentationModeEnabled { get; set; }
+    public static EventHandler PresentationModeChanged { get; set; }
 
     static VsfPackage() {
       languageList = new List<LanguageInfo>();
@@ -48,6 +49,13 @@ namespace Winterdom.Viasfora {
       }
       return null;
     }
+
+    public static int GetPresentationModeZoomLevel() {
+      return PresentationModeEnabled
+        ? VsfSettings.PresentationModeEnabledZoomLevel
+        : VsfSettings.PresentationModeDefaultZoomLevel;
+    }
+
     protected override void Initialize() {
       base.Initialize();
       Instance = this;
@@ -69,6 +77,9 @@ namespace Winterdom.Viasfora {
 
     private void OnViewPresentationMode(object sender, EventArgs e) {
       PresentationModeEnabled = !PresentationModeEnabled;
+      if ( PresentationModeChanged != null ) {
+        PresentationModeChanged(this, EventArgs.Empty);
+      }
     }
     private void OnViewPresentationModeBeforeQueryStatus(object sender, EventArgs e) {
       var cmd = (OleMenuCommand)sender;

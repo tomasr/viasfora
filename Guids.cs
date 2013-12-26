@@ -16,6 +16,6 @@ namespace Winterdom.Viasfora {
     public const String SqlOptions = "a2796d78-d8d7-4a8b-8760-4e2c5b388289";
     public const String TypeScriptOptions = "cb219fe4-0e9e-4237-8ca2-e236c9607ef8";
 
-    public const String guidVsfViewCmdSet = "14e93c73-144b-4909-9cdc-694be6125e8c"; 
+    public const String guidVsfViewCmdSet = "14e93c73-144b-4909-9cdc-694be6125e8c";
   }
 }

@@ -13,6 +13,8 @@ namespace Winterdom.Viasfora {
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
     const String XML_MATCH_TAGS_ENABLED = "XmlMatchTagsEnabled";
     const String RAINBOW_TAGS_ENABLED = "RainbowTagsEnabled";
+    const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
+    const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
 
     private static VsfSettingsStore settings = new VsfSettingsStore();
     public static event EventHandler SettingsUpdated;
@@ -45,6 +47,14 @@ namespace Winterdom.Viasfora {
       get { return GetBoolean(RAINBOW_TAGS_ENABLED, true); }
       set { SetValue(RAINBOW_TAGS_ENABLED, value); }
     }
+    public static int PresentationModeDefaultZoomLevel {
+      get { return GetInt32(PRESENTATION_MODE_DEFAULT_ZOOM, 100); }
+      set { SetValue(PRESENTATION_MODE_DEFAULT_ZOOM, value); }
+    }
+    public static int PresentationModeEnabledZoomLevel {
+      get { return GetInt32(PRESENTATION_MODE_ENABLED_ZOOM, 150); }
+      set { SetValue(PRESENTATION_MODE_ENABLED_ZOOM, value); }
+    }
 
     public static void Save() {
       settings.Write();
@@ -56,6 +66,11 @@ namespace Winterdom.Viasfora {
     private static bool GetBoolean(String name, bool defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToBoolean(val);
+    }
+
+    private static int GetInt32(String name, int defval) {
+      String val = settings.Get(name);
+      return String.IsNullOrEmpty(val) ? defval : Convert.ToInt32(val);
     }
 
     public static String GetValue(String name, String defValue) {

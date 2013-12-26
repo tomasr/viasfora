@@ -109,6 +109,8 @@
     <Compile Include="SnapshotExtensions.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="Text\BraceCache.cs" />
+    <Compile Include="Text\PresentationMode.cs" />
+    <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Text\TypeScript.cs" />
     <Compile Include="Text\Sql.cs" />
     <Compile Include="Util\BracePos.cs" />
