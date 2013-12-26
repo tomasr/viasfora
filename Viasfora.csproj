@@ -104,6 +104,7 @@
     <Compile Include="Options\GeneralOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="PkgCmdIdList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SnapshotExtensions.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
@@ -242,6 +243,11 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="viasfora.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <VSCTCompile Include="VsfCommands.vsct">
+      <ResourceName>1000</ResourceName>
+    </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="VSPackage.resx">

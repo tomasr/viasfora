@@ -22,10 +22,13 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.FSharpOptionsPage), "Viasfora", "F#", 101, 107, true)]
   [ProvideOptionPage(typeof(Options.SqlOptionsPage), "Viasfora", "SQL", 101, 108, true)]
   [ProvideOptionPage(typeof(Options.TypeScriptOptionsPage), "Viasfora", "TypeScript", 101, 109, true)]
+  [ProvideMenuResource(1000, 1)]
   public sealed class VsfPackage : Package {
 
     private static List<LanguageInfo> languageList;
     public static VsfPackage Instance { get; private set; }
+
+    public bool PresentationModeEnabled { get; set; }
 
     static VsfPackage() {
       languageList = new List<LanguageInfo>();
@@ -52,7 +55,24 @@ namespace Winterdom.Viasfora {
 
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
       if ( null != mcs ) {
+        InitializeViewMenuCommands(mcs);
       }
+    }
+    private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
+      var viewPresentationModeCmdId = new CommandID(
+        new Guid(Guids.guidVsfViewCmdSet), 
+        PkgCmdIdList.cmdidPresentationMode);
+      var viewPresentationModeItem = new OleMenuCommand(OnViewPresentationMode, viewPresentationModeCmdId);
+      viewPresentationModeItem.BeforeQueryStatus += OnViewPresentationModeBeforeQueryStatus;
+      mcs.AddCommand(viewPresentationModeItem);
+    }
+
+    private void OnViewPresentationMode(object sender, EventArgs e) {
+      PresentationModeEnabled = !PresentationModeEnabled;
+    }
+    private void OnViewPresentationModeBeforeQueryStatus(object sender, EventArgs e) {
+      var cmd = (OleMenuCommand)sender;
+      cmd.Checked = PresentationModeEnabled;
     }
   }
 }
