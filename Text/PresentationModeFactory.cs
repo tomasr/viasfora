@@ -8,8 +8,8 @@ using System.Text;
 
 namespace Winterdom.Viasfora.Text {
   [Export(typeof(IWpfTextViewCreationListener))]
-  [ContentType("text")]
-  [TextViewRole(PredefinedTextViewRoles.Zoomable)]
+  [ContentType("any")]
+  [TextViewRole(PredefinedTextViewRoles.Interactive)]
   public class PresentationModeFactory : IWpfTextViewCreationListener {
     public void TextViewCreated(IWpfTextView textView) {
       textView.Properties.GetOrCreateSingletonProperty(

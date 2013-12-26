@@ -21,8 +21,8 @@ namespace Winterdom.Viasfora.Text {
     }
 
     void OnViewportWidthChanged(object sender, EventArgs e) {
-      SetZoomLevel(theView);
       theView.ViewportWidthChanged -= OnViewportWidthChanged;
+      SetZoomLevel(theView);
     }
 
     void OnTextViewClosed(object sender, EventArgs e) {
