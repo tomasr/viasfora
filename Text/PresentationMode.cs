@@ -10,6 +10,7 @@ namespace Winterdom.Viasfora.Text {
     public PresentationMode(IWpfTextView textView) {
       this.theView = textView;
       VsfPackage.PresentationModeChanged += OnPresentationModeChanged;
+      VsfSettings.SettingsUpdated += OnSettingsUpdated;
       textView.Closed += OnTextViewClosed;
       textView.ViewportWidthChanged += OnViewportWidthChanged;
     }
@@ -25,9 +26,14 @@ namespace Winterdom.Viasfora.Text {
       SetZoomLevel(theView);
     }
 
+    void OnSettingsUpdated(object sender, EventArgs e) {
+      SetZoomLevel(theView);
+    }
+
     void OnTextViewClosed(object sender, EventArgs e) {
       if ( theView != null ) {
         VsfPackage.PresentationModeChanged -= OnPresentationModeChanged;
+        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
         theView.Closed -= OnTextViewClosed;
         theView.ViewportWidthChanged -= OnViewportWidthChanged;
         theView = null;
