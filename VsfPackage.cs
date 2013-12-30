@@ -7,7 +7,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
-using Winterdom.Viasfora.Text;
+using Winterdom.Viasfora.Languages;
 using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora {

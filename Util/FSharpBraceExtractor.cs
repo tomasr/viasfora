@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Winterdom.Viasfora.Text;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Util {
   public class FSharpBraceExtractor : IBraceExtractor {

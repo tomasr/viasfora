@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Languages {
   class Sql : LanguageInfo {
     public const String ContentType = "Sql Server Tools";
     public const String ContentTypeAlt = "SQL";

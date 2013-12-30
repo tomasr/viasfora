@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {

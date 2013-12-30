@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo {
     private static StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
 
