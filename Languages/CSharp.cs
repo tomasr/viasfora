@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Languages {
   class CSharp : CBasedLanguage {
     public const String ContentType = "CSharp";
     static readonly String[] CS_KEYWORDS = {
