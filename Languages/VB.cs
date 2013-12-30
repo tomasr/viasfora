@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Languages {
   class VB : LanguageInfo {
     public const String ContentType = "Basic";
     static readonly String[] VB_KEYWORDS = {

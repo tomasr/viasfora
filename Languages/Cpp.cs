@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Languages {
   class Cpp : CBasedLanguage {
     public const String ContentType = "C/C++";
     static readonly String[] CPP_KEYWORDS = {

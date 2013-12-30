@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Languages {
   abstract class CBasedLanguage : LanguageInfo {
     public override string BraceList {
       get { return "(){}[]"; }

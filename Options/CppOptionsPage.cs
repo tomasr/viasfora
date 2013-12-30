@@ -6,7 +6,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
-using Winterdom.Viasfora.Text;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.CppOptions)]

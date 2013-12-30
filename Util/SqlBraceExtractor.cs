@@ -5,22 +5,23 @@ using System.Text;
 using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Util {
-  public class VbBraceExtractor : IBraceExtractor {
+  public class SqlBraceExtractor : IBraceExtractor {
     const int stText = 0;
     const int stString = 1;
-    private int status;
-    private LanguageInfo language;
+    const int stMultiLineComment = 4;
+    private int status = stText;
+    private LanguageInfo lang;
 
-    public VbBraceExtractor(LanguageInfo lang) {
-      this.language = lang;
-      this.status = stText;
+    public SqlBraceExtractor(LanguageInfo lang) {
+      this.lang = lang;
     }
 
     public IEnumerable<CharPos> Extract(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
-          default:
+          case stMultiLineComment: ParseMultiLineComment(tc); break;
+          default: 
             foreach ( var p in ParseText(tc) ) {
               yield return p;
             }
@@ -31,14 +32,18 @@ namespace Winterdom.Viasfora.Util {
 
     private IEnumerable<CharPos> ParseText(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '\'' ) {
-          // single line comment
+        // multi-line comment
+        if ( tc.Char() == '/' && tc.NChar() == '*' ) {
+          this.status = stMultiLineComment;
+          tc.Skip(2);
+          this.ParseMultiLineComment(tc);
+        } else if ( tc.Char() == '-' && tc.NChar() == '-' ) {
           tc.SkipRemainder();
-        } else if ( tc.Char() == '"' ) {
+        } else if ( tc.Char() == '\'' ) {
           this.status = stString;
           tc.Next();
           this.ParseString(tc);
-        } else if ( language.BraceList.Contains(tc.Char()) ) {
+        } else if ( lang.BraceList.Contains(tc.Char()) ) {
           yield return new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
         } else {
@@ -49,13 +54,25 @@ namespace Winterdom.Viasfora.Util {
 
     private void ParseString(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '"' && tc.NChar() == '"' ) {
-          // embedded quotes, skip
+        if ( tc.Char() == '\'' && tc.NChar() == '\'' ) {
           tc.Skip(2);
-        } else if ( tc.Char() == '"' ) {
-          this.status = stText;
+        } else if ( tc.Char() == '\'' ) {
           tc.Next();
           break;
+        } else {
+          tc.Next();
+        }
+      }
+      this.status = stText;
+    }
+
+
+    private void ParseMultiLineComment(ITextChars tc) {
+      while ( !tc.EndOfLine ) {
+        if ( tc.Char() == '*' && tc.NChar() == '/' ) {
+          tc.Skip(2);
+          this.status = stText;
+          return;
         } else {
           tc.Next();
         }

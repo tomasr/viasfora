@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
@@ -18,6 +19,9 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(JScript.ContentTypeVS2012)]
   [ContentType(VB.ContentType)]
   [ContentType(FSharp.ContentType)]
+  [ContentType(Sql.ContentType)]
+  [ContentType(Sql.ContentTypeAlt)]
+  [ContentType(TypeScript.ContentType)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   [Name("Rainbow Classifier")]
   public class RainbowClassifierProvider : IClassifierProvider {
