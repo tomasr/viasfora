@@ -24,15 +24,17 @@
     /// </summary>
     private void InitializeComponent() {
       this.groupBox1 = new System.Windows.Forms.GroupBox();
+      this.enabledZoom = new Winterdom.Viasfora.Design.ZoomTrackBar();
+      this.defaultZoom = new Winterdom.Viasfora.Design.ZoomTrackBar();
       this.label2 = new System.Windows.Forms.Label();
       this.label1 = new System.Windows.Forms.Label();
-      this.defaultZoom = new Winterdom.Viasfora.Design.ZoomTrackBar();
-      this.enabledZoom = new Winterdom.Viasfora.Design.ZoomTrackBar();
+      this.enableCheckbox = new System.Windows.Forms.CheckBox();
       this.groupBox1.SuspendLayout();
       this.SuspendLayout();
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.enableCheckbox);
       this.groupBox1.Controls.Add(this.enabledZoom);
       this.groupBox1.Controls.Add(this.defaultZoom);
       this.groupBox1.Controls.Add(this.label2);
@@ -45,10 +47,26 @@
       this.groupBox1.TabStop = false;
       this.groupBox1.Text = "Presentation Mode";
       // 
+      // enabledZoom
+      // 
+      this.enabledZoom.Location = new System.Drawing.Point(24, 255);
+      this.enabledZoom.Name = "enabledZoom";
+      this.enabledZoom.Size = new System.Drawing.Size(607, 79);
+      this.enabledZoom.TabIndex = 3;
+      this.enabledZoom.Value = 20;
+      // 
+      // defaultZoom
+      // 
+      this.defaultZoom.Location = new System.Drawing.Point(24, 129);
+      this.defaultZoom.Name = "defaultZoom";
+      this.defaultZoom.Size = new System.Drawing.Size(607, 79);
+      this.defaultZoom.TabIndex = 2;
+      this.defaultZoom.Value = 20;
+      // 
       // label2
       // 
       this.label2.AutoSize = true;
-      this.label2.Location = new System.Drawing.Point(19, 160);
+      this.label2.Location = new System.Drawing.Point(19, 214);
       this.label2.Name = "label2";
       this.label2.Size = new System.Drawing.Size(215, 25);
       this.label2.TabIndex = 1;
@@ -57,27 +75,22 @@
       // label1
       // 
       this.label1.AutoSize = true;
-      this.label1.Location = new System.Drawing.Point(19, 46);
+      this.label1.Location = new System.Drawing.Point(19, 100);
       this.label1.Name = "label1";
       this.label1.Size = new System.Drawing.Size(204, 25);
       this.label1.TabIndex = 0;
       this.label1.Text = "Default Zoom Level:";
       // 
-      // defaultZoom
+      // enableCheckbox
       // 
-      this.defaultZoom.Location = new System.Drawing.Point(24, 75);
-      this.defaultZoom.Name = "defaultZoom";
-      this.defaultZoom.Size = new System.Drawing.Size(607, 79);
-      this.defaultZoom.TabIndex = 2;
-      this.defaultZoom.Value = 0;
-      // 
-      // enabledZoom
-      // 
-      this.enabledZoom.Location = new System.Drawing.Point(24, 201);
-      this.enabledZoom.Name = "enabledZoom";
-      this.enabledZoom.Size = new System.Drawing.Size(607, 79);
-      this.enabledZoom.TabIndex = 3;
-      this.enabledZoom.Value = 0;
+      this.enableCheckbox.AutoSize = true;
+      this.enableCheckbox.Location = new System.Drawing.Point(24, 41);
+      this.enableCheckbox.Name = "enableCheckbox";
+      this.enableCheckbox.Size = new System.Drawing.Size(298, 29);
+      this.enableCheckbox.TabIndex = 4;
+      this.enableCheckbox.Text = "Enable Presentation Mode";
+      this.enableCheckbox.UseVisualStyleBackColor = true;
+      this.enableCheckbox.CheckedChanged += new System.EventHandler(this.OnEnableCheckboxChecked);
       // 
       // PresentationModeDialogPage
       // 
@@ -99,5 +112,6 @@
     private System.Windows.Forms.Label label1;
     private Design.ZoomTrackBar enabledZoom;
     private Design.ZoomTrackBar defaultZoom;
+    private System.Windows.Forms.CheckBox enableCheckbox;
   }
 }

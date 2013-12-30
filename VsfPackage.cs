@@ -9,9 +9,12 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System.Diagnostics;
 using Winterdom.Viasfora.Languages;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.VisualStudio;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
+  [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
+  [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
   [InstalledProductRegistration("#110", "#111", "1.0", IconResourceID = 400)]
   [Guid(Guids.VSPackage)]
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 101, 102, true)]
@@ -29,7 +32,7 @@ namespace Winterdom.Viasfora {
     private static List<LanguageInfo> languageList;
     public static VsfPackage Instance { get; private set; }
 
-    public static bool PresentationModeEnabled { get; set; }
+    public static bool PresentationModeTurnedOn { get; set; }
     public static EventHandler PresentationModeChanged { get; set; }
 
     static VsfPackage() {
@@ -52,7 +55,7 @@ namespace Winterdom.Viasfora {
     }
 
     public static int GetPresentationModeZoomLevel() {
-      return PresentationModeEnabled
+      return PresentationModeTurnedOn
         ? VsfSettings.PresentationModeEnabledZoomLevel
         : VsfSettings.PresentationModeDefaultZoomLevel;
     }
@@ -77,14 +80,19 @@ namespace Winterdom.Viasfora {
     }
 
     private void OnViewPresentationMode(object sender, EventArgs e) {
-      PresentationModeEnabled = !PresentationModeEnabled;
+      PresentationModeTurnedOn = !PresentationModeTurnedOn;
       if ( PresentationModeChanged != null ) {
         PresentationModeChanged(this, EventArgs.Empty);
       }
     }
     private void OnViewPresentationModeBeforeQueryStatus(object sender, EventArgs e) {
       var cmd = (OleMenuCommand)sender;
-      cmd.Checked = PresentationModeEnabled;
+      SetViewPresentationModeCmdStatus(cmd);
+    }
+
+    private void SetViewPresentationModeCmdStatus(OleMenuCommand cmd) {
+      cmd.Checked = PresentationModeTurnedOn;
+      cmd.Enabled = VsfSettings.PresentationModeEnabled;
     }
   }
 }

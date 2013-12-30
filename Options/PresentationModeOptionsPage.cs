@@ -23,11 +23,14 @@ namespace Winterdom.Viasfora.Options {
 
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
+      VsfSettings.PresentationModeEnabled = dialog.PMEnabled;
       VsfSettings.PresentationModeDefaultZoomLevel = dialog.DefaultZoom;
       VsfSettings.PresentationModeEnabledZoomLevel = dialog.EnabledZoom;
+      VsfSettings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
+      dialog.PMEnabled = VsfSettings.PresentationModeEnabled;
       dialog.DefaultZoom = VsfSettings.PresentationModeDefaultZoomLevel;
       dialog.EnabledZoom = VsfSettings.PresentationModeEnabledZoomLevel;
     }

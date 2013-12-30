@@ -41,8 +41,10 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void SetZoomLevel(IWpfTextView textView) {
-      int zoomLevel = VsfPackage.GetPresentationModeZoomLevel();
-      textView.ZoomLevel = zoomLevel;
+      if ( VsfSettings.PresentationModeEnabled ) {
+        int zoomLevel = VsfPackage.GetPresentationModeZoomLevel();
+        textView.ZoomLevel = zoomLevel;
+      }
     }
   }
 }

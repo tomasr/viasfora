@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora {
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
     const String XML_MATCH_TAGS_ENABLED = "XmlMatchTagsEnabled";
     const String RAINBOW_TAGS_ENABLED = "RainbowTagsEnabled";
+    const String PRESENTATION_MODE_ENABLED = "PresentationModeEnabled";
     const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
     const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
 
@@ -46,6 +47,10 @@ namespace Winterdom.Viasfora {
     public static bool RainbowTagsEnabled {
       get { return GetBoolean(RAINBOW_TAGS_ENABLED, true); }
       set { SetValue(RAINBOW_TAGS_ENABLED, value); }
+    }
+    public static bool PresentationModeEnabled {
+      get { return GetBoolean(PRESENTATION_MODE_ENABLED, true); }
+      set { SetValue(PRESENTATION_MODE_ENABLED, value); }
     }
     public static int PresentationModeDefaultZoomLevel {
       get { return GetInt32(PRESENTATION_MODE_DEFAULT_ZOOM, 100); }
