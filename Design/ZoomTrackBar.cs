@@ -23,11 +23,13 @@ namespace Winterdom.Viasfora.Design {
     }
     public int GetValue() {
       double trackbarValue = trackBar.Value;
-      double zoomValue = (trackbarValue * trackbarValue) / (50 * 50);
+      double yp = trackbarValue;
+      double zoomValue = ((yp * yp) / (50 * 50)) + 20;
       return (int)Math.Round(zoomValue);
     }
     public void SetValue(int zoomValue) {
-      double trackbarValue = 50 * Math.Sqrt(zoomValue);
+      if ( zoomValue == 0 ) zoomValue = 20;
+      double trackbarValue = 50 * Math.Sqrt(zoomValue-20);
       trackBar.Value = (int)Math.Round(trackbarValue);
     }
 

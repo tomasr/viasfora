@@ -31,10 +31,12 @@
       // trackBar
       // 
       this.trackBar.Dock = System.Windows.Forms.DockStyle.Left;
+      this.trackBar.LargeChange = 10;
       this.trackBar.Location = new System.Drawing.Point(0, 0);
-      this.trackBar.Maximum = 1000;
+      this.trackBar.Maximum = 975;
       this.trackBar.Name = "trackBar";
       this.trackBar.Size = new System.Drawing.Size(489, 79);
+      this.trackBar.SmallChange = 2;
       this.trackBar.TabIndex = 0;
       this.trackBar.TickFrequency = 50;
       this.trackBar.TickStyle = System.Windows.Forms.TickStyle.Both;
