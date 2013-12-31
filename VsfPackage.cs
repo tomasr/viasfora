@@ -19,6 +19,7 @@ namespace Winterdom.Viasfora {
   [Guid(Guids.VSPackage)]
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.PresentationModeOptionsPage), "Viasfora", "Presentation Mode", 0, 0, true)]
+  [ProvideOptionPage(typeof(Options.AllLanguagesOptionsPage), "Viasfora", "Languages", 0, 0, false)]
   [ProvideOptionPage(typeof(Options.CSharpOptionsPage), "Viasfora\\Languages", "C#", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.CppOptionsPage), "Viasfora\\Languages", "C/C++", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.JScriptOptionsPage), "Viasfora\\Languages", "JavaScript", 0, 0, true)]
