@@ -52,6 +52,11 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void Dispose() {
+      this.dispatcher = null;
+      if ( this.dispatcherTimer != null ) {
+        this.dispatcherTimer.Stop();
+        this.dispatcherTimer = null;
+      }
       if ( theBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
         theBuffer.ChangedLowPriority -= this.BufferChanged;
