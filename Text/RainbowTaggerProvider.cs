@@ -12,7 +12,7 @@ using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
 
-  [Export(typeof(IClassifierProvider))]
+  [Export(typeof(IViewTaggerProvider))]
   [ContentType(CSharp.ContentType)]
   [ContentType(Cpp.ContentType)]
   [ContentType(JScript.ContentType)]
@@ -23,15 +23,16 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(Sql.ContentTypeAlt)]
   [ContentType(TypeScript.ContentType)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
+  [TagType(typeof(RainbowTag))]
   [Name("Rainbow Classifier")]
-  public class RainbowClassifierProvider : IClassifierProvider {
+  public class RainbowTaggerProvider : IViewTaggerProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
 
-    public IClassifier GetClassifier(ITextBuffer buffer) {
-      return buffer.Properties.GetOrCreateSingletonProperty(
-        () => { 
-          return new RainbowClassifier(buffer, ClassificationRegistry);
+    public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
+      return buffer.Properties.GetOrCreateSingletonProperty<ITagger<T>>(
+        () => {
+          return new RainbowTagger(view, buffer, ClassificationRegistry) as ITagger<T>;
         });
     }
   }

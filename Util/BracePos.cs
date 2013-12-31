@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Tagging;
+using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Util {
   public struct BracePos {
@@ -32,9 +34,9 @@ namespace Winterdom.Viasfora.Util {
       this.lineNum = lineNum;
     }
 
-    public ClassificationSpan ToSpan(ITextSnapshot snapshot, IClassificationType type) {
+    public ITagSpan<RainbowTag> ToSpan(ITextSnapshot snapshot, IClassificationType type) {
       var span = new SnapshotSpan(snapshot, Position, 1);
-      return new ClassificationSpan(span, type);
+      return new TagSpan<RainbowTag>(span, new RainbowTag(type));
     }
   }
 }
