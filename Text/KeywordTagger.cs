@@ -38,7 +38,7 @@ namespace Winterdom.Viasfora.Text {
          new KeywordTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
       stringEscapeClassification =
          new KeywordTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
-      rainbowTypes = RainbowClassifier.GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
+      rainbowTypes = RainbowTagger.GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
 
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
       this.aggregator = aggregator;

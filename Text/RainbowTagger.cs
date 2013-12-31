@@ -13,7 +13,8 @@ using System.Threading;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowClassifier : IClassifier, IDisposable {
+  class RainbowTagger : ITagger<RainbowTag>, IDisposable {
+    private ITextView theView;
     private ITextBuffer theBuffer;
     private IClassificationType[] rainbowTags;
     private object updateLock = new object();
@@ -23,18 +24,21 @@ namespace Winterdom.Viasfora.Text {
     private int updatePendingFrom;
 
 #pragma warning disable 67
-    public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
+    public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 #pragma warning restore 67
 
-    internal RainbowClassifier(
+    internal RainbowTagger(
+          ITextView view,
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
+      this.theView = view;
       this.theBuffer = buffer;
       this.rainbowTags = GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
 
       SetLanguage(buffer.ContentType);
 
       this.updatePendingFrom = -1;
+      this.theView.Closed += this.OnViewClosed;
       this.theBuffer.ChangedLowPriority += this.BufferChanged;
       this.theBuffer.ContentTypeChanged += this.ContentTypeChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
@@ -52,10 +56,9 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void Dispose() {
-      this.dispatcher = null;
-      if ( this.dispatcherTimer != null ) {
-        this.dispatcherTimer.Stop();
-        this.dispatcherTimer = null;
+      if ( theView != null ) {
+        theView.Closed -= OnViewClosed;
+        theView = null;
       }
       if ( theBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
@@ -63,25 +66,28 @@ namespace Winterdom.Viasfora.Text {
         theBuffer.ContentTypeChanged -= this.ContentTypeChanged;
         theBuffer = null;
       }
+      this.dispatcher = null;
+      if ( this.dispatcherTimer != null ) {
+        this.dispatcherTimer.Stop();
+        this.dispatcherTimer = null;
+      }
     }
 
-    public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span) {
-      List<ClassificationSpan> result = new List<ClassificationSpan>();
+    public IEnumerable<ITagSpan<RainbowTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
       if ( !VsfSettings.RainbowTagsEnabled ) {
-        return result;
+        yield break;
       }
-      if ( span.Length == 0 ) {
-        return result;
+      if ( spans.Count == 0 ) {
+        yield break;
       }
-      ITextSnapshot snapshot = span.Snapshot;
+      ITextSnapshot snapshot = spans[0].Snapshot;
       if ( braceCache == null || braceCache.Snapshot != snapshot ) {
-        return result;
+        yield break;
       }
-      foreach ( var brace in braceCache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)) ) {
-        var tag = rainbowTags[brace.Depth % Constants.MAX_RAINBOW_DEPTH];
-        result.Add(brace.ToSpan(snapshot, tag));
+      foreach ( var brace in braceCache.BracesInSpans(spans) ) {
+        var ctype = rainbowTags[brace.Depth % Constants.MAX_RAINBOW_DEPTH];
+        yield return brace.ToSpan(snapshot, ctype);
       }
-      return result;
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint) {
@@ -149,6 +155,10 @@ namespace Winterdom.Viasfora.Text {
       this.braceCache = new BraceCache(this.theBuffer.CurrentSnapshot, contentType);
     }
 
+    private void OnViewClosed(object sender, EventArgs e) {
+      this.Dispose();
+    }
+
     void OnSettingsUpdated(object sender, EventArgs e) {
       this.UpdateBraceList(new SnapshotPoint(this.theBuffer.CurrentSnapshot, 0));
     }
@@ -171,10 +181,10 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void NotifyUpdateTags(SnapshotSpan span) {
-      var tempEvent = this.ClassificationChanged;
+      var tempEvent = this.TagsChanged;
       if ( tempEvent != null ) {
         Action action = delegate() {
-          tempEvent(this, new ClassificationChangedEventArgs(span));
+          tempEvent(this, new SnapshotSpanEventArgs(span));
         };
         dispatcher.BeginInvoke(action, DispatcherPriority.ApplicationIdle);
       }
