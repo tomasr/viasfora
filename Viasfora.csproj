@@ -128,12 +128,12 @@
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
     <Compile Include="Languages\Sql.cs" />
+    <Compile Include="Text\RainbowTagger.cs" />
+    <Compile Include="Text\RainbowTaggerProvider.cs" />
     <Compile Include="Util\BracePos.cs" />
     <Compile Include="Languages\CBasedLanguage.cs" />
     <Compile Include="Languages\FSharp.cs" />
     <Compile Include="Languages\LanguageInfo.cs" />
-    <Compile Include="Text\RainbowClassifier.cs" />
-    <Compile Include="Text\RainbowClassifierProvider.cs" />
     <Compile Include="Languages\VB.cs" />
     <Compile Include="Util\SqlBraceExtractor.cs" />
     <Compile Include="Util\CBraceExtractor.cs" />
