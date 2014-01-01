@@ -43,8 +43,9 @@ namespace Winterdom.Viasfora.Text {
       var end = new SnapshotPoint(newSnapshot, newSnapshot.Length);
       var span = new SnapshotSpan(startPoint, end);
       // remove everything cached after the startPoint
-      int index = FindIndexOfFirstBraceInSpan(span);
+      int index = FindIndexOfBraceBefore(startPoint.Position);//FindIndexOfFirstBraceInSpan(span);
       if ( index >= 0 ) {
+        // the index is *before* or at most right 
         InvalidateFromBraceAtIndex(newSnapshot, index);
       } else {
         // otherwise, there are no braces after startPoint
@@ -181,6 +182,33 @@ namespace Winterdom.Viasfora.Text {
       }
       // no braces within the expected span
       return -1;
+    }
+
+    // simple binary-search like for the closest 
+    // brace to this position
+    private int FindIndexOfBraceBefore(int position) {
+      int first = 0;
+      int last = this.braces.Count;
+      int candidate = -1;
+      while ( first < last ) {
+        int mid = (first + last) / 2;
+        BracePos midPos = braces[mid];
+        if ( midPos.Position > position ) {
+          // keep looking in second half
+          first = mid;
+        } else if ( midPos.Position < position ) {
+          // keep looking in first half
+          candidate = mid;
+          last = mid;
+        } else {
+          // we've got an exact match
+          // but we're interested on an strict
+          // order, so return the item before this one
+          candidate = mid - 1;
+          break;
+        }
+      }
+      return candidate;
     }
 
     private void EnsureLineCacheCapacity(int capacity, int lastKnownLine) {
