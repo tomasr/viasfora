@@ -22,9 +22,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(Sql.ContentType)]
   [ContentType(Sql.ContentTypeAlt)]
   [ContentType(TypeScript.ContentType)]
-  [TextViewRole(PredefinedTextViewRoles.Document)]
   [TagType(typeof(RainbowTag))]
-  [Name("Rainbow Classifier")]
   public class RainbowTaggerProvider : IViewTaggerProvider {
     [Import]
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
