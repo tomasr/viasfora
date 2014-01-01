@@ -12,7 +12,6 @@ namespace Winterdom.Viasfora.Util {
     private char brace;
     private int depth;
     private int position;
-    private int lineNum;
 
     public char Brace {
       get { return brace; }
@@ -23,20 +22,20 @@ namespace Winterdom.Viasfora.Util {
     public int Position {
       get { return position; }
     }
-    public int LineNumber {
-      get { return lineNum; }
-    }
 
-    public BracePos(char ch, int pos, int lineNum, int depth) {
+    public BracePos(char ch, int pos, int depth) {
       this.brace = ch;
       this.position = pos;
       this.depth = depth;
-      this.lineNum = lineNum;
     }
 
     public ITagSpan<RainbowTag> ToSpan(ITextSnapshot snapshot, IClassificationType type) {
       var span = new SnapshotSpan(snapshot, Position, 1);
       return new TagSpan<RainbowTag>(span, new RainbowTag(type));
+    }
+
+    public override string ToString() {
+      return String.Format("'{0}' ({1}) {3}", Brace, Position, Depth);
     }
   }
 }
