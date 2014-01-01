@@ -28,9 +28,9 @@ namespace Winterdom.Viasfora.Text {
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
 
     public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
-      return buffer.Properties.GetOrCreateSingletonProperty<ITagger<T>>(
+      return view.Properties.GetOrCreateSingletonProperty<ITagger<T>>(
         () => {
-          return new RainbowTagger(view, buffer, ClassificationRegistry) as ITagger<T>;
+          return new RainbowTagger(buffer, ClassificationRegistry) as ITagger<T>;
         });
     }
   }

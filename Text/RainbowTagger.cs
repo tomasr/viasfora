@@ -14,7 +14,6 @@ using System.Threading;
 namespace Winterdom.Viasfora.Text {
 
   class RainbowTagger : ITagger<RainbowTag>, IDisposable {
-    private ITextView theView;
     private ITextBuffer theBuffer;
     private IClassificationType[] rainbowTags;
     private object updateLock = new object();
@@ -28,17 +27,14 @@ namespace Winterdom.Viasfora.Text {
 #pragma warning restore 67
 
     internal RainbowTagger(
-          ITextView view,
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
-      this.theView = view;
       this.theBuffer = buffer;
       this.rainbowTags = GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
 
       SetLanguage(buffer.ContentType);
 
       this.updatePendingFrom = -1;
-      this.theView.Closed += this.OnViewClosed;
       this.theBuffer.ChangedLowPriority += this.BufferChanged;
       this.theBuffer.ContentTypeChanged += this.ContentTypeChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
@@ -56,10 +52,6 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void Dispose() {
-      if ( theView != null ) {
-        theView.Closed -= OnViewClosed;
-        theView = null;
-      }
       if ( theBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
         theBuffer.ChangedLowPriority -= this.BufferChanged;
@@ -153,10 +145,6 @@ namespace Winterdom.Viasfora.Text {
 
     private void SetLanguage(IContentType contentType) {
       this.braceCache = new BraceCache(this.theBuffer.CurrentSnapshot, contentType);
-    }
-
-    private void OnViewClosed(object sender, EventArgs e) {
-      this.Dispose();
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
