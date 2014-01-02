@@ -77,12 +77,13 @@ namespace Winterdom.Viasfora.Text {
 
     // We don't want to parse the document in small spans
     // as it is to expensive, so force a larger span if
-    // necessary
+    // necessary. However, if we've already parsed
+    // beyond the span, leave it be
     private void EnsureLinesInPreferredSpan(SnapshotSpan span) {
-      const int MIN_SPAN_LEN = 100;
+      int minSpanLen = Math.Max(100, (int)(span.Snapshot.Length * 0.10));
       var realSpan = span;
-      if ( span.Length < MIN_SPAN_LEN ) {
-        int end = Math.Min(span.Snapshot.Length, span.Start.Position + MIN_SPAN_LEN);
+      if ( this.LastParsedPosition < span.End && span.Length < minSpanLen ) {
+        int end = Math.Min(span.Snapshot.Length, span.Start.Position + minSpanLen);
         realSpan = new SnapshotSpan(span.Start, end - span.Start);
       }
       EnsureLinesInSpan(realSpan);
@@ -125,7 +126,9 @@ namespace Winterdom.Viasfora.Text {
       while ( lineNum < Snapshot.LineCount  ) {
         var line = Snapshot.GetLineFromLineNumber(lineNum++);
         var lineOffset = startOffset > 0 ? startOffset - line.Start : 0;
-        ExtractFromLine(pairs, line, lineOffset);
+        if ( line.Length != 0 ) {
+          ExtractFromLine(pairs, line, lineOffset);
+        }
         startOffset = 0;
         if ( line.End >= endOffset ) break;
       }
@@ -230,7 +233,12 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private bool IsOpeningBrace(char ch) {
-      return braceList.IndexOfKey(ch) >= 0;
+      // linear search will be better with so few entries
+      var keys = braceList.Keys;
+      for ( int i = 0; i < keys.Count; i++ ) {
+        if ( keys[i] == ch ) return true;
+      }
+      return false;
     }
   }
 }
