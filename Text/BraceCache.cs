@@ -10,7 +10,7 @@ using Winterdom.Viasfora.Util;
 namespace Winterdom.Viasfora.Text {
   public class BraceCache {
     private List<BracePos> braces = new List<BracePos>();
-    private Dictionary<char, char> braceList = new Dictionary<char, char>();
+    private SortedList<char, char> braceList = new SortedList<char, char>();
     public ITextSnapshot Snapshot { get; private set; }
     public int LastParsedPosition { get; private set; }
     public LanguageInfo Language { get; private set; }
@@ -53,7 +53,9 @@ namespace Winterdom.Viasfora.Text {
 
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
       if ( this.Language == null ) yield break;
-      foreach ( var wantedSpan in spans ) {
+
+      for ( int i = 0; i < spans.Count; i++ ) {
+        var wantedSpan = spans[i];
         EnsureLinesInPreferredSpan(wantedSpan);
         int startIndex = FindIndexOfBraceAtOrAfter(wantedSpan.Start);
         if ( startIndex < 0 ) {
@@ -137,7 +139,9 @@ namespace Winterdom.Viasfora.Text {
           BracePos p = cp.AsBrace(pairs.Count);
           pairs.Push(p);
           Add(p);
-        } else if ( IsClosingBrace(cp) && pairs.Count > 0 ) {
+          // we don't need to check if it's a closing brace
+          // because the extractor won't return anything else
+        } else if ( pairs.Count > 0 ) {
           BracePos p = pairs.Peek();
           if ( braceList[p.Brace] == cp.Char ) {
             // yield closing brace
@@ -225,12 +229,8 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private bool IsClosingBrace(char ch) {
-      return braceList.Values.Contains(ch);
-    }
-
     private bool IsOpeningBrace(char ch) {
-      return braceList.ContainsKey(ch);
+      return braceList.IndexOfKey(ch) >= 0;
     }
   }
 }

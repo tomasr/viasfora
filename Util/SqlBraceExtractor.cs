@@ -43,7 +43,7 @@ namespace Winterdom.Viasfora.Util {
           this.status = stString;
           tc.Next();
           this.ParseString(tc);
-        } else if ( lang.BraceList.Contains(tc.Char()) ) {
+        } else if ( lang.BraceList.IndexOf(tc.Char()) >= 0 ) {
           yield return new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
         } else {

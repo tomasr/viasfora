@@ -26,7 +26,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public bool EndOfLine {
-      get { return this.position >= line.Length; }
+      get { return this.position >= text.Length; }
     }
 
     public char Char() {
@@ -49,7 +49,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public void SkipRemainder() {
-      this.position = line.Length;
+      this.position = text.Length;
     }
 
     public String PreviousToken() {
@@ -69,7 +69,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     private bool Available(int count) {
-      return this.position + count - 1 < line.Length;
+      return this.position + count - 1 < text.Length;
     }
   }
 }
