@@ -99,11 +99,12 @@ namespace Winterdom.Viasfora.Text {
 
     private void SynchronousUpdate(bool notify, SnapshotPoint startPoint) {
       lock ( updateLock ) {
-        // only invalidate the spans
-        // containing all the positions of braces from the start point, leave
-        // the rest alone
         if ( notify ) {
-          this.updatePendingFrom = startPoint.Position;
+          // only change the update mark if the current change is *before*
+          // a pending one, or there are no notifications pending
+          if ( this.updatePendingFrom < 0 || this.updatePendingFrom > startPoint.Position ) {
+            this.updatePendingFrom = startPoint.Position;
+          }
           ScheduleUpdate();
         }
       }
@@ -133,8 +134,11 @@ namespace Winterdom.Viasfora.Text {
 
     private void FireTagsChanged() {
       var snapshot = braceCache.Snapshot;
-      int upd = this.updatePendingFrom;
-      this.updatePendingFrom = -1;
+      int upd;
+      lock ( this.updateLock ) {
+        upd = this.updatePendingFrom;
+        this.updatePendingFrom = -1;
+      }
       if ( upd < 0 ) return;
       var startPoint = new SnapshotPoint(snapshot, upd);
       NotifyUpdateTags(new SnapshotSpan(startPoint, snapshot.Length - startPoint.Position));

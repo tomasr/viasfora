@@ -216,15 +216,11 @@ namespace Winterdom.Viasfora.Text {
 
 
     private void InvalidateFromBraceAtIndex(ITextSnapshot snapshot, int index) {
-      if ( index >= braces.Count ) {
-        // invalidating from the last one, so not much else to do
-        return;
+      if ( index < braces.Count ) {
+        // invalidate the brace list
+        braces.RemoveRange(index, braces.Count - index);
       }
-      BracePos lastBrace = braces[index];
-      // invalidate the brace list
-      braces.RemoveRange(index, braces.Count - index);
 
-      // lastBrace isn't on our cache anymore
       if ( braces.Count > 0 ) {
         this.LastParsedPosition = braces[braces.Count - 1].Position;
       } else {
