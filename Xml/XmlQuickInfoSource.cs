@@ -15,6 +15,8 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using System.Windows.Media;
+using System.Reflection;
 
 namespace Winterdom.Viasfora.Xml {
   internal class XmlQuickInfoSource : IQuickInfoSource {
@@ -52,17 +54,33 @@ namespace Winterdom.Viasfora.Xml {
       }
     }
 
-    private FrameworkElement CreateInfoText(String xmlns, String url) {
-        var textBlock = new TextBlock();
-        textBlock.Inlines.AddRange(new Inline[] {
-          new Bold(new Run("Prefix: ")),
-          new Run(xmlns),
-          new LineBreak(),
-          new Bold(new Run("Namespace: ")),
-          new Hyperlink(new Run(url))
-        });
-        return textBlock;
+    private UIElement CreateInfoText(String xmlns, String url) {
+      var textBlock = new TextBlock();
+      Hyperlink hl = new Hyperlink(new Run(url));
+      textBlock.Inlines.AddRange(new Inline[] {
+        new Bold(new Run("Prefix: ")),
+        new Run(xmlns),
+        new LineBreak(),
+        new Bold(new Run("Namespace: ")),
+        hl
+      });
+      // set styles in order to support other 
+      // visual studio themes on 2012/2013
+      object tooltipBrushKey = VsfPackage.Instance.FindColorResource("ToolTipBrushKey");
+      if ( tooltipBrushKey != null  ) {
+        textBlock.SetResourceReference(TextBlock.BackgroundProperty, tooltipBrushKey);
+      }
+      object tooltipTextBrushKey = VsfPackage.Instance.FindColorResource("ToolTipTextBrushKey");
+      if ( tooltipTextBrushKey != null ) {
+        textBlock.SetResourceReference(TextBlock.ForegroundProperty, tooltipTextBrushKey);
+      }
+      object hlBrushKey = VsfPackage.Instance.FindColorResource("PanelHyperlinkBrushKey");
+      if ( hlBrushKey != null ) {
+        hl.SetResourceReference(Hyperlink.ForegroundProperty, hlBrushKey);
+      }
+      return textBlock;
     }
+
 
     private TextExtent FindExtentAtPoint(SnapshotPoint? subjectTriggerPoint) {
       ITextStructureNavigator navigator =

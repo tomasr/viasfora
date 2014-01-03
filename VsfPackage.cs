@@ -10,6 +10,8 @@ using System.Diagnostics;
 using Winterdom.Viasfora.Languages;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio;
+using System.IO;
+using System.Reflection;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -35,6 +37,8 @@ namespace Winterdom.Viasfora {
 
     public static bool PresentationModeTurnedOn { get; set; }
     public static EventHandler PresentationModeChanged { get; set; }
+
+    private Version vsVersion;
 
     static VsfPackage() {
       languageList = new List<LanguageInfo>();
@@ -65,12 +69,32 @@ namespace Winterdom.Viasfora {
       base.Initialize();
       Instance = this;
       Trace.WriteLine("Initializing VsfPackage");
+      vsVersion = FindVSVersion();
 
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
       if ( null != mcs ) {
         InitializeViewMenuCommands(mcs);
       }
     }
+
+    // see http://msdn.microsoft.com/en-us/library/vstudio/microsoft.visualstudio.platformui.environmentcolors.aspx
+    // for available styles.
+    public object FindColorResource(String name) {
+      if ( vsVersion.Major <= 10 ) {
+        return null;
+      }
+      Assembly assembly = Assembly.Load(String.Format(
+        "Microsoft.VisualStudio.Shell.{0}.0, Version={0}.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
+        vsVersion.Major
+        ));
+      if ( assembly != null ) {
+        Type type = assembly.GetType("Microsoft.VisualStudio.PlatformUI.EnvironmentColors");
+        var prop = type.GetProperty(name);
+        return prop.GetValue(null, null);
+      }
+      return null;
+    }
+
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
       var viewPresentationModeCmdId = new CommandID(
         new Guid(Guids.guidVsfViewCmdSet), 
@@ -94,6 +118,17 @@ namespace Winterdom.Viasfora {
     private void SetViewPresentationModeCmdStatus(OleMenuCommand cmd) {
       cmd.Checked = PresentationModeTurnedOn;
       cmd.Enabled = VsfSettings.PresentationModeEnabled;
+    }
+
+    private static Version FindVSVersion() {
+      String key = Instance.UserRegistryRoot.Name;
+      String last = Path.GetFileName(key);
+      last = last.Substring(0, last.IndexOf('.'));
+      int version;
+      if ( Int32.TryParse(last, out version) ) {
+        return new Version(version, 0, 0, 0);
+      }
+      return new Version(10, 0, 0, 0);
     }
   }
 }
