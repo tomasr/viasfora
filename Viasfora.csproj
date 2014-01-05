@@ -252,7 +252,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\cmdImages.png" />
+    <Resource Include="Resources\cmdImages.bmp" />
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
