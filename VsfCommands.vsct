@@ -5,21 +5,18 @@
   <Extern href="vsshlids.h"/>
 
   <Commands package="guidVsfPackage">
-    <!--
-    <Groups>
-      <Group guid="guidVsfViewCmdSet" id="VsfViewMenuGroup" priority="0x0003">
-        <Parent guid="IDM_VS_MENU_VIEW" id=""/>
-      </Group>
-    </Groups>
-    -->
     <Buttons>
-      <Button guid="guidVsfViewCmdSet" id="cmdidPresentationMode" priority="0x0103" type="Button" >
+      <Button guid="guidVsfViewCmdSet" id="cmdidPresentationMode" priority="0x0103" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_VIEW_TOOLBARS"/>
+        <Icon guid="guidImages" id="1"/>
         <Strings>
           <ButtonText>Presentation Mode</ButtonText>
         </Strings>
       </Button>
     </Buttons>
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\cmdImages.png"/>
+    </Bitmaps>
   </Commands>
   <Symbols>
     <GuidSymbol name="guidVsfPackage" value="{cd66bfea-4129-498f-a4fe-553f96f09c50}" />
@@ -27,6 +24,9 @@
     <GuidSymbol name="guidVsfViewCmdSet" value="{14e93c73-144b-4909-9cdc-694be6125e8c}">
       <IDSymbol name="cmdidPresentationMode" value="0x1020" />
     </GuidSymbol>
-    
+
+    <GuidSymbol name="guidImages" value="{04d40cc8-b432-4d13-9e6e-436222ef2930}">
+      <IDSymbol name="cmdidPresentationMode" value="1" />
+    </GuidSymbol>
   </Symbols>
 </CommandTable>
