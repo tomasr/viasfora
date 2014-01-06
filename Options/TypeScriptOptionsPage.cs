@@ -9,9 +9,9 @@ using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Options {
-  [Guid(Guids.CSharpOptions)]
-  public class CSharpOptionsPage : DialogPage {
-    private CSharp language = new CSharp();
+  [Guid(Guids.TypeScriptOptions)]
+  public class TypeScriptOptionsPage : DialogPage {
+    private TypeScript language = new TypeScript();
 
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
@@ -29,21 +29,21 @@ namespace Winterdom.Viasfora.Options {
 
     [LocDisplayName("Control Flow")]
     [Description("Control Flow keywords to highlight")]
-    [Category("CSharp")]
+    [Category("TypeScript")]
     [Editor(Constants.STRING_COLLECTION_EDITOR, typeof(UITypeEditor))]
     [TypeConverter(typeof(Design.StringListConverter))]
     public List<String> ControlFlowKeywords { get; set; }
 
     [LocDisplayName("Visibility")]
     [Description("Visibility keywords to highlight")]
-    [Category("CSharp")]
+    [Category("TypeScript")]
     [Editor(Constants.STRING_COLLECTION_EDITOR, typeof(UITypeEditor))]
     [TypeConverter(typeof(Design.StringListConverter))]
     public List<String> VisibilityKeywords { get; set; }
 
-    [LocDisplayName("LINQ")]
-    [Description("LINQ keywords to highlight")]
-    [Category("CSharp")]
+    [LocDisplayName("Query")]
+    [Description("Query keywords to highlight")]
+    [Category("TypeScript")]
     [Editor(Constants.STRING_COLLECTION_EDITOR, typeof(UITypeEditor))]
     [TypeConverter(typeof(Design.StringListConverter))]
     public List<String> LinqKeywords { get; set; }

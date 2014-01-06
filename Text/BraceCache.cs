@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
   public class BraceCache {
     private List<BracePos> braces = new List<BracePos>();
-    private List<int> lineCache = new List<int>();
-    private Dictionary<char, char> braceList = new Dictionary<char, char>();
+    private SortedList<char, char> braceList = new SortedList<char, char>();
     public ITextSnapshot Snapshot { get; private set; }
     public int LastParsedPosition { get; private set; }
     public LanguageInfo Language { get; private set; }
@@ -28,10 +28,8 @@ namespace Winterdom.Viasfora.Text {
         for ( int i = 0; i < braceChars.Length; i += 2 ) {
           this.braceList.Add(braceChars[i], braceChars[i + 1]);
         }
-        EnsureLineCacheCapacity(snapshot.LineCount, 0);
       }
     }
-
 
     public void Invalidate(SnapshotPoint startPoint) {
       if ( this.Language == null ) return;
@@ -42,28 +40,30 @@ namespace Winterdom.Viasfora.Text {
       var end = new SnapshotPoint(newSnapshot, newSnapshot.Length);
       var span = new SnapshotSpan(startPoint, end);
       // remove everything cached after the startPoint
-      int index = FindIndexOfFirstBraceInSpan(span);
+      int index = FindIndexOfBraceBefore(startPoint.Position);
       if ( index >= 0 ) {
-        InvalidateFromBraceAtIndex(newSnapshot, index);
+        // index is before startPoint
+        InvalidateFromBraceAtIndex(newSnapshot, index+1);
       } else {
-        // otherwise, there are no braces after startPoint
-        int startLine = newSnapshot.GetLineNumberFromPosition(startPoint.Position);
-        EnsureLineCacheCapacity(this.Snapshot.LineCount, startLine);
+        // there are no braces found before this position
+        // so invalidate all
+        InvalidateFromBraceAtIndex(newSnapshot, 0);
       }
-      //ContinueParsing(startPoint, Snapshot.Length);
     }
 
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
       if ( this.Language == null ) yield break;
-      foreach ( var wantedSpan in spans ) {
+
+      for ( int i = 0; i < spans.Count; i++ ) {
+        var wantedSpan = spans[i];
         EnsureLinesInPreferredSpan(wantedSpan);
-        int startIndex = FindIndexOfFirstBraceInSpan(wantedSpan);
+        int startIndex = FindIndexOfBraceAtOrAfter(wantedSpan.Start);
         if ( startIndex < 0 ) {
           continue;
         }
         for ( int j = startIndex; j < braces.Count; j++ ) {
           BracePos bp = braces[j];
-          if ( bp.Position >= wantedSpan.End ) break;
+          if ( bp.Position > wantedSpan.End ) break;
           yield return bp;
         }
       }
@@ -77,12 +77,13 @@ namespace Winterdom.Viasfora.Text {
 
     // We don't want to parse the document in small spans
     // as it is to expensive, so force a larger span if
-    // necessary
+    // necessary. However, if we've already parsed
+    // beyond the span, leave it be
     private void EnsureLinesInPreferredSpan(SnapshotSpan span) {
-      const int MIN_SPAN_LEN = 100;
+      int minSpanLen = Math.Max(100, (int)(span.Snapshot.Length * 0.10));
       var realSpan = span;
-      if ( span.Length < MIN_SPAN_LEN ) {
-        int end = Math.Min(span.Snapshot.Length, span.Start.Position + MIN_SPAN_LEN);
+      if ( this.LastParsedPosition < span.End && span.Length < minSpanLen ) {
+        int end = Math.Min(span.Snapshot.Length, span.Start.Position + minSpanLen);
         realSpan = new SnapshotSpan(span.Start, end - span.Start);
       }
       EnsureLinesInSpan(realSpan);
@@ -125,7 +126,9 @@ namespace Winterdom.Viasfora.Text {
       while ( lineNum < Snapshot.LineCount  ) {
         var line = Snapshot.GetLineFromLineNumber(lineNum++);
         var lineOffset = startOffset > 0 ? startOffset - line.Start : 0;
-        ExtractFromLine(pairs, line, lineOffset);
+        if ( line.Length != 0 ) {
+          ExtractFromLine(pairs, line, lineOffset);
+        }
         startOffset = 0;
         if ( line.End >= endOffset ) break;
       }
@@ -136,15 +139,17 @@ namespace Winterdom.Viasfora.Text {
       var bracesInLine = this.braceExtractor.Extract(lc) /*.ToArray() */;
       foreach ( var cp in bracesInLine ) {
         if ( IsOpeningBrace(cp) ) {
-          BracePos p = cp.AsBrace(line.LineNumber, pairs.Count);
+          BracePos p = cp.AsBrace(pairs.Count);
           pairs.Push(p);
           Add(p);
-        } else if ( IsClosingBrace(cp) && pairs.Count > 0 ) {
+          // we don't need to check if it's a closing brace
+          // because the extractor won't return anything else
+        } else if ( pairs.Count > 0 ) {
           BracePos p = pairs.Peek();
           if ( braceList[p.Brace] == cp.Char ) {
             // yield closing brace
             pairs.Pop();
-            BracePos c = cp.AsBrace(line.LineNumber, p.Depth);
+            BracePos c = cp.AsBrace(p.Depth);
             Add(c);
           }
         }
@@ -155,67 +160,67 @@ namespace Winterdom.Viasfora.Text {
     private void Add(BracePos brace) {
       // if this brace is on a new line
       // store its position in the line cache
-      int thisLineNum = brace.LineNumber;
-      if ( braces.Count > 0 ) {
-        int lastLineNum = braces[braces.Count - 1].LineNumber;
-        if ( lastLineNum != thisLineNum ) {
-          lineCache[thisLineNum] = braces.Count;
-        }
-      } else {
-        lineCache[thisLineNum] = braces.Count;
-      }
       braces.Add(brace);
       LastParsedPosition = brace.Position;
     }
 
-    private int FindIndexOfFirstBraceInSpan(SnapshotSpan wantedSpan) {
-      int line = Snapshot.GetLineNumberFromPosition(wantedSpan.Start);
-      int spanEndLine = Snapshot.GetLineNumberFromPosition(wantedSpan.End);
-      for ( ; line <= spanEndLine; line++ ) {
-        // line contains at least one brace, return it's
-        // index within the braces list
-        if ( lineCache[line] >= 0 ) {
-          return lineCache[line];
+
+    // simple binary-search like for the closest 
+    // brace to this position
+    private int FindIndexOfBraceAtOrAfter(int position) {
+      int first = 0;
+      int last = this.braces.Count - 1;
+      int candidate = -1;
+      while ( first <= last ) {
+        int mid = (first + last) / 2;
+        BracePos midPos = braces[mid];
+        if ( midPos.Position < position ) {
+          // keep looking in second half
+          first = mid + 1;
+        } else if ( midPos.Position > position ) {
+          // keep looking in first half
+          candidate = mid;
+          last = mid - 1;
+        } else {
+          // we've got an exact match
+          candidate = mid;
+          break;
         }
       }
-      // no braces within the expected span
-      return -1;
+      return candidate;
+    }
+    private int FindIndexOfBraceBefore(int position) {
+      int first = 0;
+      int last = this.braces.Count - 1;
+      int candidate = -1;
+      while ( first <= last ) {
+        int mid = (first + last) / 2;
+        BracePos midPos = braces[mid];
+        if ( midPos.Position < position ) {
+          // keep looking in second half
+          candidate = mid;
+          first = mid + 1;
+        } else if ( midPos.Position > position ) {
+          // keep looking in first half
+          last = mid - 1;
+        } else {
+          // we've got an exact match
+          // but we're interested on an strict
+          // order, so return the item before this one
+          candidate = mid - 1;
+          break;
+        }
+      }
+      return candidate;
     }
 
-    private void EnsureLineCacheCapacity(int capacity, int lastKnownLine) {
-      if ( lineCache.Count > capacity ) {
-        lineCache.RemoveRange(capacity, lineCache.Count - capacity);
-      }
-      lineCache.Capacity = capacity;
-      for ( int i = lastKnownLine; i < capacity; i++ ) {
-        lineCache.Add(-1);
-      }
-    }
 
     private void InvalidateFromBraceAtIndex(ITextSnapshot snapshot, int index) {
-      if ( index >= braces.Count ) {
-        // invalidating from the last one, so not much else to do
-        return;
-      }
-      BracePos lastBrace = braces[index];
-      // invalidate the brace list
-      braces.RemoveRange(index, braces.Count - index);
-      int line = 0;
-      if ( lastBrace.Position > snapshot.Length ) {
-        line = snapshot.LineCount - 1;
-      } else {
-        line = snapshot.GetLineNumberFromPosition(lastBrace.Position);
+      if ( index < braces.Count ) {
+        // invalidate the brace list
+        braces.RemoveRange(index, braces.Count - index);
       }
 
-      // invalidate the line cache
-      // notice we can only clear the current line entry
-      // if the brace being invalidated from is actually
-      // the first in that line
-      if ( lineCache[line] == index ) {
-        lineCache[line] = -1;
-      }
-      EnsureLineCacheCapacity(snapshot.LineCount, line+1);
-      // lastBrace isn't on our cache anymore
       if ( braces.Count > 0 ) {
         this.LastParsedPosition = braces[braces.Count - 1].Position;
       } else {
@@ -223,12 +228,13 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private bool IsClosingBrace(char ch) {
-      return braceList.Values.Contains(ch);
-    }
-
     private bool IsOpeningBrace(char ch) {
-      return braceList.ContainsKey(ch);
+      // linear search will be better with so few entries
+      var keys = braceList.Keys;
+      for ( int i = 0; i < keys.Count; i++ ) {
+        if ( keys[i] == ch ) return true;
+      }
+      return false;
     }
   }
 }

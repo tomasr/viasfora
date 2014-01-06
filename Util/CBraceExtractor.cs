@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Winterdom.Viasfora.Text;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Util {
   public class CBraceExtractor : IBraceExtractor {
@@ -55,7 +55,7 @@ namespace Winterdom.Viasfora.Util {
           this.status = stString;
           tc.Next();
           this.ParseCharLiteral(tc);
-        } else if ( lang.BraceList.Contains(tc.Char()) ) {
+        } else if ( lang.BraceList.IndexOf(tc.Char()) >= 0 ) {
           yield return new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
         } else {

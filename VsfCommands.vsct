@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidVsfPackage">
+    <Buttons>
+      <Button guid="guidVsfViewCmdSet" id="cmdidPresentationMode" priority="0x0103" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_VIEW_TOOLBARS"/>
+        <Icon guid="guidImages" id="1"/>
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <ButtonText>Presentation Mode</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+    <Bitmaps>
+      <Bitmap guid="guidImages" href="Resources\cmdImages.bmp" usedList="bmpPresentationMode"/>
+    </Bitmaps>
+  </Commands>
+
+  <Symbols>
+    <GuidSymbol name="guidVsfPackage" value="{cd66bfea-4129-498f-a4fe-553f96f09c50}" />
+
+    <GuidSymbol name="guidVsfViewCmdSet" value="{14e93c73-144b-4909-9cdc-694be6125e8c}">
+      <IDSymbol name="cmdidPresentationMode" value="1" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidImages" value="{04d40cc8-b432-4d13-9e6e-436222ef2930}">
+      <IDSymbol name="bmpPresentationMode" value="1" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

@@ -9,11 +9,13 @@ namespace Winterdom.Viasfora.Util {
     private ITextSnapshotLine line;
     private int position;
     private String text;
+    private int length;
     const char EOT = '\0';
 
     public LineChars(ITextSnapshotLine line, int start=0) {
       this.line = line;
       this.text = line.GetText();
+      this.length = text.Length;
       this.position = start;
     }
 
@@ -26,7 +28,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public bool EndOfLine {
-      get { return this.position >= line.Length; }
+      get { return this.position >= length; }
     }
 
     public char Char() {
@@ -49,7 +51,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public void SkipRemainder() {
-      this.position = line.Length;
+      this.position = length;
     }
 
     public String PreviousToken() {
@@ -69,7 +71,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     private bool Available(int count) {
-      return this.position + count - 1 < line.Length;
+      return this.position + count - 1 < length;
     }
   }
 }

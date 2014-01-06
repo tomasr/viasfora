@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
+using Winterdom.Viasfora.Design;
+using System.Drawing.Design;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.GeneralOptions)]
@@ -68,5 +70,6 @@ namespace Winterdom.Viasfora.Options {
     [Description("Enables highlighting XML element opening/closing tags")]
     [Category("XML Editor")]
     public bool XmlMatchTagsEnabled { get; set; }
+
   }
 }

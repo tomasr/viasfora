@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowClassifier : IClassifier, IDisposable {
+  class RainbowTagger : ITagger<RainbowTag>, IDisposable {
     private ITextBuffer theBuffer;
     private IClassificationType[] rainbowTags;
     private object updateLock = new object();
@@ -23,10 +23,10 @@ namespace Winterdom.Viasfora.Text {
     private int updatePendingFrom;
 
 #pragma warning disable 67
-    public event EventHandler<ClassificationChangedEventArgs> ClassificationChanged;
+    public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 #pragma warning restore 67
 
-    internal RainbowClassifier(
+    internal RainbowTagger(
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
       this.theBuffer = buffer;
@@ -58,25 +58,28 @@ namespace Winterdom.Viasfora.Text {
         theBuffer.ContentTypeChanged -= this.ContentTypeChanged;
         theBuffer = null;
       }
+      this.dispatcher = null;
+      if ( this.dispatcherTimer != null ) {
+        this.dispatcherTimer.Stop();
+        this.dispatcherTimer = null;
+      }
     }
 
-    public IList<ClassificationSpan> GetClassificationSpans(SnapshotSpan span) {
-      List<ClassificationSpan> result = new List<ClassificationSpan>();
+    public IEnumerable<ITagSpan<RainbowTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
       if ( !VsfSettings.RainbowTagsEnabled ) {
-        return result;
+        yield break;
       }
-      if ( span.Length == 0 ) {
-        return result;
+      if ( spans.Count == 0 ) {
+        yield break;
       }
-      ITextSnapshot snapshot = span.Snapshot;
+      ITextSnapshot snapshot = spans[0].Snapshot;
       if ( braceCache == null || braceCache.Snapshot != snapshot ) {
-        return result;
+        yield break;
       }
-      foreach ( var brace in braceCache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)) ) {
-        var tag = rainbowTags[brace.Depth % Constants.MAX_RAINBOW_DEPTH];
-        result.Add(brace.ToSpan(snapshot, tag));
+      foreach ( var brace in braceCache.BracesInSpans(spans) ) {
+        var ctype = rainbowTags[brace.Depth % Constants.MAX_RAINBOW_DEPTH];
+        yield return brace.ToSpan(snapshot, ctype);
       }
-      return result;
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint) {
@@ -96,11 +99,12 @@ namespace Winterdom.Viasfora.Text {
 
     private void SynchronousUpdate(bool notify, SnapshotPoint startPoint) {
       lock ( updateLock ) {
-        // only invalidate the spans
-        // containing all the positions of braces from the start point, leave
-        // the rest alone
         if ( notify ) {
-          this.updatePendingFrom = startPoint.Position;
+          // only change the update mark if the current change is *before*
+          // a pending one, or there are no notifications pending
+          if ( this.updatePendingFrom < 0 || this.updatePendingFrom > startPoint.Position ) {
+            this.updatePendingFrom = startPoint.Position;
+          }
           ScheduleUpdate();
         }
       }
@@ -130,8 +134,11 @@ namespace Winterdom.Viasfora.Text {
 
     private void FireTagsChanged() {
       var snapshot = braceCache.Snapshot;
-      int upd = this.updatePendingFrom;
-      this.updatePendingFrom = -1;
+      int upd;
+      lock ( this.updateLock ) {
+        upd = this.updatePendingFrom;
+        this.updatePendingFrom = -1;
+      }
       if ( upd < 0 ) return;
       var startPoint = new SnapshotPoint(snapshot, upd);
       NotifyUpdateTags(new SnapshotSpan(startPoint, snapshot.Length - startPoint.Position));
@@ -166,10 +173,10 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void NotifyUpdateTags(SnapshotSpan span) {
-      var tempEvent = this.ClassificationChanged;
+      var tempEvent = this.TagsChanged;
       if ( tempEvent != null ) {
         Action action = delegate() {
-          tempEvent(this, new ClassificationChangedEventArgs(span));
+          tempEvent(this, new SnapshotSpanEventArgs(span));
         };
         dispatcher.BeginInvoke(action, DispatcherPriority.ApplicationIdle);
       }

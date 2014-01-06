@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
@@ -17,7 +18,6 @@ namespace Winterdom.Viasfora.Text {
     private KeywordTag linqClassification;
     private KeywordTag visClassification;
     private KeywordTag stringEscapeClassification;
-    private IClassificationType[] rainbowTypes;
     private ITagAggregator<IClassificationTag> aggregator;
 
 #pragma warning disable 67
@@ -37,7 +37,6 @@ namespace Winterdom.Viasfora.Text {
          new KeywordTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
       stringEscapeClassification =
          new KeywordTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
-      rainbowTypes = RainbowClassifier.GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
 
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
       this.aggregator = aggregator;
@@ -56,7 +55,7 @@ namespace Winterdom.Viasfora.Text {
 
       ITextSnapshot snapshot = spans[0].Snapshot;
       foreach ( var tagSpan in aggregator.GetTags(spans) ) {
-        if ( this.rainbowTypes.Contains(tagSpan.Tag.ClassificationType) )
+        if ( tagSpan.Tag.ClassificationType is RainbowTag )
           continue;
         String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
         if ( eshe && name.Contains("string") ) {
