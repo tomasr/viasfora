@@ -49,5 +49,9 @@ namespace Winterdom.Viasfora.Languages {
       // trailing spaces (such as "IF ")
       return text.Trim();
     }
+    public override IFirstLineCommentParser NewFirstLineCommentParser() {
+      // TODO: Implement
+      throw new NotImplementedException();
+    }
   }
 }
