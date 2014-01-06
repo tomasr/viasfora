@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Util {
-  public interface IModeLineParser {
-    IDictionary<String, String> Parse(String text);
+  public interface ITokenizer {
+    bool AtEnd { get; }
+    String Token { get; }
+    bool Next();
   }
 }
