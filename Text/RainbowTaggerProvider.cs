@@ -28,10 +28,10 @@ namespace Winterdom.Viasfora.Text {
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
 
     public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
-      return view.Properties.GetOrCreateSingletonProperty<ITagger<T>>(
-        () => {
-          return new RainbowTagger(buffer, ClassificationRegistry) as ITagger<T>;
-        });
+      // Lesson of the day: The tagger cannot be a singleton property
+      // because the VS2013 HTML editor holds it in an Aggregator which will
+      // dispose it during the ContentTypeChanged event!
+      return new RainbowTagger(buffer, ClassificationRegistry) as ITagger<T>;
     }
   }
 }

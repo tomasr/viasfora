@@ -32,6 +32,7 @@ namespace Winterdom.Viasfora {
   [ProvideMenuResource(1000, 1)]
   public sealed class VsfPackage : Package {
 
+    private static readonly LanguageInfo DefaultLanguage = new DefaultLanguage();
     private static List<LanguageInfo> languageList;
     public static VsfPackage Instance { get; private set; }
 
@@ -56,7 +57,7 @@ namespace Winterdom.Viasfora {
         if ( li.MatchesContentType(contentType) )
           return li;
       }
-      return null;
+      return new DefaultLanguage();
     }
 
     public static int GetPresentationModeZoomLevel() {
