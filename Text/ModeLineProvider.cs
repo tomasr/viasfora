@@ -31,13 +31,15 @@ namespace Winterdom.Viasfora.Text {
         return;
       }
 
-      tc = new StringChars(commentText);
       var modelineParser = new ModeLineParser();
-      var options = modelineParser.Parse(tc);
+      var options = modelineParser.Parse(commentText);
       ApplyModelines(options);
     }
 
     private void ApplyModelines(IDictionary<String, String> options) {
+      foreach ( String key in options.Keys ) {
+        System.Diagnostics.Trace.WriteLine(String.Format("Modeline: {0}={1}", key, options[key]));
+      }
     }
   }
 }
