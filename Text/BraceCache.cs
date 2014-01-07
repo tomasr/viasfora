@@ -37,8 +37,6 @@ namespace Winterdom.Viasfora.Text {
       var newSnapshot = startPoint.Snapshot;
       this.Snapshot = newSnapshot;
 
-      var end = new SnapshotPoint(newSnapshot, newSnapshot.Length);
-      var span = new SnapshotSpan(startPoint, end);
       // remove everything cached after the startPoint
       int index = FindIndexOfBraceBefore(startPoint.Position);
       if ( index >= 0 ) {
@@ -82,40 +80,40 @@ namespace Winterdom.Viasfora.Text {
     private void EnsureLinesInPreferredSpan(SnapshotSpan span) {
       int minSpanLen = Math.Max(100, (int)(span.Snapshot.Length * 0.10));
       var realSpan = span;
-      if ( this.LastParsedPosition < span.End && span.Length < minSpanLen ) {
-        int end = Math.Min(span.Snapshot.Length, span.Start.Position + minSpanLen);
-        realSpan = new SnapshotSpan(span.Start, end - span.Start);
+      int lastPosition = this.LastParsedPosition;
+
+      var snapshot = this.Snapshot;
+      if ( lastPosition > 0 && lastPosition >= span.End ) {
+        // already parsed this, so no need to do it again
+        return;
       }
-      EnsureLinesInSpan(realSpan);
+      int parseFrom = lastPosition + 1;
+      int parseUntil = Math.Min(
+        snapshot.Length, 
+        Math.Max(span.End, parseFrom + minSpanLen)
+        );
+
+      ContinueParsing(parseFrom, parseUntil);
     }
 
-    private void EnsureLinesInSpan(SnapshotSpan span) {
-      if ( span.End > this.LastParsedPosition ) {
-        ExtractUntil(span.End);
-      }
-    }
-
-    private void ExtractUntil(int position) {
-      ContinueParsing(this.LastParsedPosition, position);
-    }
-
-    private void ContinueParsing(int lastPointParsed, int parseUntil) {
+    private void ContinueParsing(int parseFrom, int parseUntil) {
       int startPosition = 0;
       int lastGoodBrace = 0;
       // figure out where to start parsing again
       Stack<BracePos> pairs = new Stack<BracePos>();
-      for ( ; lastGoodBrace < braces.Count; lastGoodBrace++ ) {
-        BracePos r = braces[lastGoodBrace];
-        if ( r.Position >= lastPointParsed ) break;
+      for ( int i=0; i < braces.Count; i++ ) {
+        BracePos r = braces[i];
+        if ( r.Position > parseFrom ) break;
         if ( IsOpeningBrace(r.Brace) ) {
           pairs.Push(r);
         } else if ( pairs.Count > 0 ) {
           pairs.Pop();
         }
         startPosition = r.Position + 1;
+        lastGoodBrace = i;
       }
-      if ( lastGoodBrace < braces.Count ) {
-        braces.RemoveRange(lastGoodBrace, braces.Count - lastGoodBrace);
+      if ( lastGoodBrace < braces.Count - 1 ) {
+        braces.RemoveRange(lastGoodBrace+1, braces.Count - lastGoodBrace - 1);
       }
 
       ExtractBraces(pairs, startPosition, parseUntil);
@@ -130,6 +128,7 @@ namespace Winterdom.Viasfora.Text {
           ExtractFromLine(pairs, line, lineOffset);
         }
         startOffset = 0;
+        this.LastParsedPosition = line.End;
         if ( line.End >= endOffset ) break;
       }
     }
@@ -158,8 +157,6 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void Add(BracePos brace) {
-      // if this brace is on a new line
-      // store its position in the line cache
       braces.Add(brace);
       LastParsedPosition = brace.Position;
     }
