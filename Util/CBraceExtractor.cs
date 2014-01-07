@@ -19,6 +19,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public IEnumerable<CharPos> Extract(ITextChars tc) {
+      this.status = stText;
       while ( !tc.EndOfLine ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
