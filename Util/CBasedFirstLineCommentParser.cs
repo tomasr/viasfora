@@ -12,13 +12,16 @@ namespace Winterdom.Viasfora.Util {
       if ( tc.EndOfLine ) return null;
 
       StringBuilder sb = new StringBuilder();
-      if ( tc.NChar() == '*' ) {
+      tc.Next();
+      if ( tc.Char() == '*' ) {
+        tc.Next();
         // multiline comment
-        while ( !tc.EndOfLine && tc.NChar() != '*' && tc.NNChar() != '/' ) {
+        while ( !tc.EndOfLine && tc.Char() != '*' && tc.NChar() != '/' ) {
           sb.Append(tc.Char());
           tc.Next();
         }
-      } else if ( tc.NChar() == '/' ) {
+      } else if ( tc.Char() == '/' ) {
+        tc.Next();
         // single line comment
         while ( !tc.EndOfLine ) {
           sb.Append(tc.Char());

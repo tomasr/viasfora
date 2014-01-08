@@ -26,11 +26,10 @@ namespace Winterdom.Viasfora.Util {
       if ( tokenizer.Token != ":" ) return; // not what we expect
       if ( !tokenizer.Next() ) return;
 
-      if ( tokenizer.Token == "Set" ) {
+      if ( tokenizer.Token == "set" ) {
         tokenizer.Next();
         ParseListNoDelimiter(tokenizer, result);
       } else {
-        tokenizer.Next();
         ParseList(tokenizer, result, ":");
       }
     }
@@ -49,10 +48,12 @@ namespace Winterdom.Viasfora.Util {
           result[p1] = "";
         }
         if ( tokenizer.Token != delimiter ) break;
+        // consume the delimiter
+        tokenizer.Next();
       }
     }
     private void ParseListNoDelimiter(ITokenizer tokenizer, Dictionary<string, string> result) {
-      while ( !tokenizer.AtEnd ) {
+      while ( !tokenizer.AtEnd && tokenizer.Token != ":" ) {
         String p1 = tokenizer.Token;
         tokenizer.Next();
         String p2 = tokenizer.Token;
@@ -63,6 +64,8 @@ namespace Winterdom.Viasfora.Util {
           tokenizer.Next();
         } else {
           result[p1] = "";
+          // tokenizer.Token contains the next option we want to process
+          // so don't consume it
         }
       }
     }

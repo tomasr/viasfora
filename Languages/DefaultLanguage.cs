@@ -32,11 +32,19 @@ namespace Winterdom.Viasfora.Languages {
     public override IBraceExtractor NewBraceExtractor() {
       return new NoBraceExtractor();
     }
+    public override IFirstLineCommentParser NewFirstLineCommentParser() {
+      return new NoFirstLineCommentParser();
+    }
 
     private class NoBraceExtractor : IBraceExtractor {
       private static CharPos[] noBraces = new CharPos[0];
       public IEnumerable<CharPos> Extract(ITextChars text) {
         return noBraces;
+      }
+    }
+    private class NoFirstLineCommentParser : IFirstLineCommentParser {
+      public string Parse(ITextChars tc) {
+        return "";
       }
     }
   }

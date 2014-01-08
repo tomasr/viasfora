@@ -40,6 +40,7 @@ namespace Winterdom.Viasfora {
     public static EventHandler PresentationModeChanged { get; set; }
 
     private Version vsVersion;
+    private IVsActivityLog activityLog;
 
     static VsfPackage() {
       languageList = new List<LanguageInfo>();
@@ -69,7 +70,8 @@ namespace Winterdom.Viasfora {
     protected override void Initialize() {
       base.Initialize();
       Instance = this;
-      Trace.WriteLine("Initializing VsfPackage");
+      InitializeActivityLog();
+      LogInfo("Initializing VsfPackage");
       vsVersion = FindVSVersion();
 
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -77,6 +79,22 @@ namespace Winterdom.Viasfora {
         InitializeViewMenuCommands(mcs);
       }
     }
+
+    private void InitializeActivityLog() {
+      this.activityLog = (IVsActivityLog)GetService(typeof(SVsActivityLog));
+    }
+
+    public static void LogInfo(String format, params object[] args) {
+      var log = Instance.activityLog;
+      if ( log != null ) {
+        log.LogEntry(
+          (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_INFORMATION,
+          "Viasfora",
+          String.Format(format, args)
+        );
+      }
+    }
+
 
     // see http://msdn.microsoft.com/en-us/library/vstudio/microsoft.visualstudio.platformui.environmentcolors.aspx
     // for available styles.

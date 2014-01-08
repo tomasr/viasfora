@@ -12,6 +12,8 @@ namespace Winterdom.Viasfora.Text {
   [ContentType("text")]
   public class ModelineFactory : IWpfTextViewCreationListener {
     public void TextViewCreated(IWpfTextView textView) {
+      ModeLineProvider provider = new ModeLineProvider(textView);
+      provider.ParseModeline();
     }
   }
 }

@@ -24,7 +24,7 @@ namespace Winterdom.Viasfora.Util {
       if ( tc.EndOfLine ) {
         this.currentToken = "";
         this.reachedEnd = true;
-        return true;
+       return false;
       }
       // skip whitespace
       while ( !tc.EndOfLine && Char.IsWhiteSpace(tc.Char()) ) {
@@ -33,25 +33,25 @@ namespace Winterdom.Viasfora.Util {
       if ( tc.EndOfLine ) {
         this.currentToken = "";
         this.reachedEnd = true;
-        return true;
+        return false;
       }
       // if it's a special character, return it on its own
       if ( !Char.IsLetterOrDigit(tc.Char()) ) {
         char ch = tc.Char();
         tc.Next();
         this.currentToken = "" + ch;
-        return false;
+        return true;
       }
       // return the word
       StringBuilder sb = new StringBuilder();
       while ( !tc.EndOfLine ) {
         char ch = tc.Char();
-        tc.Next();
         if ( !Char.IsLetterOrDigit(ch) ) break;
+        tc.Next();
         sb.Append(ch);
       }
       this.currentToken = sb.ToString();
-      return false;
+      return true;
     }
   }
 }
