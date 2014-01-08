@@ -42,5 +42,9 @@ namespace Winterdom.Viasfora.Languages {
     public override IBraceExtractor NewBraceExtractor() {
       return new FSharpBraceExtractor(this);
     }
+    public override IFirstLineCommentParser NewFirstLineCommentParser() {
+      // TODO: Implement
+      throw new NotImplementedException();
+    }
   }
 }
