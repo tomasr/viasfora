@@ -43,8 +43,7 @@ namespace Winterdom.Viasfora.Languages {
       return new FSharpBraceExtractor(this);
     }
     public override IFirstLineCommentParser NewFirstLineCommentParser() {
-      // TODO: Implement
-      throw new NotImplementedException();
+      return new FSharpFirstLineCommentParser();
     }
   }
 }

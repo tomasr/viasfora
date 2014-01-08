@@ -6,7 +6,6 @@ using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Util {
   public class ModeLineParser : IModeLineParser {
-    private int status;
 
     public IDictionary<String, String> Parse(String text) {
       Dictionary<String, String> result = new Dictionary<String, String>();

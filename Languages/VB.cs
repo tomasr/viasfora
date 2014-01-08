@@ -46,8 +46,7 @@ namespace Winterdom.Viasfora.Languages {
       return new VbBraceExtractor(this);
     }
     public override IFirstLineCommentParser NewFirstLineCommentParser() {
-      // TODO: Implement
-      throw new NotImplementedException();
+      return new VbFirstLineCommentParser();
     }
   }
 }

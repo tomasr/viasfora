@@ -137,6 +137,9 @@
     <Compile Include="Languages\Sql.cs" />
     <Compile Include="Text\RainbowTagger.cs" />
     <Compile Include="Text\RainbowTaggerProvider.cs" />
+    <Compile Include="Util\SqlBasedFirstLineCommentParser.cs" />
+    <Compile Include="Util\FSharpBasedFirstLineCommentParser.cs" />
+    <Compile Include="Util\VbFirstLineCommentParser.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
     <Compile Include="Util\BracePos.cs" />

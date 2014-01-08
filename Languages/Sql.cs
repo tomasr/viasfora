@@ -50,8 +50,7 @@ namespace Winterdom.Viasfora.Languages {
       return text.Trim();
     }
     public override IFirstLineCommentParser NewFirstLineCommentParser() {
-      // TODO: Implement
-      throw new NotImplementedException();
+      return new SqlFirstLineCommentParser();
     }
   }
 }
