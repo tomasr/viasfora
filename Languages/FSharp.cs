@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
@@ -41,6 +43,9 @@ namespace Winterdom.Viasfora.Languages {
     }
     public override IBraceExtractor NewBraceExtractor() {
       return new FSharpBraceExtractor(this);
+    }
+    public override IFirstLineCommentParser NewFirstLineCommentParser() {
+      return new FSharpFirstLineCommentParser();
     }
   }
 }

@@ -120,6 +120,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void ExtractBraces(Stack<BracePos> pairs, int startOffset, int endOffset) {
+      braceExtractor.Reset();
       int lineNum = Snapshot.GetLineNumberFromPosition(startOffset);
       while ( lineNum < Snapshot.LineCount  ) {
         var line = Snapshot.GetLineFromLineNumber(lineNum++);

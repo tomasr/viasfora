@@ -18,6 +18,7 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
+      VsfSettings.ModelinesEnabled = ModelinesEnabled;
       VsfSettings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
       VsfSettings.XmlCloseTagHighlightEnabled = XmlCloseTagHighlightEnabled;
       VsfSettings.XmlMatchTagsEnabled = XmlMatchTagsEnabled;
@@ -29,6 +30,7 @@ namespace Winterdom.Viasfora.Options {
       KeywordClassifierEnabled = VsfSettings.KeywordClassifierEnabled;
       EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
+      ModelinesEnabled = VsfSettings.ModelinesEnabled;
       XmlnsPrefixHighlightEnabled = VsfSettings.XmlnsPrefixHighlightEnabled;
       XmlCloseTagHighlightEnabled = VsfSettings.XmlCloseTagHighlightEnabled;
       XmlMatchTagsEnabled = VsfSettings.XmlMatchTagsEnabled;
@@ -54,6 +56,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Highlight matching braces using colors based on nesting")]
     [Category("Text Editor")]
     public bool RainbowTagsEnabled { get; set; }
+
+    [LocDisplayName("Enable Modelines Support")]
+    [Description("Enables the use of Vim-style modelines to configure the text editor")]
+    [Category("Text Editor")]
+    public bool ModelinesEnabled { get; set; }
 
     // XML Editor Extensions
     [LocDisplayName("Highlight XML Namespace Prefix")]

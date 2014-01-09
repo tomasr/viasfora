@@ -5,73 +5,17 @@ using System.Text;
 using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Util {
-  public class LineChars : ITextChars {
+  public class LineChars : StringChars {
     private ITextSnapshotLine line;
-    private int position;
-    private String text;
-    private int length;
     const char EOT = '\0';
 
-    public LineChars(ITextSnapshotLine line, int start=0) {
+    public LineChars(ITextSnapshotLine line, int start=0)
+        : base(line.GetText(), start) {
       this.line = line;
-      this.text = line.GetText();
-      this.length = text.Length;
-      this.position = start;
     }
 
-    public int Position {
-      get { return this.position;  }
-    }
-
-    public int AbsolutePosition {
-      get { return this.line.Start + this.position;  }
-    }
-
-    public bool EndOfLine {
-      get { return this.position >= length; }
-    }
-
-    public char Char() {
-      return Available(1) ? text[position] : EOT;
-    }
-
-    public char NChar() {
-      return Available(2) ? text[position+1] : EOT;
-    }
-
-    public char NNChar() {
-      return Available(3) ? text[position+2] : EOT;
-    }
-
-    public void Next() {
-      Skip(1);
-    }
-    public void Skip(int count) {
-      this.position += count;
-    }
-
-    public void SkipRemainder() {
-      this.position = length;
-    }
-
-    public String PreviousToken() {
-      int startPos = this.Position-1;
-      // skip any whitespace
-      for ( ; startPos > 0; startPos-- ) {
-        if ( !System.Char.IsWhiteSpace(text[startPos]) )
-          break;
-      }
-      int end = startPos;
-      for ( ; startPos > 0; startPos-- ) {
-        if ( System.Char.IsWhiteSpace(text[startPos]) )
-          break;
-      }
-      if ( startPos < 0 ) return "";
-      return text.Substring(startPos, end - startPos + 1);
-    }
-
-    private bool Available(int count) {
-      return this.position + count - 1 < length;
+    public override int AbsolutePosition {
+      get { return this.line.Start + this.Position;  }
     }
   }
 }
