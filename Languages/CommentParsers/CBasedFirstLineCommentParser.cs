@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Util {
+namespace Winterdom.Viasfora.Languages.CommentParsers {
   public class CBasedFirstLineCommentParser : IFirstLineCommentParser {
     public string Parse(ITextChars tc) {
       while ( !tc.EndOfLine && tc.Char() != '/' ) {

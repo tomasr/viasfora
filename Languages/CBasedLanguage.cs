@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
