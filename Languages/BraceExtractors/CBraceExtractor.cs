@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Languages;
+using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Util {
-  public class FSharpBraceExtractor : IBraceExtractor {
+namespace Winterdom.Viasfora.Languages.BraceExtractors {
+  public class CBraceExtractor : IBraceExtractor {
     const int stText = 0;
     const int stString = 1;
     const int stChar = 2;
@@ -14,7 +15,7 @@ namespace Winterdom.Viasfora.Util {
     private int status = stText;
     private LanguageInfo lang;
 
-    public FSharpBraceExtractor(LanguageInfo lang) {
+    public CBraceExtractor(LanguageInfo lang) {
       this.lang = lang;
     }
 
@@ -41,7 +42,7 @@ namespace Winterdom.Viasfora.Util {
     private IEnumerable<CharPos> ParseText(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         // multi-line comment
-        if ( tc.Char() == '(' && tc.NChar() == '*' ) {
+        if ( tc.Char() == '/' && tc.NChar() == '*' ) {
           this.status = stMultiLineComment;
           tc.Skip(2);
           this.ParseMultiLineComment(tc);
@@ -55,12 +56,7 @@ namespace Winterdom.Viasfora.Util {
           this.status = stString;
           tc.Next();
           this.ParseString(tc);
-        } else if ( tc.Char() == '<' && tc.NChar() == '\'') {
-          // this is just a generic parameter, so skip it already
-          tc.Skip(2);
-        } else if ( (tc.Char() == '\'' && tc.NChar() == '\\') 
-                 || (tc.Char() == '\'' && tc.NNChar() == '\'') ) {
-          // char literal
+        } else if ( tc.Char() == '\'' ) {
           this.status = stString;
           tc.Next();
           this.ParseCharLiteral(tc);
@@ -117,7 +113,7 @@ namespace Winterdom.Viasfora.Util {
 
     private void ParseMultiLineComment(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '*' && tc.NChar() == ')' ) {
+        if ( tc.Char() == '*' && tc.NChar() == '/' ) {
           tc.Skip(2);
           this.status = stText;
           return;
