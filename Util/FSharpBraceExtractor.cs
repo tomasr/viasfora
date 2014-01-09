@@ -18,8 +18,11 @@ namespace Winterdom.Viasfora.Util {
       this.lang = lang;
     }
 
-    public IEnumerable<CharPos> Extract(ITextChars tc) {
+    public void Reset() {
       this.status = stText;
+    }
+
+    public IEnumerable<CharPos> Extract(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;

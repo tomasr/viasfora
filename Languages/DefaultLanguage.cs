@@ -38,6 +38,8 @@ namespace Winterdom.Viasfora.Languages {
 
     private class NoBraceExtractor : IBraceExtractor {
       private static CharPos[] noBraces = new CharPos[0];
+      public void Reset() {
+      }
       public IEnumerable<CharPos> Extract(ITextChars text) {
         return noBraces;
       }

@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Util {
   public interface IBraceExtractor {
+    void Reset();
     IEnumerable<CharPos> Extract(ITextChars text);
   }
 }
