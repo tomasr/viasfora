@@ -51,7 +51,7 @@ namespace Winterdom.Viasfora.Util {
       this.position = this.length;
     }
 
-    public string PreviousToken() {
+    public String PreviousToken() {
       int startPos = this.Position-1;
       // skip any whitespace
       for ( ; startPos > 0; startPos-- ) {
@@ -65,6 +65,13 @@ namespace Winterdom.Viasfora.Util {
       }
       if ( startPos < 0 ) return "";
       return text.Substring(startPos, end - startPos + 1);
+    }
+    public String GetRemainder() {
+      int remainder = this.length - this.position;
+      if ( remainder > 0 ) {
+        return this.text.Substring(this.position, remainder);
+      }
+      return "";
     }
     private bool Available(int count) {
       return this.position + count - 1 < length;

@@ -24,10 +24,7 @@ namespace Winterdom.Viasfora.Languages.CommentParsers {
       } else if ( tc.Char() == '/' ) {
         tc.Next();
         // single line comment
-        while ( !tc.EndOfLine ) {
-          sb.Append(tc.Char());
-          tc.Next();
-        }
+        sb.Append(tc.GetRemainder());
       }
       return sb.ToString(); 
     }

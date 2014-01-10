@@ -12,13 +12,8 @@ namespace Winterdom.Viasfora.Languages.CommentParsers {
       }
       if ( tc.EndOfLine ) return null;
 
-      StringBuilder sb = new StringBuilder();
       // single line comment
-      while ( !tc.EndOfLine ) {
-        sb.Append(tc.Char());
-        tc.Next();
-      }
-      return sb.ToString(); 
+      return tc.GetRemainder();
     }
   }
 }
