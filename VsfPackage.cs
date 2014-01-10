@@ -51,6 +51,7 @@ namespace Winterdom.Viasfora {
       languageList.Add(new FSharp());
       languageList.Add(new Sql());
       languageList.Add(new TypeScript());
+      languageList.Add(new Python());
     }
 
     public static LanguageInfo LookupLanguage(IContentType contentType) {

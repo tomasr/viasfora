@@ -86,7 +86,10 @@
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="Languages\BraceExtractors\PythonBraceExtractor.cs" />
+    <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
+    <Compile Include="Languages\Python.cs" />
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
