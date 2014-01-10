@@ -102,6 +102,9 @@
     <Compile Include="Options\PresentationModeOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Options\PythonOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Options\TypeScriptOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
