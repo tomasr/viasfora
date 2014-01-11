@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
@@ -48,6 +50,9 @@ namespace Winterdom.Viasfora.Languages {
       // the SQL classifier will return text spans that include
       // trailing spaces (such as "IF ")
       return text.Trim();
+    }
+    public override IFirstLineCommentParser NewFirstLineCommentParser() {
+      return new SqlFirstLineCommentParser();
     }
   }
 }

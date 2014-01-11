@@ -24,7 +24,7 @@
     <GuidSymbol name="guidVsfPackage" value="{cd66bfea-4129-498f-a4fe-553f96f09c50}" />
 
     <GuidSymbol name="guidVsfViewCmdSet" value="{14e93c73-144b-4909-9cdc-694be6125e8c}">
-      <IDSymbol name="cmdidPresentationMode" value="1" />
+      <IDSymbol name="cmdidPresentationMode" value="0x1020" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{04d40cc8-b432-4d13-9e6e-436222ef2930}">

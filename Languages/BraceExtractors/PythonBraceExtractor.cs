@@ -3,25 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Languages;
+using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Util {
-  public class SqlBraceExtractor : IBraceExtractor {
+namespace Winterdom.Viasfora.Languages.BraceExtractors {
+  public class PythonBraceExtractor : IBraceExtractor {
     const int stText = 0;
     const int stString = 1;
-    const int stMultiLineComment = 4;
+    const int stMultiLineString = 3;
     private int status = stText;
+    private char quoteChar;
     private LanguageInfo lang;
 
-    public SqlBraceExtractor(LanguageInfo lang) {
+    public PythonBraceExtractor(LanguageInfo lang) {
       this.lang = lang;
     }
 
-    public IEnumerable<CharPos> Extract(ITextChars tc) {
+    public void Reset() {
       this.status = stText;
+    }
+
+    public IEnumerable<CharPos> Extract(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
-          case stMultiLineComment: ParseMultiLineComment(tc); break;
+          case stMultiLineString: ParseMultiLineString(tc); break;
           default: 
             foreach ( var p in ParseText(tc) ) {
               yield return p;
@@ -33,15 +38,17 @@ namespace Winterdom.Viasfora.Util {
 
     private IEnumerable<CharPos> ParseText(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        // multi-line comment
-        if ( tc.Char() == '/' && tc.NChar() == '*' ) {
-          this.status = stMultiLineComment;
-          tc.Skip(2);
-          this.ParseMultiLineComment(tc);
-        } else if ( tc.Char() == '-' && tc.NChar() == '-' ) {
+        if ( tc.Char() == '#' ) {
           tc.SkipRemainder();
-        } else if ( tc.Char() == '\'' ) {
+        } else if ( (tc.Char() == '"' && tc.NChar() == '"' && tc.NNChar() == '"') 
+                 || (tc.Char() == '\'' && tc.NChar() == '\'' && tc.NNChar() == '\'') ) {
+          this.status = stMultiLineString;
+          this.quoteChar = tc.Char();
+          tc.Skip(3);
+          this.ParseMultiLineString(tc);
+        } else if ( tc.Char() == '\'' || tc.Char() == '"' ) {
           this.status = stString;
+          this.quoteChar = tc.Char();
           tc.Next();
           this.ParseString(tc);
         } else if ( lang.BraceList.IndexOf(tc.Char()) >= 0 ) {
@@ -55,9 +62,10 @@ namespace Winterdom.Viasfora.Util {
 
     private void ParseString(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '\'' && tc.NChar() == '\'' ) {
+        if ( tc.Char() == '\\' ) {
+          // skip over escape sequences
           tc.Skip(2);
-        } else if ( tc.Char() == '\'' ) {
+        } else if ( tc.Char() == quoteChar ) {
           tc.Next();
           break;
         } else {
@@ -67,11 +75,10 @@ namespace Winterdom.Viasfora.Util {
       this.status = stText;
     }
 
-
-    private void ParseMultiLineComment(ITextChars tc) {
+    private void ParseMultiLineString(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '*' && tc.NChar() == '/' ) {
-          tc.Skip(2);
+        if ( tc.Char() == '"' ) {
+          tc.Next();
           this.status = stText;
           return;
         } else {

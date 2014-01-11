@@ -15,5 +15,6 @@ namespace Winterdom.Viasfora.Util {
     void Skip(int count);
     void SkipRemainder();
     String PreviousToken();
+    String GetRemainder();
   }
 }

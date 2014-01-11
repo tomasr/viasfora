@@ -86,7 +86,10 @@
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="Languages\BraceExtractors\PythonBraceExtractor.cs" />
+    <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
+    <Compile Include="Languages\Python.cs" />
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -97,6 +100,9 @@
       <DependentUpon>PresentationModeDialogPage.cs</DependentUpon>
     </Compile>
     <Compile Include="Options\PresentationModeOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\PythonOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Options\TypeScriptOptionsPage.cs">
@@ -129,26 +135,38 @@
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="Text\BraceCache.cs" />
+    <Compile Include="Text\ModelineFactory.cs" />
+    <Compile Include="Text\ModeLineProvider.cs" />
     <Compile Include="Text\PresentationMode.cs" />
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
     <Compile Include="Languages\Sql.cs" />
     <Compile Include="Text\RainbowTagger.cs" />
     <Compile Include="Text\RainbowTaggerProvider.cs" />
+    <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
+    <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
+    <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
+    <Compile Include="Util\ITokenizer.cs" />
+    <Compile Include="Util\ModeLineParser.cs" />
     <Compile Include="Util\BracePos.cs" />
     <Compile Include="Languages\CBasedLanguage.cs" />
     <Compile Include="Languages\FSharp.cs" />
     <Compile Include="Languages\LanguageInfo.cs" />
     <Compile Include="Languages\VB.cs" />
-    <Compile Include="Util\SqlBraceExtractor.cs" />
-    <Compile Include="Util\CBraceExtractor.cs" />
+    <Compile Include="Languages\CommentParsers\CBasedFirstLineCommentParser.cs" />
+    <Compile Include="Util\IFirstLineCommentParser.cs" />
+    <Compile Include="Util\IModeLineParser.cs" />
+    <Compile Include="Util\SimpleTokenizer.cs" />
+    <Compile Include="Languages\BraceExtractors\SqlBraceExtractor.cs" />
+    <Compile Include="Languages\BraceExtractors\CBraceExtractor.cs" />
     <Compile Include="Util\CharPos.cs" />
-    <Compile Include="Util\JScriptBraceExtractor.cs" />
-    <Compile Include="Util\FSharpBraceExtractor.cs" />
+    <Compile Include="Languages\BraceExtractors\JScriptBraceExtractor.cs" />
+    <Compile Include="Languages\BraceExtractors\FSharpBraceExtractor.cs" />
     <Compile Include="Util\IBraceExtractor.cs" />
     <Compile Include="Util\ITextChars.cs" />
     <Compile Include="Util\LineChars.cs" />
-    <Compile Include="Util\VbBraceExtractor.cs" />
+    <Compile Include="Util\StringChars.cs" />
+    <Compile Include="Languages\BraceExtractors\VbBraceExtractor.cs" />
     <Compile Include="VsfSettings.cs" />
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />

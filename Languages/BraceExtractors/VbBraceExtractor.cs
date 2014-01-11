@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Languages;
+using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Util {
+namespace Winterdom.Viasfora.Languages.BraceExtractors {
   public class VbBraceExtractor : IBraceExtractor {
     const int stText = 0;
     const int stString = 1;
@@ -16,8 +17,11 @@ namespace Winterdom.Viasfora.Util {
       this.status = stText;
     }
 
-    public IEnumerable<CharPos> Extract(ITextChars tc) {
+    public void Reset() {
       this.status = stText;
+    }
+
+    public IEnumerable<CharPos> Extract(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
