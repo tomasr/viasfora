@@ -101,7 +101,10 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
 
     private void ParseMultiLineString(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '"' ) {
+        if ( tc.Char() == '"' && tc.NChar() == '"' ) {
+          // means a single embedded double quote
+          tc.Skip(2);
+        } else if ( tc.Char() == '"' ) {
           tc.Next();
           this.status = stText;
           return;
