@@ -7,23 +7,26 @@ using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
-  class Python : LanguageInfo {
-    public const String ContentType = "Python";
+  class Sql : LanguageInfo {
+    public const String ContentType = "Sql Server Tools";
+    public const String ContentTypeAlt = "SQL";
 
     static readonly String[] KEYWORDS = {
-          "break", "continue", "if", "elif", "else",
-          "for", "raise", "return", "while", "yield"
+          "begin", "end", "break", "continue", "goto", "if",
+          "else", "then", "return", "throw", "try", "catch",
+          "waitfor", "while"
       };
     static readonly String[] VIS_KEYWORDS = {
+         "public", "external"
       };
     static readonly String[] LINQ_KEYWORDS = {
-          "from", "in"
+         "select", "update", "insert", "delete", "merge"
       };
     public override bool SupportsEscapeSeqs {
-      get { return true; }
+      get { return false; }
     }
     public override string BraceList {
-      get { return "(){}[]"; }
+      get { return "()"; }
     }
     protected override String[] ControlFlowDefaults {
       get { return KEYWORDS; }
@@ -35,16 +38,18 @@ namespace Winterdom.Viasfora.Languages {
       get { return VIS_KEYWORDS; }
     }
     protected override String KeyName {
-      get { return "Python"; }
+      get { return "Sql"; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new PythonBraceExtractor(this);
+      return new SqlBraceExtractor(this);
     }
     protected override String[] ContentTypes {
-      get { return new String[] { ContentType }; }
+      get { return new String[] { ContentType, ContentTypeAlt }; }
     }
-    public override IFirstLineCommentParser NewFirstLineCommentParser() {
-      return new PythonFirstLineCommentParser();
+    protected override string TextToCompare(string text) {
+      // the SQL classifier will return text spans that include
+      // trailing spaces (such as "IF ")
+      return text.Trim();
     }
   }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Util;
+using Winterdom.Viasfora.Languages.CommentParsers;
 
 namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo {
@@ -25,7 +26,9 @@ namespace Winterdom.Viasfora.Languages {
     public abstract String BraceList { get; }
     public abstract bool SupportsEscapeSeqs { get; }
     public abstract IBraceExtractor NewBraceExtractor();
-    public abstract IFirstLineCommentParser NewFirstLineCommentParser();
+    public virtual IFirstLineCommentParser NewFirstLineCommentParser() {
+      return new GenericCommentParser();
+    }
 
     public bool MatchesContentType(IContentType contentType) {
       foreach ( String str in this.ContentTypes ) {
