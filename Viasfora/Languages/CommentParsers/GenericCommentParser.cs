@@ -9,8 +9,9 @@ namespace Winterdom.Viasfora.Languages.CommentParsers {
   // that takes care of the most common cases
   public class GenericCommentParser : IFirstLineCommentParser {
     public string Parse(ITextChars tc) {
-      // C single line comment
+      SkipWhitespace(tc);
       if ( tc.Char() == '/' && tc.NChar() == '/' ) {
+        // C single line comment
         tc.Skip(2);
         return TrimmedRemainder(tc);
       } else if ( tc.Char() == '/' && tc.NChar() == '*' ) {
@@ -44,7 +45,13 @@ namespace Winterdom.Viasfora.Languages.CommentParsers {
       return null;
     }
 
-    // we assume endChars is 2, which is the most common case
+    private void SkipWhitespace(ITextChars tc) {
+      while ( !tc.EndOfLine && Char.IsWhiteSpace(tc.Char()) ) {
+        tc.Next();
+      }
+    }
+
+    // we assume endChars is 2 or 3, which is the most common case
     private string TrimmedMinus(ITextChars tc, String t) {
       StringBuilder buffer = new StringBuilder();
       while ( !tc.EndOfLine ) {

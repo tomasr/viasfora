@@ -73,5 +73,13 @@ namespace Viasfora.Tests.CommentParsers {
       String result = parser.Parse(new StringChars(input));
       Assert.Equal("vim: ts=4:sw=8", result);
     }
+
+    [Fact]
+    public void ParsesLeadingWhiteSpace() {
+      const String input = "\t   // vim: ts=4:sw=8";
+      var parser = new GenericCommentParser();
+      String result = parser.Parse(new StringChars(input));
+      Assert.Equal("vim: ts=4:sw=8", result);
+    }
   }
 }
