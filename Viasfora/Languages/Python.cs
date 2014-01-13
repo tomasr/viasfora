@@ -43,8 +43,5 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] ContentTypes {
       get { return new String[] { ContentType }; }
     }
-    public override IFirstLineCommentParser NewFirstLineCommentParser() {
-      return new PythonFirstLineCommentParser();
-    }
   }
 }
