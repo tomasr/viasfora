@@ -104,6 +104,7 @@ namespace Winterdom.Viasfora.Text {
     private static void InitializeOptionMap() {
       optionMap["et"] = SetExpandTab;
       optionMap["expandtab"] = SetExpandTab;
+      optionMap["noet"] = SetExpandTab;
       optionMap["noexpandtab"] = SetExpandTab;
       optionMap["ts"] = SetTabStop;
       optionMap["tabstop"] = SetTabStop;
