@@ -15,8 +15,63 @@ namespace Viasfora.Tests.CommentParsers {
       const String input = "// vim: ts=4:sw=8";
       var parser = new GenericCommentParser();
       String result = parser.Parse(new StringChars(input));
-      Assert.Equal("vim: ts=4;sw=8", result);
+      Assert.Equal("vim: ts=4:sw=8", result);
     }
 
+    [Fact]
+    public void SqlBasedSingleLineComment() {
+      const String input = "-- vim: ts=4:sw=8";
+      var parser = new GenericCommentParser();
+      String result = parser.Parse(new StringChars(input));
+      Assert.Equal("vim: ts=4:sw=8", result);
+    }
+
+    [Fact]
+    public void VbBasedSingleLineComment() {
+      const String input = "' vim: ts=4:sw=8";
+      var parser = new GenericCommentParser();
+      String result = parser.Parse(new StringChars(input));
+      Assert.Equal("vim: ts=4:sw=8", result);
+    }
+
+    [Fact]
+    public void PythonBasedSingleLineComment() {
+      const String input = "# vim: ts=4:sw=8";
+      var parser = new GenericCommentParser();
+      String result = parser.Parse(new StringChars(input));
+      Assert.Equal("vim: ts=4:sw=8", result);
+    }
+    
+    [Fact]
+    public void CBasedMultiLineComment() {
+      const String input = "/* vim: ts=4:sw=8 */";
+      var parser = new GenericCommentParser();
+      String result = parser.Parse(new StringChars(input));
+      Assert.Equal("vim: ts=4:sw=8", result);
+    }
+
+    [Fact]
+    public void CBasedMultiLineWithoutTerminatorComment() {
+      const String input = "/* vim: ts=4:sw=8     ";
+      var parser = new GenericCommentParser();
+      String result = parser.Parse(new StringChars(input));
+      Assert.Equal("vim: ts=4:sw=8", result);
+    }
+
+    [Fact]
+    public void FSharpMultiLineComment() {
+      const String input = "(* vim: ts=4:sw=8 *)";
+      var parser = new GenericCommentParser();
+      String result = parser.Parse(new StringChars(input));
+      Assert.Equal("vim: ts=4:sw=8", result);
+    }
+
+    [Fact]
+    public void XmlComment() {
+      const String input = "<!-- vim: ts=4:sw=8 -->";
+      var parser = new GenericCommentParser();
+      String result = parser.Parse(new StringChars(input));
+      Assert.Equal("vim: ts=4:sw=8", result);
+    }
   }
 }
