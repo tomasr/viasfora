@@ -26,7 +26,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return false; }
     }
     public override string BraceList {
-      get { return "()"; }
+      get { return "()[]"; }
     }
     protected override String[] ControlFlowDefaults {
       get { return KEYWORDS; }

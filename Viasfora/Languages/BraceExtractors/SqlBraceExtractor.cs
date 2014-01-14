@@ -63,12 +63,12 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           tc.Skip(2);
         } else if ( tc.Char() == '\'' ) {
           tc.Next();
+          this.status = stText;
           break;
         } else {
           tc.Next();
         }
       }
-      this.status = stText;
     }
 
 
