@@ -17,6 +17,7 @@ namespace Winterdom.Viasfora {
     const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
     const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
     const String MODELINES_ENABLED = "ModelinesEnabled";
+    const String MODELINES_NUMLINES = "ModelinesNumLines";
 
     private static VsfSettingsStore settings = new VsfSettingsStore();
     public static event EventHandler SettingsUpdated;
@@ -64,6 +65,10 @@ namespace Winterdom.Viasfora {
     public static bool ModelinesEnabled {
       get { return GetBoolean(MODELINES_ENABLED, true); }
       set { SetValue(MODELINES_ENABLED, value); }
+    }
+    public static int ModelinesNumLines {
+      get { return GetInt32(MODELINES_NUMLINES, 5); }
+      set { SetValue(MODELINES_NUMLINES, value); }
     }
 
     public static void Save() {

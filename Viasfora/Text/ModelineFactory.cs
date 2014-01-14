@@ -14,7 +14,9 @@ namespace Winterdom.Viasfora.Text {
     public void TextViewCreated(IWpfTextView textView) {
       if ( VsfSettings.ModelinesEnabled ) {
         ModeLineProvider provider = new ModeLineProvider(textView);
-        provider.ParseModeline();
+        for ( int i = 0; i < VsfSettings.ModelinesNumLines; i++ ) {
+          provider.ParseModeline(i);
+        }
       }
     }
   }

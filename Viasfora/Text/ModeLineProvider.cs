@@ -20,16 +20,16 @@ namespace Winterdom.Viasfora.Text {
       this.theView = view;
     }
 
-    public void ParseModeline() {
+    public void ParseModeline(int numLine) {
       ITextBuffer buffer = this.theView.TextBuffer;
       var snapshot = buffer.CurrentSnapshot;
-      if ( snapshot.LineCount == 0 ) {
+      if ( snapshot.LineCount <= numLine ) {
         return;
       }
       LanguageInfo language = VsfPackage.LookupLanguage(snapshot.ContentType);
       if ( language == null ) return;
 
-      var firstLine = snapshot.GetLineFromLineNumber(0);
+      var firstLine = snapshot.GetLineFromLineNumber(numLine);
 
       ITextChars tc = new LineChars(firstLine);
       String commentText = language.NewFirstLineCommentParser().Parse(tc);
