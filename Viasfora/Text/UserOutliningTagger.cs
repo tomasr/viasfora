@@ -6,16 +6,16 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Text {
-  public class UserRegionTagger : ITagger<IOutliningRegionTag> {
+  public class UserOutliningTagger : ITagger<IOutliningRegionTag> {
     private ITextBuffer theBuffer;
-    private BufferRegions regions;
+    private BufferOutlines regions;
 
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-    public UserRegionTagger(ITextBuffer buffer) {
+    public UserOutliningTagger(ITextBuffer buffer) {
       this.theBuffer = buffer;
       this.regions = buffer.Properties.GetOrCreateSingletonProperty(() => {
-        return new BufferRegions();
+        return new BufferOutlines();
       });
     }
     public IEnumerable<ITagSpan<IOutliningRegionTag>> GetTags(NormalizedSnapshotSpanCollection spans) {

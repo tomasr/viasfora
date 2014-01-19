@@ -140,7 +140,7 @@
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="Text\BraceCache.cs" />
-    <Compile Include="Text\BufferRegions.cs" />
+    <Compile Include="Text\BufferOutlines.cs" />
     <Compile Include="Text\ModelineFactory.cs" />
     <Compile Include="Text\ModeLineProvider.cs" />
     <Compile Include="Text\PresentationMode.cs" />
@@ -152,8 +152,8 @@
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
-    <Compile Include="Text\UserRegionTagger.cs" />
-    <Compile Include="Text\UserRegionTaggerProvider.cs" />
+    <Compile Include="Text\UserOutliningTagger.cs" />
+    <Compile Include="Text\UserOutliningTaggerProvider.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
     <Compile Include="Util\BracePos.cs" />
