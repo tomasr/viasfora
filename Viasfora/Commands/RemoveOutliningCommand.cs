@@ -4,6 +4,8 @@ using System.ComponentModel.Design;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Text.Editor;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Commands {
   public class RemoveOutliningCommand : VsCommand {
@@ -18,6 +20,13 @@ namespace Winterdom.Viasfora.Commands {
     }
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);
+      ITextView view = TextEditor.GetCurrentView();
+      if ( view == null ) return;
+      ITextCaret caret = view.Caret;
+
+      if ( caret == null ) return;
+      IUserOutlining outlining = UserOutliningTaggerProvider.Get(view.TextBuffer);
+      outlining.RemoveAt(caret.Position.BufferPosition);
     }
   }
 }

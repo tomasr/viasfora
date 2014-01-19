@@ -43,6 +43,11 @@ namespace Winterdom.Viasfora.Text {
     }
 
     void IUserOutlining.RemoveAt(SnapshotPoint point) {
+      int index = regions.FindRegionContaining(point);
+      if ( index >= 0 ) {
+        var span = regions.RemoveAt(point.Snapshot, index);
+        RaiseTagsChanged(span);
+      }
     }
   }
 }

@@ -17,5 +17,25 @@ namespace Winterdom.Viasfora.Text {
     public IEnumerable<ITrackingSpan> Enumerate() {
       return regions;
     }
+    public int FindRegionContaining(SnapshotPoint point) {
+      int candidate = -1;
+      int distance = Int32.MaxValue;
+      for (int i=0; i < regions.Count; i++ ) {
+        var spSpan = regions[i].GetSpan(point.Snapshot);
+        if ( spSpan.Contains(point) ) {
+          int d = point - spSpan.Start;
+          if ( d < distance ) {
+            candidate = i;
+          }
+        }
+      }
+      return candidate;
+    }
+    public SnapshotSpan RemoveAt(ITextSnapshot snapshot, int index) {
+      var trackingSpan = regions[index];
+      var result = trackingSpan.GetSpan(snapshot);
+      regions.RemoveAt(index);
+      return result;
+    }
   }
 }

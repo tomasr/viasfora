@@ -14,9 +14,13 @@ namespace Winterdom.Viasfora.Text {
   [TagType(typeof(IOutliningRegionTag))]
   public class UserOutliningTaggerProvider : ITaggerProvider {
     public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
+      return Get(buffer) as ITagger<T>;
+    }
+
+    public static IUserOutlining Get(ITextBuffer buffer) {
       return buffer.Properties.GetOrCreateSingletonProperty(() => {
         return new UserOutliningTagger(buffer) as IUserOutlining;
-      }) as ITagger<T>;
+      });
     }
   }
 }
