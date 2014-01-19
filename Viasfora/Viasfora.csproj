@@ -69,6 +69,10 @@
   <ItemGroup>
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
+    <Compile Include="Commands\RemoveOutliningCommand.cs" />
+    <Compile Include="Commands\AddOutliningCommand.cs" />
+    <Compile Include="Commands\PresentationModeCommand.cs" />
+    <Compile Include="Commands\VsCommand.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Design\StringListConverter.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
@@ -136,6 +140,7 @@
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="Text\BraceCache.cs" />
+    <Compile Include="Text\BufferRegions.cs" />
     <Compile Include="Text\ModelineFactory.cs" />
     <Compile Include="Text\ModeLineProvider.cs" />
     <Compile Include="Text\PresentationMode.cs" />
@@ -147,6 +152,8 @@
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
+    <Compile Include="Text\UserRegionTagger.cs" />
+    <Compile Include="Text\UserRegionTaggerProvider.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
     <Compile Include="Util\BracePos.cs" />
@@ -286,6 +293,7 @@
   <ItemGroup>
     <VSCTCompile Include="VsfCommands.vsct">
       <ResourceName>1000</ResourceName>
+      <SubType>Designer</SubType>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>

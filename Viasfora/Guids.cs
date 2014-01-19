@@ -19,6 +19,8 @@ namespace Winterdom.Viasfora {
     public const String TypeScriptOptions = "cb219fe4-0e9e-4237-8ca2-e236c9607ef8";
     public const String PythonOptions = "93c54475-f739-4442-9441-90119a8962a9";
 
+    // Command groups
     public const String guidVsfViewCmdSet = "14e93c73-144b-4909-9cdc-694be6125e8c";
+    public const String guidVsfTextEditorCmdSet = "ea344c89-0b89-46dd-9555-21e1ee58a62f";
   }
 }

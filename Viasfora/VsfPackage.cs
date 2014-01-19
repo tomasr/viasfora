@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio;
 using System.IO;
 using System.Reflection;
+using Winterdom.Viasfora.Commands;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -42,6 +43,7 @@ namespace Winterdom.Viasfora {
 
     private Version vsVersion;
     private IVsActivityLog activityLog;
+    private List<VsCommand> commands = new List<VsCommand>();
 
     static VsfPackage() {
       languageList = new List<LanguageInfo>();
@@ -79,6 +81,7 @@ namespace Winterdom.Viasfora {
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
       if ( null != mcs ) {
         InitializeViewMenuCommands(mcs);
+        InitializeTextEditorCommands(mcs);
       }
     }
 
@@ -117,29 +120,13 @@ namespace Winterdom.Viasfora {
     }
 
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
-      var viewPresentationModeCmdId = new CommandID(
-        new Guid(Guids.guidVsfViewCmdSet), 
-        PkgCmdIdList.cmdidPresentationMode);
-      var viewPresentationModeItem = new OleMenuCommand(OnViewPresentationMode, viewPresentationModeCmdId);
-      viewPresentationModeItem.BeforeQueryStatus += OnViewPresentationModeBeforeQueryStatus;
-      mcs.AddCommand(viewPresentationModeItem);
+      commands.Add(new PresentationModeCommand(this, mcs));
+    }
+    private void InitializeTextEditorCommands(OleMenuCommandService mcs) {
+      commands.Add(new AddOutliningCommand(this, mcs));
+      commands.Add(new RemoveOutliningCommand(this, mcs));
     }
 
-    private void OnViewPresentationMode(object sender, EventArgs e) {
-      PresentationModeTurnedOn = !PresentationModeTurnedOn;
-      if ( PresentationModeChanged != null ) {
-        PresentationModeChanged(this, EventArgs.Empty);
-      }
-    }
-    private void OnViewPresentationModeBeforeQueryStatus(object sender, EventArgs e) {
-      var cmd = (OleMenuCommand)sender;
-      SetViewPresentationModeCmdStatus(cmd);
-    }
-
-    private void SetViewPresentationModeCmdStatus(OleMenuCommand cmd) {
-      cmd.Checked = PresentationModeTurnedOn;
-      cmd.Enabled = VsfSettings.PresentationModeEnabled;
-    }
 
     private static Version FindVSVersion() {
       String key = Instance.UserRegistryRoot.Name;
