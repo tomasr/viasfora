@@ -9,6 +9,8 @@ namespace Winterdom.Viasfora.Text {
   public class UserOutliningTagger : ITagger<IOutliningRegionTag>, IUserOutlining {
     private ITextBuffer theBuffer;
     private BufferOutlines regions;
+    private static readonly TagSpan<IOutliningRegionTag>[] empty =
+      new TagSpan<IOutliningRegionTag>[0];
 
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
@@ -18,14 +20,16 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public IEnumerable<ITagSpan<IOutliningRegionTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      var snapshot = theBuffer.CurrentSnapshot;
-      foreach ( var trackingSpan in regions.Enumerate() ) {
-        var spSpan = trackingSpan.GetSpan(snapshot);
-        if ( spans.IntersectsWith(new NormalizedSnapshotSpanCollection(spSpan)) ) {
-          yield return new TagSpan<IOutliningRegionTag>(spSpan,
-            new OutliningRegionTag(false, false, "...", spSpan.GetText()));
-        }
+      if ( spans.Count > 0 )
+      {
+        var snapshot = spans[0].Snapshot;
+        return from trackingSpan in regions.Enumerate()
+               let spSpan = trackingSpan.GetSpan(snapshot)
+               where spans.IntersectsWith(new NormalizedSnapshotSpanCollection(spSpan))
+               select new TagSpan<IOutliningRegionTag>(spSpan, 
+                 new OutliningRegionTag(false, false, "...", spSpan.GetText()));
       }
+      return empty;
     }
 
     private void RaiseTagsChanged(SnapshotSpan span) {
