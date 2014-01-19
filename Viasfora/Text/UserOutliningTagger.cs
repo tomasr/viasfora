@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Text {
-  public class UserOutliningTagger : ITagger<IOutliningRegionTag> {
+  public class UserOutliningTagger : ITagger<IOutliningRegionTag>, IUserOutlining {
     private ITextBuffer theBuffer;
     private BufferOutlines regions;
 
@@ -14,10 +14,9 @@ namespace Winterdom.Viasfora.Text {
 
     public UserOutliningTagger(ITextBuffer buffer) {
       this.theBuffer = buffer;
-      this.regions = buffer.Properties.GetOrCreateSingletonProperty(() => {
-        return new BufferOutlines();
-      });
+      this.regions = new BufferOutlines();
     }
+
     public IEnumerable<ITagSpan<IOutliningRegionTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
       var snapshot = theBuffer.CurrentSnapshot;
       foreach ( var trackingSpan in regions.Enumerate() ) {
@@ -27,6 +26,23 @@ namespace Winterdom.Viasfora.Text {
             new OutliningRegionTag(false, false, "...", spSpan.GetText()));
         }
       }
+    }
+
+    private void RaiseTagsChanged(SnapshotSpan span) {
+      var temp = this.TagsChanged;
+      if ( temp != null ) {
+        temp(this, new SnapshotSpanEventArgs(span));
+      }
+    }
+
+
+    // user outlining implementation
+    void IUserOutlining.Add(SnapshotSpan span) {
+      regions.Add(span);
+      RaiseTagsChanged(span);
+    }
+
+    void IUserOutlining.RemoveAt(SnapshotPoint point) {
     }
   }
 }

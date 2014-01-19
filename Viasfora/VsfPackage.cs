@@ -13,6 +13,8 @@ using Microsoft.VisualStudio;
 using System.IO;
 using System.Reflection;
 using Winterdom.Viasfora.Commands;
+using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.Editor;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]

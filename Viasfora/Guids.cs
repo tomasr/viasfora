@@ -22,5 +22,9 @@ namespace Winterdom.Viasfora {
     // Command groups
     public const String guidVsfViewCmdSet = "14e93c73-144b-4909-9cdc-694be6125e8c";
     public const String guidVsfTextEditorCmdSet = "ea344c89-0b89-46dd-9555-21e1ee58a62f";
+
+
+    // Visual Studio
+    public const String SComponentModelHost = "FD57C398-FDE3-42c2-A358-660F269CBE43";
   }
 }
