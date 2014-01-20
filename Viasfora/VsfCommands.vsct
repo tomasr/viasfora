@@ -58,25 +58,30 @@
       -->
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidAddOutlining" priority="0x0001" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
+        <Icon guid="guidImages" id="2"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
         <Strings>
           <CommandName>Add Outlining</CommandName>
-          <ButtonText>Add Outlinging</ButtonText>
+          <ButtonText>Add Outlining</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidRemoveOutlining" priority="0x0002" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
+        <Icon guid="guidImages" id="3"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
         <Strings>
           <CommandName>Remove Outlining</CommandName>
-          <ButtonText>Remove Outlinging</ButtonText>
+          <ButtonText>Remove Outlining</ButtonText>
         </Strings>
       </Button>
 
     </Buttons>
 
     <Bitmaps>
-      <Bitmap guid="guidImages" href="Resources\cmdImages.bmp" usedList="bmpPresentationMode"/>
+      <Bitmap guid="guidImages" href="Resources\cmdImages.bmp"
+              usedList="bmpPresentationMode, bmpAddOutlining, bmpRemoveOutlining"/>
     </Bitmaps>
   </Commands>
 
@@ -106,6 +111,8 @@
 
     <GuidSymbol name="guidImages" value="{04d40cc8-b432-4d13-9e6e-436222ef2930}">
       <IDSymbol name="bmpPresentationMode" value="1" />
+      <IDSymbol name="bmpAddOutlining" value="2" />
+      <IDSymbol name="bmpRemoveOutlining" value="3" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>
