@@ -53,5 +53,9 @@ namespace Winterdom.Viasfora.Text {
         RaiseTagsChanged(span);
       }
     }
+
+    bool IUserOutlining.IsInOutliningRegion(SnapshotPoint point) {
+      return regions.FindRegionContaining(point) >= 0;
+    }
   }
 }

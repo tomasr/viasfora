@@ -17,6 +17,13 @@ namespace Winterdom.Viasfora.Commands {
 
     protected override void OnBeforeQueryStatus(object sender, EventArgs e) {
       base.OnBeforeQueryStatus(sender, e);
+      ITextView view = TextEditor.GetCurrentView();
+      if ( view == null ) return;
+      ITextCaret caret = view.Caret;
+
+      if ( caret == null ) return;
+      IUserOutlining outlining = UserOutliningTaggerProvider.Get(view.TextBuffer);
+      Command.Enabled = outlining.IsInOutliningRegion(caret.Position.BufferPosition);
     }
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);

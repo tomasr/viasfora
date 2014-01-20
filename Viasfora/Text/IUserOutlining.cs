@@ -8,5 +8,6 @@ namespace Winterdom.Viasfora.Text {
   public interface IUserOutlining {
     void Add(SnapshotSpan span);
     void RemoveAt(SnapshotPoint point);
+    bool IsInOutliningRegion(SnapshotPoint point);
   }
 }
