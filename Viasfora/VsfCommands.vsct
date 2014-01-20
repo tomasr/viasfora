@@ -40,6 +40,9 @@
       <Group guid="guidVsfTextEditorCmdSet" id="groupEditMenu" priority="0xA100">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_EDIT"/>
       </Group>
+      <Group guid="guidVsfTextEditorCmdSet" id="groupEditMenu" priority="0xA100">
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
+      </Group>
     </Groups>
 
     <Buttons>
