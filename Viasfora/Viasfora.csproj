@@ -73,6 +73,7 @@
     <Compile Include="Commands\AddOutliningCommand.cs" />
     <Compile Include="Commands\PresentationModeCommand.cs" />
     <Compile Include="Commands\VsCommand.cs" />
+    <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Design\StringListConverter.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
@@ -274,10 +275,6 @@
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refs\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualStudio.ComponentModelHost, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\refs\Microsoft.VisualStudio.ComponentModelHost.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

@@ -6,8 +6,8 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
+using Winterdom.Viasfora.Compatibility;
 
 namespace Winterdom.Viasfora {
   public static class TextEditor {
@@ -35,17 +35,9 @@ namespace Winterdom.Viasfora {
       int hr = textManager.GetActiveView(1, null, out textView);
       CheckError(hr, "GetActiveView");
 
-      var componentModel = GetComponentModel();
-      if ( componentModel != null ) {
-        var factory = componentModel.GetService<IVsEditorAdaptersFactoryService>();
-        return factory.GetWpfTextView(textView);
-      }
-      return null;
-    }
-
-    public static IComponentModel GetComponentModel() {
-      return (IComponentModel)
-        ServiceProvider.GlobalProvider.GetService(typeof(SComponentModel));
+      var componentModel = new SComponentModel();
+      var factory = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+      return factory.GetWpfTextView(textView);
     }
 
     public static int S_OK = 0;
