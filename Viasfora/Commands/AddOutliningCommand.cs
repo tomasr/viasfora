@@ -28,18 +28,16 @@ namespace Winterdom.Viasfora.Commands {
           // not supported, ignore for now;
           return;
         }
-        SnapshotSpan span;
-        if ( selection.IsReversed ) {
-          span = new SnapshotSpan(selection.End.Position, selection.Start.Position);
-        } else {
-          span = new SnapshotSpan(selection.Start.Position, selection.End.Position);
+        ITextView view = selection.TextView;
+        SnapshotSpan? span = TextEditor.MapSelectionToPrimaryBuffer(selection);
+        if ( span != null ) {
+          AddOutlining(span.Value.Snapshot.TextBuffer, span.Value);
         }
-        AddOutlining(selection.TextView, span);
       }
     }
 
-    private void AddOutlining(ITextView view, SnapshotSpan span) {
-      var outlines = UserOutliningTaggerProvider.Get(view.TextBuffer);
+    private void AddOutlining(ITextBuffer buffer, SnapshotSpan span) {
+      var outlines = UserOutliningTaggerProvider.Get(buffer);
       outlines.Add(span);
     }
   }

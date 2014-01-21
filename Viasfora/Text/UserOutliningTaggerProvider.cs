@@ -7,11 +7,13 @@ using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Languages;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
 
 namespace Winterdom.Viasfora.Text {
   [Export(typeof(ITaggerProvider))]
   [ContentType("Text")]
   [TagType(typeof(IOutliningRegionTag))]
+  [TextViewRole(PredefinedTextViewRoles.Structured)]
   public class UserOutliningTaggerProvider : ITaggerProvider {
     public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
       return Get(buffer) as ITagger<T>;
@@ -19,7 +21,7 @@ namespace Winterdom.Viasfora.Text {
 
     public static IUserOutlining Get(ITextBuffer buffer) {
       return buffer.Properties.GetOrCreateSingletonProperty(() => {
-        return new UserOutliningTagger(buffer) as IUserOutlining;
+        return new UserOutliningTagger() as IUserOutlining;
       });
     }
   }

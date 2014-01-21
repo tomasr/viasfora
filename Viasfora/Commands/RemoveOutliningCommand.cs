@@ -22,8 +22,12 @@ namespace Winterdom.Viasfora.Commands {
       ITextCaret caret = view.Caret;
 
       if ( caret == null ) return;
-      IUserOutlining outlining = UserOutliningTaggerProvider.Get(view.TextBuffer);
-      Command.Enabled = outlining.IsInOutliningRegion(caret.Position.BufferPosition);
+      var point = TextEditor.MapCaretToPrimaryBuffer(view);
+      if ( point != null ) {
+        IUserOutlining outlining = 
+          UserOutliningTaggerProvider.Get(point.Value.Snapshot.TextBuffer);
+        Command.Enabled = outlining.IsInOutliningRegion(point.Value);
+      }
     }
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);
@@ -32,8 +36,13 @@ namespace Winterdom.Viasfora.Commands {
       ITextCaret caret = view.Caret;
 
       if ( caret == null ) return;
-      IUserOutlining outlining = UserOutliningTaggerProvider.Get(view.TextBuffer);
-      outlining.RemoveAt(caret.Position.BufferPosition);
+
+      var point = TextEditor.MapCaretToPrimaryBuffer(view);
+      if ( point != null ) {
+        IUserOutlining outlining = 
+          UserOutliningTaggerProvider.Get(point.Value.Snapshot.TextBuffer);
+        outlining.RemoveAt(point.Value);
+      }
     }
   }
 }

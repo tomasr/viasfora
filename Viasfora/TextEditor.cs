@@ -40,6 +40,46 @@ namespace Winterdom.Viasfora {
       return factory.GetWpfTextView(textView);
     }
 
+    public static SnapshotSpan? MapSelectionToPrimaryBuffer(ITextSelection selection) {
+      // here we need to map down the selection
+      // to the first non-projection buffer, as the tagger does not
+      // get created for projection buffers
+      var span = selection.StreamSelectionSpan.SnapshotSpan;
+
+      ITextView view = selection.TextView;
+      var buffer = GetPrimaryBuffer(view);
+
+      var locations = view.BufferGraph.MapDownToBuffer(
+        span, SpanTrackingMode.EdgeInclusive, buffer
+      );
+      if ( locations.Count > 0 ) {
+        span = new SnapshotSpan(locations[0].Start, locations[locations.Count - 1].End);
+      }
+      return span;
+    }
+
+    public static SnapshotPoint? MapCaretToPrimaryBuffer(ITextView view) {
+      var buffer = GetPrimaryBuffer(view);
+      var caret = view.Caret;
+      var point = view.BufferGraph.MapDownToBuffer(
+        caret.Position.BufferPosition, 
+        PointTrackingMode.Negative, buffer,
+        PositionAffinity.Predecessor
+      );
+      return point;
+    }
+
+    public static ITextBuffer GetPrimaryBuffer(ITextView view) {
+      var buffers = view.BufferGraph.GetTextBuffers(
+          (x) => !x.ContentType.IsOfType("projection")
+        );
+      if ( buffers.Count <= 0 ) {
+        VsfPackage.LogInfo("Could not find a primary buffer on view: {0}", view);
+        return view.BufferGraph.TopBuffer;
+      }
+      return buffers[0];
+    }
+
     public static int S_OK = 0;
     private static void CheckError(int hr, String operation) {
       if ( hr != S_OK ) {

@@ -6,16 +6,14 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Text {
-  public class UserOutliningTagger : ITagger<IOutliningRegionTag>, IUserOutlining {
-    private ITextBuffer theBuffer;
+  public class UserOutliningTagger : ITagger<IOutliningRegionTag>, IUserOutlining, IDisposable {
     private BufferOutlines regions;
     private static readonly TagSpan<IOutliningRegionTag>[] empty =
       new TagSpan<IOutliningRegionTag>[0];
 
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-    public UserOutliningTagger(ITextBuffer buffer) {
-      this.theBuffer = buffer;
+    public UserOutliningTagger() {
       this.regions = new BufferOutlines();
     }
 
@@ -30,6 +28,9 @@ namespace Winterdom.Viasfora.Text {
                  new OutliningRegionTag(false, false, "...", spSpan.GetText()));
       }
       return empty;
+    }
+
+    public void Dispose() {
     }
 
     private void RaiseTagsChanged(SnapshotSpan span) {
