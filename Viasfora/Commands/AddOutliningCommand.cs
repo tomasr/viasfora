@@ -28,8 +28,11 @@ namespace Winterdom.Viasfora.Commands {
           // not supported, ignore for now;
           return;
         }
+        // if this is a projection buffer, we will add
+        // the outline on the projection buffer, not the original doc
         ITextView view = selection.TextView;
-        SnapshotSpan? span = TextEditor.MapSelectionToPrimaryBuffer(selection);
+        //SnapshotSpan? span = TextEditor.MapSelectionToPrimaryBuffer(selection);
+        SnapshotSpan? span = selection.StreamSelectionSpan.SnapshotSpan;
         if ( span != null ) {
           AddOutlining(span.Value.Snapshot.TextBuffer, span.Value);
         }

@@ -41,9 +41,6 @@ namespace Winterdom.Viasfora {
     }
 
     public static SnapshotSpan? MapSelectionToPrimaryBuffer(ITextSelection selection) {
-      // here we need to map down the selection
-      // to the first non-projection buffer, as the tagger does not
-      // get created for projection buffers
       var span = selection.StreamSelectionSpan.SnapshotSpan;
 
       ITextView view = selection.TextView;

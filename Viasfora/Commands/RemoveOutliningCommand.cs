@@ -6,6 +6,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Winterdom.Viasfora.Text;
+using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Commands {
   public class RemoveOutliningCommand : VsCommand {
@@ -22,7 +23,9 @@ namespace Winterdom.Viasfora.Commands {
       ITextCaret caret = view.Caret;
 
       if ( caret == null ) return;
-      var point = TextEditor.MapCaretToPrimaryBuffer(view);
+      //var point = TextEditor.MapCaretToPrimaryBuffer(view);
+      SnapshotPoint? point = caret.Position.BufferPosition;
+
       if ( point != null ) {
         IUserOutlining outlining = 
           UserOutliningTaggerProvider.Get(point.Value.Snapshot.TextBuffer);
@@ -37,7 +40,8 @@ namespace Winterdom.Viasfora.Commands {
 
       if ( caret == null ) return;
 
-      var point = TextEditor.MapCaretToPrimaryBuffer(view);
+      //var point = TextEditor.MapCaretToPrimaryBuffer(view);
+      SnapshotPoint? point = caret.Position.BufferPosition;
       if ( point != null ) {
         IUserOutlining outlining = 
           UserOutliningTaggerProvider.Get(point.Value.Snapshot.TextBuffer);
