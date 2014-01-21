@@ -291,6 +291,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\cmdImages.bmp" />
+    <Content Include="license.txt">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
