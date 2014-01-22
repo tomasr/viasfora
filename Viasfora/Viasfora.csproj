@@ -69,6 +69,12 @@
   <ItemGroup>
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
+    <Compile Include="Commands\ClearOutliningCommand.cs" />
+    <Compile Include="Commands\RemoveOutliningCommand.cs" />
+    <Compile Include="Commands\AddOutliningCommand.cs" />
+    <Compile Include="Commands\PresentationModeCommand.cs" />
+    <Compile Include="Commands\VsCommand.cs" />
+    <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Design\StringListConverter.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
@@ -135,7 +141,10 @@
     <Compile Include="SnapshotExtensions.cs" />
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
+    <Compile Include="TextEditor.cs" />
     <Compile Include="Text\BraceCache.cs" />
+    <Compile Include="Text\BufferOutlines.cs" />
+    <Compile Include="Text\IUserOutlining.cs" />
     <Compile Include="Text\ModelineFactory.cs" />
     <Compile Include="Text\ModeLineProvider.cs" />
     <Compile Include="Text\PresentationMode.cs" />
@@ -147,6 +156,8 @@
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
+    <Compile Include="Text\UserOutliningTagger.cs" />
+    <Compile Include="Text\UserOutliningTaggerProvider.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
     <Compile Include="Util\BracePos.cs" />
@@ -258,6 +269,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refs\Microsoft.VisualStudio.Text.UI.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Editor, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -273,6 +292,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\cmdImages.bmp" />
+    <Content Include="license.txt">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -286,6 +308,7 @@
   <ItemGroup>
     <VSCTCompile Include="VsfCommands.vsct">
       <ResourceName>1000</ResourceName>
+      <SubType>Designer</SubType>
     </VSCTCompile>
   </ItemGroup>
   <ItemGroup>
