@@ -9,5 +9,6 @@ namespace Winterdom.Viasfora {
 
     public const int cmdidAddOutlining = 0x1101;
     public const int cmdidRemoveOutlining = 0x1102;
+    public const int cmdidClearOutlining = 0x1103;
   }
 }

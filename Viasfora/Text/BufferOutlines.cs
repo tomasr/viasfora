@@ -8,6 +8,10 @@ namespace Winterdom.Viasfora.Text {
   public class BufferOutlines {
     private List<ITrackingSpan> regions = new List<ITrackingSpan>();
 
+    public int Count {
+      get { return regions.Count; }
+    }
+
     public void Add(SnapshotSpan span) {
       regions.Add(span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgeInclusive));
     }
@@ -16,6 +20,9 @@ namespace Winterdom.Viasfora.Text {
     }
     public IEnumerable<ITrackingSpan> Enumerate() {
       return regions;
+    }
+    public void Clear() {
+      regions.Clear();
     }
     public int FindRegionContaining(SnapshotPoint point) {
       int candidate = -1;

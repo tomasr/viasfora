@@ -79,6 +79,14 @@
           <ButtonText>Remove Outlining</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidVsfTextEditorCmdSet" id="cmdidClearOutlining" priority="0x0003" type="Button">
+        <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <Strings>
+          <CommandName>Clear Outlining</CommandName>
+          <ButtonText>Clear Outlining</ButtonText>
+        </Strings>
+      </Button>
 
     </Buttons>
 
@@ -110,6 +118,7 @@
       <IDSymbol name="groupEditMenu" value="0x0102" />
       <IDSymbol name="cmdidAddOutlining" value="0x1101" />
       <IDSymbol name="cmdidRemoveOutlining" value="0x1102" />
+      <IDSymbol name="cmdidClearOutlining" value="0x1103" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{04d40cc8-b432-4d13-9e6e-436222ef2930}">

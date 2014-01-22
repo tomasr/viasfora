@@ -127,6 +127,7 @@ namespace Winterdom.Viasfora {
     private void InitializeTextEditorCommands(OleMenuCommandService mcs) {
       commands.Add(new AddOutliningCommand(this, mcs));
       commands.Add(new RemoveOutliningCommand(this, mcs));
+      commands.Add(new ClearOutliningCommand(this, mcs));
     }
 
 

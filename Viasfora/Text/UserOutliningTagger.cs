@@ -58,5 +58,18 @@ namespace Winterdom.Viasfora.Text {
     bool IUserOutlining.IsInOutliningRegion(SnapshotPoint point) {
       return regions.FindRegionContaining(point) >= 0;
     }
+
+    bool IUserOutlining.HasUserOutlines() {
+      return regions.Count > 0;
+    }
+
+    void IUserOutlining.RemoveAll(ITextSnapshot snapshot) {
+      var currentSpans = regions.Enumerate().ToList();
+      regions.Clear();
+      foreach ( var trackingSpan in currentSpans ) {
+        var span = trackingSpan.GetSpan(snapshot);
+        RaiseTagsChanged(span);
+      }
+    }
   }
 }
