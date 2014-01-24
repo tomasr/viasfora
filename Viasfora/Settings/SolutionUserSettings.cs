@@ -48,6 +48,22 @@ namespace Winterdom.Viasfora.Settings {
       return GetEntry<T>(json, filePath);
     }
 
+    public String MakeRelativePath(String toPath) {
+      // based on: http://stackoverflow.com/questions/275689/how-to-get-relative-path-from-absolute-path
+      Uri fromUri = new Uri(this.settingsFile);
+      Uri toUri = new Uri(toPath);
+
+      if ( fromUri.Scheme != toUri.Scheme ) { return toPath; } // path can't be made relative.
+
+      Uri relativeUri = fromUri.MakeRelativeUri(toUri);
+      String relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+      if ( toUri.Scheme.ToUpperInvariant() == "FILE" ) {
+        relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+      }
+
+      return relativePath;
+    }
 
     private T GetEntry<T>(JObject json, String key) where T : ISettingsObject, new() {
       var keyEntry = json[key];

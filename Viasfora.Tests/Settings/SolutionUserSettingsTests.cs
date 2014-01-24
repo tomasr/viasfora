@@ -97,6 +97,25 @@ namespace Viasfora.Tests.Settings {
       Assert.Equal("Test1", setting.Entry.Name);
     }
 
+    [Fact]
+    public void MakeRelativePath_NestedPath() {
+      String slnPath = @"C:\users\myuser\documents\Visual Studio 10.0\Project\MySolution";
+      ISolutionUserSettings sus = new SolutionUserSettings(slnPath);
+
+      String filePath = Path.Combine(slnPath, @"MyProject\Files\File1.txt");
+      String relative = sus.MakeRelativePath(filePath);
+      Assert.Equal(@"MyProject\Files\File1.txt", relative);
+    }
+    [Fact]
+    public void MakeRelativePath_ParentPath() {
+      String slnPath = @"C:\users\myuser\documents\Visual Studio 10.0\Project\MySolution";
+      ISolutionUserSettings sus = new SolutionUserSettings(slnPath);
+
+      String filePath = Path.Combine(slnPath, @"..\..\MyProject\Files\File1.txt");
+      String relative = sus.MakeRelativePath(Path.GetFullPath(filePath));
+      Assert.Equal(@"..\..\MyProject\Files\File1.txt", relative);
+    }
+
     private SampleSetting GetSampleSetting(String key, String name, String value) {
       SampleSetting setting = new SampleSetting();
       setting.Name = key;

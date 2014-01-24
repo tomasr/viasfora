@@ -77,9 +77,8 @@ namespace Winterdom.Viasfora {
       return buffers[0];
     }
 
-    public static int S_OK = 0;
     private static void CheckError(int hr, String operation) {
-      if ( hr != S_OK ) {
+      if ( hr != Constants.S_OK ) {
         VsfPackage.LogInfo("{0} returned 0x{1:x8}", operation, hr);
         throw new InvalidOperationException(String.Format("{0} returned 0x{1:x8}", operation, hr));
       }

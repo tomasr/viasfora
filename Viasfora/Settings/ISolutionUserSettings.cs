@@ -9,5 +9,6 @@ namespace Winterdom.Viasfora.Settings {
   public interface ISolutionUserSettings {
     void Store<T>(String filePath, T settingsObject) where T : ISettingsObject;
     T Load<T>(String filePath) where T : ISettingsObject, new();
+    String MakeRelativePath(String filePath);
   }
 }

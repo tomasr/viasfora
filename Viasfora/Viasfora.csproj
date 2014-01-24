@@ -195,6 +195,7 @@
     <Compile Include="Text\KeywordTaggerProvider.cs" />
     <Compile Include="VsfPackage.cs" />
     <Compile Include="VsfSettingsStore.cs" />
+    <Compile Include="VsSolution.cs" />
     <Compile Include="Xml\XmlQuickInfoSource.cs" />
     <Compile Include="Xml\XmlQuickInfoSourceProvider.cs" />
     <Compile Include="Xml\XmlQuickInfoController.cs" />
