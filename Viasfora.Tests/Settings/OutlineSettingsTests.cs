@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Xunit;
 using Winterdom.Viasfora.Settings;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace Viasfora.Tests.Settings {
   public class OutlineSettingsTests {
@@ -26,6 +27,19 @@ namespace Viasfora.Tests.Settings {
       }
     }
 
+    [Fact]
+    public void CanWrite() {
+      var writer = new StringWriter();
+      using ( var jw = new JsonTextWriter(writer) ) {
+        OutlineSettings os = new OutlineSettings();
+        os.Regions.Add(new Tuple<int, int>(10, 32));
+        os.Regions.Add(new Tuple<int, int>(27, 15));
+        os.Save(jw);
+      }
+      var jo = JObject.Parse(writer.ToString());
+      Assert.Equal(10, (int)jo["regions"][0]["start"]);
+      Assert.Equal(15, (int)jo["regions"][1]["length"]);
+    }
 
     private JsonTextReader NewReader(String json) {
       return new JsonTextReader(new StringReader(json));
