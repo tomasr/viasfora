@@ -13,18 +13,17 @@ namespace Winterdom.Viasfora.Settings {
 
     public void Read(JsonTextReader reader) {
       Regions.Clear();
-      reader.Read(); // read start object
-      reader.Read(); // property name
-      if ( (String)reader.Value != "regions" ) return;
-      reader.Read(); // read start array
-      while ( reader.Read() ) {
-        reader.Read(); // property name
-        if ( (String)reader.Value != "start" ) break;
+      if ( !reader.ReadStartObject() ) return;
+      if ( reader.ReadPropertyName() != "regions" ) return;
+      if ( !reader.ReadStartArray() ) return;
+
+      while ( reader.ReadStartObject() ) {
+        if ( reader.ReadPropertyName() != "start" ) break;
         int start = reader.ReadAsInt32().Value;
-        reader.Read(); // property name
-        if ( (String)reader.Value != "length" ) break;
+
+        if ( reader.ReadPropertyName() != "length" ) break;
         int end = reader.ReadAsInt32().Value;
-        reader.Read(); // end object
+        reader.ReadEndObject();
 
         Tuple<int, int> region = new Tuple<int,int>(start, end);
         Regions.Add(region);
