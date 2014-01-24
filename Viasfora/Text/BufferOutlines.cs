@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Text {
   public class BufferOutlines {
@@ -43,6 +44,28 @@ namespace Winterdom.Viasfora.Text {
       var result = trackingSpan.GetSpan(snapshot);
       regions.RemoveAt(index);
       return result;
+    }
+
+    public void LoadStoredData(ITextSnapshot snapshot, OutlineSettings settings) {
+      foreach ( var region in settings.Regions ) {
+        int start = region.Item1;
+        int len = region.Item2;
+        if ( start >= snapshot.Length || (start+len) > snapshot.Length ) {
+          continue;
+        }
+        SnapshotSpan span = new SnapshotSpan(snapshot, start, len);
+        this.Add(span);
+      }
+    }
+    public OutlineSettings GetStorableData(ITextSnapshot snapshot) {
+      OutlineSettings settings = new OutlineSettings();
+      foreach ( var trackingSpan in this.regions ) {
+        SnapshotSpan span = trackingSpan.GetSpan(snapshot);
+        if ( !span.IsEmpty ) {
+          settings.Regions.Add(new Tuple<int, int>(span.Start, span.Length));
+        }
+      }
+      return settings;
     }
   }
 }

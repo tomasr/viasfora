@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora {
       String solutionDir, solutionFile, userOptsFile;
       int hr = solution.GetSolutionInfo(out solutionDir, out solutionFile, out userOptsFile);
       CheckError(hr, "GetSolutionInfo");
-      return Path.GetFullPath(solutionDir);
+      return String.IsNullOrEmpty(solutionDir) ? null : Path.GetFullPath(solutionDir);
     }
 
     public static ISolutionUserSettings GetUserSettings() {

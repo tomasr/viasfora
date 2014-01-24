@@ -140,6 +140,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\ISettingsObject.cs" />
     <Compile Include="Settings\ISolutionUserSettings.cs" />
+    <Compile Include="Settings\OutlineSettings.cs" />
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="SnapshotExtensions.cs" />
     <Compile Include="Tags\RainbowTag.cs" />

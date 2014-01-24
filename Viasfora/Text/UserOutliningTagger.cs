@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Text {
   public class UserOutliningTagger : ITagger<IOutliningRegionTag>, IUserOutlining, IDisposable {
@@ -13,8 +14,9 @@ namespace Winterdom.Viasfora.Text {
 
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-    public UserOutliningTagger() {
+    public UserOutliningTagger(ITextBuffer buffer) {
       this.regions = new BufferOutlines();
+      LoadRegions(buffer);
     }
 
     public IEnumerable<ITagSpan<IOutliningRegionTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
@@ -44,6 +46,7 @@ namespace Winterdom.Viasfora.Text {
     // user outlining implementation
     void IUserOutlining.Add(SnapshotSpan span) {
       regions.Add(span);
+      UpdateUserSettings(span.Snapshot.TextBuffer);
       RaiseTagsChanged(span);
     }
 
@@ -51,6 +54,7 @@ namespace Winterdom.Viasfora.Text {
       int index = regions.FindRegionContaining(point);
       if ( index >= 0 ) {
         var span = regions.RemoveAt(point.Snapshot, index);
+        UpdateUserSettings(point.Snapshot.TextBuffer);
         RaiseTagsChanged(span);
       }
     }
@@ -70,6 +74,34 @@ namespace Winterdom.Viasfora.Text {
         var span = trackingSpan.GetSpan(snapshot);
         RaiseTagsChanged(span);
       }
+    }
+
+    private void LoadRegions(ITextBuffer buffer) {
+      var sus = VsSolution.GetUserSettings();
+      if ( sus == null ) {
+        return;
+      }
+      String filename = TextEditor.GetFileName(buffer);
+      if ( String.IsNullOrEmpty(filename) ) {
+        return;
+      }
+      filename = sus.MakeRelativePath(filename);
+      OutlineSettings settings = sus.Load<OutlineSettings>(filename);
+      if ( settings != null ) {
+        this.regions.LoadStoredData(buffer.CurrentSnapshot, settings);
+      }
+    }
+    private void UpdateUserSettings(ITextBuffer buffer) {
+      var sus = VsSolution.GetUserSettings();
+      if ( sus == null ) {
+        return;
+      }
+      String filename = TextEditor.GetFileName(buffer);
+      if ( String.IsNullOrEmpty(filename) ) {
+        return;
+      }
+      filename = sus.MakeRelativePath(filename);
+      sus.Store(filename, regions.GetStorableData(buffer.CurrentSnapshot));
     }
   }
 }
