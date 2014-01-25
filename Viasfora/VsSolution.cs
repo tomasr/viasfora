@@ -20,13 +20,34 @@ namespace Winterdom.Viasfora {
       CheckError(hr, "GetSolutionInfo");
       return String.IsNullOrEmpty(solutionDir) ? null : Path.GetFullPath(solutionDir);
     }
+    public static String MakeRelativePath(String toPath) {
+      String solutionFile = GetSolutionPath();
+      return MakeRelativePath(solutionFile, toPath);
+    }
+    public static String MakeRelativePath(String fromPath, String toPath) {
+      // based on: http://stackoverflow.com/questions/275689/how-to-get-relative-path-from-absolute-path
+      Uri fromUri = new Uri(fromPath);
+      Uri toUri = new Uri(toPath);
+
+      if ( fromUri.Scheme != toUri.Scheme ) { return toPath; } // path can't be made relative.
+
+      Uri relativeUri = fromUri.MakeRelativeUri(toUri);
+      String relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+
+      if ( toUri.Scheme.ToUpperInvariant() == "FILE" ) {
+        relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+      }
+
+      return relativePath;
+    }
 
     public static ISolutionUserSettings GetUserSettings() {
       String solutionPath = GetSolutionPath();
       if ( String.IsNullOrEmpty(solutionPath) ) {
         return null;
       }
-      return new SolutionUserSettings(solutionPath);
+      IPersistSettings persist = new FilePersistUserSettings(solutionPath);
+      return new SolutionUserSettings(persist);
     }
 
     private static void CheckError(int hr, String operation) {

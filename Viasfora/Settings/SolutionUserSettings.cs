@@ -8,16 +8,13 @@ using System.Text;
 
 namespace Winterdom.Viasfora.Settings {
   public class SolutionUserSettings : ISolutionUserSettings {
-    private String settingsFile;
-    public const String FILENAME = "settings.vsfuser";
+    private IPersistSettings persistSettings;
+    private Encoding encoding;
     public const String DEFAULT_FILE = "__";
 
-    public SolutionUserSettings(String location) {
-      String path = Path.GetFullPath(location);
-      if ( !String.IsNullOrEmpty(Path.GetExtension(path)) ) {
-        path = Path.GetDirectoryName(path);
-      }
-      this.settingsFile = Path.Combine(path, FILENAME);
+    public SolutionUserSettings(IPersistSettings persister) {
+      this.persistSettings = persister;
+      this.encoding = Encoding.UTF8;
     }
 
     public void Store<T>(string filePath, T settingsObject) where T : ISettingsObject {
@@ -30,10 +27,12 @@ namespace Winterdom.Viasfora.Settings {
       }
       SetEntry(json, filePath, settingsObject);
 
-      using ( var sw = new StreamWriter(this.settingsFile) )
-      using ( var jw = new JsonTextWriter(sw) ) {
-        jw.Formatting = Formatting.Indented;
-        json.WriteTo(jw);
+      using ( var sw = new StringWriter() ) {
+        using ( var jw = new JsonTextWriter(sw) ) {
+          jw.Formatting = Formatting.Indented;
+          json.WriteTo(jw);
+        }
+        this.persistSettings.Write(this.encoding.GetBytes(sw.ToString()));
       }
     }
 
@@ -48,22 +47,6 @@ namespace Winterdom.Viasfora.Settings {
       return GetEntry<T>(json, filePath);
     }
 
-    public String MakeRelativePath(String toPath) {
-      // based on: http://stackoverflow.com/questions/275689/how-to-get-relative-path-from-absolute-path
-      Uri fromUri = new Uri(this.settingsFile);
-      Uri toUri = new Uri(toPath);
-
-      if ( fromUri.Scheme != toUri.Scheme ) { return toPath; } // path can't be made relative.
-
-      Uri relativeUri = fromUri.MakeRelativeUri(toUri);
-      String relativePath = Uri.UnescapeDataString(relativeUri.ToString());
-
-      if ( toUri.Scheme.ToUpperInvariant() == "FILE" ) {
-        relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-      }
-
-      return relativePath;
-    }
 
     private T GetEntry<T>(JObject json, String key) where T : ISettingsObject, new() {
       var keyEntry = json[key.ToLowerInvariant()];
@@ -104,13 +87,11 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     private JObject TryRead() {
-      if ( !File.Exists(this.settingsFile) ) {
-        return null;
+      byte[] data = this.persistSettings.Read();
+      if ( data != null && data.Length > 0 ) {
+        return JObject.Parse(this.encoding.GetString(data));
       }
-      return JObject.Parse(File.ReadAllText(this.settingsFile));
-    }
-    private bool SettingsFileExist() {
-      return File.Exists(this.settingsFile);
+      return null;
     }
   }
 }

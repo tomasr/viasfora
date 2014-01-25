@@ -85,7 +85,7 @@ namespace Winterdom.Viasfora.Text {
       if ( String.IsNullOrEmpty(filename) ) {
         return;
       }
-      filename = sus.MakeRelativePath(filename);
+      filename = VsSolution.MakeRelativePath(filename);
       OutlineSettings settings = sus.Load<OutlineSettings>(filename);
       if ( settings != null ) {
         this.regions.LoadStoredData(buffer.CurrentSnapshot, settings);
@@ -100,7 +100,7 @@ namespace Winterdom.Viasfora.Text {
       if ( String.IsNullOrEmpty(filename) ) {
         return;
       }
-      filename = sus.MakeRelativePath(filename);
+      filename = VsSolution.MakeRelativePath(filename);
       sus.Store(filename, regions.GetStorableData(buffer.CurrentSnapshot));
     }
   }

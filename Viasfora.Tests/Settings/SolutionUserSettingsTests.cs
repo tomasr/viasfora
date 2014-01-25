@@ -10,14 +10,15 @@ using Newtonsoft.Json.Linq;
 
 namespace Viasfora.Tests.Settings {
   public class SolutionUserSettingsTests {
+    static String FILENAME = FilePersistUserSettings.FILENAME;
 
     [Fact]
     public void CanAddOneEntry() {
-      String file = Path.Combine(GetFolder(), SolutionUserSettings.FILENAME);
+      String file = Path.Combine(GetFolder(), FILENAME);
       if ( File.Exists(file) ) File.Delete(file);
 
       var setting = GetSampleSetting("Sample", "Test1", "Test1Value");
-      var sus = new SolutionUserSettings(GetFolder());
+      var sus = GetSUS(GetFolder());
       sus.Store("c:\\test1", setting);
 
       Assert.True(File.Exists(file));
@@ -29,12 +30,12 @@ namespace Viasfora.Tests.Settings {
     }
     [Fact]
     public void CanStoreTwoEntriesOnSingleFile() {
-      String file = Path.Combine(GetFolder(), SolutionUserSettings.FILENAME);
+      String file = Path.Combine(GetFolder(), FILENAME);
       if ( File.Exists(file) ) File.Delete(file);
 
       var setting1 = GetSampleSetting("First", "Test1", "Test1Value");
       var setting2 = GetSampleSetting("Second", "Test2", "Test2Value");
-      var sus = new SolutionUserSettings(GetFolder());
+      var sus = GetSUS(GetFolder());
       sus.Store("c:\\test1", setting1);
       sus.Store("c:\\test1", setting2);
 
@@ -47,12 +48,12 @@ namespace Viasfora.Tests.Settings {
     }
     [Fact]
     public void CanStoreEntriesOnSeparateFiles() {
-      String file = Path.Combine(GetFolder(), SolutionUserSettings.FILENAME);
+      String file = Path.Combine(GetFolder(), FILENAME);
       if ( File.Exists(file) ) File.Delete(file);
 
       var setting1 = GetSampleSetting("First", "Test1", "Test1Value");
       var setting2 = GetSampleSetting("Second", "Test2", "Test2Value");
-      var sus = new SolutionUserSettings(GetFolder());
+      var sus = GetSUS(GetFolder());
       sus.Store("c:\\test1", setting1);
       sus.Store("c:\\test2", setting2);
 
@@ -65,11 +66,11 @@ namespace Viasfora.Tests.Settings {
     }
     [Fact]
     public void CanStoreEntryOnBlankFile() {
-      String file = Path.Combine(GetFolder(), SolutionUserSettings.FILENAME);
+      String file = Path.Combine(GetFolder(), FILENAME);
       if ( File.Exists(file) ) File.Delete(file);
 
       var setting1 = GetSampleSetting("First", "Test1", "Test1Value");
-      var sus = new SolutionUserSettings(GetFolder());
+      var sus = GetSUS(GetFolder());
       sus.Store("", setting1);
 
       Assert.True(File.Exists(file));
@@ -80,7 +81,7 @@ namespace Viasfora.Tests.Settings {
     }
     [Fact]
     public void CanReadEntries() {
-      String file = Path.Combine(GetFolder(), SolutionUserSettings.FILENAME);
+      String file = Path.Combine(GetFolder(), FILENAME);
       var testData = @"{
         'c:\\test1': {
           'SampleSetting': {
@@ -91,30 +92,12 @@ namespace Viasfora.Tests.Settings {
       }";
       File.WriteAllText(file, testData);
 
-      var sus = new SolutionUserSettings(GetFolder());
+      var sus = GetSUS(GetFolder());
       SampleSetting setting = sus.Load<SampleSetting>("c:\\test1");
       Assert.NotNull(setting);
       Assert.Equal("Test1", setting.Entry.Name);
     }
 
-    [Fact]
-    public void MakeRelativePath_NestedPath() {
-      String slnPath = @"C:\users\myuser\documents\Visual Studio 10.0\Project\MySolution";
-      ISolutionUserSettings sus = new SolutionUserSettings(slnPath);
-
-      String filePath = Path.Combine(slnPath, @"MyProject\Files\File1.txt");
-      String relative = sus.MakeRelativePath(filePath);
-      Assert.Equal(@"MyProject\Files\File1.txt", relative);
-    }
-    [Fact]
-    public void MakeRelativePath_ParentPath() {
-      String slnPath = @"C:\users\myuser\documents\Visual Studio 10.0\Project\MySolution";
-      ISolutionUserSettings sus = new SolutionUserSettings(slnPath);
-
-      String filePath = Path.Combine(slnPath, @"..\..\MyProject\Files\File1.txt");
-      String relative = sus.MakeRelativePath(Path.GetFullPath(filePath));
-      Assert.Equal(@"..\..\MyProject\Files\File1.txt", relative);
-    }
 
     private SampleSetting GetSampleSetting(String key, String name, String value) {
       SampleSetting setting = new SampleSetting();
@@ -128,6 +111,10 @@ namespace Viasfora.Tests.Settings {
 
     private String GetFolder() {
       return Path.GetTempPath();
+    }
+    private SolutionUserSettings GetSUS(String folder) {
+      IPersistSettings persist = new FilePersistUserSettings(folder);
+      return new SolutionUserSettings(persist);
     }
 
 
