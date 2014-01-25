@@ -66,7 +66,7 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     private T GetEntry<T>(JObject json, String key) where T : ISettingsObject, new() {
-      var keyEntry = json[key];
+      var keyEntry = json[key.ToLowerInvariant()];
       if ( keyEntry == null ) {
         return default(T);
       }
@@ -86,10 +86,10 @@ namespace Winterdom.Viasfora.Settings {
       }
     }
     private void SetEntry<T>(JObject json, string key, T settingsObject) where T : ISettingsObject {
-      var keyEntry = json[key];
+      var keyEntry = json[key.ToLowerInvariant()];
       if ( keyEntry == null ) {
         keyEntry = new JObject();
-        json[key] = keyEntry;
+        json[key.ToLowerInvariant()] = keyEntry;
       }
       var entryObject = SerializeEntry(settingsObject);
       keyEntry[settingsObject.Name] = entryObject;
