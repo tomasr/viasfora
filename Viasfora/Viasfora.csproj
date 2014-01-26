@@ -152,6 +152,8 @@
     <Compile Include="TextEditor.cs" />
     <Compile Include="Text\BraceCache.cs" />
     <Compile Include="Text\BufferOutlines.cs" />
+    <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
+    <Compile Include="Text\CurrentColumnAdornment.cs" />
     <Compile Include="Text\IUserOutlining.cs" />
     <Compile Include="Text\ModelineFactory.cs" />
     <Compile Include="Text\ModeLineProvider.cs" />
