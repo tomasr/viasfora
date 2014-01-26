@@ -46,7 +46,7 @@ namespace Winterdom.Viasfora.Text {
     // user outlining implementation
     void IUserOutlining.Add(SnapshotSpan span) {
       regions.Add(span);
-      UpdateUserSettings(span.Snapshot.TextBuffer);
+      UpdateUserSettings(span.Snapshot.TextBuffer, span.Snapshot);
       RaiseTagsChanged(span);
     }
 
@@ -54,7 +54,7 @@ namespace Winterdom.Viasfora.Text {
       int index = regions.FindRegionContaining(point);
       if ( index >= 0 ) {
         var span = regions.RemoveAt(point.Snapshot, index);
-        UpdateUserSettings(point.Snapshot.TextBuffer);
+        UpdateUserSettings(point.Snapshot.TextBuffer, point.Snapshot);
         RaiseTagsChanged(span);
       }
     }
@@ -74,6 +74,7 @@ namespace Winterdom.Viasfora.Text {
         var span = trackingSpan.GetSpan(snapshot);
         RaiseTagsChanged(span);
       }
+      UpdateUserSettings(snapshot.TextBuffer, snapshot);
     }
 
     private void LoadRegions(ITextBuffer buffer) {
@@ -91,7 +92,7 @@ namespace Winterdom.Viasfora.Text {
         this.regions.LoadStoredData(buffer.CurrentSnapshot, settings);
       }
     }
-    private void UpdateUserSettings(ITextBuffer buffer) {
+    private void UpdateUserSettings(ITextBuffer buffer, ITextSnapshot snapshot) {
       var sus = VsSolution.GetUserSettings();
       if ( sus == null ) {
         return;
@@ -101,7 +102,7 @@ namespace Winterdom.Viasfora.Text {
         return;
       }
       filename = VsSolution.MakeRelativePath(filename);
-      sus.Store(filename, regions.GetStorableData(buffer.CurrentSnapshot));
+      sus.Store(filename, regions.GetStorableData(snapshot));
     }
   }
 }
