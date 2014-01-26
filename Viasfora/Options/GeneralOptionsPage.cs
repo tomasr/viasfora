@@ -15,6 +15,7 @@ namespace Winterdom.Viasfora.Options {
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
       VsfSettings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
+      VsfSettings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
       VsfSettings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
@@ -28,6 +29,7 @@ namespace Winterdom.Viasfora.Options {
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
       CurrentLineHighlightEnabled = VsfSettings.CurrentLineHighlightEnabled;
+      CurrentColumnHighlightEnabled = VsfSettings.CurrentColumnHighlightEnabled;
       KeywordClassifierEnabled = VsfSettings.KeywordClassifierEnabled;
       EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
@@ -53,6 +55,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Enables highlighting the current line in the text editor")]
     [Category("Text Editor")]
     public bool CurrentLineHighlightEnabled { get; set; }
+
+    [LocDisplayName("Highlight Current Column")]
+    [Description("Enables highlighting the current column in the text editor")]
+    [Category("Text Editor")]
+    public bool CurrentColumnHighlightEnabled { get; set; }
 
     [LocDisplayName("Enable Rainbow Braces")]
     [Description("Highlight matching braces using colors based on nesting")]

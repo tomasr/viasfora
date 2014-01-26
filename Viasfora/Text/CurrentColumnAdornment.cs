@@ -105,7 +105,7 @@ namespace Winterdom.Viasfora.Text {
       }
     }
     private void CreateVisuals(VirtualSnapshotPoint caretPosition) {
-      if ( !VsfSettings.CurrentLineHighlightEnabled ) {
+      if ( !VsfSettings.CurrentColumnHighlightEnabled ) {
         return; // not enabled
       }
       IWpfTextViewLineCollection textViewLines = view.TextViewLines;

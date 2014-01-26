@@ -9,6 +9,7 @@ namespace Winterdom.Viasfora {
     const String KEYWORD_CLASSIFIER_ENABLED = "KeywordClassifierEnabled";
     const String ESCAPE_SEQ_ENABLED = "EscapeSequencesEnabled";
     const String CURRENT_LINE_ENABLED = "CurrentLineHighlightEnabled";
+    const String CURRENT_COLUMN_ENABLED = "CurrentColumnHighlightEnabled";
     const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
     const String XML_MATCH_TAGS_ENABLED = "XmlMatchTagsEnabled";
@@ -45,6 +46,10 @@ namespace Winterdom.Viasfora {
     public static bool CurrentLineHighlightEnabled {
       get { return GetBoolean(CURRENT_LINE_ENABLED, false); }
       set { SetValue(CURRENT_LINE_ENABLED, value); }
+    }
+    public static bool CurrentColumnHighlightEnabled {
+      get { return GetBoolean(CURRENT_COLUMN_ENABLED, false); }
+      set { SetValue(CURRENT_COLUMN_ENABLED, value); }
     }
     public static bool RainbowTagsEnabled {
       get { return GetBoolean(RAINBOW_TAGS_ENABLED, true); }
@@ -99,5 +104,5 @@ namespace Winterdom.Viasfora {
         settings.Set(name, null);
       }
     }
- }
+  }
 }
