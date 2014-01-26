@@ -90,7 +90,7 @@ namespace Winterdom.Viasfora.Text {
 
       fillBrush = format.BackgroundBrush;
       Brush penBrush = format.ForegroundBrush;
-      borderPen = new Pen(penBrush, 2);
+      borderPen = new Pen(penBrush, Constants.HIGHLIGHT_LINE_WIDTH);
       borderPen.Freeze();
       RedrawAdornments();
     }
@@ -112,12 +112,13 @@ namespace Winterdom.Viasfora.Text {
       if ( textViewLines == null )
         return; // not ready yet.
 
+      double lineWidth = Constants.HIGHLIGHT_LINE_WIDTH;
       var line = this.view.GetTextViewLineContainingBufferPosition(
         caretPosition.Position
         );
       var charBounds = line.GetCharacterBounds(caretPosition);
       Rect rc = new Rect(
-         new Point(charBounds.Left-2, this.view.ViewportTop),
+         new Point(charBounds.Left-lineWidth, this.view.ViewportTop),
          new Point(charBounds.Right, this.view.ViewportBottom-2)
       );
 

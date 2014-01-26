@@ -83,6 +83,7 @@
     <Compile Include="Design\ZoomTrackBar.Designer.cs">
       <DependentUpon>ZoomTrackBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
     <Compile Include="EditorFormats\RainbowFormats.cs" />
     <Compile Include="EditorFormats\XmlPrefixFormat.cs" />

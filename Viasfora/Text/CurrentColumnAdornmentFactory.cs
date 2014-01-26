@@ -27,7 +27,7 @@ namespace Winterdom.Viasfora.Text {
 
     public void TextViewCreated(IWpfTextView textView) {
       IClassificationType classification =
-         ClassificationRegistry.GetClassificationType(Constants.LINE_HIGHLIGHT);
+         ClassificationRegistry.GetClassificationType(Constants.COLUMN_HIGHLIGHT);
       IClassificationFormatMap map =
          FormatMapService.GetClassificationFormatMap(textView);
       textView.Properties.GetOrCreateSingletonProperty(

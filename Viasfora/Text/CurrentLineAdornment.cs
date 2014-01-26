@@ -94,7 +94,7 @@ namespace Winterdom.Viasfora.Text {
 
       fillBrush = format.BackgroundBrush;
       Brush penBrush = format.ForegroundBrush;
-      borderPen = new Pen(penBrush, 1.3);
+      borderPen = new Pen(penBrush, Constants.HIGHLIGHT_LINE_WIDTH);
       borderPen.Freeze();
       RedrawAdornments();
     }
@@ -125,7 +125,7 @@ namespace Winterdom.Viasfora.Text {
         return; // not ready yet.
       SnapshotSpan span = line.Extent;
       Rect rc = new Rect(
-         new Point(line.TextLeft, line.TextTop),
+         new Point(view.ViewportLeft, line.TextTop),
          new Point(Math.Max(view.ViewportRight - 2, line.TextRight), line.TextBottom)
       );
 

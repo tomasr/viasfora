@@ -25,6 +25,9 @@ namespace Winterdom.Viasfora.Classifications {
     [Export, Name(Constants.LINE_HIGHLIGHT)]
     internal static ClassificationTypeDefinition CurrentLineClassificationType = null;
 
+    [Export, Name(Constants.COLUMN_HIGHLIGHT)]
+    internal static ClassificationTypeDefinition CurrentColumnClassificationType = null;
+
     [Export, Name(Constants.RAINBOW_1)]
     internal static ClassificationTypeDefinition Rainbow1ClassificationType = null;
 
