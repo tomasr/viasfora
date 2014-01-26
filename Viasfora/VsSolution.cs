@@ -25,6 +25,9 @@ namespace Winterdom.Viasfora {
       return MakeRelativePath(solutionFile, toPath);
     }
     public static String MakeRelativePath(String fromPath, String toPath) {
+      if ( String.IsNullOrEmpty(fromPath) ) {
+        return toPath;
+      }
       // based on: http://stackoverflow.com/questions/275689/how-to-get-relative-path-from-absolute-path
       Uri fromUri = new Uri(fromPath);
       Uri toUri = new Uri(toPath);
