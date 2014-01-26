@@ -32,9 +32,9 @@ namespace Winterdom.Viasfora.Text {
       layer = view.GetAdornmentLayer(Constants.LINE_HIGHLIGHT);
 
       view.Caret.PositionChanged += OnCaretPositionChanged;
-      view.ViewportWidthChanged += OnViewportWidthChanged;
+      view.ViewportWidthChanged += OnViewportChanged;
+      view.ViewportHeightChanged += OnViewportChanged;
       view.LayoutChanged += OnLayoutChanged;
-      view.ViewportLeftChanged += OnViewportLeftChanged;
       view.Closed += OnViewClosed;
       VsfSettings.SettingsUpdated += OnSettingsUpdated;
       formatMap.ClassificationFormatMappingChanged +=
@@ -48,16 +48,14 @@ namespace Winterdom.Viasfora.Text {
     }
     void OnViewClosed(object sender, EventArgs e) {
       view.Caret.PositionChanged -= OnCaretPositionChanged;
-      view.ViewportWidthChanged -= OnViewportWidthChanged;
+      view.ViewportWidthChanged -= OnViewportChanged;
+      view.ViewportHeightChanged -= OnViewportChanged;
       view.LayoutChanged -= OnLayoutChanged;
-      view.ViewportLeftChanged -= OnViewportLeftChanged;
       view.Closed -= OnViewClosed;
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
     }
-    void OnViewportLeftChanged(object sender, EventArgs e) {
-      RedrawAdornments();
-    }
-    void OnViewportWidthChanged(object sender, EventArgs e) {
+    void OnViewportChanged(object sender, EventArgs e) {
+      this.currentHighlight = null; // force redraw
       RedrawAdornments();
     }
     void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
@@ -68,23 +66,19 @@ namespace Winterdom.Viasfora.Text {
     }
     void OnCaretPositionChanged(object sender, CaretPositionChangedEventArgs e) {
       // TODO: Only redraw if there are changes
-      layer.RemoveAdornmentsByTag(CUR_COL_TAG);
-      this.CreateVisuals(e.NewPosition.BufferPosition);
+      /*if ( e.NewPosition != e.OldPosition )*/ {
+        layer.RemoveAdornmentsByTag(CUR_COL_TAG);
+        this.CreateVisuals(e.NewPosition.VirtualBufferPosition);
+      }
     }
     void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       SnapshotPoint caret = view.Caret.Position.BufferPosition;
-      this.currentHighlight = null; // force recalculation
-      this.CreateVisuals(caret);
-      // TODO: Update later
-      /*
       foreach ( var line in e.NewOrReformattedLines ) {
         if ( line.ContainsBufferPosition(caret) ) {
-          this.currentHighlight = null; // force recalculation
-          this.CreateVisuals(line);
+          RedrawAdornments();
           break;
         }
       }
-      */
     }
 
     private void CreateDrawingObjects() {
@@ -96,7 +90,7 @@ namespace Winterdom.Viasfora.Text {
 
       fillBrush = format.BackgroundBrush;
       Brush penBrush = format.ForegroundBrush;
-      borderPen = new Pen(penBrush, 1.3);
+      borderPen = new Pen(penBrush, 2);
       borderPen.Freeze();
       RedrawAdornments();
     }
@@ -107,10 +101,10 @@ namespace Winterdom.Viasfora.Text {
         }
         this.currentHighlight = null; // force redraw
         var caret = view.Caret.Position;
-        this.CreateVisuals(caret.BufferPosition);
+        this.CreateVisuals(caret.VirtualBufferPosition);
       }
     }
-    private void CreateVisuals(SnapshotPoint caretPosition) {
+    private void CreateVisuals(VirtualSnapshotPoint caretPosition) {
       if ( !VsfSettings.CurrentLineHighlightEnabled ) {
         return; // not enabled
       }
@@ -118,11 +112,13 @@ namespace Winterdom.Viasfora.Text {
       if ( textViewLines == null )
         return; // not ready yet.
 
-      var line = this.view.GetTextViewLineContainingBufferPosition(caretPosition);
+      var line = this.view.GetTextViewLineContainingBufferPosition(
+        caretPosition.Position
+        );
       var charBounds = line.GetCharacterBounds(caretPosition);
       Rect rc = new Rect(
-         new Point(charBounds.Left, this.view.ViewportTop),
-         new Point(charBounds.Right, this.view.ViewportBottom)
+         new Point(charBounds.Left-2, this.view.ViewportTop),
+         new Point(charBounds.Right, this.view.ViewportBottom-2)
       );
 
       if ( NeedsNewImage(rc) ) {
