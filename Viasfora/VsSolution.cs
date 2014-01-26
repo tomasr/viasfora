@@ -42,11 +42,14 @@ namespace Winterdom.Viasfora {
     }
 
     public static ISolutionUserSettings GetUserSettings() {
+      /*
       String solutionPath = GetSolutionPath();
       if ( String.IsNullOrEmpty(solutionPath) ) {
         return null;
       }
       IPersistSettings persist = new FilePersistUserSettings(solutionPath);
+      */
+      IPersistSettings persist = new SuoPersistUserSettings(VsfPackage.Instance);
       return new SolutionUserSettings(persist);
     }
 

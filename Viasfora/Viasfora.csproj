@@ -145,6 +145,7 @@
     <Compile Include="Settings\ISolutionUserSettings.cs" />
     <Compile Include="Settings\OutlineSettings.cs" />
     <Compile Include="Settings\SolutionUserSettings.cs" />
+    <Compile Include="Settings\SuoPersistUserSettings.cs" />
     <Compile Include="SnapshotExtensions.cs" />
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
