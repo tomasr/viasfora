@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Text {
 
     public static IUserOutlining Get(ITextBuffer buffer) {
       return buffer.Properties.GetOrCreateSingletonProperty(() => {
-        return new UserOutliningTagger() as IUserOutlining;
+        return new UserOutliningTagger(buffer) as IUserOutlining;
       });
     }
   }

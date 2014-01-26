@@ -92,6 +92,7 @@
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="JsonExtensions.cs" />
     <Compile Include="Languages\BraceExtractors\PythonBraceExtractor.cs" />
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
@@ -138,6 +139,13 @@
     </Compile>
     <Compile Include="PkgCmdIdList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\FilePersistUserSettings.cs" />
+    <Compile Include="Settings\IPersistSettings.cs" />
+    <Compile Include="Settings\ISettingsObject.cs" />
+    <Compile Include="Settings\ISolutionUserSettings.cs" />
+    <Compile Include="Settings\OutlineSettings.cs" />
+    <Compile Include="Settings\SolutionUserSettings.cs" />
+    <Compile Include="Settings\SuoPersistUserSettings.cs" />
     <Compile Include="SnapshotExtensions.cs" />
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
@@ -192,6 +200,7 @@
     <Compile Include="Text\KeywordTaggerProvider.cs" />
     <Compile Include="VsfPackage.cs" />
     <Compile Include="VsfSettingsStore.cs" />
+    <Compile Include="VsSolution.cs" />
     <Compile Include="Xml\XmlQuickInfoSource.cs" />
     <Compile Include="Xml\XmlQuickInfoSourceProvider.cs" />
     <Compile Include="Xml\XmlQuickInfoController.cs" />
@@ -206,6 +215,7 @@
     <Compile Include="Xml\IMarkupLanguage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -276,6 +286,9 @@
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\refs\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

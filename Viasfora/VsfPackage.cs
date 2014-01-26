@@ -35,6 +35,7 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.PythonOptionsPage), "Viasfora\\Languages", "Python", 0, 0, true)]
   [ProvideMenuResource(1000, 1)]
   public sealed class VsfPackage : Package {
+    public const String USER_OPTIONS_KEY = "VsfUserOptions";
 
     private static readonly LanguageInfo DefaultLanguage = new DefaultLanguage();
     private static List<LanguageInfo> languageList;
@@ -42,6 +43,7 @@ namespace Winterdom.Viasfora {
 
     public static bool PresentationModeTurnedOn { get; set; }
     public static EventHandler PresentationModeChanged { get; set; }
+    public byte[] UserOptions { get; set; }
 
     private Version vsVersion;
     private IVsActivityLog activityLog;
@@ -84,6 +86,24 @@ namespace Winterdom.Viasfora {
       if ( null != mcs ) {
         InitializeViewMenuCommands(mcs);
         InitializeTextEditorCommands(mcs);
+      }
+
+      this.AddOptionKey(USER_OPTIONS_KEY);
+    }
+
+
+    protected override void OnLoadOptions(string key, Stream stream) {
+      base.OnLoadOptions(key, stream);
+      if ( key == USER_OPTIONS_KEY ) {
+        byte[] data = new byte[stream.Length];
+        stream.Read(data, 0, data.Length);
+        this.UserOptions = data;
+      }
+    }
+    protected override void OnSaveOptions(string key, Stream stream) {
+      base.OnSaveOptions(key, stream);
+      if ( key == USER_OPTIONS_KEY && UserOptions != null ) {
+        stream.Write(UserOptions, 0, UserOptions.Length);
       }
     }
 

@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Editor;
 using Winterdom.Viasfora.Compatibility;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace Winterdom.Viasfora {
   public static class TextEditor {
@@ -38,6 +39,21 @@ namespace Winterdom.Viasfora {
       var componentModel = new SComponentModel();
       var factory = componentModel.GetService<IVsEditorAdaptersFactoryService>();
       return factory.GetWpfTextView(textView);
+    }
+
+    public static String GetFileName(ITextBuffer buffer) {
+      IVsTextBuffer adapter;
+      if ( buffer.Properties.TryGetProperty(typeof(IVsTextBuffer), out adapter) ) {
+        IPersistFileFormat pff = adapter as IPersistFileFormat;
+        if ( pff != null ) {
+          String filename;
+          uint formatIndex;
+          int hr = pff.GetCurFile(out filename, out formatIndex);
+          CheckError(hr, "GetCurFile");
+          return filename;
+        }
+      }
+      return null;
     }
 
     public static SnapshotSpan? MapSelectionToPrimaryBuffer(ITextSelection selection) {
@@ -77,9 +93,8 @@ namespace Winterdom.Viasfora {
       return buffers[0];
     }
 
-    public static int S_OK = 0;
     private static void CheckError(int hr, String operation) {
-      if ( hr != S_OK ) {
+      if ( hr != Constants.S_OK ) {
         VsfPackage.LogInfo("{0} returned 0x{1:x8}", operation, hr);
         throw new InvalidOperationException(String.Format("{0} returned 0x{1:x8}", operation, hr));
       }
