@@ -10,8 +10,6 @@ namespace Winterdom.Viasfora {
     public const String LINE_HIGHLIGHT = "Viasfora Current Line";
     public const String COLUMN_HIGHLIGHT = "Viasfora Current Column";
 
-    public const double HIGHLIGHT_LINE_WIDTH = 1.4;
-
     public const int MAX_RAINBOW_DEPTH = 4;
     public const String RAINBOW = "Viasfora Rainbow Brace ";
     public const String RAINBOW_1 = RAINBOW + "1";

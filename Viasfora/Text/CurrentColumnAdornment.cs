@@ -44,6 +44,8 @@ namespace Winterdom.Viasfora.Text {
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
+      this.currentHighlight = null;
+      CreateDrawingObjects();
       RedrawAdornments();
     }
     void OnViewClosed(object sender, EventArgs e) {
@@ -90,7 +92,7 @@ namespace Winterdom.Viasfora.Text {
 
       fillBrush = format.BackgroundBrush;
       Brush penBrush = format.ForegroundBrush;
-      borderPen = new Pen(penBrush, Constants.HIGHLIGHT_LINE_WIDTH);
+      borderPen = new Pen(penBrush, VsfSettings.HighlightLineWidth);
       borderPen.Freeze();
       RedrawAdornments();
     }
@@ -112,7 +114,7 @@ namespace Winterdom.Viasfora.Text {
       if ( textViewLines == null )
         return; // not ready yet.
 
-      double lineWidth = Constants.HIGHLIGHT_LINE_WIDTH;
+      double lineWidth = VsfSettings.HighlightLineWidth;
       var line = this.view.GetTextViewLineContainingBufferPosition(
         caretPosition.Position
         );

@@ -10,6 +10,8 @@ namespace Winterdom.Viasfora {
     const String ESCAPE_SEQ_ENABLED = "EscapeSequencesEnabled";
     const String CURRENT_LINE_ENABLED = "CurrentLineHighlightEnabled";
     const String CURRENT_COLUMN_ENABLED = "CurrentColumnHighlightEnabled";
+    const String HIGHLIGHT_LINE_WIDTH = "HighlightLineWidth";
+
     const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
     const String XML_MATCH_TAGS_ENABLED = "XmlMatchTagsEnabled";
@@ -51,6 +53,10 @@ namespace Winterdom.Viasfora {
       get { return GetBoolean(CURRENT_COLUMN_ENABLED, false); }
       set { SetValue(CURRENT_COLUMN_ENABLED, value); }
     }
+    public static double HighlightLineWidth {
+      get { return GetDouble(HIGHLIGHT_LINE_WIDTH, 1.4); }
+      set { SetValue(HIGHLIGHT_LINE_WIDTH, value); }
+    }
     public static bool RainbowTagsEnabled {
       get { return GetBoolean(RAINBOW_TAGS_ENABLED, true); }
       set { SetValue(RAINBOW_TAGS_ENABLED, value); }
@@ -91,6 +97,10 @@ namespace Winterdom.Viasfora {
     private static int GetInt32(String name, int defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToInt32(val);
+    }
+    private static double GetDouble(String name, double defval) {
+      String val = settings.Get(name);
+      return String.IsNullOrEmpty(val) ? defval : Convert.ToDouble(val);
     }
 
     public static String GetValue(String name, String defValue) {
