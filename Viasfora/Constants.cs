@@ -8,6 +8,7 @@ namespace Winterdom.Viasfora {
     public const String VISIBILITY_CLASSIF_NAME = "Viasfora Visibility Keyword";
     public const String STRING_ESCAPE_CLASSIF_NAME = "Viasfora String Escape Sequence";
     public const String LINE_HIGHLIGHT = "Viasfora Current Line";
+    public const String COLUMN_HIGHLIGHT = "Viasfora Current Column";
 
     public const int MAX_RAINBOW_DEPTH = 4;
     public const String RAINBOW = "Viasfora Rainbow Brace ";

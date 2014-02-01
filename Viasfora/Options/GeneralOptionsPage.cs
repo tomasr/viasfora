@@ -15,6 +15,8 @@ namespace Winterdom.Viasfora.Options {
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
       VsfSettings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
+      VsfSettings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
+      VsfSettings.HighlightLineWidth = this.HighlightLineWidth;
       VsfSettings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
@@ -28,6 +30,8 @@ namespace Winterdom.Viasfora.Options {
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
       CurrentLineHighlightEnabled = VsfSettings.CurrentLineHighlightEnabled;
+      CurrentColumnHighlightEnabled = VsfSettings.CurrentColumnHighlightEnabled;
+      highlightLineWidth = VsfSettings.HighlightLineWidth;
       KeywordClassifierEnabled = VsfSettings.KeywordClassifierEnabled;
       EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
@@ -53,6 +57,25 @@ namespace Winterdom.Viasfora.Options {
     [Description("Enables highlighting the current line in the text editor")]
     [Category("Text Editor")]
     public bool CurrentLineHighlightEnabled { get; set; }
+
+    [LocDisplayName("Highlight Current Column")]
+    [Description("Enables highlighting the current column in the text editor")]
+    [Category("Text Editor")]
+    public bool CurrentColumnHighlightEnabled { get; set; }
+
+    private double highlightLineWidth;
+    [LocDisplayName("Highlight Line Width")]
+    [Description("Defines the thickness of the current line/column highlight")]
+    [Category("Text Editor")]
+    public double HighlightLineWidth {
+      get { return this.highlightLineWidth; }
+      set {
+        if ( value <= 0.0 ) {
+          throw new ArgumentOutOfRangeException("Value must be greater than 0");
+        }
+        this.highlightLineWidth = value;
+      }
+    }
 
     [LocDisplayName("Enable Rainbow Braces")]
     [Description("Highlight matching braces using colors based on nesting")]
