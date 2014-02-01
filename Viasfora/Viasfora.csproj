@@ -67,6 +67,7 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AdornmentLayers.cs" />
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
     <Compile Include="Commands\ClearOutliningCommand.cs" />

@@ -21,7 +21,7 @@ namespace Winterdom.Viasfora.Text {
 
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(Constants.LINE_HIGHLIGHT)]
-    [Order(Before = "Selection")]
+    [Order(Before = PredefinedAdornmentLayers.Selection)]
     [TextViewRole(PredefinedTextViewRoles.Document)]
     public AdornmentLayerDefinition editorAdornmentLayer = null;
 
