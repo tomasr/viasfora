@@ -9,9 +9,11 @@ using System.Xml.Linq;
 namespace Winterdom.Viasfora.Settings {
   public class GlobalXmlSettingsStore : ISettingsStore {
     const String FILE_NAME = "viasfora.xml";
+    private String filePath;
     Dictionary<String, String> settings = new Dictionary<String, String>();
 
-    public GlobalXmlSettingsStore() {
+    public GlobalXmlSettingsStore(String file) {
+      ConfigurePath(file);
       Load();
     }
 
@@ -28,9 +30,8 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     public void Load() {
-      String file = GetUserSettingsPath();
-      if ( File.Exists(file) ) {
-        XDocument doc = XDocument.Load(file);
+      if ( File.Exists(filePath) ) {
+        XDocument doc = XDocument.Load(filePath);
         foreach ( var element in doc.Root.Elements() ) {
           settings[element.Name.LocalName] = element.Value;
         }
@@ -38,8 +39,7 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     public void Save() {
-      String file = GetUserSettingsPath();
-      using ( var xw = XmlWriter.Create(file) ) {
+      using ( var xw = XmlWriter.Create(filePath) ) {
         xw.WriteStartElement("viasfora");
         foreach ( String key in settings.Keys ) {
           String value = settings[key];
@@ -51,15 +51,22 @@ namespace Winterdom.Viasfora.Settings {
       }
     }
 
-    private String GetUserSettingsPath() {
-      String folder = Path.Combine(
-          Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-          "Viasfora"
-        );
+    private void ConfigurePath(string filePath) {
+      String folder = null;
+      String fileName = FILE_NAME;
+      if ( String.IsNullOrEmpty(filePath) ) {
+        folder = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            "Viasfora"
+          );
+      } else {
+        folder = Path.GetDirectoryName(filePath);
+        fileName = Path.GetFileName(filePath);
+      }
       if ( !Directory.Exists(folder) ) {
         Directory.CreateDirectory(folder);
       }
-      return Path.Combine(folder, FILE_NAME);
+      this.filePath = Path.Combine(folder, fileName);
     }
   }
 }

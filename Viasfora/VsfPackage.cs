@@ -164,7 +164,7 @@ namespace Winterdom.Viasfora {
     }
 
     internal static ISettingsStore GetGlobalSettingsStore() {
-      return new GlobalXmlSettingsStore();
+      return new GlobalXmlSettingsStore(null);
     }
   }
 }
