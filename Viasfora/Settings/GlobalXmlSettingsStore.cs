@@ -6,12 +6,12 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Winterdom.Viasfora {
-  public class VsfSettingsStore {
+namespace Winterdom.Viasfora.Settings {
+  public class GlobalXmlSettingsStore : ISettingsStore {
     const String FILE_NAME = "viasfora.xml";
     Dictionary<String, String> settings = new Dictionary<String, String>();
 
-    public VsfSettingsStore() {
+    public GlobalXmlSettingsStore() {
       Load();
     }
 
@@ -37,7 +37,7 @@ namespace Winterdom.Viasfora {
       }
     }
 
-    public void Write() {
+    public void Save() {
       String file = GetUserSettingsPath();
       using ( var xw = XmlWriter.Create(file) ) {
         xw.WriteStartElement("viasfora");

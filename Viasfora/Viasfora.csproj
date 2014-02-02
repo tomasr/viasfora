@@ -142,8 +142,10 @@
     <Compile Include="PkgCmdIdList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />
+    <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
     <Compile Include="Settings\IPersistSettings.cs" />
     <Compile Include="Settings\ISettingsObject.cs" />
+    <Compile Include="Settings\ISettingsStore.cs" />
     <Compile Include="Settings\ISolutionUserSettings.cs" />
     <Compile Include="Settings\OutlineSettings.cs" />
     <Compile Include="Settings\SolutionUserSettings.cs" />
@@ -203,7 +205,6 @@
     <Compile Include="Languages\CSharp.cs" />
     <Compile Include="Text\KeywordTaggerProvider.cs" />
     <Compile Include="VsfPackage.cs" />
-    <Compile Include="VsfSettingsStore.cs" />
     <Compile Include="VsSolution.cs" />
     <Compile Include="Xml\XmlQuickInfoSource.cs" />
     <Compile Include="Xml\XmlQuickInfoSourceProvider.cs" />

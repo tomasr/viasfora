@@ -15,6 +15,7 @@ using System.Reflection;
 using Winterdom.Viasfora.Commands;
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Editor;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -160,6 +161,10 @@ namespace Winterdom.Viasfora {
         return new Version(version, 0, 0, 0);
       }
       return new Version(10, 0, 0, 0);
+    }
+
+    internal static ISettingsStore GetGlobalSettingsStore() {
+      return new GlobalXmlSettingsStore();
     }
   }
 }
