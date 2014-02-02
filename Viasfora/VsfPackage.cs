@@ -113,6 +113,7 @@ namespace Winterdom.Viasfora {
     }
 
     public static void LogInfo(String format, params object[] args) {
+      if ( Instance == null ) return;
       var log = Instance.activityLog;
       if ( log != null ) {
         log.LogEntry(

@@ -31,9 +31,13 @@ namespace Winterdom.Viasfora.Settings {
 
     public void Load() {
       if ( File.Exists(filePath) ) {
-        XDocument doc = XDocument.Load(filePath);
-        foreach ( var element in doc.Root.Elements() ) {
-          settings[element.Name.LocalName] = element.Value;
+        try {
+          XDocument doc = XDocument.Load(filePath);
+          foreach ( var element in doc.Root.Elements() ) {
+            settings[element.Name.LocalName] = element.Value;
+          }
+        } catch ( XmlException ex ) {
+          VsfPackage.LogInfo("Error loading '{0}': {1}", filePath, ex);
         }
       }
     }
