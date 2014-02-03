@@ -1,0 +1,355 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{ED05E9A0-B822-4925-81A5-721CBE04DA37}</ProjectGuid>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Winterdom.Viasfora</RootNamespace>
+    <AssemblyName>Winterdom.Viasfora</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <!--
+         GeneratePkgDef is necessary so that the build will generatre
+         the pkgdef file that will install our package.
+         UseCodeBase is necessary so that it runs 
+         CreatePkgDef.exe /codebase
+    -->
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
+    <UseCodeBase>true</UseCodeBase>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
+    <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
+    <CopyBuildOutputToOutputDirectory>true</CopyBuildOutputToOutputDirectory>
+    <CopyOutputSymbolsToOutputDirectory>true</CopyOutputSymbolsToOutputDirectory>
+    <ReferencePath>$(ReferencePath);$(MSBuildThisFileDirectory)refs</ReferencePath>
+    <StartAction>Program</StartAction>
+    <StartProgram>$(DevEnvDir)\devenv.exe</StartProgram>
+    <StartArguments>/rootsuffix Exp /log</StartArguments>
+  </PropertyGroup>
+  <!-- Look for the SDK specific to the current version of Visual Studio -->
+  <PropertyGroup>
+    <VsSdkTargets>$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\VSSDK\Microsoft.VsSDK.targets</VsSdkTargets>
+    <VsSdkTargets Condition=" '$(VisualStudioVersion)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets</VsSdkTargets>
+  </PropertyGroup>
+  <!-- This is needed to prevent forced migrations when opening the project in Vs2012 -->
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '11.0' ">
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <!-- This is needed to prevent forced migrations when opening the project in Vs2013 -->
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '12.0' ">
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AdornmentLayers.cs" />
+    <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
+    <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
+    <Compile Include="Commands\ClearOutliningCommand.cs" />
+    <Compile Include="Commands\RemoveOutliningCommand.cs" />
+    <Compile Include="Commands\AddOutliningCommand.cs" />
+    <Compile Include="Commands\PresentationModeCommand.cs" />
+    <Compile Include="Commands\VsCommand.cs" />
+    <Compile Include="Compatibility\SComponentModel.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Design\StringListConverter.cs" />
+    <Compile Include="Design\ZoomTrackBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\ZoomTrackBar.Designer.cs">
+      <DependentUpon>ZoomTrackBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
+    <Compile Include="EditorFormats\CurrentLineFormat.cs" />
+    <Compile Include="EditorFormats\RainbowFormats.cs" />
+    <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
+    <Compile Include="EditorFormats\XmlClosingTagFormat.cs" />
+    <Compile Include="EditorFormats\StringEscapeSequenceFormat.cs" />
+    <Compile Include="EditorFormats\VisibilityKeywordFormat.cs" />
+    <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
+    <Compile Include="EditorFormats\FlowControlFormat.cs" />
+    <Compile Include="Guids.cs" />
+    <Compile Include="JsonExtensions.cs" />
+    <Compile Include="Languages\BraceExtractors\PythonBraceExtractor.cs" />
+    <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
+    <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
+    <Compile Include="Languages\DefaultLanguage.cs" />
+    <Compile Include="Languages\Python.cs" />
+    <Compile Include="Options\AllLanguagesOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\PresentationModeDialogPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Options\PresentationModeDialogPage.Designer.cs">
+      <DependentUpon>PresentationModeDialogPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Options\PresentationModeOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\PythonOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\TypeScriptOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\SqlOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\FSharpOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\VBOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\JScriptOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\CppOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\CSharpOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\GeneralOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="PkgCmdIdList.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\FilePersistUserSettings.cs" />
+    <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
+    <Compile Include="Settings\IPersistSettings.cs" />
+    <Compile Include="Settings\ISettingsObject.cs" />
+    <Compile Include="Settings\ISettingsStore.cs" />
+    <Compile Include="Settings\ISolutionUserSettings.cs" />
+    <Compile Include="Settings\OutlineSettings.cs" />
+    <Compile Include="Settings\SolutionUserSettings.cs" />
+    <Compile Include="Settings\SuoPersistUserSettings.cs" />
+    <Compile Include="SnapshotExtensions.cs" />
+    <Compile Include="Tags\RainbowTag.cs" />
+    <Compile Include="Tags\KeywordTag.cs" />
+    <Compile Include="TextEditor.cs" />
+    <Compile Include="Text\BraceCache.cs" />
+    <Compile Include="Text\BufferOutlines.cs" />
+    <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
+    <Compile Include="Text\CurrentColumnAdornment.cs" />
+    <Compile Include="Text\IUserOutlining.cs" />
+    <Compile Include="Text\ModelineFactory.cs" />
+    <Compile Include="Text\ModeLineProvider.cs" />
+    <Compile Include="Text\PresentationMode.cs" />
+    <Compile Include="Text\PresentationModeFactory.cs" />
+    <Compile Include="Languages\TypeScript.cs" />
+    <Compile Include="Languages\Sql.cs" />
+    <Compile Include="Text\RainbowTagger.cs" />
+    <Compile Include="Text\RainbowTaggerProvider.cs" />
+    <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
+    <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
+    <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
+    <Compile Include="Text\UserOutliningTagger.cs" />
+    <Compile Include="Text\UserOutliningTaggerProvider.cs" />
+    <Compile Include="Util\ITokenizer.cs" />
+    <Compile Include="Util\ModeLineParser.cs" />
+    <Compile Include="Util\BracePos.cs" />
+    <Compile Include="Languages\CBasedLanguage.cs" />
+    <Compile Include="Languages\FSharp.cs" />
+    <Compile Include="Languages\LanguageInfo.cs" />
+    <Compile Include="Languages\VB.cs" />
+    <Compile Include="Languages\CommentParsers\CBasedFirstLineCommentParser.cs" />
+    <Compile Include="Util\IFirstLineCommentParser.cs" />
+    <Compile Include="Util\IModeLineParser.cs" />
+    <Compile Include="Util\SimpleTokenizer.cs" />
+    <Compile Include="Languages\BraceExtractors\SqlBraceExtractor.cs" />
+    <Compile Include="Languages\BraceExtractors\CBraceExtractor.cs" />
+    <Compile Include="Util\CharPos.cs" />
+    <Compile Include="Languages\BraceExtractors\JScriptBraceExtractor.cs" />
+    <Compile Include="Languages\BraceExtractors\FSharpBraceExtractor.cs" />
+    <Compile Include="Util\IBraceExtractor.cs" />
+    <Compile Include="Util\ITextChars.cs" />
+    <Compile Include="Util\LineChars.cs" />
+    <Compile Include="Util\StringChars.cs" />
+    <Compile Include="Languages\BraceExtractors\VbBraceExtractor.cs" />
+    <Compile Include="VsfSettings.cs" />
+    <Compile Include="Sgml\SgmlParser.cs" />
+    <Compile Include="Sgml\SgmlReader.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Text\CurrentLineAdornment.cs" />
+    <Compile Include="Text\CurrentLineAdornmentFactory.cs" />
+    <Compile Include="Text\KeywordTagger.cs" />
+    <Compile Include="Languages\JScript.cs" />
+    <Compile Include="Languages\Cpp.cs" />
+    <Compile Include="Languages\CSharp.cs" />
+    <Compile Include="Text\KeywordTaggerProvider.cs" />
+    <Compile Include="VsfPackage.cs" />
+    <Compile Include="VsSolution.cs" />
+    <Compile Include="Xml\XmlQuickInfoSource.cs" />
+    <Compile Include="Xml\XmlQuickInfoSourceProvider.cs" />
+    <Compile Include="Xml\XmlQuickInfoController.cs" />
+    <Compile Include="Xml\XmlQuickInfoControllerProvider.cs" />
+    <Compile Include="Xml\XmlTagMatchingTagger.cs" />
+    <Compile Include="Xml\XmlTagMatchingTaggerProvider.cs" />
+    <Compile Include="Xml\XmlTagger.cs" />
+    <Compile Include="Xml\XmlTaggerProvider.cs" />
+    <Compile Include="Xml\HtmlMarkup.cs" />
+    <Compile Include="Xml\XamlMarkup.cs" />
+    <Compile Include="Xml\XmlMarkup.cs" />
+    <Compile Include="Xml\IMarkupLanguage.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="source.extension.vsixmanifest">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Language.Intellisense, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Language.Intellisense.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Language.StandardClassification, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Language.StandardClassification.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.OLE.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Shell.10.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Shell.Immutable.10.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\refs\Microsoft.VisualStudio.Shell.Interop.10.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Shell.Interop.8.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Shell.Interop.9.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Text.Data, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Text.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Text.Logic, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Text.Logic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Text.UI, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Text.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Text.UI.Wpf, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Text.UI.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Editor, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\refs\Microsoft.VisualStudio.TextManager.Interop.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.XML" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\cmdImages.bmp" />
+    <Content Include="license.txt">
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="viasfora-icon.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
+    <Content Include="viasfora-preview.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="viasfora.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <VSCTCompile Include="VsfCommands.vsct">
+      <ResourceName>1000</ResourceName>
+      <SubType>Designer</SubType>
+    </VSCTCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Design\ZoomTrackBar.resx">
+      <DependentUpon>ZoomTrackBar.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options\PresentationModeDialogPage.resx">
+      <DependentUpon>PresentationModeDialogPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VSPackage.resx">
+      <MergeWithCTO>true</MergeWithCTO>
+      <ManifestResourceName>VSPackage</ManifestResourceName>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Condition="Exists($(VsSdkTargets))" Project="$(VsSdkTargets)" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

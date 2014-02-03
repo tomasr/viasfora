@@ -1,7 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora", "Viasfora.csproj", "{ED05E9A0-B822-4925-81A5-721CBE04DA37}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora", "Viasfora\Viasfora.csproj", "{ED05E9A0-B822-4925-81A5-721CBE04DA37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Tests", "Viasfora.Tests\Viasfora.Tests.csproj", "{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,6 +17,10 @@ Global
 		{ED05E9A0-B822-4925-81A5-721CBE04DA37}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED05E9A0-B822-4925-81A5-721CBE04DA37}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED05E9A0-B822-4925-81A5-721CBE04DA37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
