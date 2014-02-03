@@ -15,6 +15,7 @@ using System.Reflection;
 using Winterdom.Viasfora.Commands;
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Editor;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -112,6 +113,7 @@ namespace Winterdom.Viasfora {
     }
 
     public static void LogInfo(String format, params object[] args) {
+      if ( Instance == null ) return;
       var log = Instance.activityLog;
       if ( log != null ) {
         log.LogEntry(
@@ -160,6 +162,10 @@ namespace Winterdom.Viasfora {
         return new Version(version, 0, 0, 0);
       }
       return new Version(10, 0, 0, 0);
+    }
+
+    internal static ISettingsStore GetGlobalSettingsStore() {
+      return new GlobalXmlSettingsStore(null);
     }
   }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {
 
@@ -22,7 +23,7 @@ namespace Winterdom.Viasfora {
     const String MODELINES_ENABLED = "ModelinesEnabled";
     const String MODELINES_NUMLINES = "ModelinesNumLines";
 
-    private static VsfSettingsStore settings = new VsfSettingsStore();
+    private static ISettingsStore settings = VsfPackage.GetGlobalSettingsStore();
     public static event EventHandler SettingsUpdated;
     
     public static bool KeywordClassifierEnabled {
@@ -83,7 +84,7 @@ namespace Winterdom.Viasfora {
     }
 
     public static void Save() {
-      settings.Write();
+      settings.Save();
       if ( SettingsUpdated != null ) {
         SettingsUpdated(VsfPackage.Instance, EventArgs.Empty);
       }
