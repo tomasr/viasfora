@@ -149,9 +149,9 @@ namespace Winterdom.Viasfora.Text {
     private bool NeedsNewImage(Rect rc) {
       if ( currentHighlight == null )
         return true;
-      if ( AreClose(currentHighlight.Width, rc.Width) )
+      if ( !AreClose(currentHighlight.Width, rc.Width) )
         return true;
-      return AreClose(currentHighlight.Height, rc.Height);
+      return !AreClose(currentHighlight.Height, rc.Height);
     }
     private bool AreClose(double d1, double d2) {
       double diff = d1 - d2;

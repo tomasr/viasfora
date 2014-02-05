@@ -48,8 +48,14 @@ namespace Winterdom.Viasfora {
         if ( pff != null ) {
           String filename;
           uint formatIndex;
-          int hr = pff.GetCurFile(out filename, out formatIndex);
-          CheckError(hr, "GetCurFile");
+		      try {
+            int hr = pff.GetCurFile(out filename, out formatIndex);
+            CheckError(hr, "GetCurFile");
+          } catch ( NotImplementedException ) {
+            // Lovely stuff: SecondaryVsTextBuffer will
+            // fail with a NIE instead of returning E_NOTIMPL O_0
+            filename = null;
+          }
           return filename;
         }
       }
