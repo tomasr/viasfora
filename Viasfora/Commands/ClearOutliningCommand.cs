@@ -35,8 +35,8 @@ namespace Winterdom.Viasfora.Commands {
       buffer = null;
       ITextView view = TextEditor.GetCurrentView();
       if ( view != null ) {
-        //buffer = TextEditor.GetPrimaryBuffer(view);
-        buffer = view.TextBuffer;
+        buffer = TextEditor.GetPrimaryBuffer(view);
+        //buffer = view.TextBuffer;
         return UserOutliningTaggerProvider.Get(buffer);
       }
       return null;

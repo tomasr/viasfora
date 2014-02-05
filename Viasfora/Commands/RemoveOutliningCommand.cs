@@ -23,8 +23,8 @@ namespace Winterdom.Viasfora.Commands {
       ITextCaret caret = view.Caret;
 
       if ( caret == null ) return;
-      //var point = TextEditor.MapCaretToPrimaryBuffer(view);
-      SnapshotPoint? point = caret.Position.BufferPosition;
+      var point = TextEditor.MapCaretToPrimaryBuffer(view);
+      //SnapshotPoint? point = caret.Position.BufferPosition;
 
       if ( point != null ) {
         IUserOutlining outlining = 
@@ -40,8 +40,8 @@ namespace Winterdom.Viasfora.Commands {
 
       if ( caret == null ) return;
 
-      //var point = TextEditor.MapCaretToPrimaryBuffer(view);
-      SnapshotPoint? point = caret.Position.BufferPosition;
+      var point = TextEditor.MapCaretToPrimaryBuffer(view);
+      //SnapshotPoint? point = caret.Position.BufferPosition;
       if ( point != null ) {
         IUserOutlining outlining = 
           UserOutliningTaggerProvider.Get(point.Value.Snapshot.TextBuffer);

@@ -28,11 +28,14 @@ namespace Winterdom.Viasfora.Commands {
           // not supported, ignore for now;
           return;
         }
-        // if this is a projection buffer, we will add
-        // the outline on the projection buffer, not the original doc
+        // in many cases, the buffer at the top of the
+        // buffer graph will be a projection buffer, which
+        // is problematic for the ASPX editor. Instead
+        // look for the first, non-projection buffer
+        // on the graph and project on it.
         ITextView view = selection.TextView;
-        //SnapshotSpan? span = TextEditor.MapSelectionToPrimaryBuffer(selection);
-        SnapshotSpan? span = selection.StreamSelectionSpan.SnapshotSpan;
+        SnapshotSpan? span = TextEditor.MapSelectionToPrimaryBuffer(selection);
+        //SnapshotSpan? span = selection.StreamSelectionSpan.SnapshotSpan;
         if ( span != null ) {
           AddOutlining(span.Value.Snapshot.TextBuffer, span.Value);
         }
