@@ -74,12 +74,8 @@ namespace Winterdom.Viasfora.Text {
       }
     }
     void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
-      SnapshotPoint caret = view.Caret.Position.BufferPosition;
-      foreach ( var line in e.NewOrReformattedLines ) {
-        if ( line.ContainsBufferPosition(caret) ) {
+      if ( e.VerticalTranslation ) {
           RedrawAdornments();
-          break;
-        }
       }
     }
 
@@ -142,7 +138,7 @@ namespace Winterdom.Viasfora.Text {
       Canvas.SetTop(currentHighlight, rc.Top);
 
       layer.AddAdornment(
-         AdornmentPositioningBehavior.ViewportRelative, null,
+         AdornmentPositioningBehavior.OwnerControlled, null,
          CUR_COL_TAG, currentHighlight, null
       );
     }
