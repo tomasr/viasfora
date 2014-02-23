@@ -162,6 +162,7 @@
     <Compile Include="Text\IUserOutlining.cs" />
     <Compile Include="Text\ModelineFactory.cs" />
     <Compile Include="Text\ModeLineProvider.cs" />
+    <Compile Include="Text\OutliningGlyphFactoryProvider.cs" />
     <Compile Include="Text\OutliningManager.cs" />
     <Compile Include="Text\PresentationMode.cs" />
     <Compile Include="Text\PresentationModeFactory.cs" />

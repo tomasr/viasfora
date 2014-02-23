@@ -13,11 +13,15 @@ namespace Winterdom.Viasfora.Text {
   [Export(typeof(ITaggerProvider))]
   [ContentType("Text")]
   [TagType(typeof(IOutliningRegionTag))]
+  [TagType(typeof(IGlyphTag))]
   [TextViewRole(PredefinedTextViewRoles.Structured)]
   public class UserOutliningTaggerProvider : ITaggerProvider {
     public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
       IOutliningManager manager = OutliningManager.GetManager(buffer);
-      return manager.GetOutliningTagger() as ITagger<T>;
+      if ( typeof(T) == typeof(IOutliningRegionTag) ) {
+        return manager.GetOutliningTagger() as ITagger<T>;
+      }
+      return manager.GetGlyphTagger() as ITagger<T>;
     }
   }
 }
