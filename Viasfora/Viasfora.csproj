@@ -151,6 +151,7 @@
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="Settings\SuoPersistUserSettings.cs" />
     <Compile Include="SnapshotExtensions.cs" />
+    <Compile Include="Tags\OutliningGlyphTag.cs" />
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="TextEditor.cs" />
@@ -161,6 +162,7 @@
     <Compile Include="Text\IUserOutlining.cs" />
     <Compile Include="Text\ModelineFactory.cs" />
     <Compile Include="Text\ModeLineProvider.cs" />
+    <Compile Include="Text\OutliningManager.cs" />
     <Compile Include="Text\PresentationMode.cs" />
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
@@ -170,7 +172,6 @@
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
-    <Compile Include="Text\UserOutliningTagger.cs" />
     <Compile Include="Text\UserOutliningTaggerProvider.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />

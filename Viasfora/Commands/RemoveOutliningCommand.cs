@@ -28,7 +28,7 @@ namespace Winterdom.Viasfora.Commands {
 
       if ( point != null ) {
         IUserOutlining outlining = 
-          UserOutliningTaggerProvider.Get(point.Value.Snapshot.TextBuffer);
+          OutliningManager.Get(point.Value.Snapshot.TextBuffer);
         Command.Enabled = outlining.IsInOutliningRegion(point.Value);
       }
     }
@@ -44,7 +44,7 @@ namespace Winterdom.Viasfora.Commands {
       //SnapshotPoint? point = caret.Position.BufferPosition;
       if ( point != null ) {
         IUserOutlining outlining = 
-          UserOutliningTaggerProvider.Get(point.Value.Snapshot.TextBuffer);
+          OutliningManager.Get(point.Value.Snapshot.TextBuffer);
         outlining.RemoveAt(point.Value);
       }
     }
