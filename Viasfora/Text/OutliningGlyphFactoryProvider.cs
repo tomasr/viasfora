@@ -52,7 +52,7 @@ namespace Winterdom.Viasfora.Text {
 
       private TextBlock CreateGlyphElement(double minSize) {
         TextBlock tb = new TextBlock();
-        tb.Text = "U";
+        tb.Text = "V";
         tb.FontWeight = FontWeights.Bold;
         tb.Height = tb.Width = minSize;
         tb.TextAlignment = TextAlignment.Center;
@@ -62,7 +62,7 @@ namespace Winterdom.Viasfora.Text {
         Rectangle rect = new Rectangle();
         rect.Height = rect.Width = minSize * 0.9;
         rect.Stroke = Brushes.Transparent;
-        rect.Fill = new SolidColorBrush(Color.FromRgb(90,90,90));
+        rect.Fill = new SolidColorBrush(Colors.DarkOliveGreen);
         rect.RadiusX = rect.RadiusY = rect.Height * 0.1;
 
         tb.Background = new VisualBrush(rect);
@@ -90,17 +90,30 @@ namespace Winterdom.Viasfora.Text {
         Point pos = GetLocation(e);
         var oLine = GetLineAt(clickPos);
         var cLine = GetLineAt(pos);
-        if ( oLine == cLine && cLine != null ) {
-          SnapshotSpan span = new SnapshotSpan(cLine.Start, cLine.End);
-          var spans = new NormalizedSnapshotSpanCollection(span);
-          foreach ( var tag in tagAggregator.GetTags(spans) ) {
-            if ( !(tag.Tag is OutliningGlyphTag) ) continue;
-            var realSpan = tag.GetSpan(cLine.Snapshot);
-            if ( realSpan.IsEmpty ) continue;
-            RemoveOutlineAt(realSpan.Start);
-            break;
+        if ( oLine != cLine || cLine == null ) return;
+        // find what outlining regions start on the current line
+        // if it's one of ours, remove it.
+        SnapshotSpan span = new SnapshotSpan(cLine.Start, cLine.End);
+        var spans = new NormalizedSnapshotSpanCollection(span);
+
+        foreach ( var tag in tagAggregator.GetTags(spans) ) {
+          if ( !(tag.Tag is OutliningGlyphTag) ) continue;
+          var tagSpan = tag.GetSpan(cLine.Snapshot);
+          if ( tagSpan.IsEmpty ) continue;
+          // we might see tags that cover this region, but
+          // don't start on the selected line
+          if ( TagStartsOnViewLine(tagSpan, cLine) ) {
+            RemoveOutlineAt(tagSpan.Start);
+            e.Handled = true;
           }
+          break;
         }
+      }
+
+      private bool TagStartsOnViewLine(SnapshotSpan tagSpan, ITextViewLine viewLine) {
+        var tagLine = tagSpan.Start.GetContainingLine();
+        var actualViewLine = viewLine.Start.GetContainingLine();
+        return tagLine.LineNumber == actualViewLine.LineNumber;
       }
 
       private void RemoveOutlineAt(SnapshotPoint snapshotPoint) {
