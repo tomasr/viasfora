@@ -12,18 +12,16 @@ using Microsoft.VisualStudio.Text.Editor;
 namespace Winterdom.Viasfora.Text {
   [Export(typeof(ITaggerProvider))]
   [ContentType("Text")]
-  //[ContentType("projection")]
   [TagType(typeof(IOutliningRegionTag))]
+  [TagType(typeof(IGlyphTag))]
   [TextViewRole(PredefinedTextViewRoles.Structured)]
   public class UserOutliningTaggerProvider : ITaggerProvider {
     public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
-      return Get(buffer) as ITagger<T>;
-    }
-
-    public static IUserOutlining Get(ITextBuffer buffer) {
-      return buffer.Properties.GetOrCreateSingletonProperty(() => {
-        return new UserOutliningTagger(buffer) as IUserOutlining;
-      });
+      IOutliningManager manager = OutliningManager.GetManager(buffer);
+      if ( typeof(T) == typeof(IOutliningRegionTag) ) {
+        return manager.GetOutliningTagger() as ITagger<T>;
+      }
+      return manager.GetGlyphTagger() as ITagger<T>;
     }
   }
 }
