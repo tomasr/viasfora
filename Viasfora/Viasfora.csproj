@@ -105,6 +105,7 @@
       <DependentUpon>DevMarginVisual.xaml</DependentUpon>
     </Compile>
     <Compile Include="Margins\DevMarginViewModel.cs" />
+    <Compile Include="Margins\DevViewMargin.cs" />
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
