@@ -32,11 +32,13 @@ namespace Winterdom.Viasfora.Margins {
       foreach ( var buffer in buffers ) {
         this.bufferGraph.Add(new BufferInfo {
           ContentType = buffer.ContentType.DisplayName,
+          BufferType = buffer.GetType(),
           Index = index++
         });
       }
       NotifyChanged("BufferGraph");
-      this.SelectedBuffer = this.bufferGraph.FirstOrDefault();
+      this.SelectedBuffer = this.bufferGraph.FirstOrDefault(
+        b => TextEditor.IsPrimaryBufferType(b.BufferType));
     }
     private void NotifyChanged(String property) {
       if ( PropertyChanged != null ) {
@@ -46,7 +48,12 @@ namespace Winterdom.Viasfora.Margins {
 
     public class BufferInfo {
       public String ContentType { get; set; }
+      public Type BufferType { get; set; }
       public int Index { get; set; }
+
+      public String DisplayName {
+        get { return String.Format("{0} ({1})", ContentType, BufferType.Name); }
+      }
     }
   }
 }

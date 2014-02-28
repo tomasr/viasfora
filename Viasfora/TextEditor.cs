@@ -99,6 +99,10 @@ namespace Winterdom.Viasfora {
       return buffers[0];
     }
 
+    public static bool IsPrimaryBufferType(Type type) {
+      return type.FullName == "Microsoft.VisualStudio.Text.Implementation.TextBuffer";
+    }
+
     private static void CheckError(int hr, String operation) {
       if ( hr != Constants.S_OK ) {
         VsfPackage.LogInfo("{0} returned 0x{1:x8}", operation, hr);

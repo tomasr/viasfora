@@ -13,7 +13,7 @@
   <Grid>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="100" />
-      <ColumnDefinition Width="120" />
+      <ColumnDefinition Width="160" />
       <ColumnDefinition Width="60" />
       <ColumnDefinition Width="*" />
       <ColumnDefinition Width="40" />
@@ -21,7 +21,7 @@
     </Grid.ColumnDefinitions>
     <TextBlock Text="Buffer Graph:" Grid.Column="0" />
     <ComboBox Name="BufferGraphCombo" 
-              DisplayMemberPath="ContentType"
+              DisplayMemberPath="DisplayName"
               ItemsSource="{Binding BufferGraph}"
               SelectedItem="{Binding SelectedBuffer}"
               Grid.Column="1"/>
