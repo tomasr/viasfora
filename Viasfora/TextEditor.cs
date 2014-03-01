@@ -112,7 +112,7 @@ namespace Winterdom.Viasfora {
     // and then create a new editor window for it
     //
     public static void OpenBufferInPlainTextEditorAsReadOnly(ITextBuffer buffer) {
-      String filepath = SaveBufferToTempPath(buffer);
+      String filepath = SaveBufferToTempPath(buffer, true);
 
       var uiShell = (IVsUIShellOpenDocument)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsUIShellOpenDocument));
@@ -216,10 +216,13 @@ namespace Winterdom.Viasfora {
       hierarchy = (IVsUIHierarchy)vsProject;
     }
 
-    private static string SaveBufferToTempPath(ITextBuffer buffer) {
+    private static string SaveBufferToTempPath(ITextBuffer buffer, bool readOnly) {
       String tempDir = Path.GetTempPath();
       String file = Path.Combine(tempDir, Path.GetRandomFileName() + ".txt");
       File.WriteAllText(file, buffer.CurrentSnapshot.GetText());
+      if ( readOnly ) {
+        File.SetAttributes(file, FileAttributes.ReadOnly);
+      }
       return file;
     }
 
