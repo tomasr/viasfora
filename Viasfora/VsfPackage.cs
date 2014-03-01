@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using System.Diagnostics;
-using Winterdom.Viasfora.Languages;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio;
-using System.IO;
-using System.Reflection;
-using Winterdom.Viasfora.Commands;
-using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Editor;
+using Winterdom.Viasfora.Commands;
+using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {

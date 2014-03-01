@@ -9,6 +9,8 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Editor;
 using Winterdom.Viasfora.Compatibility;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
+using System.IO;
 
 namespace Winterdom.Viasfora {
   public static class TextEditor {
@@ -97,6 +99,131 @@ namespace Winterdom.Viasfora {
         return view.BufferGraph.TopBuffer;
       }
       return buffers[0];
+    }
+
+    public static bool IsPrimaryBufferType(Type type) {
+      return type.FullName == "Microsoft.VisualStudio.Text.Implementation.TextBuffer";
+    }
+
+    //
+    // Ugly hack: We write the buffer contents into a
+    // temporary file, then add this to the "external files"
+    // folder in solution explorer
+    // and then create a new editor window for it
+    //
+    public static void OpenBufferInPlainTextEditorAsReadOnly(ITextBuffer buffer) {
+      String filepath = SaveBufferToTempPath(buffer, true);
+
+      var uiShell = (IVsUIShellOpenDocument)
+        ServiceProvider.GlobalProvider.GetService(typeof(SVsUIShellOpenDocument));
+      var oleSvcProvider = (Microsoft.VisualStudio.OLE.Interop.IServiceProvider)
+        ServiceProvider.GlobalProvider.GetService(typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider));
+
+      IVsUIHierarchy hierarchy;
+      uint itemid;
+      CreateHierarchy(filepath, out hierarchy, out itemid);
+
+      Guid editorType = VSConstants.VsEditorFactoryGuid.TextEditor_guid;
+      Guid logicalView = VSConstants.LOGVIEWID.TextView_guid;
+      String physicalView = "Code";
+
+      IVsWindowFrame windowFrame = null;
+      int hr = uiShell.OpenSpecificEditor(
+        grfOpenSpecific: (uint)0,
+        pszMkDocument: filepath,
+        rguidEditorType: ref editorType,
+        pszPhysicalView: physicalView,
+        rguidLogicalView: ref logicalView,
+        pszOwnerCaption: Path.GetFileName(filepath),
+        pHier: hierarchy,
+        itemid: itemid,
+        punkDocDataExisting: IntPtr.Zero,
+        pSPHierContext: oleSvcProvider,
+        ppWindowFrame: out windowFrame
+      );
+      CheckError(hr, "OpenSpecificEditor");
+      MarkDocumentAsTemporaryAndShow(filepath, windowFrame);
+    }
+
+    private static void MarkDocumentAsTemporaryAndShow(string moniker, IVsWindowFrame windowFrame) {
+      IVsRunningDocumentTable docTable = (IVsRunningDocumentTable)
+        ServiceProvider.GlobalProvider.GetService(typeof(SVsRunningDocumentTable));
+
+      uint lockType = (uint)_VSRDTFLAGS.RDT_CantSave
+                    | (uint)_VSRDTFLAGS.RDT_DontAddToMRU
+                    | (uint)_VSRDTFLAGS.RDT_DontAutoOpen
+                    | (uint)_VSRDTFLAGS.RDT_NonCreatable
+                    | (uint)_VSRDTFLAGS.RDT_VirtualDocument
+                    | (uint)_VSRDTFLAGS.RDT_PlaceHolderDoc
+                    | (uint)_VSRDTFLAGS.RDT_ReadLock
+                    | (uint)_VSRDTFLAGS.RDT_EditLock;
+      IVsHierarchy hierarchy;
+      uint itemid;
+      uint documentCookie;
+      IntPtr docData;
+
+      int hr = docTable.FindAndLockDocument(
+        dwRDTLockType: lockType,
+        pszMkDocument: moniker,
+        ppHier: out hierarchy,
+        pitemid: out itemid,
+        ppunkDocData: out docData,
+        pdwCookie: out documentCookie
+        );
+      CheckError(hr, "FindAndLockDocument");
+      docTable.ModifyDocumentFlags(documentCookie, lockType, 1);
+
+      if ( windowFrame != null ) {
+        windowFrame.Show();
+      }
+    }
+
+    // based on: https://github.com/jaredpar/VsSamples/blob/master/Src/ProjectionBufferDemo/Implementation/EditorFactory.cs
+    private static void CreateHierarchy(string moniker, out IVsUIHierarchy hierarchy, out uint itemId) {
+      IVsExternalFilesManager filesMgr = (IVsExternalFilesManager)
+        ServiceProvider.GlobalProvider.GetService(typeof(SVsExternalFilesManager));
+
+      int defaultPosition;
+      IVsWindowFrame dummyWindowFrame;
+      uint flags = (uint)_VSRDTFLAGS.RDT_NonCreatable | (uint)_VSRDTFLAGS.RDT_PlaceHolderDoc;
+      var hr = filesMgr.AddDocument(
+          dwCDW: flags,
+          pszMkDocument: moniker,
+          punkDocView: IntPtr.Zero,
+          punkDocData: IntPtr.Zero,
+          rguidEditorType: Guid.Empty,
+          pszPhysicalView: null,
+          rguidCmdUI: Guid.Empty,
+          pszOwnerCaption: moniker,
+          pszEditorCaption: null,
+          pfDefaultPosition: out defaultPosition,
+          ppWindowFrame: out dummyWindowFrame);
+      ErrorHandler.ThrowOnFailure(hr);
+
+      // Get the hierarchy for the document we added to the miscellaneous files project
+      IVsProject vsProject;
+      hr = filesMgr.GetExternalFilesProject(out vsProject);
+      ErrorHandler.ThrowOnFailure(hr);
+
+      int found;
+      VSDOCUMENTPRIORITY[] priority = new VSDOCUMENTPRIORITY[1];
+      hr = vsProject.IsDocumentInProject(moniker, out found, priority, out itemId);
+      ErrorHandler.ThrowOnFailure(hr);
+      if ( 0 == found || VSConstants.VSITEMID_NIL == itemId ) {
+        throw new InvalidOperationException("Could not find in project");
+      }
+
+      hierarchy = (IVsUIHierarchy)vsProject;
+    }
+
+    private static string SaveBufferToTempPath(ITextBuffer buffer, bool readOnly) {
+      String tempDir = Path.GetTempPath();
+      String file = Path.Combine(tempDir, Path.GetRandomFileName() + ".txt");
+      File.WriteAllText(file, buffer.CurrentSnapshot.GetText());
+      if ( readOnly ) {
+        File.SetAttributes(file, FileAttributes.ReadOnly);
+      }
+      return file;
     }
 
     private static void CheckError(int hr, String operation) {

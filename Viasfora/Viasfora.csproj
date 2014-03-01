@@ -100,6 +100,12 @@
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
     <Compile Include="Languages\Python.cs" />
+    <Compile Include="Margins\DevMarginProvider.cs" />
+    <Compile Include="Margins\DevMarginVisual.xaml.cs">
+      <DependentUpon>DevMarginVisual.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Margins\DevMarginViewModel.cs" />
+    <Compile Include="Margins\DevViewMargin.cs" />
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -208,6 +214,7 @@
     <Compile Include="Text\KeywordTaggerProvider.cs" />
     <Compile Include="VsfPackage.cs" />
     <Compile Include="VsSolution.cs" />
+    <Compile Include="WpfExtensions.cs" />
     <Compile Include="Xml\XmlQuickInfoSource.cs" />
     <Compile Include="Xml\XmlQuickInfoSourceProvider.cs" />
     <Compile Include="Xml\XmlQuickInfoController.cs" />
@@ -315,6 +322,7 @@
     <Content Include="license.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Resource Include="Resources\ViewBuffer.ico" />
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -344,7 +352,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Margins\DevMarginVisual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists($(VsSdkTargets))" Project="$(VsSdkTargets)" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
