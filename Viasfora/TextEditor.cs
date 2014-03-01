@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.Editor;
 using Winterdom.Viasfora.Compatibility;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using VsOle = Microsoft.VisualStudio.OLE.Interop;
 using System.IO;
 
 namespace Winterdom.Viasfora {
@@ -116,8 +117,8 @@ namespace Winterdom.Viasfora {
 
       var uiShell = (IVsUIShellOpenDocument)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsUIShellOpenDocument));
-      var oleSvcProvider = (Microsoft.VisualStudio.OLE.Interop.IServiceProvider)
-        ServiceProvider.GlobalProvider.GetService(typeof(Microsoft.VisualStudio.OLE.Interop.IServiceProvider));
+      var oleSvcProvider = (VsOle.IServiceProvider)
+        ServiceProvider.GlobalProvider.GetService(typeof(VsOle.IServiceProvider));
 
       IVsUIHierarchy hierarchy;
       uint itemid;
@@ -142,10 +143,15 @@ namespace Winterdom.Viasfora {
         ppWindowFrame: out windowFrame
       );
       CheckError(hr, "OpenSpecificEditor");
-      MarkDocumentAsTemporaryAndShow(filepath, windowFrame);
+
+      MarkDocumentAsTemporary(filepath);
+
+      if ( windowFrame != null ) {
+        windowFrame.Show();
+      }
     }
 
-    private static void MarkDocumentAsTemporaryAndShow(string moniker, IVsWindowFrame windowFrame) {
+    private static void MarkDocumentAsTemporary(string moniker) {
       IVsRunningDocumentTable docTable = (IVsRunningDocumentTable)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsRunningDocumentTable));
 
@@ -172,10 +178,6 @@ namespace Winterdom.Viasfora {
         );
       CheckError(hr, "FindAndLockDocument");
       docTable.ModifyDocumentFlags(documentCookie, lockType, 1);
-
-      if ( windowFrame != null ) {
-        windowFrame.Show();
-      }
     }
 
     // based on: https://github.com/jaredpar/VsSamples/blob/master/Src/ProjectionBufferDemo/Implementation/EditorFactory.cs
