@@ -73,7 +73,8 @@ namespace Winterdom.Viasfora.Margins {
       int index = 0;
       foreach ( var b in buffers ) {
         if ( index++ == this.model.SelectedBuffer.Index ) {
-          MessageBox.Show(b.CurrentSnapshot.GetText());
+          TextEditor.OpenBufferInPlainTextEditorAsReadOnly(b);
+          break;
         }
       }
     }
