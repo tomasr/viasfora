@@ -9,9 +9,9 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Margins {
   [Export(typeof(IWpfTextViewMarginProvider))]
-  [Name("Viasfora Developer Margin")]
+  [Name("VsfDevMargin")]
   [Order(Before = "Wpf Horizontal Scrollbar")]
-  [MarginContainer("bottom")]
+  [MarginContainer("Bottom")]
   [ContentType("text")]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   public class DevMarginProvider : IWpfTextViewMarginProvider {

@@ -20,6 +20,9 @@ namespace Winterdom.Viasfora.Margins {
       this.wpfTextViewHost = wpfTextViewHost;
       this.visual = new DevMarginVisual(model);
       this.visual.ViewBuffer += OnViewBuffer;
+      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+
+      UpdateVisibility();
       InitializeTextView();
       RefreshBufferGraphList();
     }
@@ -29,7 +32,7 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     public bool Enabled {
-      get { return true;  }
+      get { return VsfSettings.DevMarginEnabled;  }
     }
 
     public ITextViewMargin GetTextViewMargin(string marginName) {
@@ -77,6 +80,18 @@ namespace Winterdom.Viasfora.Margins {
           OpenBufferInEditor(b);
         }
       }
+    }
+
+    private void OnSettingsUpdated(object sender, EventArgs e) {
+      if ( this.visual != null ) {
+        UpdateVisibility();
+      }
+    }
+
+    private void UpdateVisibility() {
+      this.visual.Visibility = this.Enabled
+        ? Visibility.Visible
+        : Visibility.Collapsed;
     }
 
     private void OpenBufferInEditor(ITextBuffer b) {
