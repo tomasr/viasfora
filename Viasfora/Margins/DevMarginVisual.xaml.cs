@@ -43,6 +43,8 @@ namespace Winterdom.Viasfora.Margins {
       this.BindResource(UserControl.BackgroundProperty, "ToolWindowBackgroundBrushKey");
       this.BindResource(ComboBox.BackgroundProperty, "ComboBoxBackgroundBrushKey");
       this.BindResource(ComboBox.BorderBrushProperty, "ComboBoxBorderBrushKey");
+      this.BindResource(ListBox.BackgroundProperty, "ComboBoxPopupBackgroundGradientBrushKey");
+      this.BindResource(ListBox.BorderBrushProperty, "ComboBoxPopupBorderBrushKey");
       this.BindResource(ComboBoxItem.ForegroundProperty, "ComboBoxItemTextBrushKey");
     }
   }
