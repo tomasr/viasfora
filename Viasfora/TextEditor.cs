@@ -105,8 +105,15 @@ namespace Winterdom.Viasfora {
       return type.FullName == "Microsoft.VisualStudio.Text.Implementation.TextBuffer";
     }
 
-    public static bool OpenBufferInPlainTextEditorAsReadOnly(ITextBuffer buffer) {
+    //
+    // Ugly hack: We write the buffer contents into a
+    // temporary file, then add this to the "external files"
+    // folder in solution explorer
+    // and then create a new editor window for it
+    //
+    public static void OpenBufferInPlainTextEditorAsReadOnly(ITextBuffer buffer) {
       String filepath = SaveBufferToTempPath(buffer);
+
       var uiShell = (IVsUIShellOpenDocument)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsUIShellOpenDocument));
       var oleSvcProvider = (Microsoft.VisualStudio.OLE.Interop.IServiceProvider)
@@ -114,15 +121,14 @@ namespace Winterdom.Viasfora {
 
       IVsUIHierarchy hierarchy;
       uint itemid;
-      int hr = CreateHierarchy(filepath, out hierarchy, out itemid);
-      if ( hr != 0 ) return false;
+      CreateHierarchy(filepath, out hierarchy, out itemid);
 
       Guid editorType = VSConstants.VsEditorFactoryGuid.TextEditor_guid;
       Guid logicalView = VSConstants.LOGVIEWID.TextView_guid;
       String physicalView = "Code";
 
       IVsWindowFrame windowFrame = null;
-      hr = uiShell.OpenSpecificEditor(
+      int hr = uiShell.OpenSpecificEditor(
         grfOpenSpecific: (uint)0,
         pszMkDocument: filepath,
         rguidEditorType: ref editorType,
@@ -137,7 +143,6 @@ namespace Winterdom.Viasfora {
       );
       CheckError(hr, "OpenSpecificEditor");
       MarkDocumentAsTemporaryAndShow(filepath, windowFrame);
-      return true;
     }
 
     private static void MarkDocumentAsTemporaryAndShow(string moniker, IVsWindowFrame windowFrame) {
@@ -156,6 +161,7 @@ namespace Winterdom.Viasfora {
       uint itemid;
       uint documentCookie;
       IntPtr docData;
+
       int hr = docTable.FindAndLockDocument(
         dwRDTLockType: lockType,
         pszMkDocument: moniker,
@@ -166,13 +172,14 @@ namespace Winterdom.Viasfora {
         );
       CheckError(hr, "FindAndLockDocument");
       docTable.ModifyDocumentFlags(documentCookie, lockType, 1);
+
       if ( windowFrame != null ) {
         windowFrame.Show();
       }
     }
 
     // based on: https://github.com/jaredpar/VsSamples/blob/master/Src/ProjectionBufferDemo/Implementation/EditorFactory.cs
-    private static int CreateHierarchy(string moniker, out IVsUIHierarchy hierarchy, out uint itemId) {
+    private static void CreateHierarchy(string moniker, out IVsUIHierarchy hierarchy, out uint itemId) {
       IVsExternalFilesManager filesMgr = (IVsExternalFilesManager)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsExternalFilesManager));
 
@@ -207,7 +214,6 @@ namespace Winterdom.Viasfora {
       }
 
       hierarchy = (IVsUIHierarchy)vsProject;
-      return 0;
     }
 
     private static string SaveBufferToTempPath(ITextBuffer buffer) {

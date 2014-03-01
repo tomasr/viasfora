@@ -6,6 +6,7 @@ using System.Windows;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Margins {
   public class DevViewMargin : IWpfTextViewMargin {
@@ -73,9 +74,16 @@ namespace Winterdom.Viasfora.Margins {
       int index = 0;
       foreach ( var b in buffers ) {
         if ( index++ == this.model.SelectedBuffer.Index ) {
-          TextEditor.OpenBufferInPlainTextEditorAsReadOnly(b);
-          break;
+          OpenBufferInEditor(b);
         }
+      }
+    }
+
+    private void OpenBufferInEditor(ITextBuffer b) {
+      try {
+        TextEditor.OpenBufferInPlainTextEditorAsReadOnly(b);
+      } catch ( Exception ex ) {
+        MessageBox.Show(ex.Message, "Viasfora Error", MessageBoxButton.OK, MessageBoxImage.Error);
       }
     }
 
