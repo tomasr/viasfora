@@ -16,28 +16,38 @@
   </UserControl.Resources>
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="90" />
-      <ColumnDefinition Width="160" />
-      <ColumnDefinition Width="60" />
       <ColumnDefinition Width="*" />
-      <ColumnDefinition Width="40" />
-      <ColumnDefinition Width="80" />
+      <ColumnDefinition Width="100" />
     </Grid.ColumnDefinitions>
-    <TextBlock Text="Buffer Graph:"
-               Grid.Column="0"
-               Padding="10,0,0,0"/>
-    <ComboBox Name="BufferGraphCombo" 
-              DisplayMemberPath="DisplayName"
-              ItemsSource="{Binding BufferGraph}"
-              SelectedItem="{Binding SelectedBuffer}"
-              Grid.Column="1"/>
-    <TextBlock Grid.Column="2" Padding="5,0,0,0">
-      <Hyperlink RequestNavigate="OnViewBufferClick" NavigateUri="x">View...</Hyperlink>
-    </TextBlock>
-    <TextBlock Text="Pos" 
-               Grid.Column="4" 
-               HorizontalAlignment="Right"
-               Padding="0,0,10,0"/>
-    <TextBlock Name="BufferPosLabel" Text="{Binding BufferPosition}" Grid.Column="5" HorizontalAlignment="Left" />
+    <StackPanel Orientation="Horizontal" Grid.Column="0">
+      <TextBlock Text="Buffer Graph:"
+                 Padding="5,0,5,0"/>
+      <ComboBox Name="BufferGraphCombo" 
+                ItemsSource="{Binding BufferGraph}"
+                SelectedItem="{Binding SelectedBuffer}"
+                Width="160">
+        <ComboBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock>
+              <Run Text="{Binding Path=ContentType}"/> <Span Foreground="Gray">(<Run Text="{Binding Path=BufferType.Name,Mode=OneWay}"/>)</Span>
+            </TextBlock>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <TextBlock Padding="5,0,0,0">
+        <Hyperlink RequestNavigate="OnViewBufferClick" NavigateUri="x">View...</Hyperlink>
+      </TextBlock>
+    </StackPanel>
+    
+    <StackPanel Orientation="Horizontal"
+                Grid.Column="1"
+                HorizontalAlignment="Right">
+      <TextBlock Text="Pos" 
+                 HorizontalAlignment="Right"
+                 Padding="0,0,5,0"/>
+      <TextBlock Name="BufferPosLabel"
+                 Text="{Binding BufferPosition}"
+                 HorizontalAlignment="Left" />
+    </StackPanel>
   </Grid>
 </UserControl>
