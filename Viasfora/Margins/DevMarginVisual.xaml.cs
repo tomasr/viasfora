@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -43,7 +44,7 @@ namespace Winterdom.Viasfora.Margins {
       this.BindResource(UserControl.BackgroundProperty, "ToolWindowBackgroundBrushKey");
       this.BindResource(ComboBox.BackgroundProperty, "ComboBoxBackgroundBrushKey");
       this.BindResource(ComboBox.BorderBrushProperty, "ComboBoxBorderBrushKey");
-      this.BindResource(ListBox.BackgroundProperty, "ComboBoxPopupBackgroundGradientBrushKey");
+      this.BindResource(Control.BackgroundProperty, "ComboBoxPopupBackgroundGradientBrushKey");
       this.BindResource(ListBox.BorderBrushProperty, "ComboBoxPopupBorderBrushKey");
       this.BindResource(ComboBoxItem.ForegroundProperty, "ComboBoxItemTextBrushKey");
     }
