@@ -40,13 +40,13 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     private void SetResources() {
+      /*
       this.BindResource(TextBlock.ForegroundProperty, "ToolWindowTextBrushKey");
       this.BindResource(UserControl.BackgroundProperty, "ToolWindowBackgroundBrushKey");
       this.BindResource(ComboBox.BackgroundProperty, "ComboBoxBackgroundBrushKey");
       this.BindResource(ComboBox.BorderBrushProperty, "ComboBoxBorderBrushKey");
-      this.BindResource(Control.BackgroundProperty, "ComboBoxPopupBackgroundGradientBrushKey");
-      this.BindResource(ListBox.BorderBrushProperty, "ComboBoxPopupBorderBrushKey");
       this.BindResource(ComboBoxItem.ForegroundProperty, "ComboBoxItemTextBrushKey");
+      */
     }
   }
 }

@@ -5,18 +5,20 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vsm="clr-namespace:System.Windows;assembly=System.Windows"
              xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+             xmlns:vs="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.10.0" 
              mc:Ignorable="d" 
-             d:DesignHeight="25" d:DesignWidth="600"
-             Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}">
+             d:DesignHeight="25" d:DesignWidth="600">
   <UserControl.Resources>
     <Style TargetType="{x:Type TextBlock}">
       <Setter Property="VerticalAlignment" Value="Center" />
+      <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}" />
     </Style>
-    <Style TargetType="UserControl">
-      <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.MenuBrushKey}}" />
+    <Style TargetType="Grid" x:Key="MainGridStyle">
+      <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.ToolWindowBackgroundKey}}" />
     </Style>
+    <ResourceDictionary x:Key="ComboBox" Source="ComboBox.xaml" />
   </UserControl.Resources>
-  <Grid>
+  <Grid Style="{StaticResource ResourceKey=MainGridStyle}">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*" />
       <ColumnDefinition Width="100" />
@@ -27,6 +29,7 @@
       <ComboBox Name="BufferGraphCombo" 
                 ItemsSource="{Binding BufferGraph}"
                 SelectedItem="{Binding SelectedBuffer}"
+                Resources="{StaticResource ComboBox}"
                 Width="160">
         <ComboBox.ItemTemplate>
           <DataTemplate>
@@ -37,7 +40,7 @@
         </ComboBox.ItemTemplate>
       </ComboBox>
       <TextBlock Padding="5,0,0,0">
-        <Hyperlink RequestNavigate="OnViewBufferClick" NavigateUri="x">View...</Hyperlink>
+        <Hyperlink RequestNavigate="OnViewBufferClick" NavigateUri="x" Foreground="{DynamicResource {x:Static vs:VsBrushes.PanelHyperlinkKey}}">View...</Hyperlink>
       </TextBlock>
     </StackPanel>
     
@@ -49,7 +52,8 @@
                  Padding="0,0,5,0"/>
       <TextBlock Name="BufferPosLabel"
                  Text="{Binding BufferPosition}"
-                 HorizontalAlignment="Left" />
+                 HorizontalAlignment="Left"
+                 Padding="0,0,5,0"/>
     </StackPanel>
   </Grid>
 </UserControl>

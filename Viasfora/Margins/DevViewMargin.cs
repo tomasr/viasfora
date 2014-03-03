@@ -42,7 +42,7 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     public double MarginSize {
-      get { return 25;  }
+      get { return this.visual.ActualHeight + 2;  }
     }
 
     public void Dispose() {
