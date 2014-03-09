@@ -195,7 +195,7 @@
       </Trigger>
       <Trigger Property="ToggleButton.IsChecked" Value="True">
         <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBackgroundKey}}"/>
-        <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverGlyphKey}}"/>
+        <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
         <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxGlyphKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">

@@ -14,7 +14,7 @@
       <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}" />
     </Style>
     <Style TargetType="Grid" x:Key="MainGridStyle">
-      <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.ToolWindowBackgroundKey}}" />
+      <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarGradientKey}}" />
     </Style>
     <ResourceDictionary x:Key="ComboBox" Source="ComboBox.xaml" />
   </UserControl.Resources>
