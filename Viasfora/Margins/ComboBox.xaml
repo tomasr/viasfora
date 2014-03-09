@@ -188,14 +188,15 @@
     <ControlTemplate.Triggers>
       <Trigger Property="UIElement.IsMouseOver" Value="True">
         <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBackgroundGradientKey}}"/>
-        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>
+        <!--<Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>-->
         <Setter Property="Border.BorderBrush" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>
-        <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBackgroundGradientKey}}"/>
+        <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBackgroundGradientKey}}"/>
         <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverGlyphKey}}"/>
       </Trigger>
       <Trigger Property="ToggleButton.IsChecked" Value="True">
         <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBackgroundKey}}"/>
-        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
+        <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverGlyphKey}}"/>
+        <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxGlyphKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
         <Setter Property="Panel.Background" TargetName="LeftBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxDisabledBackgroundKey}}"/>
@@ -298,7 +299,7 @@
                     Name="DropDownBorder"
                     Background="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBackgroundGradientKey}}"/>
                 <ScrollViewer
-                    Margin="4,6,4,6"
+                    Margin="2,0,2,0"
                     SnapsToDevicePixels="True">
                   <ItemsPresenter
                       KeyboardNavigation.DirectionalNavigation="Contained" />
