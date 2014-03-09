@@ -36,7 +36,7 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     public ITextViewMargin GetTextViewMargin(string marginName) {
-      if ( marginName == "Viasfora Developer Margin" )
+      if ( marginName == Constants.DEV_MARGIN )
         return this;
       return null;
     }
