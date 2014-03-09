@@ -231,7 +231,7 @@
           </Border>
           <ControlTemplate.Triggers>
             <Trigger Property="ComboBoxItem.IsHighlighted" Value="True">
-              <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBackgroundGradientKey}}"/>
+              <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarHoverOverSelectedKey}}"/>
               <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>
             </Trigger>
             <Trigger Property="UIElement.IsEnabled" Value="False">
