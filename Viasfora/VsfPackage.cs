@@ -56,6 +56,7 @@ namespace Winterdom.Viasfora {
       languageList.Add(new Cpp());
       languageList.Add(new CSharp());
       languageList.Add(new JScript());
+      languageList.Add(new JSON());
       languageList.Add(new VB());
       languageList.Add(new FSharp());
       languageList.Add(new Sql());

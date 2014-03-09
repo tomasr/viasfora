@@ -99,6 +99,7 @@
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
+    <Compile Include="Languages\Json.cs" />
     <Compile Include="Languages\Python.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />
     <Compile Include="Margins\DevMarginVisual.xaml.cs">
