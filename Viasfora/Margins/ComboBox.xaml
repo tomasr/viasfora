@@ -196,6 +196,7 @@
       <Trigger Property="ToggleButton.IsChecked" Value="True">
         <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBackgroundKey}}"/>
         <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
         <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxGlyphKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
@@ -206,7 +207,7 @@
       </Trigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>
-  <ControlTemplate TargetType="TextBox" x:Key="ComboBoxTextBoxTemplate">
+  <ControlTemplate TargetType="{x:Type TextBox}" x:Key="ComboBoxTextBoxTemplate">
     <Border
         Name="PART_ContentHost"
         Background="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}"
@@ -283,7 +284,7 @@
                 xml:space="preserve"
                 Template="{StaticResource ComboBoxTextBoxTemplate}"/>
             <Popup
-                Placement="Bottom"
+                Placement="Top"
                 Name="Popup"
                 Focusable="False"
                 IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}"

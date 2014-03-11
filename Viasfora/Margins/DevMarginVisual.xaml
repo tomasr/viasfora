@@ -5,17 +5,41 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib" 
              xmlns:vs="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.10.0" 
+             xmlns:vm="clr-namespace:Winterdom.Viasfora.Margins"
              mc:Ignorable="d" 
              d:DesignHeight="25" d:DesignWidth="600">
+  <UserControl.DataContext>
+    <vm:DevMarginViewModel />
+  </UserControl.DataContext>
   <UserControl.Resources>
-    <Style TargetType="{x:Type TextBlock}">
-      <Setter Property="VerticalAlignment" Value="Center" />
-      <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}" />
-    </Style>
-    <Style TargetType="Grid" x:Key="MainGridStyle">
-      <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarGradientKey}}" />
-    </Style>
-    <ResourceDictionary x:Key="ComboBox" Source="ComboBox.xaml" />
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="./ComboBox.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <HierarchicalDataTemplate DataType="{x:Type vm:ContentTypeViewModel}"
+                                ItemsSource="{Binding BaseTypes}">
+        <TextBlock Text="{Binding DisplayName}" />
+      </HierarchicalDataTemplate>
+      <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}" />
+      </Style>
+      <Style TargetType="Grid" x:Key="MainGridStyle">
+        <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarGradientKey}}" />
+      </Style>
+      <Style TargetType="Hyperlink">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelHyperlinkKey}}" />
+      </Style>
+      <Style TargetType="TreeView">
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBorderKey}}" />
+        <Setter Property="Padding" Value="1,1,1,1" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}" />
+      </Style>
+      <Style TargetType="TreeViewItem">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}" />
+        <Setter Property="IsExpanded" Value="true" />
+      </Style>
+    </ResourceDictionary>
   </UserControl.Resources>
   <Grid Style="{StaticResource ResourceKey=MainGridStyle}">
     <Grid.ColumnDefinitions>
@@ -28,7 +52,6 @@
       <ComboBox Name="BufferGraphCombo" 
                 ItemsSource="{Binding BufferGraph}"
                 SelectedItem="{Binding SelectedBuffer}"
-                Resources="{StaticResource ComboBox}"
                 Width="160">
         <ComboBox.ItemTemplate>
           <DataTemplate>
@@ -39,8 +62,30 @@
         </ComboBox.ItemTemplate>
       </ComboBox>
       <TextBlock Padding="5,0,0,0">
-        <Hyperlink RequestNavigate="OnViewBufferClick" NavigateUri="x" Foreground="{DynamicResource {x:Static vs:VsBrushes.PanelHyperlinkKey}}">View...</Hyperlink>
+        <Hyperlink RequestNavigate="OnViewBufferClick" NavigateUri="x">View...</Hyperlink>
       </TextBlock>
+      <ToggleButton x:Name="CTToggleButton" Padding="5,0,0,0" Content="CT...">
+      </ToggleButton>
+      <Popup Name="ContentTypeTreePopup"
+             IsOpen="{Binding IsChecked, ElementName=CTToggleButton}"
+             Focusable="false"
+             StaysOpen="false"
+             Placement="Top"
+             PlacementTarget="{Binding ElementName=CTToggleButton}"
+             DataContext="{Binding SelectedBuffer.ActualContentType}">
+        <Grid>
+          <Border BorderThickness="0,1,0,1">
+            <ScrollViewer Margin="0,1,0,1" SnapsToDevicePixels="True">
+              <StackPanel>
+                <TreeView MinHeight="100" MinWidth="100">
+                  <TreeViewItem ItemsSource="{Binding BaseTypes}"
+                                Header="{Binding DisplayName}" />
+                </TreeView>
+              </StackPanel>
+            </ScrollViewer>
+          </Border>
+        </Grid>
+      </Popup>
     </StackPanel>
     
     <StackPanel Orientation="Horizontal"

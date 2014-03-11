@@ -38,6 +38,11 @@ namespace Winterdom.Viasfora.Margins {
         ViewBuffer(this, EventArgs.Empty);
       e.Handled = true;
     }
+    private void OnViewCTClick(object sender, RequestNavigateEventArgs e) {
+      if ( Model.SelectedBuffer != null ) {
+        this.ContentTypeTreePopup.BringIntoView();
+      }
+    }
 
     private void SetResources() {
       /*

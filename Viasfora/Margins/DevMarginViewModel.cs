@@ -1,24 +1,26 @@
-﻿using Microsoft.VisualStudio.Text.Projection;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Projection;
+using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Margins {
   public class DevMarginViewModel : INotifyPropertyChanged {
-    private ObservableCollection<BufferInfo> bufferGraph = new ObservableCollection<BufferInfo>();
+    private ObservableCollection<BufferInfoViewModel> bufferGraph = new ObservableCollection<BufferInfoViewModel>();
     private int bufferPosition;
-    private BufferInfo selectedBuffer;
-    public ReadOnlyObservableCollection<BufferInfo> BufferGraph {
-      get { return new ReadOnlyObservableCollection<BufferInfo>(bufferGraph); }
+    private BufferInfoViewModel selectedBuffer;
+    public ReadOnlyObservableCollection<BufferInfoViewModel> BufferGraph {
+      get { return new ReadOnlyObservableCollection<BufferInfoViewModel>(bufferGraph); }
     }
     public int BufferPosition {
       get { return bufferPosition; }
       set { bufferPosition = value; NotifyChanged("BufferPosition"); }
     }
-    public BufferInfo SelectedBuffer {
+    public BufferInfoViewModel SelectedBuffer {
       get { return selectedBuffer; }
       set { selectedBuffer = value; NotifyChanged("SelectedBuffer"); }
     }
@@ -30,9 +32,10 @@ namespace Winterdom.Viasfora.Margins {
       var buffers = graph.GetTextBuffers(b => true);
       int index = 0;
       foreach ( var buffer in buffers ) {
-        this.bufferGraph.Add(new BufferInfo {
+        this.bufferGraph.Add(new BufferInfoViewModel {
           ContentType = buffer.ContentType.DisplayName,
           BufferType = buffer.GetType(),
+          ActualContentType = new ContentTypeViewModel(buffer.ContentType),
           Index = index++
         });
       }
@@ -45,14 +48,65 @@ namespace Winterdom.Viasfora.Margins {
         PropertyChanged(this, new PropertyChangedEventArgs(property));
       }
     }
+  }
 
-    public class BufferInfo {
-      public String ContentType { get; set; }
-      public Type BufferType { get; set; }
-      public int Index { get; set; }
+  public class BufferInfoViewModel : INotifyPropertyChanged {
+    public event PropertyChangedEventHandler PropertyChanged;
+    private String contentType;
+    private Type bufferType;
+    private int index;
+    private ContentTypeViewModel ctViewModel;
+    public String ContentType {
+      get { return contentType; }
+      set { contentType = value; NotifyChanged("ContentType"); }
+    }
+    public Type BufferType {
+      get { return bufferType; }
+      set { bufferType = value; NotifyChanged("BufferType"); }
+    }
+    public int Index {
+      get { return index; }
+      set { index = value; NotifyChanged("Index"); }
+    }
+    public ContentTypeViewModel ActualContentType {
+      get { return ctViewModel; }
+      set { ctViewModel = value; NotifyChanged("ActualContentType"); }
+    }
 
-      public String DisplayName {
-        get { return String.Format("{0} ({1})", ContentType, BufferType.Name); }
+    public String DisplayName {
+      get { return String.Format("{0} ({1})", ContentType, BufferType.Name); }
+    }
+
+    private void NotifyChanged(String property) {
+      if ( PropertyChanged != null ) {
+        PropertyChanged(this, new PropertyChangedEventArgs(property));
+      }
+    }
+  }
+  public class ContentTypeViewModel : INotifyPropertyChanged {
+    public event PropertyChangedEventHandler PropertyChanged;
+    private String displayName;
+    private ObservableCollection<ContentTypeViewModel> baseTypes;
+    public String DisplayName {
+      get { return displayName; }
+      set { displayName = value; NotifyChanged("DisplayName"); }
+    }
+    public ObservableCollection<ContentTypeViewModel> BaseTypes {
+      get { return baseTypes; }
+      set { baseTypes = value; NotifyChanged("BaseTypes"); }
+    }
+
+    public ContentTypeViewModel(IContentType type) {
+      this.DisplayName = type.DisplayName;
+      var btCollection = new ObservableCollection<ContentTypeViewModel>();
+      foreach ( var bt in type.BaseTypes ) {
+        btCollection.Add(new ContentTypeViewModel(bt));
+      }
+      this.BaseTypes = btCollection;
+    }
+    private void NotifyChanged(String property) {
+      if ( PropertyChanged != null ) {
+        PropertyChanged(this, new PropertyChangedEventArgs(property));
       }
     }
   }
