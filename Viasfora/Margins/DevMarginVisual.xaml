@@ -7,6 +7,7 @@
              xmlns:vs="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.10.0" 
              xmlns:vm="clr-namespace:Winterdom.Viasfora.Margins"
              mc:Ignorable="d" 
+             Height="24"
              d:DesignHeight="25" d:DesignWidth="600">
   <UserControl.DataContext>
     <vm:DevMarginViewModel />
@@ -14,7 +15,8 @@
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="./ComboBox.xaml" />
+        <ResourceDictionary Source="../Resources/ComboBox.xaml" />
+        <ResourceDictionary Source="../Resources/Buttons.xaml" />
       </ResourceDictionary.MergedDictionaries>
       <HierarchicalDataTemplate DataType="{x:Type vm:ContentTypeViewModel}"
                                 ItemsSource="{Binding BaseTypes}">
@@ -61,10 +63,21 @@
           </DataTemplate>
         </ComboBox.ItemTemplate>
       </ComboBox>
-      <TextBlock Padding="5,0,0,0">
-        <Hyperlink RequestNavigate="OnViewBufferClick" NavigateUri="x">View...</Hyperlink>
-      </TextBlock>
-      <ToggleButton x:Name="CTToggleButton" Padding="5,0,0,0" Content="CT...">
+      <Button Click="OnViewBufferClick"
+              Padding="4,0,4,0"
+              Width="24"
+              Height="24"
+              ToolTip="Show selected buffer contents"
+              Template="{StaticResource ButtonTemplate}">
+        <Image Source="../Resources/OpenBuffer.ico" />
+      </Button>
+      <ToggleButton x:Name="CTToggleButton"
+                    Padding="4,0,4,0"
+              Width="24"
+              Height="24"
+                    ToolTip="Show selected buffer content type tree"
+                    Template="{StaticResource TogleButtonTemplate}">
+        <Image Source="../Resources/ShowCT.ico" />
       </ToggleButton>
       <Popup Name="ContentTypeTreePopup"
              IsOpen="{Binding IsChecked, ElementName=CTToggleButton}"

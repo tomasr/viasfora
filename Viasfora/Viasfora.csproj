@@ -323,7 +323,8 @@
     <Content Include="license.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Resource Include="Resources\ViewBuffer.ico" />
+    <Resource Include="Resources\OpenBuffer.ico" />
+    <Resource Include="Resources\ShowCT.ico" />
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -354,7 +355,11 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Margins\ComboBox.xaml">
+    <Page Include="Resources\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ComboBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

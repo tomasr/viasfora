@@ -26,7 +26,6 @@ namespace Winterdom.Viasfora.Margins {
 
     public DevMarginVisual() {
       InitializeComponent();
-      SetResources();
     }
     public DevMarginVisual(DevMarginViewModel model) : this() {
       this.Model = model;
@@ -38,20 +37,15 @@ namespace Winterdom.Viasfora.Margins {
         ViewBuffer(this, EventArgs.Empty);
       e.Handled = true;
     }
+    private void OnViewBufferClick(object sender, RoutedEventArgs e) {
+      if ( ViewBuffer != null )
+        ViewBuffer(this, EventArgs.Empty);
+      e.Handled = true;
+    }
     private void OnViewCTClick(object sender, RequestNavigateEventArgs e) {
       if ( Model.SelectedBuffer != null ) {
         this.ContentTypeTreePopup.BringIntoView();
       }
-    }
-
-    private void SetResources() {
-      /*
-      this.BindResource(TextBlock.ForegroundProperty, "ToolWindowTextBrushKey");
-      this.BindResource(UserControl.BackgroundProperty, "ToolWindowBackgroundBrushKey");
-      this.BindResource(ComboBox.BackgroundProperty, "ComboBoxBackgroundBrushKey");
-      this.BindResource(ComboBox.BorderBrushProperty, "ComboBoxBorderBrushKey");
-      this.BindResource(ComboBoxItem.ForegroundProperty, "ComboBoxItemTextBrushKey");
-      */
     }
   }
 }
