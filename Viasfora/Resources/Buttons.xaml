@@ -8,7 +8,8 @@
       <Border
           x:Name="Border"
           Background="{DynamicResource {x:Static vs:VsBrushes.CommandBarGradientKey}}"
-          BorderThickness="0" />
+          BorderBrush="Transparent"
+          BorderThickness="1" />
       <ContentPresenter
           x:Name="contentPresenter"
           Content="{TemplateBinding Content}"
@@ -19,10 +20,12 @@
     </Grid>
     <ControlTemplate.Triggers>
       <Trigger Property="UIElement.IsMouseOver" Value="True">
-        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBackgroundGradientKey}}"/>
+        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarHoverOverSelectedIconKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarHoverOverSelectedIconBorderKey}}"/>
       </Trigger>
       <Trigger Property="ToggleButton.IsPressed" Value="True">
-        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
+        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarMouseDownBackgroundGradientKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarMouseDownBorderKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
         <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxDisabledBackgroundKey}}"/>
@@ -36,7 +39,8 @@
       <Border
           x:Name="Border"
           Background="{DynamicResource {x:Static vs:VsBrushes.CommandBarGradientKey}}"
-          BorderThickness="0" />
+          BorderBrush="Transparent"
+          BorderThickness="1" />
       <ContentPresenter
           x:Name="contentPresenter"
           Content="{TemplateBinding Content}"
@@ -47,10 +51,12 @@
     </Grid>
     <ControlTemplate.Triggers>
       <Trigger Property="UIElement.IsMouseOver" Value="True">
-        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBackgroundGradientKey}}"/>
+        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarHoverOverSelectedIconKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarHoverOverSelectedIconBorderKey}}"/>
       </Trigger>
       <Trigger Property="ToggleButton.IsChecked" Value="True">
-        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
+        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarMouseDownBackgroundGradientKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarMouseDownBorderKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
         <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxDisabledBackgroundKey}}"/>
