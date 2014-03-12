@@ -7,7 +7,7 @@
     <Grid x:Name="Grid">
       <Border
           x:Name="Border"
-          Background="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}"
+          Background="{DynamicResource {x:Static vs:VsBrushes.CommandBarGradientKey}}"
           BorderThickness="0" />
       <ContentPresenter
           x:Name="contentPresenter"
@@ -35,7 +35,7 @@
     <Grid x:Name="Grid">
       <Border
           x:Name="Border"
-          Background="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}"
+          Background="{DynamicResource {x:Static vs:VsBrushes.CommandBarGradientKey}}"
           BorderThickness="0" />
       <ContentPresenter
           x:Name="contentPresenter"

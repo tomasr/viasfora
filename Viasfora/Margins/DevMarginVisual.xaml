@@ -87,8 +87,9 @@
              PlacementTarget="{Binding ElementName=CTToggleButton}"
              DataContext="{Binding SelectedBuffer.ActualContentType}">
         <Grid>
-          <Border BorderThickness="0,1,0,1">
-            <ScrollViewer Margin="0,1,0,1" SnapsToDevicePixels="True">
+          <Border BorderThickness="1,1,1,1"
+                  BorderBrush="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBorderKey}}">
+            <ScrollViewer Margin="0,0,0,0" SnapsToDevicePixels="True">
               <StackPanel>
                 <TreeView MinHeight="100" MinWidth="100">
                   <TreeViewItem ItemsSource="{Binding BaseTypes}"
