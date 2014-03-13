@@ -18,8 +18,10 @@ namespace Winterdom.Viasfora.Util {
     public static object CommandBarHoverOverSelectedIconBrushKey { get; private set; }
     public static object CommandBarHoverOverSelectedIconBorderBrushKey { get; private set; }
     public static object CommandBarMouseOverBackgroundGradientBrushKey { get; private set; }
+    public static object CommandBarMouseDownBackgroundGradientBrushKey { get; private set; }
     public static object CommandBarMouseOverUnfocusedBrushKey { get; private set; }
     public static object CommandBarSelectedBrushKey { get; private set; }
+    public static object CommandBarSelectedBorderBrushKey { get; private set; }
     public static object CommandBarBorderBrushKey { get; private set; }
 
     public static object DropDownGlyphBrushKey { get; private set; }
@@ -27,6 +29,8 @@ namespace Winterdom.Viasfora.Util {
     public static object DropDownMouseDownGlyphBrushKey { get; private set; }
     public static object DropDownBackgroundBrushKey { get; private set; }
     public static object DropDownBorderBrushKey { get; private set; }
+    public static object DropDownDisabledBackgroundBrushKey { get; private set; }
+    public static object DropDownDisabledBorderBrushKey { get; private set; }
 
     static VsColors() {
       assemblyLoadAttempted = false;
@@ -39,8 +43,10 @@ namespace Winterdom.Viasfora.Util {
       CommandBarHoverOverSelectedIconBrushKey = Get("CommandBarHoverOverSelectedIconBrushKey", VsBrushes.CommandBarHoverOverSelectedIconKey);
       CommandBarHoverOverSelectedIconBorderBrushKey = Get("CommandBarHoverOverSelectedIconBorderBrushKey", VsBrushes.CommandBarHoverOverSelectedIconBorderKey);
       CommandBarMouseOverBackgroundGradientBrushKey  = Get("CommandBarMouseOverBackgroundGradientBrushKey", VsBrushes.CommandBarMouseOverBackgroundGradientKey);
+      CommandBarMouseDownBackgroundGradientBrushKey  = Get("CommandBarMouseDownBackgroundGradientBrushKey", VsBrushes.CommandBarMouseDownBackgroundGradientKey);
       CommandBarMouseOverUnfocusedBrushKey = Get("CommandBarMouseOverUnfocusedBrushKey", VsBrushes.CommandBarHoverOverSelectedKey);
       CommandBarSelectedBrushKey = Get("CommandBarSelectedBrushKey", VsBrushes.CommandBarSelectedKey);
+      CommandBarSelectedBorderBrushKey = Get("CommandBarSelectedBorderBrushKey", VsBrushes.CommandBarSelectedBorderKey);
 
       CommandBarBorderBrushKey = Get("CommandBarBorderBrushKey", VsBrushes.CommandBarBorderKey);
 
@@ -49,6 +55,8 @@ namespace Winterdom.Viasfora.Util {
       DropDownMouseDownGlyphBrushKey = Get("DropDownMouseDownGlyphBrushKey", VsBrushes.ComboBoxGlyphKey);
       DropDownBackgroundBrushKey = Get("DropDownBackgroundBrushKey", VsBrushes.DropDownBackgroundKey);
       DropDownBorderBrushKey = Get("DropDownBorderBrushKey", VsBrushes.DropDownBorderKey);
+      DropDownDisabledBackgroundBrushKey = Get("DropDownDisabledBackgroundBrushKey", VsBrushes.DropDownDisabledBackgroundKey);
+      DropDownDisabledBorderBrushKey = Get("DropDownDisabledBorderBrushKey", VsBrushes.DropDownDisabledBorderKey);
     }
 
 

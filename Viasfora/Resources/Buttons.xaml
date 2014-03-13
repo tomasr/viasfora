@@ -25,11 +25,12 @@
         <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarBorderBrushKey}}"/>
       </Trigger>
       <Trigger Property="ToggleButton.IsPressed" Value="True">
-        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarMouseDownBackgroundGradientKey}}"/>
-        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarMouseDownBorderKey}}"/>
+        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarMouseDownBackgroundGradientBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarBorderBrushKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
-        <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxDisabledBackgroundKey}}"/>
+        <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownDisabledBackgroundBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownDisabledBorderBrushKey}}"/>
         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextInactiveBrushKey}}"/>
       </Trigger>
     </ControlTemplate.Triggers>
@@ -55,13 +56,18 @@
         <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarMouseOverBackgroundGradientBrushKey}}"/>
         <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarBorderBrushKey}}"/>
       </Trigger>
-      <Trigger Property="ToggleButton.IsChecked" Value="True">
-        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarMouseDownBackgroundGradientKey}}"/>
-        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarMouseDownBorderKey}}"/>
+      <Trigger Property="ToggleButton.IsPressed" Value="True">
+        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarMouseDownBackgroundGradientBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarBorderBrushKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
-        <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxDisabledBackgroundKey}}"/>
+        <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownDisabledBackgroundBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownDisabledBorderBrushKey}}"/>
         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextInactiveBrushKey}}"/>
+      </Trigger>
+      <Trigger Property="ToggleButton.IsChecked" Value="True">
+        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarSelectedBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarSelectedBorderBrushKey}}"/>
       </Trigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>
