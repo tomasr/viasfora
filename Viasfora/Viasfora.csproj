@@ -202,6 +202,7 @@
     <Compile Include="Util\LineChars.cs" />
     <Compile Include="Util\StringChars.cs" />
     <Compile Include="Languages\BraceExtractors\VbBraceExtractor.cs" />
+    <Compile Include="Util\VsColors.cs" />
     <Compile Include="VsfSettings.cs" />
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />

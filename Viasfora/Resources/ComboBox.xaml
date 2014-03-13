@@ -1,56 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:vs="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.10.0" 
+                    xmlns:util="clr-namespace:Winterdom.Viasfora.Util"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
-  <SolidColorBrush x:Key="NormalForegroundBrush" Color="Black" />
-  <!-- Border Brushes -->
-
-  <LinearGradientBrush x:Key="NormalBorderBrush" StartPoint="0,0" EndPoint="0,1">
-    <GradientBrush.GradientStops>
-      <GradientStopCollection>
-        <GradientStop Color="#CCC" Offset="0.0"/>
-        <GradientStop Color="#444" Offset="1.0"/>
-      </GradientStopCollection>
-    </GradientBrush.GradientStops>
-  </LinearGradientBrush>
-
-  <LinearGradientBrush x:Key="HorizontalNormalBorderBrush" StartPoint="0,0" EndPoint="1,0">
-    <GradientBrush.GradientStops>
-      <GradientStopCollection>
-        <GradientStop Color="#CCC" Offset="0.0"/>
-        <GradientStop Color="#444" Offset="1.0"/>
-      </GradientStopCollection>
-    </GradientBrush.GradientStops>
-  </LinearGradientBrush>
-
-  <LinearGradientBrush x:Key="DefaultedBorderBrush" StartPoint="0,0" EndPoint="0,1">
-    <GradientBrush.GradientStops>
-      <GradientStopCollection>
-        <GradientStop Color="#777" Offset="0.0"/>
-        <GradientStop Color="#000" Offset="1.0"/>
-      </GradientStopCollection>
-    </GradientBrush.GradientStops>
-  </LinearGradientBrush>
-
-  <LinearGradientBrush x:Key="PressedBorderBrush" StartPoint="0,0" EndPoint="0,1">
-    <GradientBrush.GradientStops>
-      <GradientStopCollection>
-        <GradientStop Color="#444" Offset="0.0"/>
-        <GradientStop Color="#888" Offset="1.0"/>
-      </GradientStopCollection>
-    </GradientBrush.GradientStops>
-  </LinearGradientBrush>
-
-  <SolidColorBrush x:Key="DisabledBorderBrush" Color="#AAA" />
-
-  <SolidColorBrush x:Key="SolidBorderBrush" Color="#888" />
-
-  <SolidColorBrush x:Key="LightBorderBrush" Color="#AAA" />
-
-  <!-- Miscellaneous Brushes -->
-
-  <SolidColorBrush x:Key="LightColorBrush" Color="#DDD" />
-
 
   <Style x:Key="ButtonFocusVisual">
     <Setter Property="Control.Template">
@@ -66,7 +17,7 @@
   <Style x:Key="RoundedButton" TargetType="{x:Type Button}">
     <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
     <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBackgroundGradientKey}}"/>
-    <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}"/>
+    <Setter Property="Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextActiveBrushKey}}"/>
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="HorizontalContentAlignment" Value="Center"/>
     <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -178,7 +129,7 @@
             Margin="0,0,0,0"
             Data="M0,0L4,4 8,0z"
             HorizontalAlignment="Center"
-            Fill="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBorderKey}}"
+            Fill="{DynamicResource {x:Static util:VsColors.DropDownGlyphBrushKey}}"
             Name="Arrow"
             VerticalAlignment="Center"
             Width="8"
@@ -191,19 +142,18 @@
         <!--<Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>-->
         <Setter Property="Border.BorderBrush" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>
         <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBackgroundGradientKey}}"/>
-        <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverGlyphKey}}"/>
+        <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseOverGlyphBrushKey}}"/>
       </Trigger>
       <Trigger Property="ToggleButton.IsChecked" Value="True">
         <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBackgroundKey}}"/>
         <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
         <Setter Property="Border.BorderBrush" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
-        <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxGlyphKey}}"/>
+        <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseDownGlyphBrushKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
         <Setter Property="Panel.Background" TargetName="LeftBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxDisabledBackgroundKey}}"/>
-        <Setter Property="Border.BorderBrush" TargetName="LeftBorder" Value="{StaticResource DisabledBorderBrush}"/>
-        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.GrayTextKey}}"/>
-        <Setter Property="Shape.Fill" TargetName="Arrow" Value="#66FFFFFF"/>
+        <Setter Property="Border.BorderBrush" TargetName="LeftBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxDisabledBackgroundKey}}"/>
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextInactiveBrushKey}}"/>
       </Trigger>
     </ControlTemplate.Triggers>
   </ControlTemplate>
@@ -216,7 +166,7 @@
   <Style TargetType="{x:Type ComboBoxItem}">
     <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
     <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
-    <Setter Property="TextElement.Foreground"  Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}"/>
+    <Setter Property="TextElement.Foreground"  Value="{DynamicResource {x:Static util:VsColors.CommandBarTextActiveBrushKey}}"/>
     <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True"/>
     <Setter Property="Control.Template">
       <Setter.Value>
@@ -234,9 +184,10 @@
             <Trigger Property="ComboBoxItem.IsHighlighted" Value="True">
               <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarHoverOverSelectedKey}}"/>
               <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>
+              <Setter Property="TextElement.Foreground" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextSelectedBrushKey}}"/>
             </Trigger>
             <Trigger Property="UIElement.IsEnabled" Value="False">
-              <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.GrayTextKey}}"/>
+              <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextInactiveBrushKey}}"/>
             </Trigger>
           </ControlTemplate.Triggers>
         </ControlTemplate>
@@ -249,7 +200,7 @@
     <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
     <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
     <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
-    <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}"/>
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextActiveBrushKey}}"/>
     <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
     <Setter Property="Control.Template">
       <Setter.Value>

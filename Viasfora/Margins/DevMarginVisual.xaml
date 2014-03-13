@@ -6,6 +6,7 @@
              xmlns:sys="clr-namespace:System;assembly=mscorlib" 
              xmlns:vs="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.10.0" 
              xmlns:vm="clr-namespace:Winterdom.Viasfora.Margins"
+             xmlns:util="clr-namespace:Winterdom.Viasfora.Util"
              mc:Ignorable="d" 
              Height="24"
              d:DesignHeight="25" d:DesignWidth="600">
@@ -24,13 +25,10 @@
       </HierarchicalDataTemplate>
       <Style TargetType="{x:Type TextBlock}">
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextActiveBrushKey}}" />
       </Style>
       <Style TargetType="Grid" x:Key="MainGridStyle">
-        <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.CommandBarGradientKey}}" />
-      </Style>
-      <Style TargetType="Hyperlink">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelHyperlinkKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static util:VsColors.CommandShelfBackgroundGradientBrushKey}}" />
       </Style>
       <Style TargetType="TreeView">
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBorderKey}}" />
@@ -38,7 +36,7 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}" />
       </Style>
       <Style TargetType="TreeViewItem">
-        <Setter Property="Foreground" Value="{DynamicResource {x:Static vs:VsBrushes.PanelTextKey}}" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextActiveBrushKey}}" />
         <Setter Property="IsExpanded" Value="true" />
       </Style>
     </ResourceDictionary>
