@@ -141,15 +141,16 @@
         <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseOverBorderBrushKey}}"/>
         <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseOverBackgroundBeginBrushKey}}"/>
 
-        <Setter Property="Border.BorderBrush" TargetName="Separator" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseOverGlyphBrushKey}}"/>
-        <Setter Property="Border.Background" TargetName="Separator" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBackgroundGradientKey}}"/>
+        <Setter Property="Border.Background" TargetName="Separator" Value="{DynamicResource {x:Static util:VsColors.DropDownButtonMouseOverBackgroundBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Separator" Value="{DynamicResource {x:Static util:VsColors.DropDownButtonMouseOverSeparatorBrushKey}}"/>
         <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseOverGlyphBrushKey}}"/>
       </Trigger>
       <Trigger Property="ToggleButton.IsChecked" Value="True">
-        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarBorderBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseDownBorderBrushKey}}"/>
+        <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseDownBackgroundBrushKey}}"/>
 
-        <Setter Property="Border.Background" TargetName="Separator" Value="{DynamicResource {x:Static util:VsColors.CommandBarMouseDownBackgroundGradientBrushKey}}"/>
-        <Setter Property="Border.BorderBrush" TargetName="Separator" Value="{DynamicResource {x:Static util:VsColors.CommandBarMouseDownBackgroundGradientBrushKey}}"/>
+        <Setter Property="Border.Background" TargetName="Separator" Value="{DynamicResource {x:Static util:VsColors.DropDownButtonMouseDownBackgroundBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Separator" Value="{DynamicResource {x:Static util:VsColors.DropDownButtonMouseDownSeparatorBrushKey}}"/>
         <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseDownGlyphBrushKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
