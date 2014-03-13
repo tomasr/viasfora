@@ -27,10 +27,16 @@ namespace Winterdom.Viasfora.Util {
     public static object DropDownGlyphBrushKey { get; private set; }
     public static object DropDownMouseOverGlyphBrushKey { get; private set; }
     public static object DropDownMouseDownGlyphBrushKey { get; private set; }
+    public static object DropDownMouseOverBorderBrushKey { get; private set; }
+    public static object DropDownMouseOverBackgroundBeginBrushKey { get; private set; }
     public static object DropDownBackgroundBrushKey { get; private set; }
     public static object DropDownBorderBrushKey { get; private set; }
     public static object DropDownDisabledBackgroundBrushKey { get; private set; }
     public static object DropDownDisabledBorderBrushKey { get; private set; }
+
+    public static object ComboBoxBackgroundBrushKey { get; set; }
+    public static object ComboBoxMouseOverBackgroundBeginBrushKey { get; set; }
+    public static object ComboBoxMouseOverBorderBrushKey { get; set; }
 
     static VsColors() {
       assemblyLoadAttempted = false;
@@ -53,10 +59,16 @@ namespace Winterdom.Viasfora.Util {
       DropDownGlyphBrushKey = Get("DropDownGlyphBrushKey", VsBrushes.ComboBoxGlyphKey);
       DropDownMouseOverGlyphBrushKey = Get("DropDownMouseOverGlyphBrushKey", VsBrushes.ComboBoxMouseOverGlyphKey);
       DropDownMouseDownGlyphBrushKey = Get("DropDownMouseDownGlyphBrushKey", VsBrushes.ComboBoxGlyphKey);
+      DropDownMouseOverBorderBrushKey = Get("DropDownMouseOverBorderBrushKey", VsBrushes.DropDownMouseOverBorderKey);
+      DropDownMouseOverBackgroundBeginBrushKey = Get("DropDownMouseOverBackgroundBeginBrushKey", VsBrushes.DropDownMouseOverBackgroundGradientKey);
       DropDownBackgroundBrushKey = Get("DropDownBackgroundBrushKey", VsBrushes.DropDownBackgroundKey);
       DropDownBorderBrushKey = Get("DropDownBorderBrushKey", VsBrushes.DropDownBorderKey);
       DropDownDisabledBackgroundBrushKey = Get("DropDownDisabledBackgroundBrushKey", VsBrushes.DropDownDisabledBackgroundKey);
       DropDownDisabledBorderBrushKey = Get("DropDownDisabledBorderBrushKey", VsBrushes.DropDownDisabledBorderKey);
+
+      ComboBoxMouseOverBackgroundBeginBrushKey = Get("ComboBoxMouseOverBackgroundBeginBrushKey", VsBrushes.ComboBoxMouseOverBackgroundBeginKey);
+      ComboBoxBackgroundBrushKey = Get("ComboBoxBackgroundBrushKey", VsBrushes.ComboBoxBackgroundKey);
+      ComboBoxMouseOverBorderBrushKey = Get("ComboBoxMouseOverBorderBrushKey", VsBrushes.ComboBoxBorderKey);
     }
 
 
