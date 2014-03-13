@@ -25,6 +25,8 @@ namespace Winterdom.Viasfora.Util {
     public static object DropDownGlyphBrushKey { get; private set; }
     public static object DropDownMouseOverGlyphBrushKey { get; private set; }
     public static object DropDownMouseDownGlyphBrushKey { get; private set; }
+    public static object DropDownBackgroundBrushKey { get; private set; }
+    public static object DropDownBorderBrushKey { get; private set; }
 
     static VsColors() {
       assemblyLoadAttempted = false;
@@ -45,6 +47,8 @@ namespace Winterdom.Viasfora.Util {
       DropDownGlyphBrushKey = Get("DropDownGlyphBrushKey", VsBrushes.ComboBoxGlyphKey);
       DropDownMouseOverGlyphBrushKey = Get("DropDownMouseOverGlyphBrushKey", VsBrushes.ComboBoxMouseOverGlyphKey);
       DropDownMouseDownGlyphBrushKey = Get("DropDownMouseDownGlyphBrushKey", VsBrushes.ComboBoxGlyphKey);
+      DropDownBackgroundBrushKey = Get("DropDownBackgroundBrushKey", VsBrushes.DropDownBackgroundKey);
+      DropDownBorderBrushKey = Get("DropDownBorderBrushKey", VsBrushes.DropDownBorderKey);
     }
 
 

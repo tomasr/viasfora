@@ -113,13 +113,13 @@
       </Grid.ColumnDefinitions>
       <Border
           x:Name="Border"
-          Background="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}"
-          BorderBrush="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBorderKey}}"
+          Background="{DynamicResource {x:Static util:VsColors.DropDownBackgroundBrushKey}}"
+          BorderBrush="{DynamicResource {x:Static util:VsColors.DropDownBorderBrushKey}}"
           BorderThickness="1"
           Grid.ColumnSpan="2" />
       <Border
           x:Name="LeftBorder"
-          BorderBrush="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}"
+          BorderBrush="{DynamicResource {x:Static util:VsColors.DropDownBackgroundBrushKey}}"
           BorderThickness="0,0,0,0"
           Grid.Column="0" />
       <Border x:Name="Separator" Grid.Column="1"
