@@ -122,7 +122,7 @@
           BorderBrush="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}"
           BorderThickness="0,0,0,0"
           Grid.Column="0" />
-      <Border x:Name="GlyphBorder" Grid.Column="1"
+      <Border x:Name="Separator" Grid.Column="1"
           BorderThickness="1,0,0,0"
           Margin="1,1,1,1">
         <Path
@@ -139,15 +139,15 @@
     <ControlTemplate.Triggers>
       <Trigger Property="UIElement.IsMouseOver" Value="True">
         <Setter Property="Border.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBackgroundGradientKey}}"/>
-        <!--<Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>-->
-        <Setter Property="Border.BorderBrush" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>
-        <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBackgroundGradientKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.CommandBarBorderBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Separator" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseOverBorderKey}}"/>
+        <Setter Property="Border.Background" TargetName="Separator" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBackgroundGradientKey}}"/>
         <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseOverGlyphBrushKey}}"/>
       </Trigger>
       <Trigger Property="ToggleButton.IsChecked" Value="True">
         <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBackgroundKey}}"/>
-        <Setter Property="Border.Background" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
-        <Setter Property="Border.BorderBrush" TargetName="GlyphBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
+        <Setter Property="Border.Background" TargetName="Separator" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Separator" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxMouseDownBorderKey}}"/>
         <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseDownGlyphBrushKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
