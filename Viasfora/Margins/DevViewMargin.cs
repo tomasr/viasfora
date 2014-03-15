@@ -73,13 +73,8 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     private void OnViewBuffer(object sender, EventArgs e) {
-      var buffers = this.textView.BufferGraph.GetTextBuffers(b => true);
-      int index = 0;
-      foreach ( var b in buffers ) {
-        if ( index++ == this.model.SelectedBuffer.Index ) {
-          OpenBufferInEditor(b);
-        }
-      }
+      var buffer = GetSelectedBuffer();
+      OpenBufferInEditor(buffer);
     }
 
     private void OnSettingsUpdated(object sender, EventArgs e) {
@@ -94,6 +89,15 @@ namespace Winterdom.Viasfora.Margins {
         : Visibility.Collapsed;
     }
 
+    private ITextBuffer GetSelectedBuffer() {
+      var buffers = this.textView.BufferGraph.GetTextBuffers(b => true);
+      int selectedIndex = this.model.SelectedBuffer.Index;
+      foreach ( var b in buffers ) {
+        if ( selectedIndex == 0 ) return b;
+        selectedIndex--;
+      }
+      return null;
+    }
     private void OpenBufferInEditor(ITextBuffer b) {
       try {
         TextEditor.OpenBufferInPlainTextEditorAsReadOnly(b);
