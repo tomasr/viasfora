@@ -31,9 +31,9 @@
         <Setter Property="Background" Value="{DynamicResource {x:Static util:VsColors.CommandShelfBackgroundGradientBrushKey}}" />
       </Style>
       <Style TargetType="TreeView">
-        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBorderKey}}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static util:VsColors.DropDownPopupBorderBrushKey}}" />
         <Setter Property="Padding" Value="1,1,1,1" />
-        <Setter Property="Background" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static util:VsColors.DropDownPopupBackgroundBeginBrushKey}}" />
       </Style>
       <Style TargetType="TreeViewItem">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextActiveBrushKey}}" />
@@ -88,7 +88,7 @@
              DataContext="{Binding SelectedBuffer.ActualContentType}">
         <Grid>
           <Border BorderThickness="1,1,1,1"
-                  BorderBrush="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBorderKey}}">
+                  BorderBrush="{DynamicResource {x:Static util:VsColors.DropDownPopupBorderBrushKey}}">
             <ScrollViewer Margin="0,0,0,0" SnapsToDevicePixels="True">
               <StackPanel>
                 <TreeView MinHeight="100" MinWidth="100">

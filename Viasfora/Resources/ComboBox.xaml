@@ -154,8 +154,8 @@
         <Setter Property="Shape.Fill" TargetName="Arrow" Value="{DynamicResource {x:Static util:VsColors.DropDownMouseDownGlyphBrushKey}}"/>
       </Trigger>
       <Trigger Property="UIElement.IsEnabled" Value="False">
-        <Setter Property="Panel.Background" TargetName="LeftBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxDisabledBackgroundKey}}"/>
-        <Setter Property="Border.BorderBrush" TargetName="LeftBorder" Value="{DynamicResource {x:Static vs:VsBrushes.ComboBoxDisabledBackgroundKey}}"/>
+        <Setter Property="Panel.Background" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownDisabledBackgroundBrushKey}}"/>
+        <Setter Property="Border.BorderBrush" TargetName="Border" Value="{DynamicResource {x:Static util:VsColors.DropDownDisabledBorderBrushKey}}"/>
         <Setter Property="TextElement.Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextInactiveBrushKey}}"/>
       </Trigger>
     </ControlTemplate.Triggers>
@@ -163,7 +163,7 @@
   <ControlTemplate TargetType="{x:Type TextBox}" x:Key="ComboBoxTextBoxTemplate">
     <Border
         Name="PART_ContentHost"
-        Background="{DynamicResource {x:Static vs:VsBrushes.ComboBoxBackgroundKey}}"
+        Background="{DynamicResource {x:Static util:VsColors.DropDownBackgroundBrushKey}}"
         Focusable="False" />
   </ControlTemplate>
   <Style TargetType="{x:Type ComboBoxItem}">
@@ -249,10 +249,10 @@
                   Name="DropDown"
                   SnapsToDevicePixels="True">
                 <Border
-                    BorderBrush="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBorderKey}}"
+                    BorderBrush="{DynamicResource {x:Static util:VsColors.DropDownPopupBorderBrushKey}}"
                     BorderThickness="1,1,1,1"
                     Name="DropDownBorder"
-                    Background="{DynamicResource {x:Static vs:VsBrushes.ComboBoxPopupBackgroundGradientKey}}"/>
+                    Background="{DynamicResource {x:Static util:VsColors.DropDownPopupBackgroundBeginBrushKey}}"/>
                 <ScrollViewer
                     Margin="2,0,2,0"
                     SnapsToDevicePixels="True">
