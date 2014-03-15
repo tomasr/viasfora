@@ -73,7 +73,7 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( braceCache == null || braceCache.Snapshot != snapshot ) {
+      if ( braceCache == null && braceCache.Snapshot != spans[0].Snapshot ) {
         yield break;
       }
       foreach ( var brace in braceCache.BracesInSpans(spans) ) {
@@ -180,7 +180,7 @@ namespace Winterdom.Viasfora.Text {
         Action action = delegate() {
           tempEvent(this, new SnapshotSpanEventArgs(span));
         };
-        dispatcher.BeginInvoke(action, DispatcherPriority.ApplicationIdle);
+        dispatcher.BeginInvoke(action, DispatcherPriority.Background);
       }
     }
   }
