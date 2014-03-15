@@ -84,14 +84,14 @@
              Focusable="false"
              StaysOpen="false"
              Placement="Top"
-             PlacementTarget="{Binding ElementName=CTToggleButton}"
+             PlacementTarget="{Binding ElementName=BufferGraphCombo}"
              DataContext="{Binding SelectedBuffer.ActualContentType}">
         <Grid>
           <Border BorderThickness="1,1,1,1"
                   BorderBrush="{DynamicResource {x:Static util:VsColors.DropDownPopupBorderBrushKey}}">
             <ScrollViewer Margin="0,0,0,0" SnapsToDevicePixels="True">
               <StackPanel>
-                <TreeView MinHeight="100" MinWidth="100">
+                <TreeView MinHeight="100" MinWidth="195">
                   <TreeViewItem ItemsSource="{Binding BaseTypes}"
                                 Header="{Binding DisplayName}" />
                 </TreeView>
