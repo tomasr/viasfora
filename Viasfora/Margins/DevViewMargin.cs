@@ -50,6 +50,7 @@ namespace Winterdom.Viasfora.Margins {
         this.textView.BufferGraph.GraphBuffersChanged -= OnGraphBuffersChanged;
         this.textView.BufferGraph.GraphBufferContentTypeChanged -= OnGraphBufferContentTypeChanged;
         this.textView.Caret.PositionChanged -= OnCaretPositionChanged;
+        this.textView.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
       }
     }
 
@@ -58,6 +59,13 @@ namespace Winterdom.Viasfora.Margins {
       this.textView.BufferGraph.GraphBuffersChanged += OnGraphBuffersChanged;
       this.textView.BufferGraph.GraphBufferContentTypeChanged += OnGraphBufferContentTypeChanged;
       this.textView.Caret.PositionChanged += OnCaretPositionChanged;
+      this.textView.TextViewModel.EditBuffer.PostChanged += OnBufferPostChanged;
+    }
+
+    private void OnBufferPostChanged(object sender, EventArgs e) {
+      // need to track buffer changes as well,
+      // because text editing does not raise ITextCaret.PositionChanged
+      this.model.BufferPosition = this.textView.Caret.Position.BufferPosition;
     }
 
     private void OnCaretPositionChanged(object sender, CaretPositionChangedEventArgs e) {
