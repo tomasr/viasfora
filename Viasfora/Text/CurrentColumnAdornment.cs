@@ -35,6 +35,7 @@ namespace Winterdom.Viasfora.Text {
       view.ViewportWidthChanged += OnViewportChanged;
       view.ViewportHeightChanged += OnViewportChanged;
       view.LayoutChanged += OnLayoutChanged;
+      view.TextViewModel.EditBuffer.PostChanged += OnBufferPostChanged;
       view.Closed += OnViewClosed;
       VsfSettings.SettingsUpdated += OnSettingsUpdated;
       formatMap.ClassificationFormatMappingChanged +=
@@ -43,6 +44,7 @@ namespace Winterdom.Viasfora.Text {
       CreateDrawingObjects();
     }
 
+
     void OnSettingsUpdated(object sender, EventArgs e) {
       this.currentHighlight = null;
       CreateDrawingObjects();
@@ -50,6 +52,7 @@ namespace Winterdom.Viasfora.Text {
     }
     void OnViewClosed(object sender, EventArgs e) {
       view.Caret.PositionChanged -= OnCaretPositionChanged;
+      view.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
       view.ViewportWidthChanged -= OnViewportChanged;
       view.ViewportHeightChanged -= OnViewportChanged;
       view.LayoutChanged -= OnLayoutChanged;
@@ -72,6 +75,10 @@ namespace Winterdom.Viasfora.Text {
         layer.RemoveAdornmentsByTag(CUR_COL_TAG);
         this.CreateVisuals(e.NewPosition.VirtualBufferPosition);
       }
+    }
+    private void OnBufferPostChanged(object sender, EventArgs e) {
+      layer.RemoveAdornmentsByTag(CUR_COL_TAG);
+      this.CreateVisuals(this.view.Caret.Position.VirtualBufferPosition);
     }
     void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       if ( e.VerticalTranslation ) {
