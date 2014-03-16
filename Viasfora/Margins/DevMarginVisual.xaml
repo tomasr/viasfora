@@ -1,0 +1,117 @@
+﻿<UserControl x:Class="Winterdom.Viasfora.Margins.DevMarginVisual"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+             xmlns:vs="clr-namespace:Microsoft.VisualStudio.Shell;assembly=Microsoft.VisualStudio.Shell.10.0" 
+             xmlns:vm="clr-namespace:Winterdom.Viasfora.Margins"
+             xmlns:util="clr-namespace:Winterdom.Viasfora.Util"
+             mc:Ignorable="d" 
+             Height="24"
+             d:DesignHeight="25" d:DesignWidth="600">
+  <UserControl.DataContext>
+    <vm:DevMarginViewModel />
+  </UserControl.DataContext>
+  <UserControl.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="../Resources/ComboBox.xaml" />
+        <ResourceDictionary Source="../Resources/Buttons.xaml" />
+      </ResourceDictionary.MergedDictionaries>
+      <HierarchicalDataTemplate DataType="{x:Type vm:ContentTypeViewModel}"
+                                ItemsSource="{Binding BaseTypes}">
+        <TextBlock Text="{Binding DisplayName}" />
+      </HierarchicalDataTemplate>
+      <Style TargetType="{x:Type TextBlock}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextActiveBrushKey}}" />
+      </Style>
+      <Style TargetType="Grid" x:Key="MainGridStyle">
+        <Setter Property="Background" Value="{DynamicResource {x:Static util:VsColors.CommandShelfBackgroundGradientBrushKey}}" />
+      </Style>
+      <Style TargetType="TreeView">
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static util:VsColors.DropDownPopupBorderBrushKey}}" />
+        <Setter Property="Padding" Value="1,1,1,1" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static util:VsColors.DropDownPopupBackgroundBeginBrushKey}}" />
+      </Style>
+      <Style TargetType="TreeViewItem">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextActiveBrushKey}}" />
+        <Setter Property="IsExpanded" Value="true" />
+      </Style>
+    </ResourceDictionary>
+  </UserControl.Resources>
+  <Grid Style="{StaticResource ResourceKey=MainGridStyle}">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*" />
+      <ColumnDefinition Width="100" />
+    </Grid.ColumnDefinitions>
+    <StackPanel Orientation="Horizontal" Grid.Column="0" Margin="2,0,2,0">
+      <TextBlock Text="Buffer Graph:"
+                 Padding="5,0,5,0"/>
+      <ComboBox Name="BufferGraphCombo" 
+                ItemsSource="{Binding BufferGraph}"
+                SelectedItem="{Binding SelectedBuffer}"
+                Width="160">
+        <ComboBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock>
+              <Run Text="{Binding Path=ContentType}"/> <Span Foreground="Gray">(<Run Text="{Binding Path=BufferType.Name,Mode=OneWay}"/>)</Span>
+            </TextBlock>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <Button Click="OnViewBufferClick"
+              Margin="2,0,2,0"
+              Padding="4,0,4,0"
+              Width="24"
+              Height="24"
+              ToolTip="Show selected buffer contents"
+              Template="{StaticResource ButtonTemplate}">
+        <Image Source="../Resources/OpenBuffer.ico" />
+      </Button>
+      <ToggleButton x:Name="CTToggleButton"
+                    Padding="4,0,4,0"
+                    Margin="2,0,2,0"
+                    Width="24"
+                    Height="24"
+                    ToolTip="Show selected buffer content type tree"
+                    Template="{StaticResource TogleButtonTemplate}">
+        <Image Source="../Resources/ShowCT.ico" />
+      </ToggleButton>
+      <Popup Name="ContentTypeTreePopup"
+             IsOpen="{Binding IsChecked, ElementName=CTToggleButton}"
+             Focusable="false"
+             StaysOpen="false"
+             Placement="Top"
+             PlacementTarget="{Binding ElementName=BufferGraphCombo}"
+             DataContext="{Binding SelectedBuffer.ActualContentType}">
+        <Grid>
+          <Border BorderThickness="1,1,1,1"
+                  BorderBrush="{DynamicResource {x:Static util:VsColors.DropDownPopupBorderBrushKey}}">
+            <ScrollViewer Margin="0,0,0,0" SnapsToDevicePixels="True">
+              <StackPanel>
+                <TreeView MinHeight="100" MinWidth="195">
+                  <TreeViewItem ItemsSource="{Binding BaseTypes}"
+                                Header="{Binding DisplayName}" />
+                </TreeView>
+              </StackPanel>
+            </ScrollViewer>
+          </Border>
+        </Grid>
+      </Popup>
+    </StackPanel>
+    
+    <StackPanel Orientation="Horizontal"
+                Grid.Column="1"
+                HorizontalAlignment="Right">
+      <TextBlock Text="Pos" 
+                 HorizontalAlignment="Right"
+                 Padding="0,0,5,0"/>
+      <TextBlock Name="BufferPosLabel"
+                 Text="{Binding BufferPosition}"
+                 HorizontalAlignment="Left"
+                 Padding="0,0,5,0"/>
+    </StackPanel>
+  </Grid>
+</UserControl>

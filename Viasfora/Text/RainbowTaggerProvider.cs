@@ -17,6 +17,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(Cpp.ContentType)]
   [ContentType(JScript.ContentType)]
   [ContentType(JScript.ContentTypeVS2012)]
+  [ContentType(JSON.ContentType)]
   [ContentType(VB.ContentType)]
   [ContentType(FSharp.ContentType)]
   [ContentType(Sql.ContentType)]

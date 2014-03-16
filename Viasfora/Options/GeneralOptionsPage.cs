@@ -20,6 +20,7 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
+      VsfSettings.DevMarginEnabled = DevMarginEnabled;
       VsfSettings.ModelinesEnabled = ModelinesEnabled;
       VsfSettings.ModelinesNumLines = (int)ModelinesNumLines;
       VsfSettings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
@@ -35,6 +36,7 @@ namespace Winterdom.Viasfora.Options {
       KeywordClassifierEnabled = VsfSettings.KeywordClassifierEnabled;
       EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
+      DevMarginEnabled = VsfSettings.DevMarginEnabled;
       ModelinesEnabled = VsfSettings.ModelinesEnabled;
       ModelinesNumLines = (uint)VsfSettings.ModelinesNumLines;
       XmlnsPrefixHighlightEnabled = VsfSettings.XmlnsPrefixHighlightEnabled;
@@ -82,6 +84,11 @@ namespace Winterdom.Viasfora.Options {
     [Category("Text Editor")]
     public bool RainbowTagsEnabled { get; set; }
 
+    [LocDisplayName("Enable Developer Margin")]
+    [Description("Enables the VS text editor extension developer margin")]
+    [Category("Text Editor")]
+    public bool DevMarginEnabled { get; set; }
+
     // Modelines Configuration
     [LocDisplayName("Enable Modelines Support")]
     [Description("Enables the use of Vim-style modelines to configure the text editor")]
@@ -92,6 +99,7 @@ namespace Winterdom.Viasfora.Options {
     [Description("Number of lines to check for modeline commands")]
     [Category("Modelines")]
     public uint ModelinesNumLines {get; set; }
+
 
     // XML Editor Extensions
     [LocDisplayName("Highlight XML Namespace Prefix")]

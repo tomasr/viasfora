@@ -16,12 +16,14 @@ namespace Winterdom.Viasfora {
     const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
     const String XML_MATCH_TAGS_ENABLED = "XmlMatchTagsEnabled";
+
     const String RAINBOW_TAGS_ENABLED = "RainbowTagsEnabled";
     const String PRESENTATION_MODE_ENABLED = "PresentationModeEnabled";
     const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
     const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
     const String MODELINES_ENABLED = "ModelinesEnabled";
     const String MODELINES_NUMLINES = "ModelinesNumLines";
+    const String DEVMARGIN_ENABLED = "DeveloperMarginEnabled";
 
     private static ISettingsStore settings = VsfPackage.GetGlobalSettingsStore();
     public static event EventHandler SettingsUpdated;
@@ -81,6 +83,10 @@ namespace Winterdom.Viasfora {
     public static int ModelinesNumLines {
       get { return GetInt32(MODELINES_NUMLINES, 5); }
       set { SetValue(MODELINES_NUMLINES, value); }
+    }
+    public static bool DevMarginEnabled {
+      get { return GetBoolean(DEVMARGIN_ENABLED, true); }
+      set { SetValue(DEVMARGIN_ENABLED, value); }
     }
 
     public static void Save() {

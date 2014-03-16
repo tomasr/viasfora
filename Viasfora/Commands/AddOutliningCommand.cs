@@ -43,7 +43,7 @@ namespace Winterdom.Viasfora.Commands {
     }
 
     private void AddOutlining(ITextBuffer buffer, SnapshotSpan span) {
-      var outlines = UserOutliningTaggerProvider.Get(buffer);
+      var outlines = OutliningManager.Get(buffer);
       outlines.Add(span);
     }
   }

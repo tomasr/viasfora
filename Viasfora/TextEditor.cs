@@ -9,6 +9,9 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Editor;
 using Winterdom.Viasfora.Compatibility;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio;
+using VsOle = Microsoft.VisualStudio.OLE.Interop;
+using System.IO;
 
 namespace Winterdom.Viasfora {
   public static class TextEditor {
@@ -97,6 +100,81 @@ namespace Winterdom.Viasfora {
         return view.BufferGraph.TopBuffer;
       }
       return buffers[0];
+    }
+
+    public static bool IsPrimaryBufferType(Type type) {
+      return type.FullName == "Microsoft.VisualStudio.Text.Implementation.TextBuffer";
+    }
+
+    //
+    // Ugly hack: We write the buffer contents into a
+    // temporary file, then open this in the standard
+    // text editor as an "external" file and
+    // then mark the buffer as read-only
+    //
+    public static void OpenBufferInPlainTextEditorAsReadOnly(ITextBuffer buffer) {
+      String filepath = SaveBufferToTempPath(buffer);
+
+      var uiShell = (IVsUIShellOpenDocument)
+        ServiceProvider.GlobalProvider.GetService(typeof(SVsUIShellOpenDocument));
+      var oleSvcProvider = (VsOle.IServiceProvider)
+        ServiceProvider.GlobalProvider.GetService(typeof(VsOle.IServiceProvider));
+
+      Guid editorType = VSConstants.VsEditorFactoryGuid.TextEditor_guid;
+      Guid logicalView = VSConstants.LOGVIEWID.TextView_guid;
+      IVsWindowFrame frame = VsShellUtilities.OpenDocumentWithSpecificEditor(
+        ServiceProvider.GlobalProvider,
+        filepath, editorType, logicalView
+        );
+      if ( frame != null ) {
+        MarkDocumentAsTemporary(filepath);
+        MarkDocumentInFrameAsReadOnly(frame);
+        frame.Show();
+      }
+    }
+
+    private static void MarkDocumentInFrameAsReadOnly(IVsWindowFrame frame) {
+      var textView = VsShellUtilities.GetTextView(frame);
+      IVsTextLines textLines;
+      if ( textView.GetBuffer(out textLines) == Constants.S_OK ) {
+        var vsBuffer = textLines as IVsTextBuffer;
+        vsBuffer.SetStateFlags((uint)(
+          BUFFERSTATEFLAGS.BSF_USER_READONLY | 
+          BUFFERSTATEFLAGS.BSF_FILESYS_READONLY
+        ));
+      }
+    }
+
+    private static void MarkDocumentAsTemporary(string moniker) {
+      IVsRunningDocumentTable docTable = (IVsRunningDocumentTable)
+        ServiceProvider.GlobalProvider.GetService(typeof(SVsRunningDocumentTable));
+
+      uint lockType = (uint)_VSRDTFLAGS.RDT_DontAddToMRU
+                    | (uint)_VSRDTFLAGS.RDT_NonCreatable
+                    | (uint)_VSRDTFLAGS.RDT_VirtualDocument
+                    | (uint)_VSRDTFLAGS.RDT_PlaceHolderDoc;
+      IVsHierarchy hierarchy;
+      uint itemid;
+      uint documentCookie;
+      IntPtr docData;
+
+      int hr = docTable.FindAndLockDocument(
+        dwRDTLockType: lockType,
+        pszMkDocument: moniker,
+        ppHier: out hierarchy,
+        pitemid: out itemid,
+        ppunkDocData: out docData,
+        pdwCookie: out documentCookie
+        );
+      CheckError(hr, "FindAndLockDocument");
+      docTable.ModifyDocumentFlags(documentCookie, lockType, 1);
+    }
+
+    private static string SaveBufferToTempPath(ITextBuffer buffer) {
+      String tempDir = Path.GetTempPath();
+      String file = Path.Combine(tempDir, Path.GetRandomFileName() + ".txt");
+      File.WriteAllText(file, buffer.CurrentSnapshot.GetText());
+      return file;
     }
 
     private static void CheckError(int hr, String operation) {

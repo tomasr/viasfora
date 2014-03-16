@@ -99,7 +99,14 @@
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
+    <Compile Include="Languages\Json.cs" />
     <Compile Include="Languages\Python.cs" />
+    <Compile Include="Margins\DevMarginProvider.cs" />
+    <Compile Include="Margins\DevMarginVisual.xaml.cs">
+      <DependentUpon>DevMarginVisual.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Margins\DevMarginViewModel.cs" />
+    <Compile Include="Margins\DevViewMargin.cs" />
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -151,6 +158,7 @@
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="Settings\SuoPersistUserSettings.cs" />
     <Compile Include="SnapshotExtensions.cs" />
+    <Compile Include="Tags\OutliningGlyphTag.cs" />
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="TextEditor.cs" />
@@ -161,6 +169,8 @@
     <Compile Include="Text\IUserOutlining.cs" />
     <Compile Include="Text\ModelineFactory.cs" />
     <Compile Include="Text\ModeLineProvider.cs" />
+    <Compile Include="Text\OutliningGlyphFactoryProvider.cs" />
+    <Compile Include="Text\OutliningManager.cs" />
     <Compile Include="Text\PresentationMode.cs" />
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
@@ -170,7 +180,6 @@
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
-    <Compile Include="Text\UserOutliningTagger.cs" />
     <Compile Include="Text\UserOutliningTaggerProvider.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
@@ -193,6 +202,7 @@
     <Compile Include="Util\LineChars.cs" />
     <Compile Include="Util\StringChars.cs" />
     <Compile Include="Languages\BraceExtractors\VbBraceExtractor.cs" />
+    <Compile Include="Util\VsColors.cs" />
     <Compile Include="VsfSettings.cs" />
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />
@@ -206,6 +216,7 @@
     <Compile Include="Text\KeywordTaggerProvider.cs" />
     <Compile Include="VsfPackage.cs" />
     <Compile Include="VsSolution.cs" />
+    <Compile Include="WpfExtensions.cs" />
     <Compile Include="Xml\XmlQuickInfoSource.cs" />
     <Compile Include="Xml\XmlQuickInfoSourceProvider.cs" />
     <Compile Include="Xml\XmlQuickInfoController.cs" />
@@ -313,6 +324,8 @@
     <Content Include="license.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
+    <Resource Include="Resources\OpenBuffer.ico" />
+    <Resource Include="Resources\ShowCT.ico" />
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -342,7 +355,20 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Resources\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Margins\DevMarginVisual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists($(VsSdkTargets))" Project="$(VsSdkTargets)" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
