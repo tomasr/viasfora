@@ -52,7 +52,9 @@ namespace Winterdom.Viasfora.Text {
     }
     void OnViewClosed(object sender, EventArgs e) {
       view.Caret.PositionChanged -= OnCaretPositionChanged;
-      view.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
+      if ( view.TextViewModel != null && view.TextViewModel.EditBuffer != null ) {
+        view.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
+      }
       view.ViewportWidthChanged -= OnViewportChanged;
       view.ViewportHeightChanged -= OnViewportChanged;
       view.LayoutChanged -= OnLayoutChanged;
