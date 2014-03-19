@@ -32,14 +32,14 @@ namespace Winterdom.Viasfora.Margins {
       this.DataContext = Model;
     }
 
-    private void OnViewBufferClick(object sender, RequestNavigateEventArgs e) {
+    private void OnViewBufferClick(object sender, RoutedEventArgs e) {
       if ( ViewBuffer != null )
         ViewBuffer(this, EventArgs.Empty);
       e.Handled = true;
     }
-    private void OnViewBufferClick(object sender, RoutedEventArgs e) {
-      if ( ViewBuffer != null )
-        ViewBuffer(this, EventArgs.Empty);
+    private void OnCloseButtonClick(object sender, RoutedEventArgs e) {
+      VsfSettings.DevMarginEnabled = false;
+      VsfSettings.Save();
       e.Handled = true;
     }
     private void OnViewCTClick(object sender, RequestNavigateEventArgs e) {
