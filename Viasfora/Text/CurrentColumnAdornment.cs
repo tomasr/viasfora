@@ -34,7 +34,6 @@ namespace Winterdom.Viasfora.Text {
       view.Caret.PositionChanged += OnCaretPositionChanged;
       view.ViewportWidthChanged += OnViewportChanged;
       view.ViewportHeightChanged += OnViewportChanged;
-      view.LayoutChanged += OnLayoutChanged;
       view.TextViewModel.EditBuffer.PostChanged += OnBufferPostChanged;
       view.Closed += OnViewClosed;
       VsfSettings.SettingsUpdated += OnSettingsUpdated;
@@ -57,19 +56,17 @@ namespace Winterdom.Viasfora.Text {
       }
       view.ViewportWidthChanged -= OnViewportChanged;
       view.ViewportHeightChanged -= OnViewportChanged;
-      view.LayoutChanged -= OnLayoutChanged;
       view.Closed -= OnViewClosed;
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
     }
     void OnViewportChanged(object sender, EventArgs e) {
-      this.currentHighlight = null; // force redraw
       RedrawAdornments();
     }
     void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
       // the user changed something in Fonts and Colors, so
       // recreate our adornments
       this.currentHighlight = null;
-      CreateDrawingObjects();
+      RedrawAdornments();
     }
     void OnCaretPositionChanged(object sender, CaretPositionChangedEventArgs e) {
       // TODO: Only redraw if there are changes
@@ -81,11 +78,6 @@ namespace Winterdom.Viasfora.Text {
     private void OnBufferPostChanged(object sender, EventArgs e) {
       layer.RemoveAdornmentsByTag(CUR_COL_TAG);
       this.CreateVisuals(this.view.Caret.Position.VirtualBufferPosition);
-    }
-    void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
-      if ( e.VerticalTranslation ) {
-          RedrawAdornments();
-      }
     }
 
     private void CreateDrawingObjects() {
@@ -103,6 +95,7 @@ namespace Winterdom.Viasfora.Text {
     }
     private void RedrawAdornments() {
       if ( view.TextViewLines != null ) {
+        layer.RemoveAdornmentsByTag(CUR_COL_TAG);
         if ( currentHighlight != null ) {
           layer.RemoveAdornment(currentHighlight);
         }
