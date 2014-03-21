@@ -65,12 +65,10 @@ namespace Winterdom.Viasfora.Text {
     void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
       // the user changed something in Fonts and Colors, so
       // recreate our adornments
-      this.currentHighlight = null;
       RedrawAdornments();
     }
     void OnCaretPositionChanged(object sender, CaretPositionChangedEventArgs e) {
-      // TODO: Only redraw if there are changes
-      /*if ( e.NewPosition != e.OldPosition )*/ {
+      if ( e.NewPosition != e.OldPosition ) {
         layer.RemoveAdornmentsByTag(CUR_COL_TAG);
         this.CreateVisuals(e.NewPosition.VirtualBufferPosition);
       }
