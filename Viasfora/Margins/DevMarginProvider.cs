@@ -15,8 +15,10 @@ namespace Winterdom.Viasfora.Margins {
   [ContentType("text")]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   public class DevMarginProvider : IWpfTextViewMarginProvider {
+    [Import]
+    private IFileExtensionRegistryService ferService = null;
     public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer) {
-      return new DevViewMargin(wpfTextViewHost);
+      return new DevViewMargin(wpfTextViewHost, ferService);
     }
   }
   
