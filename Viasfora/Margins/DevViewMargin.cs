@@ -10,14 +10,16 @@ using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Margins {
   public class DevViewMargin : IWpfTextViewMargin {
+    private IFileExtensionRegistryService extensionRegistry;
     private IWpfTextViewHost wpfTextViewHost;
     private IWpfTextView textView;
     private DevMarginVisual visual;
     private DevMarginViewModel model;
 
-    public DevViewMargin(IWpfTextViewHost wpfTextViewHost) {
+    public DevViewMargin(IWpfTextViewHost wpfTextViewHost, IFileExtensionRegistryService fers) {
       model = new DevMarginViewModel();
       this.wpfTextViewHost = wpfTextViewHost;
+      this.extensionRegistry = fers;
       this.visual = new DevMarginVisual(model);
       this.visual.ViewBuffer += OnViewBuffer;
       VsfSettings.SettingsUpdated += OnSettingsUpdated;
@@ -108,7 +110,14 @@ namespace Winterdom.Viasfora.Margins {
     }
     private void OpenBufferInEditor(ITextBuffer b) {
       try {
-        TextEditor.OpenBufferInPlainTextEditorAsReadOnly(b);
+        String extension = extensionRegistry
+          .GetExtensionsForContentType(b.ContentType)
+          .FirstOrDefault();
+        if ( String.IsNullOrEmpty(extension) ) {
+          TextEditor.OpenBufferInPlainTextEditorAsReadOnly(b);
+        } else {
+          TextEditor.OpenBufferInEditorAsReadOnly(b, extension);
+        }
       } catch ( Exception ex ) {
         MessageBox.Show(ex.Message, "Viasfora Error", MessageBoxButton.OK, MessageBoxImage.Error);
       }
