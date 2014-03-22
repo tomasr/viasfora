@@ -162,6 +162,8 @@
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="TextEditor.cs" />
+    <Compile Include="Text\AllTextCompletionSource.cs" />
+    <Compile Include="Text\AllTextCompletionSourceProvider.cs" />
     <Compile Include="Text\BraceCache.cs" />
     <Compile Include="Text\BufferOutlines.cs" />
     <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
