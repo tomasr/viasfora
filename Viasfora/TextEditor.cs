@@ -113,7 +113,10 @@ namespace Winterdom.Viasfora {
     // then mark the buffer as read-only
     //
     public static void OpenBufferInPlainTextEditorAsReadOnly(ITextBuffer buffer) {
-      String filepath = SaveBufferToTempPath(buffer);
+      OpenBufferInEditorAsReadOnly(buffer, "txt");
+    }
+    public static void OpenBufferInEditorAsReadOnly(ITextBuffer buffer, String extension) {
+      String filepath = SaveBufferToTempPath(buffer, extension);
 
       var uiShell = (IVsUIShellOpenDocument)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsUIShellOpenDocument));
@@ -170,9 +173,10 @@ namespace Winterdom.Viasfora {
       docTable.ModifyDocumentFlags(documentCookie, lockType, 1);
     }
 
-    private static string SaveBufferToTempPath(ITextBuffer buffer) {
+    private static string SaveBufferToTempPath(ITextBuffer buffer, String extension) {
       String tempDir = Path.GetTempPath();
-      String file = Path.Combine(tempDir, Path.GetRandomFileName() + ".txt");
+      String file = Path.Combine(tempDir, Path.GetRandomFileName());
+      file += "." + extension;
       File.WriteAllText(file, buffer.CurrentSnapshot.GetText());
       return file;
     }

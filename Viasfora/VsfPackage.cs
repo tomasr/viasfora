@@ -22,7 +22,6 @@ namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
   [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
   [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
-  [InstalledProductRegistration("#110", "#111", "1.0", IconResourceID = 400)]
   [Guid(Guids.VSPackage)]
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.PresentationModeOptionsPage), "Viasfora", "Presentation Mode", 0, 0, true)]
