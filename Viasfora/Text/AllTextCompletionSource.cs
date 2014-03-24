@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Media;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
+using System.Windows.Media.Imaging;
 
 namespace Winterdom.Viasfora.Text {
   public class AllTextCompletionSource : ICompletionSource {
     private ITextBuffer theBuffer;
     private ITextSearchService textSearch;
     private ITextStructureNavigator navigator;
+    private ImageSource glyphIcon;
 
     public AllTextCompletionSource(
           ITextBuffer buffer,
@@ -19,6 +22,7 @@ namespace Winterdom.Viasfora.Text {
       this.theBuffer = buffer;
       this.textSearch = searchService;
       this.navigator = structureNavigator;
+      glyphIcon = new BitmapImage(new Uri("pack://application:,,,/Winterdom.Viasfora;component/Resources/TextSource.png"));
     }
     public void Dispose() {
     }
@@ -30,7 +34,7 @@ namespace Winterdom.Viasfora.Text {
       var matches = FindMatchingWords(prefixSpan.GetText(theBuffer.CurrentSnapshot));
       var completions = new List<Completion>();
       foreach ( var match in matches ) {
-        completions.Add(new Completion(match, match, match, null, null));
+        completions.Add(new Completion(match, match, match, glyphIcon, null));
       }
       var set = new CompletionSet(
         moniker: "Text",

@@ -329,6 +329,7 @@
     </Content>
     <Resource Include="Resources\OpenBuffer.ico" />
     <Resource Include="Resources\ShowCT.ico" />
+    <Resource Include="Resources\TextSource.png" />
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
