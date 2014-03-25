@@ -33,9 +33,14 @@ namespace Winterdom.Viasfora.Text {
       ITrackingPoint triggerPoint = session.GetTriggerPoint(theBuffer);
       ITrackingSpan prefixSpan = GetPrefixSpan(triggerPoint);
 
-      VsfPackage.LogInfo("Matching: {0}", prefixSpan.GetText(theBuffer.CurrentSnapshot));
+      /*
+      String prefix = prefixSpan.GetText(theBuffer.CurrentSnapshot);
+      prefix = prefix.Trim();
+      */
 
-      var matches = FindMatchingWords(prefixSpan.GetText(theBuffer.CurrentSnapshot));
+      var matches = FindMatchingWords()
+                   .Distinct()
+                   .OrderBy(x => x);
       var completions = new List<Completion>();
       foreach ( var match in matches ) {
         completions.Add(new Completion(match, match, match, glyphIcon, null));
@@ -50,6 +55,35 @@ namespace Winterdom.Viasfora.Text {
       completionSets.Add(set);
     }
 
+    private IEnumerable<String> FindMatchingWords() {
+      var snapshot = theBuffer.CurrentSnapshot;
+      SnapshotPoint pt = new SnapshotPoint(snapshot, 0);
+      while ( pt.Position < snapshot.Length ) {
+        var extent = navigator.GetExtentOfWord(pt);
+        if ( extent != null ) {
+          String text;
+          if ( IsSignificant(extent, out text) ) {
+            yield return extent.Span.GetText();
+          }
+          if ( extent.Span.End > pt )
+            pt = extent.Span.End;
+        }
+        if ( pt.Position < snapshot.Length )
+          pt += 1;
+      }
+    }
+
+    private bool IsSignificant(TextExtent extent, out String word) {
+      word = "";
+      if ( !extent.IsSignificant ) return false;
+      if ( extent.Span.IsEmpty ) return false;
+      char ch = extent.Span.Start.GetChar();
+      if ( Char.IsLetter(ch) || ch == '_' ) {
+        word = extent.Span.GetText();
+        return true;
+      }
+      return false;
+    }
     private IEnumerable<String> FindMatchingWords(String prefix) {
       StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
       FindData fd = new FindData(

@@ -18,8 +18,11 @@ namespace Winterdom.Viasfora.Text {
     private ITextSearchService searchService = null;
     [Import]
     private ITextStructureNavigatorSelectorService navigatorSelector = null;
+    [Import]
+    private IContentTypeRegistryService ctRegistry = null;
     public ICompletionSource TryCreateCompletionSource(ITextBuffer textBuffer) {
-      var navigator = navigatorSelector.GetTextStructureNavigator(textBuffer);
+      var ct = ctRegistry.GetContentType("any");
+      var navigator = navigatorSelector.CreateTextStructureNavigator(textBuffer, ct);
       return new AllTextCompletionSource(textBuffer, searchService, navigator);
     }
   }
