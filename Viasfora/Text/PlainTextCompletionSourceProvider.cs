@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Text {
   [Export(typeof(ICompletionSourceProvider))]
   [ContentType("text")]
   [Name("viasfora.text.completion.source")]
-  public class AllTextCompletionSourceProvider : ICompletionSourceProvider {
+  public class PlainTextCompletionSourceProvider : ICompletionSourceProvider {
     [Import]
     private ITextSearchService searchService = null;
     [Import]
@@ -23,7 +23,7 @@ namespace Winterdom.Viasfora.Text {
     public ICompletionSource TryCreateCompletionSource(ITextBuffer textBuffer) {
       var ct = ctRegistry.GetContentType("any");
       var navigator = navigatorSelector.CreateTextStructureNavigator(textBuffer, ct);
-      return new AllTextCompletionSource(textBuffer, searchService, navigator);
+      return new PlainTextCompletionSource(textBuffer, searchService, navigator);
     }
   }
 }

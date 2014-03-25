@@ -20,7 +20,7 @@ namespace Winterdom.Viasfora.Text {
   [Name("viasfora.text.completion.handler")]
   [ContentType("text")]
   [TextViewRole(PredefinedTextViewRoles.Editable)]
-  public class AllTextCompletionHandlerProvider : IVsTextViewCreationListener {
+  public class PlainTextCompletionHandlerProvider : IVsTextViewCreationListener {
     [Import]
     internal IVsEditorAdaptersFactoryService AdapterService { get; set; }
     [Import]
@@ -33,19 +33,19 @@ namespace Winterdom.Viasfora.Text {
         return;
 
       textView.Properties.GetOrCreateSingletonProperty(
-        () => new AllTextCompletionCommandHandler(this, textViewAdapter, textView)
+        () => new PlainTextCompletionCommandHandler(this, textViewAdapter, textView)
         );
     }
   }
 
-  public class AllTextCompletionCommandHandler : IOleCommandTarget {
-    private AllTextCompletionHandlerProvider provider;
+  public class PlainTextCompletionCommandHandler : IOleCommandTarget {
+    private PlainTextCompletionHandlerProvider provider;
     private IOleCommandTarget nextCommandHandler;
     private ITextView textView;
     private ICompletionSession session;
 
-    public AllTextCompletionCommandHandler(
-          AllTextCompletionHandlerProvider provider,
+    public PlainTextCompletionCommandHandler(
+          PlainTextCompletionHandlerProvider provider,
           IVsTextView viewAdapter,
           ITextView textView) {
       this.provider = provider;

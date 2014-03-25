@@ -10,14 +10,14 @@ using System.Windows.Media.Imaging;
 using System.Collections.ObjectModel;
 
 namespace Winterdom.Viasfora.Text {
-  public class AllTextCompletionSource : ICompletionSource {
+  public class PlainTextCompletionSource : ICompletionSource {
     private ITextBuffer theBuffer;
     private ITextSearchService textSearch;
     private ITextStructureNavigator navigator;
     private ImageSource glyphIcon;
     private List<Completion> currentCompletions;
 
-    public AllTextCompletionSource(
+    public PlainTextCompletionSource(
           ITextBuffer buffer,
           ITextSearchService searchService,
           ITextStructureNavigator structureNavigator) {
