@@ -71,8 +71,6 @@ namespace Winterdom.Viasfora.Text {
       if ( VsShellUtilities.IsInAutomationFunction(provider.ServiceProvider) ) {
         return nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
       }
-      // make a copy of this so we can look at it after forwarding some commands 
-      uint commandID = nCmdID;
 
       // preprocess command
       bool handled = false;
