@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
@@ -11,7 +12,6 @@ using Winterdom.Viasfora.Compatibility;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using VsOle = Microsoft.VisualStudio.OLE.Interop;
-using System.IO;
 
 namespace Winterdom.Viasfora {
   public static class TextEditor {
