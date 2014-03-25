@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using System.Windows.Media;
 using System.Reflection;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Xml {
   internal class XmlQuickInfoSource : IQuickInfoSource {
@@ -66,18 +67,12 @@ namespace Winterdom.Viasfora.Xml {
       });
       // set styles in order to support other 
       // visual studio themes on 2012/2013
-      object tooltipBrushKey = VsfPackage.Instance.FindColorResource("ToolTipBrushKey");
-      if ( tooltipBrushKey != null  ) {
-        textBlock.SetResourceReference(TextBlock.BackgroundProperty, tooltipBrushKey);
+      var brushKey = VsColors.ToolTipBrushKey;
+      if ( brushKey != null ) {
+        textBlock.SetResourceReference(TextBlock.BackgroundProperty, brushKey);
       }
-      object tooltipTextBrushKey = VsfPackage.Instance.FindColorResource("ToolTipTextBrushKey");
-      if ( tooltipTextBrushKey != null ) {
-        textBlock.SetResourceReference(TextBlock.ForegroundProperty, tooltipTextBrushKey);
-      }
-      object hlBrushKey = VsfPackage.Instance.FindColorResource("PanelHyperlinkBrushKey");
-      if ( hlBrushKey != null ) {
-        hl.SetResourceReference(Hyperlink.ForegroundProperty, hlBrushKey);
-      }
+      textBlock.SetResourceReference(TextBlock.ForegroundProperty, VsColors.ToolTipTextBrushKey);
+      hl.SetResourceReference(Hyperlink.ForegroundProperty, VsColors.PanelHyperlinkBrushKey);
       return textBlock;
     }
 
