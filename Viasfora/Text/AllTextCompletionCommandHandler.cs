@@ -56,7 +56,8 @@ namespace Winterdom.Viasfora.Text {
 
     public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText) {
       if ( pguidCmdGroup == VSConstants.VSStd2K ) {
-        switch ( (VSConstants.VSStd2KCmdID)prgCmds[0].cmdID ) {
+        var cmdId = (VSConstants.VSStd2KCmdID)prgCmds[0].cmdID;
+        switch ( cmdId) {
           case VSConstants.VSStd2KCmdID.AUTOCOMPLETE:
           case VSConstants.VSStd2KCmdID.COMPLETEWORD:
             prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_ENABLED | (uint)OLECMDF.OLECMDF_SUPPORTED;
@@ -123,6 +124,10 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private bool StartSession() {
+      // do not start a session if there's already another
+      // provider that has started one
+      if ( provider.CompletionBroker.IsCompletionActive(this.textView) )
+        return false;
       // already have an active session, so continue
       if ( session != null && !session.IsDismissed )
         return false;
