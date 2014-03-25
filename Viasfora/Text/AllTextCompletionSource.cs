@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
 using System.Windows.Media.Imaging;
+using System.Collections.ObjectModel;
 
 namespace Winterdom.Viasfora.Text {
   public class AllTextCompletionSource : ICompletionSource {
@@ -28,8 +29,11 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets) {
+      var snapshot = theBuffer.CurrentSnapshot;
       ITrackingPoint triggerPoint = session.GetTriggerPoint(theBuffer);
       ITrackingSpan prefixSpan = GetPrefixSpan(triggerPoint);
+
+      VsfPackage.LogInfo("Matching: {0}", prefixSpan.GetText(theBuffer.CurrentSnapshot));
 
       var matches = FindMatchingWords(prefixSpan.GetText(theBuffer.CurrentSnapshot));
       var completions = new List<Completion>();
@@ -76,7 +80,7 @@ namespace Winterdom.Viasfora.Text {
     private ITrackingSpan GetPrefixSpan(ITrackingPoint triggerPoint) {
       ITextSnapshot snapshot = theBuffer.CurrentSnapshot;
       int position = triggerPoint.GetPosition(snapshot);
-      if ( position > 0 ) position--; 
+      if ( position > 0 ) position--;
       var extent = navigator.GetExtentOfWord(new SnapshotPoint(snapshot, position));
       return snapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
     }
