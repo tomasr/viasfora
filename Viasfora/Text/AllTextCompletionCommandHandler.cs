@@ -18,8 +18,8 @@ namespace Winterdom.Viasfora.Text {
 
   [Export(typeof(IVsTextViewCreationListener))]
   [Name("viasfora.text.completion.handler")]
-  [ContentType("plainText")]
-  [TextViewRole(PredefinedTextViewRoles.Document)]
+  [ContentType("text")]
+  [TextViewRole(PredefinedTextViewRoles.Editable)]
   public class AllTextCompletionHandlerProvider : IVsTextViewCreationListener {
     [Import]
     internal IVsEditorAdaptersFactoryService AdapterService { get; set; }
@@ -28,7 +28,6 @@ namespace Winterdom.Viasfora.Text {
     [Import]
     internal SVsServiceProvider ServiceProvider { get; set; }
     public void VsTextViewCreated(IVsTextView textViewAdapter) {
-
       ITextView textView = AdapterService.GetWpfTextView(textViewAdapter);
       if ( textView == null )
         return;
@@ -54,63 +53,116 @@ namespace Winterdom.Viasfora.Text {
       //add the command to the command chain
       viewAdapter.AddCommandFilter(this, out nextCommandHandler);
     }
+
+    public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText) {
+      if ( pguidCmdGroup == VSConstants.VSStd2K ) {
+        switch ( (VSConstants.VSStd2KCmdID)prgCmds[0].cmdID ) {
+          case VSConstants.VSStd2KCmdID.AUTOCOMPLETE:
+          case VSConstants.VSStd2KCmdID.COMPLETEWORD:
+            prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_ENABLED | (uint)OLECMDF.OLECMDF_SUPPORTED;
+            return VSConstants.S_OK;
+        }
+      }
+      return nextCommandHandler.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+    }
+
     public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut) {
       if ( VsShellUtilities.IsInAutomationFunction(provider.ServiceProvider) ) {
         return nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
       }
-      //make a copy of this so we can look at it after forwarding some commands 
+      // make a copy of this so we can look at it after forwarding some commands 
       uint commandID = nCmdID;
-      char typedChar = char.MinValue;
-      //make sure the input is a char before getting it 
-      if ( pguidCmdGroup == VSConstants.VSStd2K && nCmdID == (uint)VSConstants.VSStd2KCmdID.TYPECHAR ) {
-        typedChar = (char)(ushort)Marshal.GetObjectForNativeVariant(pvaIn);
+
+      // preprocess command
+      bool handled = false;
+      bool filter = false;
+      if ( pguidCmdGroup == VSConstants.VSStd2K ) {
+        var cmd = (VSConstants.VSStd2KCmdID)nCmdID;
+        switch ( cmd ) {
+          case VSConstants.VSStd2KCmdID.AUTOCOMPLETE:
+          case VSConstants.VSStd2KCmdID.COMPLETEWORD:
+            handled = StartSession();
+            break;
+          case VSConstants.VSStd2KCmdID.RETURN:
+            handled = CompleteWord(false);
+            break;
+          case VSConstants.VSStd2KCmdID.TAB:
+            handled = CompleteWord(true);
+            break;
+          case VSConstants.VSStd2KCmdID.BACKSPACE:
+            filter = true;
+            break;
+          case VSConstants.VSStd2KCmdID.CANCEL:
+            handled = CancelSession();
+            break;
+          case VSConstants.VSStd2KCmdID.TYPECHAR:
+            char typedChar = (char)(ushort)Marshal.GetObjectForNativeVariant(pvaIn);
+            // we *do* want to commit the char, so leave unhandled
+            HandleChar(typedChar);
+            // we *do* want to filter the result again
+            filter = true;
+            break;
+        }
       }
 
-      //check for a commit character 
-      if ( nCmdID == (uint)VSConstants.VSStd2KCmdID.RETURN
-          || nCmdID == (uint)VSConstants.VSStd2KCmdID.TAB
-          || (char.IsWhiteSpace(typedChar) || char.IsPunctuation(typedChar)) ) {
-        //check for a a selection 
-        if ( session != null && !session.IsDismissed ) {
-          //if the selection is fully selected, commit the current session 
-          if ( session.SelectedCompletionSet.SelectionStatus.IsSelected ) {
-            session.Commit();
-            //also, don't add the character to the buffer 
-            return VSConstants.S_OK;
-          } else {
-            //if there is no selection, dismiss the session
-            session.Dismiss();
-          }
-        }
+      int hr = 0;
+      if ( !handled ) {
+        // let other commands handle it
+        hr = nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+        if ( filter )
+          Filter();
       }
-      //pass along the command so the char is added to the buffer 
-      int retVal = nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
-      bool handled = false;
-      if ( !typedChar.Equals(char.MinValue) && char.IsLetterOrDigit(typedChar) ) {
-        if ( session == null || session.IsDismissed ) // If there is no active session, bring up completion
-        {
-          this.TriggerCompletion();
-          if ( session != null )
-            session.Filter();
-        } else
-        {
-          //the completion session is already active, so just filter
-          session.Filter();
-        }
-        handled = true;
-      } else if ( commandID == (uint)VSConstants.VSStd2KCmdID.BACKSPACE
-               || commandID == (uint)VSConstants.VSStd2KCmdID.DELETE ) {
-        //redo the filter if there is a deletion
-        if ( session != null && !session.IsDismissed )
-          session.Filter();
-        handled = true;
-      }
-      if ( handled ) return VSConstants.S_OK;
-      return retVal;
+
+      return hr;
     }
 
-    public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText) {
-      return nextCommandHandler.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+    private void Filter() {
+      if ( session != null && !session.IsDismissed ) {
+        session.Filter();
+      }       
+    }
+
+    private bool StartSession() {
+      // already have an active session, so continue
+      if ( session != null && !session.IsDismissed )
+        return false;
+      this.TriggerCompletion();
+      return true;
+    }
+
+    private bool CancelSession() {
+      if ( session != null ) {
+        session.Dismiss();
+        return true;
+      }
+      return false;
+    }
+
+    private bool CompleteWord(bool force) {
+      if ( session == null || session.IsDismissed )
+        return false;
+
+      if ( force || session.SelectedCompletionSet.SelectionStatus.IsSelected ) {
+        session.Commit();
+        return true;
+      }
+      session.Dismiss();
+      return false;
+    }
+
+    private bool HandleChar(char typedChar) {
+      if ( session != null && !session.IsDismissed ) {
+        if ( char.IsWhiteSpace(typedChar) || char.IsPunctuation(typedChar) ) {
+          return CompleteWord(false);
+        }
+        return false;
+      }
+      return StartSession();
+    }
+
+    private bool IsTabOrEnter(uint nCmdID) {
+      return nCmdID == (uint)VSConstants.VSStd2KCmdID.RETURN
+          || nCmdID != (uint)VSConstants.VSStd2KCmdID.TAB;
     }
     private bool TriggerCompletion() {
       //the caret must be in a non-projection location 
