@@ -15,6 +15,7 @@ namespace Winterdom.Viasfora.Text {
     private ITextSearchService textSearch;
     private ITextStructureNavigator navigator;
     private ImageSource glyphIcon;
+    private List<Completion> currentCompletions;
 
     public AllTextCompletionSource(
           ITextBuffer buffer,
@@ -38,21 +39,38 @@ namespace Winterdom.Viasfora.Text {
       prefix = prefix.Trim();
       */
 
-      var matches = FindMatchingWords()
-                   .Distinct()
-                   .OrderBy(x => x);
-      var completions = new List<Completion>();
-      foreach ( var match in matches ) {
-        completions.Add(new Completion(match, match, match, glyphIcon, null));
+      bool refreshCompletions = false;
+      if ( currentCompletions == null ) {
+        currentCompletions = new List<Completion>();
+        refreshCompletions = true;
+      } else {
+        refreshCompletions = IsSignificantChange(snapshot.Version);
+      }
+
+      if ( refreshCompletions ) {
+        currentCompletions.Clear();
+        var matches = FindMatchingWords()
+                     .Distinct()
+                     .OrderBy(x => x);
+        foreach ( var match in matches ) {
+          currentCompletions.Add(new Completion(match, match, match, glyphIcon, null));
+        }
       }
       var set = new CompletionSet(
         moniker: "Text",
         displayName: "Text",
         applicableTo: prefixSpan,
-        completions: completions,
+        completions: currentCompletions,
         completionBuilders: null
         );
       completionSets.Add(set);
+    }
+
+    private bool IsSignificantChange(ITextVersion textVersion) {
+      var changes = textVersion.Changes;
+      if ( changes == null || changes.Count == 0 )
+        return false;
+      return changes.Any(change => change.Delta > 10);
     }
 
     private IEnumerable<String> FindMatchingWords() {
