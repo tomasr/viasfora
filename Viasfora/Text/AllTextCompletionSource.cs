@@ -30,10 +30,13 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets) {
+      if ( !VsfSettings.TextCompletionEnabled ) {
+        return;
+      }
+
       var snapshot = theBuffer.CurrentSnapshot;
       ITrackingPoint triggerPoint = session.GetTriggerPoint(theBuffer);
       ITrackingSpan prefixSpan = GetPrefixSpan(triggerPoint);
-
       /*
       String prefix = prefixSpan.GetText(theBuffer.CurrentSnapshot);
       prefix = prefix.Trim();

@@ -68,6 +68,9 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut) {
+      if ( !VsfSettings.TextCompletionEnabled ) {
+        return nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+      }
       if ( VsShellUtilities.IsInAutomationFunction(provider.ServiceProvider) ) {
         return nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
       }
