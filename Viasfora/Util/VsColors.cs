@@ -105,21 +105,30 @@ namespace Winterdom.Viasfora.Util {
 
     private static object Get(String key, object alternate) {
       if ( !assemblyLoadAttempted ) {
-        Assembly vsShellAssembly = null;
-        try {
-          vsShellAssembly = Assembly.Load("Microsoft.VisualStudio.Shell.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-        } catch ( FileNotFoundException ) {
+        // do not attempt to load it on VS2010, because if 
+        // both VS2010 and VS2012 are installed, we'll get 
+        // unexpected results
+        if ( VsfPackage.Instance.VsVersion.Major > 10 ) {
+          LoadAssemblyAndType();
         }
         assemblyLoadAttempted = true;
-        if ( vsShellAssembly != null ) {
-          envColorsType = vsShellAssembly.GetType("Microsoft.VisualStudio.PlatformUI.EnvironmentColors");
-        }
       }
       if ( envColorsType != null ) {
         var prop = envColorsType.GetProperty(key);
         return prop.GetValue(null, null);
       }
       return alternate;
+    }
+
+    private static void LoadAssemblyAndType() {
+      Assembly vsShellAssembly = null;
+      try {
+        vsShellAssembly = Assembly.Load("Microsoft.VisualStudio.Shell.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+      } catch ( FileNotFoundException ) {
+      }
+      if ( vsShellAssembly != null ) {
+        envColorsType = vsShellAssembly.GetType("Microsoft.VisualStudio.PlatformUI.EnvironmentColors");
+      }
     }
   }
 }

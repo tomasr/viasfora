@@ -45,8 +45,7 @@ namespace Winterdom.Viasfora {
     public static bool PresentationModeTurnedOn { get; set; }
     public static EventHandler PresentationModeChanged { get; set; }
     public byte[] UserOptions { get; set; }
-
-    private Version vsVersion;
+    public Version VsVersion { get; private set; }
     private IVsActivityLog activityLog;
     private List<VsCommand> commands = new List<VsCommand>();
 
@@ -82,7 +81,7 @@ namespace Winterdom.Viasfora {
       Instance = this;
       InitializeActivityLog();
       LogInfo("Initializing VsfPackage");
-      vsVersion = FindVSVersion();
+      VsVersion = FindVSVersion();
 
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
       if ( null != mcs ) {
