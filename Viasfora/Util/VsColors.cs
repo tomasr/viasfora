@@ -1,12 +1,14 @@
-﻿using Microsoft.VisualStudio.Shell;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Windows;
+using Microsoft.VisualStudio.Shell;
 
 namespace Winterdom.Viasfora.Util {
+  // See http://msdn.microsoft.com/en-us/library/vstudio/microsoft.visualstudio.platformui.environmentcolors.aspx
   public static class VsColors {
     private static bool assemblyLoadAttempted;
     private static Type envColorsType;
@@ -46,6 +48,10 @@ namespace Winterdom.Viasfora.Util {
     public static object ComboBoxBackgroundBrushKey { get; set; }
     public static object ComboBoxMouseOverBackgroundBeginBrushKey { get; set; }
     public static object ComboBoxMouseOverBorderBrushKey { get; set; }
+
+    public static object ToolTipBrushKey { get; set; }
+    public static object ToolTipTextBrushKey { get; set; }
+    public static object PanelHyperlinkBrushKey { get; set; }
 
     static VsColors() {
       assemblyLoadAttempted = false;
@@ -88,26 +94,41 @@ namespace Winterdom.Viasfora.Util {
       ComboBoxMouseOverBackgroundBeginBrushKey = Get("ComboBoxMouseOverBackgroundBeginBrushKey", VsBrushes.ComboBoxMouseOverBackgroundBeginKey);
       ComboBoxBackgroundBrushKey = Get("ComboBoxBackgroundBrushKey", VsBrushes.ComboBoxBackgroundKey);
       ComboBoxMouseOverBorderBrushKey = Get("ComboBoxMouseOverBorderBrushKey", VsBrushes.ComboBoxBorderKey);
+
+      // these don't really seem to have a match in VS2010...
+      // so just watch it!
+      ToolTipBrushKey = Get("ToolTipBrushKey", null);
+      ToolTipTextBrushKey = Get("ToolTipTextBrushKey", SystemColors.InfoTextBrushKey);
+      PanelHyperlinkBrushKey = Get("PanelHyperlinkBrushKey", SystemColors.HotTrackBrushKey);
     }
 
 
     private static object Get(String key, object alternate) {
       if ( !assemblyLoadAttempted ) {
-        Assembly vsShellAssembly = null;
-        try {
-          vsShellAssembly = Assembly.Load("Microsoft.VisualStudio.Shell.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
-        } catch ( FileNotFoundException ) {
+        // do not attempt to load it on VS2010, because if 
+        // both VS2010 and VS2012 are installed, we'll get 
+        // unexpected results
+        if ( VsfPackage.Instance.VsVersion.Major > 10 ) {
+          LoadAssemblyAndType();
         }
         assemblyLoadAttempted = true;
-        if ( vsShellAssembly != null ) {
-          envColorsType = vsShellAssembly.GetType("Microsoft.VisualStudio.PlatformUI.EnvironmentColors");
-        }
       }
       if ( envColorsType != null ) {
         var prop = envColorsType.GetProperty(key);
         return prop.GetValue(null, null);
       }
       return alternate;
+    }
+
+    private static void LoadAssemblyAndType() {
+      Assembly vsShellAssembly = null;
+      try {
+        vsShellAssembly = Assembly.Load("Microsoft.VisualStudio.Shell.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a");
+      } catch ( FileNotFoundException ) {
+      }
+      if ( vsShellAssembly != null ) {
+        envColorsType = vsShellAssembly.GetType("Microsoft.VisualStudio.PlatformUI.EnvironmentColors");
+      }
     }
   }
 }
