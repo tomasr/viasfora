@@ -108,7 +108,7 @@ namespace Winterdom.Viasfora.Util {
         // do not attempt to load it on VS2010, because if 
         // both VS2010 and VS2012 are installed, we'll get 
         // unexpected results
-        if ( VsfPackage.Instance.VsVersion.Major > 10 ) {
+        if ( VsfPackage.Instance != null && VsfPackage.Instance.VsVersion.Major > 10 ) {
           LoadAssemblyAndType();
         }
         assemblyLoadAttempted = true;
