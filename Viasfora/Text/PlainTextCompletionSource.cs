@@ -33,6 +33,13 @@ namespace Winterdom.Viasfora.Text {
       if ( !VsfSettings.TextCompletionEnabled ) {
         return;
       }
+      // HACK: A complex editor such as htmlx can have multiple projection
+      // buffers underneath the primary buffer of the view
+      // that do *not* have the projection content type.
+      // We'd only like to parse out the primary buffer
+      if ( !TextEditor.IsNonProjectionOrElisionBuffer(this.theBuffer) ) {
+        return;
+      }
 
       var snapshot = theBuffer.CurrentSnapshot;
       ITrackingPoint triggerPoint = session.GetTriggerPoint(theBuffer);
