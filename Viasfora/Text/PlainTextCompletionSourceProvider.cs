@@ -12,7 +12,8 @@ using Microsoft.VisualStudio.Text.Editor;
 namespace Winterdom.Viasfora.Text {
   [Export(typeof(ICompletionSourceProvider))]
   [ContentType("text")]
-  [Name("zzzzzz.viasfora.text.completion.source")]
+  [Name("viasfora.text.completion.source")]
+  [Order(After="default")]
   public class PlainTextCompletionSourceProvider : ICompletionSourceProvider {
     [Import]
     private ITextSearchService searchService = null;
