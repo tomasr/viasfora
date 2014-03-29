@@ -127,7 +127,9 @@ namespace Winterdom.Viasfora.Text {
     private bool StartSession() {
       // do not start a session if there's already another
       // provider that has started one
-      if ( provider.CompletionBroker.IsCompletionActive(this.textView) )
+      var active = provider.CompletionBroker.GetSessions(textView)
+                           .Any(s => !s.IsDismissed);
+      if ( active )
         return false;
       // already have an active session, so continue
       if ( session != null && !session.IsDismissed )
