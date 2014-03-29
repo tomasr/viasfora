@@ -160,10 +160,10 @@ namespace Winterdom.Viasfora.Text {
 
     private bool HandleChar(char typedChar) {
       if ( session != null && !session.IsDismissed ) {
-        if ( char.IsPunctuation(typedChar) ) {
-          return CompleteWord(false);
-        } else if ( char.IsWhiteSpace(typedChar) ) {
+        if ( char.IsWhiteSpace(typedChar) ) {
           CancelSession();
+        } else if ( !char.IsLetterOrDigit(typedChar) ) {
+          return CompleteWord(false);
         }
         return false;
       }

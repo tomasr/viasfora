@@ -12,7 +12,6 @@ using System.Collections.ObjectModel;
 namespace Winterdom.Viasfora.Text {
   public class PlainTextCompletionSource : ICompletionSource {
     private ITextBuffer theBuffer;
-    private ITextSearchService textSearch;
     private ITextStructureNavigator navigator;
     private ImageSource glyphIcon;
     private List<Completion> currentCompletions;
@@ -24,10 +23,8 @@ namespace Winterdom.Viasfora.Text {
 
     public PlainTextCompletionSource(
           ITextBuffer buffer,
-          ITextSearchService searchService,
           ITextStructureNavigator structureNavigator) {
       this.theBuffer = buffer;
-      this.textSearch = searchService;
       this.navigator = structureNavigator;
       glyphIcon = new BitmapImage(new Uri("pack://application:,,,/Winterdom.Viasfora;component/Resources/TextSource.png"));
     }
@@ -41,22 +38,11 @@ namespace Winterdom.Viasfora.Text {
       if ( session.TextView.TextBuffer != this.theBuffer ) {
         return;
       }
-      // HACK: A complex editor such as htmlx can have multiple projection
-      // buffers underneath the primary buffer of the view
-      // that do *not* have the projection content type.
-      // We'd only like to parse out the primary buffer
-      //if ( !TextEditor.IsNonProjectionOrElisionBuffer(this.theBuffer) ) {
-      //  return;
-      //}
 
       var snapshot = theBuffer.CurrentSnapshot;
       var applicableToSpan = GetBufferSpan(snapshot);
       ITrackingPoint triggerPoint = session.GetTriggerPoint(theBuffer);
       ITrackingSpan prefixSpan = GetPrefixSpan(triggerPoint);
-      /*
-      String prefix = prefixSpan.GetText(theBuffer.CurrentSnapshot);
-      prefix = prefix.Trim();
-      */
 
       bool refreshCompletions = false;
       if ( currentCompletions == null ) {
@@ -137,32 +123,6 @@ namespace Winterdom.Viasfora.Text {
         return true;
       }
       return false;
-    }
-    private IEnumerable<String> FindMatchingWords(String prefix) {
-      StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
-      FindData fd = new FindData(
-        PrefixToRegEx(prefix),
-        theBuffer.CurrentSnapshot,
-        FindOptions.UseRegularExpressions,
-        navigator
-        );
-      HashSet<String> matches = new HashSet<string>();
-      SnapshotSpan? span = textSearch.FindNext(0, false, fd);
-      while ( span != null ) {
-        String text = span.Value.GetText();
-        if ( !matches.Contains(text) && comparer.Compare(text, prefix) != 0 ) {
-          //yield return text;
-          matches.Add(text);
-        }
-        span = textSearch.FindNext(span.Value.End, false, fd);
-      }
-      return matches;
-    }
-
-    private string PrefixToRegEx(string prefix) {
-      return String.Format(
-        @"\b{0}(_\w+|[\w-[0-9_]]\w*)\b",
-        System.Text.RegularExpressions.Regex.Escape(prefix));
     }
 
     private ITrackingSpan GetPrefixSpan(ITrackingPoint triggerPoint) {
