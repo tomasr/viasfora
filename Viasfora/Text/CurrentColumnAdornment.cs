@@ -109,6 +109,9 @@ namespace Winterdom.Viasfora.Text {
       IWpfTextViewLineCollection textViewLines = view.TextViewLines;
       if ( textViewLines == null )
         return; // not ready yet.
+      // make sure the caret position is on the right buffer snapshot
+      if ( caretPosition.Position.Snapshot != this.view.TextBuffer.CurrentSnapshot )
+        return;
 
       double lineWidth = VsfSettings.HighlightLineWidth;
       var line = this.view.GetTextViewLineContainingBufferPosition(
