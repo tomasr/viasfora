@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.Text.Editor;
 namespace Winterdom.Viasfora.Text {
   [Export(typeof(ICompletionSourceProvider))]
   [ContentType("text")]
-  [Name("viasfora.text.completion.source")]
+  [Name("zzzzzz.viasfora.text.completion.source")]
   public class PlainTextCompletionSourceProvider : ICompletionSourceProvider {
     [Import]
     private ITextSearchService searchService = null;

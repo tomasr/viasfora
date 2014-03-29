@@ -175,24 +175,12 @@ namespace Winterdom.Viasfora.Text {
           || nCmdID != (uint)VSConstants.VSStd2KCmdID.TAB;
     }
     private bool TriggerCompletion() {
-      //the caret must be in a non-projection location 
-      SnapshotPoint? caretPoint =
-      textView.Caret.Position.Point.GetPoint(
-      textBuffer => (!textBuffer.ContentType.IsOfType("projection")), PositionAffinity.Predecessor);
-      if ( !caretPoint.HasValue ) {
-        return false;
+      session = provider.CompletionBroker.TriggerCompletion(this.textView);
+      if ( session != null ) {
+        session.Dismissed += this.OnSessionDismissed;
+        return true;
       }
-
-      session = provider.CompletionBroker.CreateCompletionSession(
-        textView,
-        caretPoint.Value.Snapshot.CreateTrackingPoint(caretPoint.Value.Position, PointTrackingMode.Positive),
-        true);
-
-      //subscribe to the Dismissed event on the session 
-      session.Dismissed += this.OnSessionDismissed;
-      session.Start();
-
-      return true;
+      return false;
     }
     private void OnSessionDismissed(object sender, EventArgs e) {
       session.Dismissed -= this.OnSessionDismissed;
