@@ -38,15 +38,19 @@ namespace Winterdom.Viasfora.Text {
       if ( !VsfSettings.TextCompletionEnabled ) {
         return;
       }
+      if ( session.TextView.TextBuffer != this.theBuffer ) {
+        return;
+      }
       // HACK: A complex editor such as htmlx can have multiple projection
       // buffers underneath the primary buffer of the view
       // that do *not* have the projection content type.
       // We'd only like to parse out the primary buffer
-      if ( !TextEditor.IsNonProjectionOrElisionBuffer(this.theBuffer) ) {
-        return;
-      }
+      //if ( !TextEditor.IsNonProjectionOrElisionBuffer(this.theBuffer) ) {
+      //  return;
+      //}
 
       var snapshot = theBuffer.CurrentSnapshot;
+      var applicableToSpan = GetBufferSpan(snapshot);
       ITrackingPoint triggerPoint = session.GetTriggerPoint(theBuffer);
       ITrackingSpan prefixSpan = GetPrefixSpan(triggerPoint);
       /*
@@ -73,13 +77,17 @@ namespace Winterdom.Viasfora.Text {
         }
       }
       var set = new CompletionSet(
-        moniker: "Text",
+        moniker: "plainText",
         displayName: "Text",
         applicableTo: prefixSpan,
         completions: currentCompletions,
         completionBuilders: null
         );
       completionSets.Add(set);
+    }
+
+    private ITrackingSpan GetBufferSpan(ITextSnapshot snapshot) {
+      return snapshot.CreateTrackingSpan(0, snapshot.Length, SpanTrackingMode.EdgeInclusive);
     }
 
     private bool IsSignificantChange(ITextVersion textVersion) {
