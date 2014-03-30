@@ -49,21 +49,13 @@ namespace Winterdom.Viasfora.Text {
 
       bool refreshCompletions = false;
       if ( currentCompletions == null ) {
-        currentCompletions = new List<Completion>();
         refreshCompletions = true;
       } else {
         refreshCompletions = IsSignificantChange(snapshot.Version);
       }
 
       if ( refreshCompletions ) {
-        lastCompletionVersionNumber = CurrentVersion;
-        currentCompletions.Clear();
-        var matches = FindPlainTextWords()
-                     .Distinct().ToList();
-        matches.Sort(StringComparer.InvariantCultureIgnoreCase);
-        foreach ( var match in matches ) {
-          currentCompletions.Add(new Completion(match, match, match, glyphIcon, null));
-        }
+        BuildCompletionsList();
       }
       var set = new CompletionSet(
         moniker: "plainText",
@@ -73,6 +65,18 @@ namespace Winterdom.Viasfora.Text {
         completionBuilders: null
         );
       completionSets.Add(set);
+    }
+
+    private void BuildCompletionsList() {
+      var words = FindPlainTextWords().Distinct();
+      var newCompletions = 
+        (from w in words
+         select new Completion(w, w, w, glyphIcon, null))
+         .ToList();
+
+      newCompletions.Sort(CompletionComparer.Instance);
+      this.currentCompletions = newCompletions;
+      lastCompletionVersionNumber = CurrentVersion;
     }
 
     private ITrackingSpan GetBufferSpan(ITextSnapshot snapshot) {
@@ -134,6 +138,14 @@ namespace Winterdom.Viasfora.Text {
       if ( position > 0 ) position--;
       var extent = navigator.GetExtentOfWord(new SnapshotPoint(snapshot, position));
       return snapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
+    }
+
+    private class CompletionComparer : IComparer<Completion> {
+      private StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+      public static CompletionComparer Instance = new CompletionComparer();
+      public int Compare(Completion x, Completion y) {
+        return comparer.Compare(x.DisplayText, y.DisplayText);
+      }
     }
   }
 }
