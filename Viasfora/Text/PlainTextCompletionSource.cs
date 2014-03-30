@@ -38,6 +38,9 @@ namespace Winterdom.Viasfora.Text {
       if ( session.TextView.TextBuffer != this.theBuffer ) {
         return;
       }
+      if ( !PlainTextCompletionContext.IsSet(session) ) {
+        return;
+      }
 
       var snapshot = theBuffer.CurrentSnapshot;
       var applicableToSpan = GetBufferSpan(snapshot);
@@ -55,9 +58,9 @@ namespace Winterdom.Viasfora.Text {
       if ( refreshCompletions ) {
         lastCompletionVersionNumber = CurrentVersion;
         currentCompletions.Clear();
-        var matches = FindMatchingWords()
-                     .Distinct()
-                     .OrderBy(x => x);
+        var matches = FindPlainTextWords()
+                     .Distinct().ToList();
+        matches.Sort(StringComparer.InvariantCultureIgnoreCase);
         foreach ( var match in matches ) {
           currentCompletions.Add(new Completion(match, match, match, glyphIcon, null));
         }
@@ -90,12 +93,12 @@ namespace Winterdom.Viasfora.Text {
       // - if the change affects more than 10 characters
       if ( changes.Any(change => change.NewText.Length > 10) )
         return true;
-      // - if we have ignored more than 20 previous changes
-      return (textVersion.VersionNumber - this.lastCompletionVersionNumber) >= 20;
+      // - if we have ignored more than 10 previous changes
+      return (textVersion.VersionNumber - this.lastCompletionVersionNumber) >= 10;
       // TODO: Cut/Copy/Paste changes could significantly impact this
     }
 
-    private IEnumerable<String> FindMatchingWords() {
+    private IEnumerable<String> FindPlainTextWords() {
       var snapshot = theBuffer.CurrentSnapshot;
       SnapshotPoint pt = new SnapshotPoint(snapshot, 0);
       while ( pt.Position < snapshot.Length ) {

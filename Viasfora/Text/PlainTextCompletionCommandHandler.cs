@@ -175,9 +175,22 @@ namespace Winterdom.Viasfora.Text {
           || nCmdID != (uint)VSConstants.VSStd2KCmdID.TAB;
     }
     private bool TriggerCompletion() {
-      session = provider.CompletionBroker.TriggerCompletion(this.textView);
+      if ( session != null ) {
+        session.Dismiss();
+      }
+      // locate trigger point
+      var caretPoint = textView.Caret.Position.BufferPosition;
+      var snapshot = caretPoint.Snapshot;
+
+      var triggerPoint = snapshot.CreateTrackingPoint(
+                            caretPoint.Position, 
+                            PointTrackingMode.Positive);
+      session = provider.CompletionBroker.CreateCompletionSession(
+                            this.textView, triggerPoint, true);
       if ( session != null ) {
         session.Dismissed += this.OnSessionDismissed;
+        PlainTextCompletionContext.Add(session);
+        session.Start();
         return true;
       }
       return false;
