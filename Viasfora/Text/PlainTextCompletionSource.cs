@@ -41,11 +41,13 @@ namespace Winterdom.Viasfora.Text {
       if ( !PlainTextCompletionContext.IsSet(session) ) {
         return;
       }
-
       var snapshot = theBuffer.CurrentSnapshot;
-      var applicableToSpan = GetBufferSpan(snapshot);
-      ITrackingPoint triggerPoint = session.GetTriggerPoint(theBuffer);
-      ITrackingSpan prefixSpan = GetPrefixSpan(triggerPoint);
+      var triggerPoint = session.GetTriggerPoint(snapshot);
+      if ( !triggerPoint.HasValue ) {
+        return;
+      }
+
+      var applicableToSpan = GetApplicableToSpan(triggerPoint.Value);
 
       bool refreshCompletions = false;
       if ( currentCompletions == null ) {
@@ -60,7 +62,7 @@ namespace Winterdom.Viasfora.Text {
       var set = new CompletionSet(
         moniker: "plainText",
         displayName: "Text",
-        applicableTo: prefixSpan,
+        applicableTo: applicableToSpan,
         completions: currentCompletions,
         completionBuilders: null
         );
@@ -79,27 +81,23 @@ namespace Winterdom.Viasfora.Text {
       lastCompletionVersionNumber = CurrentVersion;
     }
 
-    private ITrackingSpan GetBufferSpan(ITextSnapshot snapshot) {
-      return snapshot.CreateTrackingSpan(0, snapshot.Length, SpanTrackingMode.EdgeInclusive);
-    }
-
     private bool IsSignificantChange(ITextVersion textVersion) {
-      var changes = textVersion.Changes;
-      if ( changes == null || changes.Count == 0 )
-        return false;
       if ( textVersion.VersionNumber == this.lastCompletionVersionNumber )
         return false;
-      // to avoid having to reparse the document on every key stroke
-      // we only do it if we consider the document has changed "enough":
-      // - if the change affects the number of lines in the buffer
-      if ( changes.Any(change => change.LineCountDelta > 0) )
-        return true;
-      // - if the change affects more than 10 characters
-      if ( changes.Any(change => change.NewText.Length > 10) )
-        return true;
+      var changes = textVersion.Changes;
+      if ( changes != null && changes.Count > 0 ) {
+        // to avoid having to reparse the document on every key stroke
+        // we only do it if we consider the document has changed "enough":
+        // - if the change affects the number of lines in the buffer
+        if ( changes.Any(change => change.LineCountDelta > 0) )
+          return true;
+        // - if the change affects more than 10 characters
+        if ( changes.Any(change => change.NewText.Length > 10) )
+          return true;
+        // TODO: Cut/Copy/Paste changes could significantly impact this
+      }
       // - if we have ignored more than 10 previous changes
       return (textVersion.VersionNumber - this.lastCompletionVersionNumber) >= 10;
-      // TODO: Cut/Copy/Paste changes could significantly impact this
     }
 
     private IEnumerable<String> FindPlainTextWords() {
@@ -132,12 +130,17 @@ namespace Winterdom.Viasfora.Text {
       return false;
     }
 
-    private ITrackingSpan GetPrefixSpan(ITrackingPoint triggerPoint) {
-      ITextSnapshot snapshot = theBuffer.CurrentSnapshot;
-      int position = triggerPoint.GetPosition(snapshot);
-      if ( position > 0 ) position--;
-      var extent = navigator.GetExtentOfWord(new SnapshotPoint(snapshot, position));
-      return snapshot.CreateTrackingSpan(extent.Span, SpanTrackingMode.EdgeInclusive);
+    private ITrackingSpan GetApplicableToSpan(SnapshotPoint triggerPoint) {
+      ITextSnapshot snapshot = triggerPoint.Snapshot;
+      SnapshotPoint end = triggerPoint;
+      if ( end > 0 ) end -= 1;
+      var word = navigator.GetExtentOfWord(end);
+      return snapshot.CreateTrackingSpan(word.Span, SpanTrackingMode.EdgeInclusive);
+    }
+
+    private bool IsIdentifierCharacter(char ch) {
+      return Char.IsLetterOrDigit(ch)
+        || ch == '_' || ch == '-';
     }
 
     private class CompletionComparer : IComparer<Completion> {
