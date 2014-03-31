@@ -14,12 +14,8 @@ namespace Winterdom.Viasfora.Text {
     private ITextBuffer theBuffer;
     private ITextStructureNavigator navigator;
     private ImageSource glyphIcon;
-    private List<Completion> currentCompletions;
-    private int lastCompletionVersionNumber;
-
-    public int CurrentVersion {
-      get { return theBuffer.CurrentSnapshot.Version.VersionNumber; }
-    }
+    private IList<Completion> currentCompletions;
+    private BufferStats bufferStatsOnCompletion;
 
     public PlainTextCompletionSource(
           ITextBuffer buffer,
@@ -49,15 +45,11 @@ namespace Winterdom.Viasfora.Text {
 
       var applicableToSpan = GetApplicableToSpan(triggerPoint.Value);
 
-      bool refreshCompletions = false;
-      if ( currentCompletions == null ) {
-        refreshCompletions = true;
-      } else {
-        refreshCompletions = IsSignificantChange(snapshot.Version);
-      }
-
-      if ( refreshCompletions ) {
-        BuildCompletionsList();
+      var then = this.bufferStatsOnCompletion;
+      var now = new BufferStats(snapshot);
+      if ( currentCompletions == null || now.SignificantThan(then) ) {
+        this.currentCompletions = BuildCompletionsList();
+        this.bufferStatsOnCompletion = now;
       }
       var set = new CompletionSet(
         moniker: "plainText",
@@ -69,7 +61,7 @@ namespace Winterdom.Viasfora.Text {
       completionSets.Add(set);
     }
 
-    private void BuildCompletionsList() {
+    private IList<Completion> BuildCompletionsList() {
       var words = FindPlainTextWords().Distinct();
       var newCompletions = 
         (from w in words
@@ -77,27 +69,7 @@ namespace Winterdom.Viasfora.Text {
          .ToList();
 
       newCompletions.Sort(CompletionComparer.Instance);
-      this.currentCompletions = newCompletions;
-      lastCompletionVersionNumber = CurrentVersion;
-    }
-
-    private bool IsSignificantChange(ITextVersion textVersion) {
-      if ( textVersion.VersionNumber == this.lastCompletionVersionNumber )
-        return false;
-      var changes = textVersion.Changes;
-      if ( changes != null && changes.Count > 0 ) {
-        // to avoid having to reparse the document on every key stroke
-        // we only do it if we consider the document has changed "enough":
-        // - if the change affects the number of lines in the buffer
-        if ( changes.Any(change => change.LineCountDelta > 0) )
-          return true;
-        // - if the change affects more than 10 characters
-        if ( changes.Any(change => change.NewText.Length > 10) )
-          return true;
-        // TODO: Cut/Copy/Paste changes could significantly impact this
-      }
-      // - if we have ignored more than 10 previous changes
-      return (textVersion.VersionNumber - this.lastCompletionVersionNumber) >= 10;
+      return newCompletions;
     }
 
     private IEnumerable<String> FindPlainTextWords() {
@@ -107,7 +79,7 @@ namespace Winterdom.Viasfora.Text {
         var extent = navigator.GetExtentOfWord(pt);
         if ( extent != null ) {
           String text;
-          if ( IsSignificant(extent, out text) ) {
+          if ( IsSignificantText(extent, out text) ) {
             yield return extent.Span.GetText();
           }
           if ( extent.Span.End > pt )
@@ -118,7 +90,7 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private bool IsSignificant(TextExtent extent, out String word) {
+    private bool IsSignificantText(TextExtent extent, out String word) {
       word = "";
       if ( !extent.IsSignificant ) return false;
       if ( extent.Span.IsEmpty ) return false;
@@ -148,6 +120,34 @@ namespace Winterdom.Viasfora.Text {
       public static CompletionComparer Instance = new CompletionComparer();
       public int Compare(Completion x, Completion y) {
         return comparer.Compare(x.DisplayText, y.DisplayText);
+      }
+    }
+
+    private struct BufferStats {
+      private int version;
+      private int lineCount;
+      public int Version {
+        get { return version; }
+      }
+      public int LineCount {
+        get { return lineCount; }
+      }
+
+      public BufferStats(ITextSnapshot snapshot) {
+        this.version = snapshot.Version.VersionNumber;
+        this.lineCount = snapshot.LineCount;
+      }
+
+      public bool SignificantThan(BufferStats then) {
+        // if a change has added lines, rebuild it
+        if ( this.LineCount > then.LineCount ) {
+          return true;
+        }
+        // has there been more than a 100 version changes?
+        if ( (this.Version - then.Version) > 100 ) {
+          return true;
+        }
+        return false;
       }
     }
   }
