@@ -62,17 +62,18 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private IList<Completion> BuildCompletionsList() {
-      var words = FindPlainTextWords().Distinct();
-      var newCompletions = 
+      var words = FindPlainTextWords();
+      var newCompletions =
         (from w in words
          select new Completion(w, w, w, glyphIcon, null))
          .ToList();
 
-      newCompletions.Sort(CompletionComparer.Instance);
+      //newCompletions.Sort(CompletionComparer.Instance);
       return newCompletions;
     }
 
     private IEnumerable<String> FindPlainTextWords() {
+      SortedSet<String> words = new SortedSet<String>(StringComparer.OrdinalIgnoreCase);
       var snapshot = theBuffer.CurrentSnapshot;
       SnapshotPoint pt = new SnapshotPoint(snapshot, 0);
       while ( pt.Position < snapshot.Length ) {
@@ -80,7 +81,7 @@ namespace Winterdom.Viasfora.Text {
         if ( extent != null ) {
           String text;
           if ( IsSignificantText(extent, out text) ) {
-            yield return extent.Span.GetText();
+            words.Add(text);
           }
           if ( extent.Span.End > pt )
             pt = extent.Span.End;
@@ -88,6 +89,7 @@ namespace Winterdom.Viasfora.Text {
         if ( pt.Position < snapshot.Length )
           pt += 1;
       }
+      return words;
     }
 
     private bool IsSignificantText(TextExtent extent, out String word) {
