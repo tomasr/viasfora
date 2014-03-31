@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Text {
           ITextStructureNavigator structureNavigator) {
       this.theBuffer = buffer;
       this.navigator = structureNavigator;
-      glyphIcon = new BitmapImage(new Uri("pack://application:,,,/Winterdom.Viasfora;component/Resources/TextSource.png"));
+      glyphIcon = new BitmapImage(new Uri("pack://application:,,,/Winterdom.Viasfora;component/Resources/PlainTextCompletion.ico"));
     }
     public void Dispose() {
     }
