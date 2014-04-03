@@ -34,6 +34,7 @@ namespace Winterdom.Viasfora.Text {
       view.Caret.PositionChanged += OnCaretPositionChanged;
       view.ViewportWidthChanged += OnViewportChanged;
       view.ViewportHeightChanged += OnViewportChanged;
+      view.LayoutChanged += OnViewLayoutChanged;
       view.TextViewModel.EditBuffer.PostChanged += OnBufferPostChanged;
       view.Closed += OnViewClosed;
       VsfSettings.SettingsUpdated += OnSettingsUpdated;
@@ -57,6 +58,7 @@ namespace Winterdom.Viasfora.Text {
       view.ViewportWidthChanged -= OnViewportChanged;
       view.ViewportHeightChanged -= OnViewportChanged;
       view.Closed -= OnViewClosed;
+      view.LayoutChanged -= OnViewLayoutChanged;
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
     }
     void OnViewportChanged(object sender, EventArgs e) {
@@ -77,6 +79,13 @@ namespace Winterdom.Viasfora.Text {
       layer.RemoveAdornmentsByTag(CUR_COL_TAG);
       this.CreateVisuals(this.view.Caret.Position.VirtualBufferPosition);
     }
+    private void OnViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
+      if ( e.VerticalTranslation ) {
+        layer.RemoveAdornmentsByTag(CUR_COL_TAG);
+        this.CreateVisuals(this.view.Caret.Position.VirtualBufferPosition);
+      }
+    }
+
 
     private void CreateDrawingObjects() {
       // this gets the color settings configured by the
