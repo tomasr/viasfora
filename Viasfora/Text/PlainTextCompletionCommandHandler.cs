@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
-using Microsoft.VisualStudio;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -78,12 +78,18 @@ namespace Winterdom.Viasfora.Text {
       // preprocess command
       bool handled = false;
       bool filter = false;
+      int hr = 0;
       if ( pguidCmdGroup == VSConstants.VSStd2K ) {
         var cmd = (VSConstants.VSStd2KCmdID)nCmdID;
         switch ( cmd ) {
           case VSConstants.VSStd2KCmdID.AUTOCOMPLETE:
           case VSConstants.VSStd2KCmdID.COMPLETEWORD:
-            handled = StartSession();
+            // we don't want to take over the existing handler
+            // by the language provider. Usually, this happens
+            // when the caret is right after a symbol
+            if ( !ShouldForward() ) {
+              handled = this.StartSession();
+            } 
             break;
           case VSConstants.VSStd2KCmdID.RETURN:
             handled = CompleteWord(false);
@@ -107,7 +113,6 @@ namespace Winterdom.Viasfora.Text {
         }
       }
 
-      int hr = 0;
       if ( !handled ) {
         // let other commands handle it
         hr = nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
@@ -116,6 +121,20 @@ namespace Winterdom.Viasfora.Text {
       }
 
       return hr;
+    }
+
+    private bool ShouldForward() {
+      var caretPos = this.textView.Caret.Position.BufferPosition;
+      if ( caretPos > 0 ) {
+        caretPos -= 1;
+      }
+      if ( caretPos < caretPos.Snapshot.Length ) {
+        char ch = caretPos.GetChar();
+        if ( Char.IsPunctuation(ch) ) {
+          return true;
+        }
+      }
+      return false;
     }
 
     private void Filter() {
