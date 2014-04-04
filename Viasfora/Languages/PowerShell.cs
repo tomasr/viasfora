@@ -14,8 +14,6 @@ namespace Winterdom.Viasfora.Languages {
           "exit"
       };
     static readonly String[] QUERY_KEYWORDS = {
-          "ForEach-Object", "Select-Object",
-          "Where-Object", "Sort-Object"
       };
     static readonly String[] VIS_KEYWORDS = {
       };
