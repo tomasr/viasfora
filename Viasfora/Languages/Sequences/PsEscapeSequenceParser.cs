@@ -15,7 +15,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       this.start = 1;
       // single-quoted strings in powershell
       // don't support escape sequences
-      if ( text.StartsWith("'") )
+      if ( text.StartsWith("'") || text.StartsWith("@'") )
         this.start = text.Length;
     }
     public Span? Next() {
