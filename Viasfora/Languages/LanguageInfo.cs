@@ -24,10 +24,12 @@ namespace Winterdom.Viasfora.Languages {
     }
 
     public abstract String BraceList { get; }
-    public abstract bool SupportsEscapeSeqs { get; }
     public abstract IBraceExtractor NewBraceExtractor();
     public virtual IFirstLineCommentParser NewFirstLineCommentParser() {
       return new GenericCommentParser();
+    }
+    public virtual IEscapeSequenceParser NewEscapeSequenceParser(String text) {
+      return null;
     }
 
     public bool MatchesContentType(IContentType contentType) {

@@ -26,9 +26,6 @@ namespace Winterdom.Viasfora.Languages {
     protected override string KeyName {
       get { return "Text"; }
     }
-    public override bool SupportsEscapeSeqs {
-      get { return false; }
-    }
     public override IBraceExtractor NewBraceExtractor() {
       return new NoBraceExtractor();
     }
