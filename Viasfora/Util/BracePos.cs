@@ -9,23 +9,28 @@ using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Util {
   public struct BracePos {
-    private char brace;
     private int depth;
-    private int position;
+    private CharPos charPos;
 
     public char Brace {
-      get { return brace; }
+      get { return charPos.Char; }
     }
     public int Depth {
       get { return depth; }
     }
     public int Position {
-      get { return position; }
+      get { return charPos.Position; }
+    }
+    public int State {
+      get { return charPos.State; }
     }
 
     public BracePos(char ch, int pos, int depth) {
-      this.brace = ch;
-      this.position = pos;
+      this.charPos = new CharPos(ch, pos);
+      this.depth = depth;
+    }
+    public BracePos(CharPos pos, int depth) {
+      this.charPos = pos;
       this.depth = depth;
     }
 

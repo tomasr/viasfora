@@ -28,7 +28,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public BracePos AsBrace(int depth) {
-      return new BracePos(Char, Position, depth);
+      return new BracePos(this, depth);
     }
 
     public static implicit operator char(CharPos cp) {
