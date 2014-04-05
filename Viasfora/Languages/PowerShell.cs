@@ -23,7 +23,7 @@ namespace Winterdom.Viasfora.Languages {
     }
 
     public override IBraceExtractor NewBraceExtractor() {
-      return new PSBraceExtractor(this);
+      return new PsBraceExtractor(this);
     }
     public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
       return new PsEscapeSequenceParser(text);

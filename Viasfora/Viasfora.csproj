@@ -95,7 +95,7 @@
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="JsonExtensions.cs" />
-    <Compile Include="Languages\BraceExtractors\PSBraceExtractor.cs" />
+    <Compile Include="Languages\BraceExtractors\PsBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\PythonBraceExtractor.cs" />
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />

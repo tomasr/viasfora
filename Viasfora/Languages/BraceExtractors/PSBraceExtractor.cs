@@ -6,7 +6,7 @@ using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.BraceExtractors {
-  public class PSBraceExtractor : IBraceExtractor {
+  public class PsBraceExtractor : IBraceExtractor {
     const int stText = 0;
     const int stString = 1;
     const int stExpandableString = 2;
@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     private int status = stText;
     private LanguageInfo lang;
 
-    public PSBraceExtractor(LanguageInfo lang) {
+    public PsBraceExtractor(LanguageInfo lang) {
       this.lang = lang;
     }
 
