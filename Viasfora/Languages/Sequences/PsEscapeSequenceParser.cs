@@ -11,9 +11,22 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     private int start;
     public PsEscapeSequenceParser(String text) {
       this.text = text;
-      this.start = 0;
+      // quotes are included, so start at 1
+      this.start = 1;
+      // single-quoted strings in powershell
+      // don't support escape sequences
+      if ( text.StartsWith("'") )
+        this.start = text.Length;
     }
     public Span? Next() {
+      while ( start < text.Length - 2 ) {
+        if ( text[start] == '`' ) {
+          var span = new Span(start, 2);
+          start += 2;
+          return span;
+        }
+        start++;
+      }
       return null;
     }
 
