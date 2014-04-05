@@ -7,7 +7,7 @@ using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
-  class PowerShell : LanguageInfo {
+  public class PowerShell : LanguageInfo {
     public const String ContentType = "PowerShell.v3";
     static readonly String[] FLOW_KEYWORDS = {
           "for", "while", "foreach", "if", "else",
