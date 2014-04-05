@@ -7,6 +7,7 @@ namespace Winterdom.Viasfora.Util {
   public struct CharPos {
     private char ch;
     private int position;
+    private int state;
 
     public char Char {
       get { return ch; }
@@ -14,10 +15,16 @@ namespace Winterdom.Viasfora.Util {
     public int Position {
       get { return position; }
     }
+    public int State {
+      get { return state; }
+    }
 
-    public CharPos(char ch, int pos) {
+    public CharPos(char ch, int pos) : this(ch, pos, 0) {
+    }
+    public CharPos(char ch, int pos, int state) {
       this.ch = ch;
       this.position = pos;
+      this.state = state;
     }
 
     public BracePos AsBrace(int depth) {
