@@ -19,9 +19,6 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] LINQ_KEYWORDS = {
           "from", "in"
       };
-    public override bool SupportsEscapeSeqs {
-      get { return true; }
-    }
     public override string BraceList {
       get { return "(){}[]"; }
     }

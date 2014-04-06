@@ -41,9 +41,6 @@ namespace Winterdom.Viasfora.Languages {
     public override string BraceList {
       get { return "()"; }
     }
-    public override bool SupportsEscapeSeqs {
-      get { return false; }
-    }
     public override IBraceExtractor NewBraceExtractor() {
       return new VbBraceExtractor(this);
     }

@@ -22,9 +22,6 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] LINQ_KEYWORDS = {
          "select", "update", "insert", "delete", "merge"
       };
-    public override bool SupportsEscapeSeqs {
-      get { return false; }
-    }
     public override string BraceList {
       get { return "()[]"; }
     }

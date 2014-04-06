@@ -47,7 +47,7 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       LanguageInfo lang = GetKeywordsByContentType(theBuffer.ContentType);
-      bool eshe = VsfSettings.EscapeSeqHighlightEnabled && lang.SupportsEscapeSeqs;
+      bool eshe = VsfSettings.EscapeSeqHighlightEnabled;
       bool kce = VsfSettings.KeywordClassifierEnabled;
       if ( !(kce || eshe) ) {
         yield break;
@@ -60,7 +60,7 @@ namespace Winterdom.Viasfora.Text {
         String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
         if ( eshe && name.Contains("string") ) {
           var span = tagSpan.GetSpan(snapshot);
-          foreach ( var escapeTag in ProcessEscapeSequences(span) ) {
+          foreach ( var escapeTag in ProcessEscapeSequences(lang, span) ) {
             yield return escapeTag;
           }
         }
@@ -107,32 +107,19 @@ namespace Winterdom.Viasfora.Text {
       return null;
     }
 
-    private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(SnapshotSpan cs) {
+    private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(
+          LanguageInfo lang, SnapshotSpan cs) {
       if ( cs.IsEmpty ) yield break;
-
       String text = cs.GetText();
-      // don't process verbatim strings
-      if ( text.StartsWith("@") || text.StartsWith("<") ) yield break;
-      int start = 1;
-      while ( start < text.Length - 2 ) {
-        if ( text[start] == '\\' ) {
-          int len = 1;
-          int maxlen = Int32.MaxValue;
-          char f = text[start + 1];
-          // not perfect, but close enough for first version
-          if ( f == 'x' || f == 'X' || f == 'u' || f == 'U' ) {
-            while ( (start + len) < text.Length && IsHexDigit(text[start + len + 1]) ) {
-              len++;
-            }
-          }
-          if ( f == 'u' ) maxlen = 5;
-          if ( f == 'U' ) maxlen = 9;
-          if ( len > maxlen ) len = maxlen;
-          var sspan = new SnapshotSpan(cs.Snapshot, cs.Start.Position + start, len + 1);
-          yield return new TagSpan<KeywordTag>(sspan, stringEscapeClassification);
-          start += len;
-        }
-        start++;
+
+      var parser = lang.NewEscapeSequenceParser(text);
+      if ( parser == null )
+        yield break;
+
+      Span? span;
+      while ( (span = parser.Next()) != null ) {
+        var sspan = new SnapshotSpan(cs.Snapshot, cs.Start.Position + span.Value.Start, span.Value.Length);
+        yield return new TagSpan<KeywordTag>(sspan, stringEscapeClassification);
       }
     }
 

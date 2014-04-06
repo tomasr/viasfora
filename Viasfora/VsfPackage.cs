@@ -34,6 +34,7 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.SqlOptionsPage), "Viasfora\\Languages", "SQL", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.TypeScriptOptionsPage), "Viasfora\\Languages", "TypeScript", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.PythonOptionsPage), "Viasfora\\Languages", "Python", 0, 0, true)]
+  [ProvideOptionPage(typeof(Options.PowerShellOptionsPage), "Viasfora\\Languages", "PowerShell", 0, 0, true)]
   [ProvideMenuResource(1000, 1)]
   public sealed class VsfPackage : Package {
     public const String USER_OPTIONS_KEY = "VsfUserOptions";
@@ -60,6 +61,7 @@ namespace Winterdom.Viasfora {
       languageList.Add(new Sql());
       languageList.Add(new TypeScript());
       languageList.Add(new Python());
+      languageList.Add(new PowerShell());
     }
 
     public static LanguageInfo LookupLanguage(IContentType contentType) {
