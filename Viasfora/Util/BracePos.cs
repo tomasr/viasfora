@@ -21,9 +21,6 @@ namespace Winterdom.Viasfora.Util {
     public int Position {
       get { return charPos.Position; }
     }
-    public int State {
-      get { return charPos.State; }
-    }
 
     public BracePos(char ch, int pos, int depth) {
       this.charPos = new CharPos(ch, pos);
