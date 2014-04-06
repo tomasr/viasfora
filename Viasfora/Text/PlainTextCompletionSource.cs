@@ -68,7 +68,6 @@ namespace Winterdom.Viasfora.Text {
          select new Completion(w, w, w, glyphIcon, null))
          .ToList();
 
-      //newCompletions.Sort(CompletionComparer.Instance);
       return newCompletions;
     }
 
@@ -97,7 +96,7 @@ namespace Winterdom.Viasfora.Text {
       if ( !extent.IsSignificant ) return false;
       if ( extent.Span.IsEmpty ) return false;
       char ch = extent.Span.Start.GetChar();
-      if ( Char.IsLetter(ch) || ch == '_' ) {
+      if ( Char.IsLetter(ch) || ch == '_' || ch == '$' ) {
         word = extent.Span.GetText();
         return true;
       }
@@ -110,11 +109,6 @@ namespace Winterdom.Viasfora.Text {
       if ( end > 0 ) end -= 1;
       var word = navigator.GetExtentOfWord(end);
       return snapshot.CreateTrackingSpan(word.Span, SpanTrackingMode.EdgeInclusive);
-    }
-
-    private bool IsIdentifierCharacter(char ch) {
-      return Char.IsLetterOrDigit(ch)
-        || ch == '_' || ch == '-';
     }
 
     private class CompletionComparer : IComparer<Completion> {
