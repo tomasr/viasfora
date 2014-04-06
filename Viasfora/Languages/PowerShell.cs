@@ -11,8 +11,8 @@ namespace Winterdom.Viasfora.Languages {
     public const String ContentType = "PowerShell.v3";
     static readonly String[] FLOW_KEYWORDS = {
           "for", "while", "foreach", "if", "else",
-          "do", "break", "continue", "continue",
-          "exit"
+          "elseif", "do", "break", "continue",
+          "exit", "return", "until", "switch"
       };
     static readonly String[] QUERY_KEYWORDS = {
       };
@@ -35,7 +35,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return QUERY_KEYWORDS; }
     }
     protected override String[] VisibilityDefaults {
-      get { return QUERY_KEYWORDS; }
+      get { return VIS_KEYWORDS; }
     }
     protected override String KeyName {
       get { return "PowerShell"; }
