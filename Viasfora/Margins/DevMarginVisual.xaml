@@ -84,7 +84,7 @@
              Focusable="false"
              StaysOpen="false"
              Placement="Top"
-             PlacementTarget="{Binding ElementName=BufferGraphCombo}"
+             PlacementTarget="{Binding ElementName=CTToggleButton}"
              DataContext="{Binding SelectedBuffer.ActualContentType}">
         <Grid>
           <Border BorderThickness="1,1,1,1"

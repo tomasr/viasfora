@@ -34,6 +34,7 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.SqlOptionsPage), "Viasfora\\Languages", "SQL", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.TypeScriptOptionsPage), "Viasfora\\Languages", "TypeScript", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.PythonOptionsPage), "Viasfora\\Languages", "Python", 0, 0, true)]
+  [ProvideOptionPage(typeof(Options.PowerShellOptionsPage), "Viasfora\\Languages", "PowerShell", 0, 0, true)]
   [ProvideMenuResource(1000, 1)]
   public sealed class VsfPackage : Package {
     public const String USER_OPTIONS_KEY = "VsfUserOptions";
@@ -45,8 +46,7 @@ namespace Winterdom.Viasfora {
     public static bool PresentationModeTurnedOn { get; set; }
     public static EventHandler PresentationModeChanged { get; set; }
     public byte[] UserOptions { get; set; }
-
-    private Version vsVersion;
+    public Version VsVersion { get; private set; }
     private IVsActivityLog activityLog;
     private List<VsCommand> commands = new List<VsCommand>();
 
@@ -61,6 +61,7 @@ namespace Winterdom.Viasfora {
       languageList.Add(new Sql());
       languageList.Add(new TypeScript());
       languageList.Add(new Python());
+      languageList.Add(new PowerShell());
     }
 
     public static LanguageInfo LookupLanguage(IContentType contentType) {
@@ -82,7 +83,7 @@ namespace Winterdom.Viasfora {
       Instance = this;
       InitializeActivityLog();
       LogInfo("Initializing VsfPackage");
-      vsVersion = FindVSVersion();
+      VsVersion = FindVSVersion();
 
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
       if ( null != mcs ) {
@@ -93,7 +94,6 @@ namespace Winterdom.Viasfora {
       this.AddOptionKey(USER_OPTIONS_KEY);
     }
 
-
     protected override void OnLoadOptions(string key, Stream stream) {
       base.OnLoadOptions(key, stream);
       if ( key == USER_OPTIONS_KEY ) {
@@ -102,6 +102,7 @@ namespace Winterdom.Viasfora {
         this.UserOptions = data;
       }
     }
+
     protected override void OnSaveOptions(string key, Stream stream) {
       base.OnSaveOptions(key, stream);
       if ( key == USER_OPTIONS_KEY && UserOptions != null ) {
@@ -125,25 +126,6 @@ namespace Winterdom.Viasfora {
       }
     }
 
-
-    // see http://msdn.microsoft.com/en-us/library/vstudio/microsoft.visualstudio.platformui.environmentcolors.aspx
-    // for available styles.
-    public object FindColorResource(String name) {
-      if ( vsVersion.Major <= 10 ) {
-        return null;
-      }
-      Assembly assembly = Assembly.Load(String.Format(
-        "Microsoft.VisualStudio.Shell.{0}.0, Version={0}.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a",
-        vsVersion.Major
-        ));
-      if ( assembly != null ) {
-        Type type = assembly.GetType("Microsoft.VisualStudio.PlatformUI.EnvironmentColors");
-        var prop = type.GetProperty(name);
-        return prop.GetValue(null, null);
-      }
-      return null;
-    }
-
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
       commands.Add(new PresentationModeCommand(this, mcs));
     }
@@ -152,7 +134,6 @@ namespace Winterdom.Viasfora {
       commands.Add(new RemoveOutliningCommand(this, mcs));
       commands.Add(new ClearOutliningCommand(this, mcs));
     }
-
 
     private static Version FindVSVersion() {
       String key = Instance.UserRegistryRoot.Name;

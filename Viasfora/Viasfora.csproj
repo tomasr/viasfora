@@ -95,12 +95,16 @@
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="JsonExtensions.cs" />
+    <Compile Include="Languages\BraceExtractors\PsBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\PythonBraceExtractor.cs" />
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
+    <Compile Include="Languages\PowerShell.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
     <Compile Include="Languages\Json.cs" />
     <Compile Include="Languages\Python.cs" />
+    <Compile Include="Languages\Sequences\PsEscapeSequenceParser.cs" />
+    <Compile Include="Languages\Sequences\CEscapeSequenceParser.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />
     <Compile Include="Margins\DevMarginVisual.xaml.cs">
       <DependentUpon>DevMarginVisual.xaml</DependentUpon>
@@ -108,6 +112,9 @@
     <Compile Include="Margins\DevMarginViewModel.cs" />
     <Compile Include="Margins\DevViewMargin.cs" />
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\PowerShellOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Options\PresentationModeDialogPage.cs">
@@ -162,6 +169,10 @@
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="TextEditor.cs" />
+    <Compile Include="Text\PlainTextCompletionCommandHandler.cs" />
+    <Compile Include="Text\PlainTextCompletionContext.cs" />
+    <Compile Include="Text\PlainTextCompletionSource.cs" />
+    <Compile Include="Text\PlainTextCompletionSourceProvider.cs" />
     <Compile Include="Text\BraceCache.cs" />
     <Compile Include="Text\BufferOutlines.cs" />
     <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
@@ -181,6 +192,7 @@
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
     <Compile Include="Text\UserOutliningTaggerProvider.cs" />
+    <Compile Include="Util\IEscapeSequenceParser.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
     <Compile Include="Util\BracePos.cs" />
@@ -216,7 +228,6 @@
     <Compile Include="Text\KeywordTaggerProvider.cs" />
     <Compile Include="VsfPackage.cs" />
     <Compile Include="VsSolution.cs" />
-    <Compile Include="WpfExtensions.cs" />
     <Compile Include="Xml\XmlQuickInfoSource.cs" />
     <Compile Include="Xml\XmlQuickInfoSourceProvider.cs" />
     <Compile Include="Xml\XmlQuickInfoController.cs" />
@@ -326,6 +337,7 @@
     </Content>
     <Resource Include="Resources\OpenBuffer.ico" />
     <Resource Include="Resources\ShowCT.ico" />
+    <Resource Include="Resources\PlainTextCompletion.ico" />
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>

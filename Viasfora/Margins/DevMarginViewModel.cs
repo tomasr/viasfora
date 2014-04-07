@@ -41,7 +41,7 @@ namespace Winterdom.Viasfora.Margins {
       }
       NotifyChanged("BufferGraph");
       this.SelectedBuffer = this.bufferGraph.FirstOrDefault(
-        b => TextEditor.IsPrimaryBufferType(b.BufferType));
+        b => TextEditor.IsNonProjectionOrElisionBufferType(b.BufferType));
     }
     private void NotifyChanged(String property) {
       if ( PropertyChanged != null ) {

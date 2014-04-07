@@ -21,6 +21,7 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
       VsfSettings.DevMarginEnabled = DevMarginEnabled;
+      VsfSettings.TextCompletionEnabled = TextCompletionEnabled;
       VsfSettings.ModelinesEnabled = ModelinesEnabled;
       VsfSettings.ModelinesNumLines = (int)ModelinesNumLines;
       VsfSettings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
@@ -37,6 +38,7 @@ namespace Winterdom.Viasfora.Options {
       EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
       DevMarginEnabled = VsfSettings.DevMarginEnabled;
+      TextCompletionEnabled = VsfSettings.TextCompletionEnabled;
       ModelinesEnabled = VsfSettings.ModelinesEnabled;
       ModelinesNumLines = (uint)VsfSettings.ModelinesNumLines;
       XmlnsPrefixHighlightEnabled = VsfSettings.XmlnsPrefixHighlightEnabled;
@@ -88,6 +90,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Enables the VS text editor extension developer margin")]
     [Category("Text Editor")]
     public bool DevMarginEnabled { get; set; }
+
+    [LocDisplayName("Enable Plain-Text Completion")]
+    [Description("Enables auto-completion based on the plain text of the current document")]
+    [Category("Text Editor")]
+    public bool TextCompletionEnabled { get; set; }
 
     // Modelines Configuration
     [LocDisplayName("Enable Modelines Support")]

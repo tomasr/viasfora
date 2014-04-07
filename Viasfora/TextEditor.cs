@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Projection;
+using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Editor;
 using Winterdom.Viasfora.Compatibility;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using VsOle = Microsoft.VisualStudio.OLE.Interop;
-using System.IO;
 
 namespace Winterdom.Viasfora {
   public static class TextEditor {
@@ -102,8 +103,19 @@ namespace Winterdom.Viasfora {
       return buffers[0];
     }
 
-    public static bool IsPrimaryBufferType(Type type) {
-      return type.FullName == "Microsoft.VisualStudio.Text.Implementation.TextBuffer";
+    public static bool IsNonProjectionOrElisionBufferType(Type type) {
+      if ( typeof(IProjectionBuffer).IsAssignableFrom(type) )
+        return false;
+      if ( typeof(IElisionBuffer).IsAssignableFrom(type) )
+        return false;
+      return true;
+    }
+    public static bool IsNonProjectionOrElisionBuffer(ITextBuffer buffer) {
+      if ( (buffer as IProjectionBuffer) != null )
+        return false;
+      if ( (buffer as IElisionBuffer) != null )
+        return false;
+      return true;
     }
 
     //

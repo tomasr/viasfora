@@ -34,6 +34,7 @@ namespace Winterdom.Viasfora.Text {
       view.Caret.PositionChanged += OnCaretPositionChanged;
       view.ViewportWidthChanged += OnViewportChanged;
       view.ViewportHeightChanged += OnViewportChanged;
+      view.LayoutChanged += OnViewLayoutChanged;
       view.TextViewModel.EditBuffer.PostChanged += OnBufferPostChanged;
       view.Closed += OnViewClosed;
       VsfSettings.SettingsUpdated += OnSettingsUpdated;
@@ -57,6 +58,7 @@ namespace Winterdom.Viasfora.Text {
       view.ViewportWidthChanged -= OnViewportChanged;
       view.ViewportHeightChanged -= OnViewportChanged;
       view.Closed -= OnViewClosed;
+      view.LayoutChanged -= OnViewLayoutChanged;
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
     }
     void OnViewportChanged(object sender, EventArgs e) {
@@ -77,6 +79,13 @@ namespace Winterdom.Viasfora.Text {
       layer.RemoveAdornmentsByTag(CUR_COL_TAG);
       this.CreateVisuals(this.view.Caret.Position.VirtualBufferPosition);
     }
+    private void OnViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
+      if ( e.VerticalTranslation ) {
+        layer.RemoveAdornmentsByTag(CUR_COL_TAG);
+        this.CreateVisuals(this.view.Caret.Position.VirtualBufferPosition);
+      }
+    }
+
 
     private void CreateDrawingObjects() {
       // this gets the color settings configured by the
@@ -109,6 +118,9 @@ namespace Winterdom.Viasfora.Text {
       IWpfTextViewLineCollection textViewLines = view.TextViewLines;
       if ( textViewLines == null )
         return; // not ready yet.
+      // make sure the caret position is on the right buffer snapshot
+      if ( caretPosition.Position.Snapshot != this.view.TextBuffer.CurrentSnapshot )
+        return;
 
       double lineWidth = VsfSettings.HighlightLineWidth;
       var line = this.view.GetTextViewLineContainingBufferPosition(

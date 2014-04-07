@@ -24,6 +24,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(Sql.ContentTypeAlt)]
   [ContentType(TypeScript.ContentType)]
   [ContentType(Python.ContentType)]
+  [ContentType(PowerShell.ContentType)]
   [TagType(typeof(RainbowTag))]
   public class RainbowTaggerProvider : IViewTaggerProvider {
     [Import]
