@@ -72,7 +72,10 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private IEnumerable<String> FindPlainTextWords() {
-      SortedSet<String> words = new SortedSet<String>(StringComparer.OrdinalIgnoreCase);
+      // can't use a sorted-set here, because we want
+      // uniqueness validated with case-sensitivity
+      // but return the results case-insentitive sorted.
+      HashSet<String> words = new HashSet<String>(StringComparer.Ordinal);
       var snapshot = theBuffer.CurrentSnapshot;
       SnapshotPoint pt = new SnapshotPoint(snapshot, 0);
       while ( pt.Position < snapshot.Length ) {
@@ -88,7 +91,7 @@ namespace Winterdom.Viasfora.Text {
         if ( pt.Position < snapshot.Length )
           pt += 1;
       }
-      return words;
+      return words.OrderBy(x=>x, StringComparer.OrdinalIgnoreCase);
     }
 
     private bool IsSignificantText(TextExtent extent, out String word) {
@@ -109,14 +112,6 @@ namespace Winterdom.Viasfora.Text {
       if ( end > 0 ) end -= 1;
       var word = navigator.GetExtentOfWord(end);
       return snapshot.CreateTrackingSpan(word.Span, SpanTrackingMode.EdgeInclusive);
-    }
-
-    private class CompletionComparer : IComparer<Completion> {
-      private StringComparer comparer = StringComparer.OrdinalIgnoreCase;
-      public static CompletionComparer Instance = new CompletionComparer();
-      public int Compare(Completion x, Completion y) {
-        return comparer.Compare(x.DisplayText, y.DisplayText);
-      }
     }
 
     private struct BufferStats {
