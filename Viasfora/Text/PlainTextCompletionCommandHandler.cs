@@ -181,12 +181,19 @@ namespace Winterdom.Viasfora.Text {
       if ( session != null && !session.IsDismissed ) {
         if ( char.IsWhiteSpace(typedChar) ) {
           CancelSession();
-        } else if ( !char.IsLetterOrDigit(typedChar) ) {
+        } else if ( !IsIdentifierChar(typedChar) ) {
           return CompleteWord(false);
         }
         return false;
       }
       return StartSession();
+    }
+
+    private bool IsIdentifierChar(char typedChar) {
+      return Char.IsLetterOrDigit(typedChar)
+          || typedChar == '$'
+          || typedChar == '_'
+          || typedChar == '-';
     }
 
     private bool IsTabOrEnter(uint nCmdID) {
