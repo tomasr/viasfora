@@ -35,7 +35,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
           if ( f == 'U' ) maxlen = 9;
           if ( len > maxlen ) len = maxlen;
           var span = new Span(start, len + 1);
-          start += len;
+          start += len + 1;
           return span;
         }
         start++;

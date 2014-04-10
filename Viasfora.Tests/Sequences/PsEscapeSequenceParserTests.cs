@@ -63,6 +63,13 @@ namespace Viasfora.Tests.Sequences {
       Assert.Equal(null, parser.Next());
     }
     [Fact]
+    public void DQ_EscapedBacktick() {
+      String input = "\"" + @"some``nstring" + "\"";
+      var parser = new PsEscapeSequenceParser(input);
+      Assert.Equal(new Span(5,2), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
     public void DQ_TwoEscapedBackticksTogether() {
       String input = "\"" + @"some````nstring" + "\"";
       var parser = new PsEscapeSequenceParser(input);

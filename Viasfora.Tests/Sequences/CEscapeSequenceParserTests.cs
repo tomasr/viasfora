@@ -30,6 +30,13 @@ namespace Viasfora.Tests.Sequences {
       Assert.Equal(null, parser.Next());
     }
     [Fact]
+    public void EscapedBackslashIsExtractedCorrectly() {
+      String input = "\"" + @"some\\string" + "\"";
+      var parser = new CEscapeSequenceParser(input);
+      Assert.Equal(new Span(5,2), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
     public void TwoSeparateEscapeSequencesAreExtracted() {
       String input = "\"" + @"some\rother\nstring" + "\"";
       var parser = new CEscapeSequenceParser(input);
