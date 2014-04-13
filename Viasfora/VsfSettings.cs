@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora {
     const String CURRENT_COLUMN_ENABLED = "CurrentColumnHighlightEnabled";
     const String HIGHLIGHT_LINE_WIDTH = "HighlightLineWidth";
     const String TEXT_COMPLETION_ENABLED = "TextCompletionEnabled";
+    const String AUTO_EXPAND_REGIONS = "AutoExpandRegions";
 
     const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
@@ -93,6 +94,10 @@ namespace Winterdom.Viasfora {
       get { return GetBoolean(TEXT_COMPLETION_ENABLED, true); }
       set { SetValue(TEXT_COMPLETION_ENABLED, value); }
     }
+    public static Text.AutoExpandMode AutoExpandRegions {
+      get { return GetEnum(AUTO_EXPAND_REGIONS, Text.AutoExpandMode.No); }
+      set { SetValue(AUTO_EXPAND_REGIONS, value); }
+    }
 
     public static void Save() {
       settings.Save();
@@ -113,6 +118,14 @@ namespace Winterdom.Viasfora {
     private static double GetDouble(String name, double defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToDouble(val);
+    }
+    private static T GetEnum<T>(String name, T defval) where T : struct {
+      String val = settings.Get(name);
+      T actual;
+      if ( Enum.TryParse<T>(val, out actual) ) {
+        return actual;
+      }
+      return defval;
     }
 
     public static String GetValue(String name, String defValue) {

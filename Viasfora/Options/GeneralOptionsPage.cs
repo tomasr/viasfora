@@ -22,6 +22,7 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
       VsfSettings.DevMarginEnabled = DevMarginEnabled;
       VsfSettings.TextCompletionEnabled = TextCompletionEnabled;
+      VsfSettings.AutoExpandRegions = AutoExpandRegions;
       VsfSettings.ModelinesEnabled = ModelinesEnabled;
       VsfSettings.ModelinesNumLines = (int)ModelinesNumLines;
       VsfSettings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
@@ -39,6 +40,7 @@ namespace Winterdom.Viasfora.Options {
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
       DevMarginEnabled = VsfSettings.DevMarginEnabled;
       TextCompletionEnabled = VsfSettings.TextCompletionEnabled;
+      AutoExpandRegions = VsfSettings.AutoExpandRegions;
       ModelinesEnabled = VsfSettings.ModelinesEnabled;
       ModelinesNumLines = (uint)VsfSettings.ModelinesNumLines;
       XmlnsPrefixHighlightEnabled = VsfSettings.XmlnsPrefixHighlightEnabled;
@@ -95,6 +97,12 @@ namespace Winterdom.Viasfora.Options {
     [Description("Enables auto-completion based on the plain text of the current document")]
     [Category("Text Editor")]
     public bool TextCompletionEnabled { get; set; }
+
+    [LocDisplayName("Expand Regions on Open")]
+    [Description("Automatically expand collapsible regions when a new text view is opened")]
+    [Category("Text Editor")]
+    public Text.AutoExpandMode AutoExpandRegions { get; set; }
+
 
     // Modelines Configuration
     [LocDisplayName("Enable Modelines Support")]
