@@ -19,31 +19,40 @@ namespace Winterdom.Viasfora.Text {
     [Import]
     private IVsOutliningManagerService outlining = null;
     public void TextViewCreated(IWpfTextView textView) {
-      if ( VsfSettings.AutoExpandRegions ) {
-        var manager = outlining.GetOutliningManager(textView);
-        textView.Properties.GetOrCreateSingletonProperty(
-          () => new AutoExpander(textView, manager)
-          );
-      }
+      var expandMode = VsfSettings.AutoExpandRegions;
+      var manager = outlining.GetOutliningManager(textView);
+      textView.Properties.GetOrCreateSingletonProperty(
+        () => new AutoExpander(textView, manager, expandMode)
+        );
     }
   }
 
   public class AutoExpander {
     private IWpfTextView theView;
     private IVsOutliningManager outliningManager;
+    private AutoExpandMode expandMode;
 
-    public AutoExpander(IWpfTextView textView, IVsOutliningManager outlining) {
-      this.theView = textView;
-      this.outliningManager = outlining;
-      this.theView.Closed += OnViewClosed;
-      // in most cases, this is enough to 
-      // expand all outlining as necessary.
-      // However, it does not appear to work
-      // if the solution is just opened
-      // so take notice of when regions are
-      // collapsed and do it again just in case
-      this.theView.LayoutChanged += OnLayoutChanged;
-      this.outliningManager.RegionsCollapsed += OnRegionsCollapsed;
+    public AutoExpander(
+          IWpfTextView textView, 
+          IVsOutliningManager outlining,
+          AutoExpandMode mode) {
+      this.expandMode = mode;
+
+      if ( expandMode == AutoExpandMode.Disable ) {
+        outlining.Enabled = false;
+      } else if ( expandMode == AutoExpandMode.Expand ) {
+        this.theView = textView;
+        this.outliningManager = outlining;
+        // in most cases, this is enough to 
+        // expand all outlining as necessary.
+        // However, it does not appear to work
+        // if the solution is just opened
+        // so take notice of when regions are
+        // collapsed and do it again just in case
+        this.theView.LayoutChanged += OnLayoutChanged;
+        this.outliningManager.RegionsCollapsed += OnRegionsCollapsed;
+        this.theView.Closed += OnViewClosed;
+      }
     }
 
     private void OnViewClosed(object sender, EventArgs e) {

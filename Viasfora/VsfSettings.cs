@@ -94,8 +94,8 @@ namespace Winterdom.Viasfora {
       get { return GetBoolean(TEXT_COMPLETION_ENABLED, true); }
       set { SetValue(TEXT_COMPLETION_ENABLED, value); }
     }
-    public static bool AutoExpandRegions {
-      get { return GetBoolean(AUTO_EXPAND_REGIONS, false); }
+    public static Text.AutoExpandMode AutoExpandRegions {
+      get { return GetEnum(AUTO_EXPAND_REGIONS, Text.AutoExpandMode.No); }
       set { SetValue(AUTO_EXPAND_REGIONS, value); }
     }
 
@@ -118,6 +118,14 @@ namespace Winterdom.Viasfora {
     private static double GetDouble(String name, double defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToDouble(val);
+    }
+    private static T GetEnum<T>(String name, T defval) where T : struct {
+      String val = settings.Get(name);
+      T actual;
+      if ( Enum.TryParse<T>(val, out actual) ) {
+        return actual;
+      }
+      return defval;
     }
 
     public static String GetValue(String name, String defValue) {

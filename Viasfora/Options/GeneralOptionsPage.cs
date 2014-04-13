@@ -101,7 +101,7 @@ namespace Winterdom.Viasfora.Options {
     [LocDisplayName("Expand Regions on Open")]
     [Description("Automatically expand collapsible regions when a new text view is opened")]
     [Category("Text Editor")]
-    public bool AutoExpandRegions { get; set; }
+    public Text.AutoExpandMode AutoExpandRegions { get; set; }
 
 
     // Modelines Configuration
