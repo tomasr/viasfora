@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Outlining;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using IVsOutliningManager = Microsoft.VisualStudio.Text.Outlining.IOutliningManager;
 using IVsOutliningManagerService = Microsoft.VisualStudio.Text.Outlining.IOutliningManagerService;
-using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Text {
   [Export(typeof(IWpfTextViewCreationListener))]
@@ -18,10 +19,12 @@ namespace Winterdom.Viasfora.Text {
     [Import]
     private IVsOutliningManagerService outlining = null;
     public void TextViewCreated(IWpfTextView textView) {
-      var manager = outlining.GetOutliningManager(textView);
-      textView.Properties.GetOrCreateSingletonProperty(
-        () => new AutoExpander(textView, manager)
-        );
+      if ( VsfSettings.AutoExpandRegions ) {
+        var manager = outlining.GetOutliningManager(textView);
+        textView.Properties.GetOrCreateSingletonProperty(
+          () => new AutoExpander(textView, manager)
+          );
+      }
     }
   }
 
@@ -31,15 +34,33 @@ namespace Winterdom.Viasfora.Text {
 
     public AutoExpander(IWpfTextView textView, IVsOutliningManager outlining) {
       this.theView = textView;
-      this.theView.LayoutChanged += OnLayoutChanged;
       this.outliningManager = outlining;
+      this.theView.Closed += OnViewClosed;
+      // in most cases, this is enough to 
+      // expand all outlining as necessary.
+      // However, it does not appear to work
+      // if the solution is just opened
+      // so take notice of when regions are
+      // collapsed and do it again just in case
+      this.theView.LayoutChanged += OnLayoutChanged;
+      this.outliningManager.RegionsCollapsed += OnRegionsCollapsed;
+    }
+
+    private void OnViewClosed(object sender, EventArgs e) {
+      this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
+      this.theView.LayoutChanged -= OnLayoutChanged;
+      this.theView = null;
+      this.outliningManager = null;
+    }
+
+    private void OnRegionsCollapsed(object sender, RegionsCollapsedEventArgs e) {
+      ExpandAll();
+      this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
     }
 
     private void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       ExpandAll();
       this.theView.LayoutChanged -= OnLayoutChanged;
-      this.theView = null;
-      this.outliningManager = null;
     }
 
     private void ExpandAll() {
