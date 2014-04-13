@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora {
     const String CURRENT_COLUMN_ENABLED = "CurrentColumnHighlightEnabled";
     const String HIGHLIGHT_LINE_WIDTH = "HighlightLineWidth";
     const String TEXT_COMPLETION_ENABLED = "TextCompletionEnabled";
+    const String AUTO_EXPAND_REGIONS = "AutoExpandRegions";
 
     const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
@@ -92,6 +93,10 @@ namespace Winterdom.Viasfora {
     public static bool TextCompletionEnabled {
       get { return GetBoolean(TEXT_COMPLETION_ENABLED, true); }
       set { SetValue(TEXT_COMPLETION_ENABLED, value); }
+    }
+    public static bool AutoExpandRegions {
+      get { return GetBoolean(AUTO_EXPAND_REGIONS, false); }
+      set { SetValue(AUTO_EXPAND_REGIONS, value); }
     }
 
     public static void Save() {
