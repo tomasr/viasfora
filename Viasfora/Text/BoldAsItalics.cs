@@ -48,7 +48,8 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void MakeBoldItalics() {
-      if ( working || formatMap.IsInBatchUpdate ) {
+      bool enabled = VsfSettings.BoldAsItalicsEnabled;
+      if ( !enabled || working || formatMap.IsInBatchUpdate ) {
         return;
       }
       working = true;
