@@ -171,6 +171,7 @@
     <Compile Include="TextEditor.cs" />
     <Compile Include="Text\AutoExpandMode.cs" />
     <Compile Include="Text\AutoExpandRegions.cs" />
+    <Compile Include="Text\BoldAsItalics.cs" />
     <Compile Include="Text\PlainTextCompletionCommandHandler.cs" />
     <Compile Include="Text\PlainTextCompletionContext.cs" />
     <Compile Include="Text\PlainTextCompletionSource.cs" />
