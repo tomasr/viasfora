@@ -23,6 +23,7 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.DevMarginEnabled = DevMarginEnabled;
       VsfSettings.TextCompletionEnabled = TextCompletionEnabled;
       VsfSettings.AutoExpandRegions = AutoExpandRegions;
+      VsfSettings.BoldAsItalicsEnabled = BoldAsItalicsEnabled;
       VsfSettings.ModelinesEnabled = ModelinesEnabled;
       VsfSettings.ModelinesNumLines = (int)ModelinesNumLines;
       VsfSettings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
@@ -41,6 +42,7 @@ namespace Winterdom.Viasfora.Options {
       DevMarginEnabled = VsfSettings.DevMarginEnabled;
       TextCompletionEnabled = VsfSettings.TextCompletionEnabled;
       AutoExpandRegions = VsfSettings.AutoExpandRegions;
+      BoldAsItalicsEnabled = VsfSettings.BoldAsItalicsEnabled;
       ModelinesEnabled = VsfSettings.ModelinesEnabled;
       ModelinesNumLines = (uint)VsfSettings.ModelinesNumLines;
       XmlnsPrefixHighlightEnabled = VsfSettings.XmlnsPrefixHighlightEnabled;
@@ -102,6 +104,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Automatically expand collapsible regions when a new text view is opened")]
     [Category("Text Editor")]
     public Text.AutoExpandMode AutoExpandRegions { get; set; }
+
+    [LocDisplayName("Enable 'Bold As Italics'")]
+    [Description("Render bold fonts using italics instead")]
+    [Category("Text Editor")]
+    public bool BoldAsItalicsEnabled { get; set; }
 
 
     // Modelines Configuration
