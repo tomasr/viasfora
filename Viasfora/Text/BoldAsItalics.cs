@@ -80,9 +80,9 @@ namespace Winterdom.Viasfora.Text {
       }
       if ( font.Weight > FontWeights.Normal ) {
         var newFont = new Typeface(
-          font.FontFamily, FontStyles.Normal,
+          font.FontFamily, FontStyles.Italic,
           FontWeights.Normal, FontStretches.Normal);
-        tp = tp.SetTypeface(newFont).SetItalic(true);
+        tp = tp.SetTypeface(newFont);
         formatMap.SetTextProperties(classifierType, tp);
       }
     }
