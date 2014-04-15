@@ -14,6 +14,7 @@ namespace Winterdom.Viasfora {
     const String HIGHLIGHT_LINE_WIDTH = "HighlightLineWidth";
     const String TEXT_COMPLETION_ENABLED = "TextCompletionEnabled";
     const String AUTO_EXPAND_REGIONS = "AutoExpandRegions";
+    const String BOLD_AS_ITALICS_ENABLED = "BoldAsItalicsEnabled";
 
     const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
@@ -97,6 +98,10 @@ namespace Winterdom.Viasfora {
     public static Text.AutoExpandMode AutoExpandRegions {
       get { return GetEnum(AUTO_EXPAND_REGIONS, Text.AutoExpandMode.No); }
       set { SetValue(AUTO_EXPAND_REGIONS, value); }
+    }
+    public static bool BoldAsItalicsEnabled {
+      get { return GetBoolean(BOLD_AS_ITALICS_ENABLED, false); }
+      set { SetValue(BOLD_AS_ITALICS_ENABLED, value); }
     }
 
     public static void Save() {
