@@ -13,30 +13,35 @@ using System.Threading;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowTagger : ITagger<RainbowTag>, IDisposable {
-    private ITextBuffer theBuffer;
+  class RainbowProvider : ITagger<RainbowTag> {
+    public ITextBuffer TextBuffer { get; private set; }
+    public BraceCache BraceCache { get; private set; }
+    public ITextView TextView { get; private set; }
+
     private IClassificationType[] rainbowTags;
     private object updateLock = new object();
     private Dispatcher dispatcher;
     private DispatcherTimer dispatcherTimer;
-    private BraceCache braceCache;
     private int updatePendingFrom;
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 #pragma warning restore 67
 
-    internal RainbowTagger(
+    internal RainbowProvider(
+          ITextView view,
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
-      this.theBuffer = buffer;
+      this.TextView = view;
+      this.TextBuffer = buffer;
       this.rainbowTags = GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
 
       SetLanguage(buffer.ContentType);
 
       this.updatePendingFrom = -1;
-      this.theBuffer.ChangedLowPriority += this.BufferChanged;
-      this.theBuffer.ContentTypeChanged += this.ContentTypeChanged;
+      this.TextView.Closed += OnViewClosed;
+      this.TextBuffer.ChangedLowPriority += this.BufferChanged;
+      this.TextBuffer.ContentTypeChanged += this.ContentTypeChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
       this.dispatcher = Dispatcher.CurrentDispatcher;
 
@@ -51,12 +56,16 @@ namespace Winterdom.Viasfora.Text {
       return result;
     }
 
-    public void Dispose() {
-      if ( theBuffer != null ) {
+    private void OnViewClosed(object sender, EventArgs e) {
+      if ( this.TextView != null ) {
+        this.TextView.Closed -= OnViewClosed;
+        this.TextView = null;
+      }
+      if ( TextBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-        theBuffer.ChangedLowPriority -= this.BufferChanged;
-        theBuffer.ContentTypeChanged -= this.ContentTypeChanged;
-        theBuffer = null;
+        TextBuffer.ChangedLowPriority -= this.BufferChanged;
+        TextBuffer.ContentTypeChanged -= this.ContentTypeChanged;
+        TextBuffer = null;
       }
       this.dispatcher = null;
       if ( this.dispatcherTimer != null ) {
@@ -73,10 +82,10 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( braceCache == null && braceCache.Snapshot != spans[0].Snapshot ) {
+      if ( BraceCache == null && BraceCache.Snapshot != spans[0].Snapshot ) {
         yield break;
       }
-      foreach ( var brace in braceCache.BracesInSpans(spans) ) {
+      foreach ( var brace in BraceCache.BracesInSpans(spans) ) {
         var ctype = rainbowTags[brace.Depth % Constants.MAX_RAINBOW_DEPTH];
         yield return brace.ToSpan(snapshot, ctype);
       }
@@ -93,7 +102,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint, bool notifyUpdate) {
-      this.braceCache.Invalidate(startPoint);
+      this.BraceCache.Invalidate(startPoint);
       SynchronousUpdate(notifyUpdate, startPoint);
     }
 
@@ -111,7 +120,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void ScheduleUpdate() {
-      if ( theBuffer == null ) {
+      if ( TextBuffer == null ) {
         return;
       }
       if ( dispatcherTimer == null ) {
@@ -124,7 +133,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void OnScheduledUpdate(object sender, EventArgs e) {
-      if ( theBuffer == null ) return;
+      if ( TextBuffer == null ) return;
       try {
         dispatcherTimer.Stop();
         FireTagsChanged();
@@ -133,7 +142,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void FireTagsChanged() {
-      var snapshot = braceCache.Snapshot;
+      var snapshot = BraceCache.Snapshot;
       int upd;
       lock ( this.updateLock ) {
         upd = this.updatePendingFrom;
@@ -148,13 +157,13 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void SetLanguage(IContentType contentType) {
-      if ( theBuffer != null ) {
-        this.braceCache = new BraceCache(this.theBuffer.CurrentSnapshot, contentType);
+      if ( TextBuffer != null ) {
+        this.BraceCache = new BraceCache(this.TextBuffer.CurrentSnapshot, contentType);
       }
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
-      this.UpdateBraceList(new SnapshotPoint(this.theBuffer.CurrentSnapshot, 0));
+      this.UpdateBraceList(new SnapshotPoint(this.TextBuffer.CurrentSnapshot, 0));
     }
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {

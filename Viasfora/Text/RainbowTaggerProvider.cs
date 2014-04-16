@@ -34,7 +34,7 @@ namespace Winterdom.Viasfora.Text {
       // Lesson of the day: The tagger cannot be a singleton property
       // because the VS2013 HTML editor holds it in an Aggregator which will
       // dispose it during the ContentTypeChanged event!
-      return new RainbowTagger(buffer, ClassificationRegistry) as ITagger<T>;
+      return new RainbowProvider(view, buffer, ClassificationRegistry) as ITagger<T>;
     }
   }
 }
