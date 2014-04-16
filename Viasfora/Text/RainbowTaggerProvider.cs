@@ -31,7 +31,11 @@ namespace Winterdom.Viasfora.Text {
     internal IClassificationTypeRegistryService ClassificationRegistry = null;
 
     public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
-      RainbowProvider prov = view.Properties.GetOrCreateSingletonProperty(
+      // for a complex editor such as the HTMLX editor in VS2013
+      // we need to have multiple of these created, for different text buffers
+      // so this cannot be a singleton property, but we need to shim it based on
+      // the buffer, not the view
+      RainbowProvider prov = buffer.Properties.GetOrCreateSingletonProperty(
         () => new RainbowProvider(view, buffer, ClassificationRegistry)
         );
       return prov.ColorTagger as ITagger<T>;
