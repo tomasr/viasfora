@@ -157,6 +157,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void NotifyUpdateTags(SnapshotSpan span) {
+      this.ColorTagger.NotifyUpdateTags(span);
     }
   }
 }
