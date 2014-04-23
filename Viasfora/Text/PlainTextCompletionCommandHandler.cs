@@ -181,8 +181,8 @@ namespace Winterdom.Viasfora.Text {
       if ( session != null && !session.IsDismissed ) {
         if ( char.IsWhiteSpace(typedChar) ) {
           CancelSession();
-        } else if ( !IsIdentifierChar(typedChar) ) {
-          return CompleteWord(false);
+        //} else if ( !IsIdentifierChar(typedChar) ) {
+        //  return CompleteWord(false);
         }
         return false;
       }
