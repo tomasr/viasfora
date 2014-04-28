@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Threading;
 using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
@@ -9,76 +10,57 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Tags;
-using System.Threading;
 
 namespace Winterdom.Viasfora.Text {
 
-  class RainbowTagger : ITagger<RainbowTag>, IDisposable {
-    private ITextBuffer theBuffer;
-    private IClassificationType[] rainbowTags;
+  class RainbowProvider  {
+    public ITextBuffer TextBuffer { get; private set; }
+    public BraceCache BraceCache { get; private set; }
+    public ITextView TextView { get; private set; }
+    public IClassificationTypeRegistryService Registry { get; private set; }
+    public Dispatcher Dispatcher { get; private set; }
+    public RainbowColorTagger ColorTagger { get; private set; }
+
     private object updateLock = new object();
-    private Dispatcher dispatcher;
     private DispatcherTimer dispatcherTimer;
-    private BraceCache braceCache;
     private int updatePendingFrom;
 
-#pragma warning disable 67
-    public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
-#pragma warning restore 67
-
-    internal RainbowTagger(
+    internal RainbowProvider(
+          ITextView view,
           ITextBuffer buffer,
           IClassificationTypeRegistryService registry) {
-      this.theBuffer = buffer;
-      this.rainbowTags = GetRainbows(registry, Constants.MAX_RAINBOW_DEPTH);
+      this.TextView = view;
+      this.TextBuffer = buffer;
+      this.Registry = registry;
+      this.ColorTagger = new RainbowColorTagger(this);
 
       SetLanguage(buffer.ContentType);
 
       this.updatePendingFrom = -1;
-      this.theBuffer.ChangedLowPriority += this.BufferChanged;
-      this.theBuffer.ContentTypeChanged += this.ContentTypeChanged;
+      this.TextView.Closed += OnViewClosed;
+      this.TextBuffer.ChangedLowPriority += this.BufferChanged;
+      this.TextBuffer.ContentTypeChanged += this.ContentTypeChanged;
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
-      this.dispatcher = Dispatcher.CurrentDispatcher;
+      this.Dispatcher = Dispatcher.CurrentDispatcher;
 
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
     }
 
-    public static IClassificationType[] GetRainbows(IClassificationTypeRegistryService registry, int max) {
-      var result = new IClassificationType[max];
-      for ( int i = 0; i < max; i++ ) {
-        result[i] = registry.GetClassificationType(Constants.RAINBOW + (i + 1));
+    private void OnViewClosed(object sender, EventArgs e) {
+      if ( this.TextView != null ) {
+        this.TextView.Closed -= OnViewClosed;
+        this.TextView = null;
       }
-      return result;
-    }
-
-    public void Dispose() {
-      if ( theBuffer != null ) {
+      if ( TextBuffer != null ) {
         VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-        theBuffer.ChangedLowPriority -= this.BufferChanged;
-        theBuffer.ContentTypeChanged -= this.ContentTypeChanged;
-        theBuffer = null;
+        TextBuffer.ChangedLowPriority -= this.BufferChanged;
+        TextBuffer.ContentTypeChanged -= this.ContentTypeChanged;
+        TextBuffer = null;
       }
-      this.dispatcher = null;
+      this.Dispatcher = null;
       if ( this.dispatcherTimer != null ) {
         this.dispatcherTimer.Stop();
         this.dispatcherTimer = null;
-      }
-    }
-
-    public IEnumerable<ITagSpan<RainbowTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      if ( !VsfSettings.RainbowTagsEnabled ) {
-        yield break;
-      }
-      if ( spans.Count == 0 ) {
-        yield break;
-      }
-      ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( braceCache == null && braceCache.Snapshot != spans[0].Snapshot ) {
-        yield break;
-      }
-      foreach ( var brace in braceCache.BracesInSpans(spans) ) {
-        var ctype = rainbowTags[brace.Depth % Constants.MAX_RAINBOW_DEPTH];
-        yield return brace.ToSpan(snapshot, ctype);
       }
     }
 
@@ -93,7 +75,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint, bool notifyUpdate) {
-      this.braceCache.Invalidate(startPoint);
+      this.BraceCache.Invalidate(startPoint);
       SynchronousUpdate(notifyUpdate, startPoint);
     }
 
@@ -111,11 +93,11 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void ScheduleUpdate() {
-      if ( theBuffer == null ) {
+      if ( TextBuffer == null ) {
         return;
       }
       if ( dispatcherTimer == null ) {
-        dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background, this.dispatcher);
+        dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background, this.Dispatcher);
         dispatcherTimer.Interval = TimeSpan.FromMilliseconds(500);
         dispatcherTimer.Tick += OnScheduledUpdate;
       }
@@ -124,7 +106,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void OnScheduledUpdate(object sender, EventArgs e) {
-      if ( theBuffer == null ) return;
+      if ( TextBuffer == null ) return;
       try {
         dispatcherTimer.Stop();
         FireTagsChanged();
@@ -133,7 +115,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void FireTagsChanged() {
-      var snapshot = braceCache.Snapshot;
+      var snapshot = BraceCache.Snapshot;
       int upd;
       lock ( this.updateLock ) {
         upd = this.updatePendingFrom;
@@ -148,13 +130,13 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void SetLanguage(IContentType contentType) {
-      if ( theBuffer != null ) {
-        this.braceCache = new BraceCache(this.theBuffer.CurrentSnapshot, contentType);
+      if ( TextBuffer != null ) {
+        this.BraceCache = new BraceCache(this.TextBuffer.CurrentSnapshot, contentType);
       }
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
-      this.UpdateBraceList(new SnapshotPoint(this.theBuffer.CurrentSnapshot, 0));
+      this.UpdateBraceList(new SnapshotPoint(this.TextBuffer.CurrentSnapshot, 0));
     }
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
@@ -175,13 +157,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void NotifyUpdateTags(SnapshotSpan span) {
-      var tempEvent = this.TagsChanged;
-      if ( tempEvent != null ) {
-        Action action = delegate() {
-          tempEvent(this, new SnapshotSpanEventArgs(span));
-        };
-        dispatcher.BeginInvoke(action, DispatcherPriority.Background);
-      }
+      this.ColorTagger.NotifyUpdateTags(span);
     }
   }
 }

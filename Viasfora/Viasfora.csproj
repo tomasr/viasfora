@@ -169,6 +169,9 @@
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="TextEditor.cs" />
+    <Compile Include="Text\AutoExpandMode.cs" />
+    <Compile Include="Text\AutoExpandRegions.cs" />
+    <Compile Include="Text\BoldAsItalics.cs" />
     <Compile Include="Text\PlainTextCompletionCommandHandler.cs" />
     <Compile Include="Text\PlainTextCompletionContext.cs" />
     <Compile Include="Text\PlainTextCompletionSource.cs" />
@@ -186,7 +189,8 @@
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
     <Compile Include="Languages\Sql.cs" />
-    <Compile Include="Text\RainbowTagger.cs" />
+    <Compile Include="Text\RainbowColorTagger.cs" />
+    <Compile Include="Text\RainbowProvider.cs" />
     <Compile Include="Text\RainbowTaggerProvider.cs" />
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
