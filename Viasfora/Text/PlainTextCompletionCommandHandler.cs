@@ -85,9 +85,10 @@ namespace Winterdom.Viasfora.Text {
           case VSConstants.VSStd2KCmdID.AUTOCOMPLETE:
           case VSConstants.VSStd2KCmdID.COMPLETEWORD:
             // we don't want to take over the existing handler
-            // by the language provider. Usually, this happens
-            // when the caret is right after a symbol
-            if ( !ShouldForward() ) {
+            // by the language provider, so only handle these
+            // commands if there isn't already an Intellisense
+            // provider
+            if ( !NextHandlerHandlesCommand(pguidCmdGroup, nCmdID) ) {
               handled = this.StartSession();
             } 
             break;
@@ -123,18 +124,15 @@ namespace Winterdom.Viasfora.Text {
       return hr;
     }
 
-    private bool ShouldForward() {
-      var caretPos = this.textView.Caret.Position.BufferPosition;
-      if ( caretPos > 0 ) {
-        caretPos -= 1;
-      }
-      if ( caretPos < caretPos.Snapshot.Length ) {
-        char ch = caretPos.GetChar();
-        if ( Char.IsPunctuation(ch) ) {
-          return true;
-        }
-      }
-      return false;
+    private bool NextHandlerHandlesCommand(Guid pguidCmdGroup, uint nCmdID) {
+      OLECMD[] cmds = new OLECMD[1];
+      cmds[0].cmdID = nCmdID;
+      int hr = nextCommandHandler.QueryStatus(ref pguidCmdGroup, 1, cmds, IntPtr.Zero);
+      if ( ErrorHandler.Failed(hr) )
+        return false;
+
+      uint expected = (uint)OLECMDF.OLECMDF_ENABLED | (uint)OLECMDF.OLECMDF_SUPPORTED;
+      return (cmds[0].cmdf & expected) == expected;
     }
 
     private void Filter() {
