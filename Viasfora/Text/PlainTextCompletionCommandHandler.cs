@@ -68,7 +68,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut) {
-      if ( !VsfSettings.TextCompletionEnabled ) {
+      if ( ReSharper.Installed || !VsfSettings.TextCompletionEnabled ) {
         return nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
       }
       if ( VsShellUtilities.IsInAutomationFunction(provider.ServiceProvider) ) {
@@ -219,6 +219,7 @@ namespace Winterdom.Viasfora.Text {
       }
       return false;
     }
+
     private void OnSessionDismissed(object sender, EventArgs e) {
       session.Dismissed -= this.OnSessionDismissed;
       session = null;

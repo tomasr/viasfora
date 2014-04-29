@@ -155,6 +155,7 @@
     </Compile>
     <Compile Include="PkgCmdIdList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReSharper.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
     <Compile Include="Settings\IPersistSettings.cs" />
