@@ -55,11 +55,10 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText) {
-      if ( pguidCmdGroup == VSConstants.VSStd2K ) {
-        var cmdId = (VSConstants.VSStd2KCmdID)prgCmds[0].cmdID;
+      if ( pguidCmdGroup == Guids.VsfTextEditorCmdSet ) {
+        var cmdId = (int)prgCmds[0].cmdID;
         switch ( cmdId) {
-          case VSConstants.VSStd2KCmdID.AUTOCOMPLETE:
-          case VSConstants.VSStd2KCmdID.COMPLETEWORD:
+          case PkgCmdIdList.cmdidCompleteWord:
             prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_ENABLED | (uint)OLECMDF.OLECMDF_SUPPORTED;
             return VSConstants.S_OK;
         }
@@ -68,7 +67,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut) {
-      if ( ReSharper.Installed || !VsfSettings.TextCompletionEnabled ) {
+      if ( !VsfSettings.TextCompletionEnabled ) {
         return nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
       }
       if ( VsShellUtilities.IsInAutomationFunction(provider.ServiceProvider) ) {
@@ -88,7 +87,7 @@ namespace Winterdom.Viasfora.Text {
             // by the language provider, so only handle these
             // commands if there isn't already an Intellisense
             // provider
-            if ( !NextHandlerHandlesCommand(pguidCmdGroup, nCmdID) ) {
+            if ( !ReSharper.Installed && !NextHandlerHandlesCommand(pguidCmdGroup, nCmdID) ) {
               handled = this.StartSession();
             } 
             break;
@@ -110,6 +109,12 @@ namespace Winterdom.Viasfora.Text {
             HandleChar(typedChar);
             // we *do* want to filter the result again
             filter = true;
+            break;
+        }
+      } else if ( pguidCmdGroup == Guids.VsfTextEditorCmdSet ) {
+        switch ( (int)nCmdID ) {
+          case PkgCmdIdList.cmdidCompleteWord:
+            handled = StartSession();
             break;
         }
       }
@@ -184,7 +189,10 @@ namespace Winterdom.Viasfora.Text {
         }
         return false;
       }
-      return StartSession();
+      if ( !ReSharper.Installed ) {
+        return StartSession();
+      }
+      return false;
     }
 
     private bool IsIdentifierChar(char typedChar) {

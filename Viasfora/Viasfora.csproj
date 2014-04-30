@@ -70,6 +70,7 @@
     <Compile Include="AdornmentLayers.cs" />
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
+    <Compile Include="Commands\CompleteWordCommand.cs" />
     <Compile Include="Commands\ClearOutliningCommand.cs" />
     <Compile Include="Commands\RemoveOutliningCommand.cs" />
     <Compile Include="Commands\AddOutliningCommand.cs" />
