@@ -133,6 +133,7 @@ namespace Winterdom.Viasfora {
       commands.Add(new AddOutliningCommand(this, mcs));
       commands.Add(new RemoveOutliningCommand(this, mcs));
       commands.Add(new ClearOutliningCommand(this, mcs));
+      commands.Add(new CompleteWordCommand(this, mcs));
     }
 
     private static Version FindVSVersion() {
