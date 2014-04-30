@@ -119,6 +119,7 @@
       <IDSymbol name="cmdidAddOutlining" value="0x1101" />
       <IDSymbol name="cmdidRemoveOutlining" value="0x1102" />
       <IDSymbol name="cmdidClearOutlining" value="0x1103" />
+      <IDSymbol name="cmdidCompleteWord" value="0x1401" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{04d40cc8-b432-4d13-9e6e-436222ef2930}">
