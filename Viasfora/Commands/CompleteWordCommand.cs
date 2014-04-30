@@ -15,5 +15,13 @@ namespace Winterdom.Viasfora.Commands {
 
       Initialize(new Guid(Guids.guidVsfTextEditorCmdSet), PkgCmdIdList.cmdidCompleteWord);
     }
+
+    protected override void OnBeforeQueryStatus(object sender, EventArgs e) {
+      base.OnBeforeQueryStatus(sender, e);
+      var view = TextEditor.GetCurrentView();
+      if ( view == null ) {
+        Command.Enabled = false;
+      }
+    }
   }
 }
