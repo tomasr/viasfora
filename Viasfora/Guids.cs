@@ -23,5 +23,6 @@ namespace Winterdom.Viasfora {
     // Command groups
     public const String guidVsfViewCmdSet = "14e93c73-144b-4909-9cdc-694be6125e8c";
     public const String guidVsfTextEditorCmdSet = "ea344c89-0b89-46dd-9555-21e1ee58a62f";
+    public static readonly Guid VsfTextEditorCmdSet = new Guid(guidVsfTextEditorCmdSet);
   }
 }
