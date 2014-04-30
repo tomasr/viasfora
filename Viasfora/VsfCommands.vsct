@@ -115,8 +115,17 @@
     </CommandPlacement>
   </CommandPlacements>
 
+  <KeyBindings>
+    <KeyBinding guid="guidVsfTextEditorCmdSet" 
+                id="cmdidCompleteWord"
+                editor="guidTextEditor"
+                mod1="Control" key1="E"
+                mod2="Control" key2="T" />
+  </KeyBindings>
+
   <Symbols>
     <GuidSymbol name="guidVsfPackage" value="{cd66bfea-4129-498f-a4fe-553f96f09c50}" />
+    <GuidSymbol name="guidTextEditor" value="{8b382828-6202-11d1-8870-0000f87579d2}" />
 
     <!-- top level View menu commands -->
     <GuidSymbol name="guidVsfViewCmdSet" value="{14e93c73-144b-4909-9cdc-694be6125e8c}">
