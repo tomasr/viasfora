@@ -21,9 +21,11 @@ namespace Winterdom.Viasfora.Text {
     public void TextViewCreated(IWpfTextView textView) {
       var expandMode = VsfSettings.AutoExpandRegions;
       var manager = outlining.GetOutliningManager(textView);
-      textView.Properties.GetOrCreateSingletonProperty(
-        () => new AutoExpander(textView, manager, expandMode)
-        );
+      if ( manager != null ) {
+        textView.Properties.GetOrCreateSingletonProperty(
+          () => new AutoExpander(textView, manager, expandMode)
+          );
+      }
     }
   }
 
@@ -74,8 +76,10 @@ namespace Winterdom.Viasfora.Text {
 
     private void ExpandAll() {
       var snapshot = theView.TextSnapshot;
-      SnapshotSpan span = new SnapshotSpan(snapshot, 0, snapshot.Length);
-      outliningManager.ExpandAll(span, collapsed => true);
+      if ( snapshot != null ) {
+        SnapshotSpan span = new SnapshotSpan(snapshot, 0, snapshot.Length);
+        outliningManager.ExpandAll(span, collapsed => true);
+      }
     }
   }
 }
