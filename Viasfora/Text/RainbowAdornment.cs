@@ -120,10 +120,8 @@ namespace Winterdom.Viasfora.Text {
       image.Source = drawing;
       image.UseLayoutRounding = false;
 
-      var startLine = this.view.GetTextViewLineContainingBufferPosition(span.Start);
-
       Canvas.SetLeft(image, spanGeometry.Bounds.Left);
-      Canvas.SetTop(image, startLine.Top);
+      Canvas.SetTop(image, spanGeometry.Bounds.Top);
 
       layer.AddAdornment(
         AdornmentPositioningBehavior.TextRelative, span,
