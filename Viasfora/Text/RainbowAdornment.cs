@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.Text.Editor;
+﻿using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Utilities;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Shapes;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -43,7 +46,7 @@ namespace Winterdom.Viasfora.Text {
     public RainbowAdornment(IWpfTextView textView) {
       this.view = textView;
       this.blackoutBrush = new SolidColorBrush(Colors.White);
-      this.borderPen = new Pen(Brushes.Transparent, 1);
+      this.borderPen = new Pen(Brushes.Red, 1);
       layer = view.GetAdornmentLayer(LAYER);
     }
 
@@ -52,40 +55,78 @@ namespace Winterdom.Viasfora.Text {
       return view.Properties.GetProperty<RainbowAdornment>(KEY);
     }
 
-    public void Start() {
-      DrawAdornment();
+    public void Start(SnapshotPoint opening, SnapshotPoint closing) {
+      SnapshotSpan span = new SnapshotSpan(opening, closing);
+      var lines = this.view.TextViewLines;
+      PathGeometry path = BuildSpanGeometry(span);
+      path = path.GetOutlinedPathGeometry();
+      DrawAdornment(span, path);
     }
+
     public void Stop() {
       layer.RemoveAllAdornments();
     }
 
-    private void DrawAdornment() {
-      Rect outerRect = new Rect(
-        0, 0, view.ViewportWidth,
-        view.ViewportHeight
-        );
-      Rect innerRect = new Rect(100, 100, 150, 150);
-      GeometryGroup group = new GeometryGroup();
-      group.FillRule = FillRule.EvenOdd;
-      group.Children.Add(new RectangleGeometry(outerRect));
-      group.Children.Add(new RectangleGeometry(innerRect));
+    private PathGeometry BuildSpanGeometry(SnapshotSpan span) {
+      PathGeometry path = new PathGeometry();
+      path.FillRule = FillRule.Nonzero;
+      foreach ( var line in this.view.TextViewLines ) {
+        if ( line.Start > span.End ) break;
+        if ( line.ContainsBufferPosition(span.Start)
+          || line.ContainsBufferPosition(span.End) 
+          || line.Start >= span.Start ) {
+          var lineGeometry = BuildLineGeometry(span, line);
+          if ( !lineGeometry.IsEmpty() ) {
+            path.AddGeometry(lineGeometry);
+          }
+        }
+      }
+      return path;
+    }
 
-      Drawing drawing = new GeometryDrawing(blackoutBrush, borderPen, group);
-      DrawingImage drawingImage = new DrawingImage(drawing);
-      drawingImage.Freeze();
+    private Geometry BuildLineGeometry(SnapshotSpan span, ITextViewLine line) {
+      double left, top, right, bottom;
+      if ( line.ContainsBufferPosition(span.Start) ) {
+        var bounds = line.GetCharacterBounds(span.Start);
+        left = bounds.Left;
+        top = bounds.Top;
+      } else {
+        left = line.Left;
+        top = line.Top;
+      }
+      if ( line.ContainsBufferPosition(span.End) ) {
+        var bounds = line.GetCharacterBounds(span.End);
+        right = bounds.Right;
+        bottom = bounds.Bottom;
+      } else {
+        right = Math.Max(line.Right, this.view.ViewportRight - 1);
+        bottom = line.Bottom;
+      }
+      return new RectangleGeometry(new Rect(left, top, right-left, bottom-top));
+    }
+
+    private void DrawAdornment(SnapshotSpan span, Geometry spanGeometry) {
+      GeometryDrawing geometry = new GeometryDrawing(
+        Brushes.Transparent, 
+        this.borderPen, 
+        spanGeometry
+        );
+
+      geometry.Freeze();
+      DrawingImage drawing = new DrawingImage(geometry);
+      drawing.Freeze();
 
       Image image = new Image();
-      image.Source = drawingImage;
-      //image.Effect = new BlurEffect { Radius = 2 };
+      image.Source = drawing;
+      image.UseLayoutRounding = false;
 
-      DoubleAnimation animation = new DoubleAnimation(
-        0, 0.5, new Duration(TimeSpan.FromMilliseconds(100))
-        );
-      animation.AutoReverse = true;
-      image.BeginAnimation(Image.OpacityProperty, animation);
+      var startLine = this.view.GetTextViewLineContainingBufferPosition(span.Start);
+
+      Canvas.SetLeft(image, spanGeometry.Bounds.Left);
+      Canvas.SetTop(image, startLine.Top);
 
       layer.AddAdornment(
-        AdornmentPositioningBehavior.ViewportRelative, null,
+        AdornmentPositioningBehavior.TextRelative, span,
         TAG, image, null
         );
     }
