@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
@@ -8,6 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -52,11 +52,13 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void StartRainbowAdornment() {
-      throw new NotImplementedException();
+      RainbowAdornment adornment = RainbowAdornment.Get(this.theView);
+      adornment.Start();
     }
 
     private void StopRainbowAdornment() {
-      throw new NotImplementedException();
+      RainbowAdornment adornment = RainbowAdornment.Get(this.theView);
+      adornment.Stop();
     }
   }
 }
