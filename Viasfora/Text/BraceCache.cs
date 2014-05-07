@@ -73,6 +73,28 @@ namespace Winterdom.Viasfora.Text {
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
     }
 
+    public Tuple<BracePos, BracePos> GetBracesAround(SnapshotPoint point) {
+      if ( point.Snapshot != this.Snapshot ) {
+        return null;
+      }
+      int closeIndex = FindIndexOfBraceAtOrAfter(point.Position);
+      if ( closeIndex < 0 ) {
+        return null;
+      }
+      BracePos closing = this.braces[closeIndex];
+      for ( int i = closeIndex - 1; i > 0; i-- ) {
+        BracePos po = this.braces[i];
+        if ( !this.IsOpeningBrace(po.Brace) )
+          continue;
+        if ( this.braceList[po.Brace] == closing.Brace && po.Depth == closing.Depth ) {
+          return new Tuple<BracePos, BracePos>(po, closing);
+        }
+        if ( po.Depth < closing.Depth )
+          break;
+      }
+      return null;
+    }
+
     // We don't want to parse the document in small spans
     // as it is to expensive, so force a larger span if
     // necessary. However, if we've already parsed

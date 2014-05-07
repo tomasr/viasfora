@@ -8,6 +8,8 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 using System.Windows.Shapes;
 
 namespace Winterdom.Viasfora.Text {
@@ -36,14 +38,12 @@ namespace Winterdom.Viasfora.Text {
     private IAdornmentLayer layer;
     private IWpfTextView view;
     private Brush blackoutBrush;
-    private Brush transparentBrush;
     private Pen borderPen;
 
     public RainbowAdornment(IWpfTextView textView) {
       this.view = textView;
-      this.transparentBrush = Brushes.Transparent;
-      this.blackoutBrush = Brushes.Tomato;
-      this.borderPen = new Pen(this.transparentBrush, 1);
+      this.blackoutBrush = new SolidColorBrush(Colors.White);
+      this.borderPen = new Pen(Brushes.Transparent, 1);
       layer = view.GetAdornmentLayer(LAYER);
     }
 
@@ -76,6 +76,13 @@ namespace Winterdom.Viasfora.Text {
 
       Image image = new Image();
       image.Source = drawingImage;
+      //image.Effect = new BlurEffect { Radius = 2 };
+
+      DoubleAnimation animation = new DoubleAnimation(
+        0, 0.5, new Duration(TimeSpan.FromMilliseconds(100))
+        );
+      animation.AutoReverse = true;
+      image.BeginAnimation(Image.OpacityProperty, animation);
 
       layer.AddAdornment(
         AdornmentPositioningBehavior.ViewportRelative, null,
