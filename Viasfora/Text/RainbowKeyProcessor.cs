@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Input;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
@@ -75,7 +71,7 @@ namespace Winterdom.Viasfora.Text {
 
       if ( TryMapToView(opening, out opening) && TryMapToView(closing, out closing) ) {
         RainbowAdornment adornment = RainbowAdornment.Get(this.theView);
-        adornment.Start(opening, closing);
+        adornment.Start(opening, closing, braces.Item1.Depth);
       }
     }
 

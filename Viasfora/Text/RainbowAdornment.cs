@@ -1,22 +1,15 @@
-﻿using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Formatting;
-using Microsoft.VisualStudio.Utilities;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Media.Effects;
-using System.Windows.Shapes;
-using Winterdom.Viasfora.Util;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Formatting;
+using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Text {
-
 
   [Export(typeof(IWpfTextViewCreationListener))]
   [ContentType("text")]
@@ -29,8 +22,20 @@ namespace Winterdom.Viasfora.Text {
     [TextViewRole(PredefinedTextViewRoles.Document)]
     public AdornmentLayerDefinition editorAdornmentLayer = null;
 
+    [Import]
+    private IClassificationFormatMapService formatMapService = null;
+    [Import]
+    private IClassificationTypeRegistryService registryService = null;
+
     public void TextViewCreated(IWpfTextView textView) {
-      textView.Properties.AddProperty(RainbowAdornment.KEY, new RainbowAdornment(textView));
+      var rainbowTags = RainbowColorTagger.GetRainbows(
+        registryService, Constants.MAX_RAINBOW_DEPTH
+        );
+      var formatMap = formatMapService.GetClassificationFormatMap(textView);
+      textView.Properties.AddProperty(
+        RainbowAdornment.KEY, 
+        new RainbowAdornment(textView, formatMap, rainbowTags)
+        );
     }
   }
   
@@ -40,13 +45,16 @@ namespace Winterdom.Viasfora.Text {
     public static object KEY = typeof(RainbowAdornment);
     private IAdornmentLayer layer;
     private IWpfTextView view;
-    private Brush blackoutBrush;
-    private Pen borderPen;
+    private IClassificationFormatMap formatMap;
+    private IClassificationType[] rainbowTags;
 
-    public RainbowAdornment(IWpfTextView textView) {
+    public RainbowAdornment(
+        IWpfTextView textView, 
+        IClassificationFormatMap map, 
+        IClassificationType[] rainbowTags) {
       this.view = textView;
-      this.blackoutBrush = new SolidColorBrush(Colors.White);
-      this.borderPen = new Pen(Brushes.Red, 1);
+      this.formatMap = map;
+      this.rainbowTags = rainbowTags;
       layer = view.GetAdornmentLayer(LAYER);
     }
 
@@ -55,12 +63,17 @@ namespace Winterdom.Viasfora.Text {
       return view.Properties.GetProperty<RainbowAdornment>(KEY);
     }
 
-    public void Start(SnapshotPoint opening, SnapshotPoint closing) {
+    public void Start(SnapshotPoint opening, SnapshotPoint closing, int depth) {
       SnapshotSpan span = new SnapshotSpan(opening, closing);
       var lines = this.view.TextViewLines;
       PathGeometry path = BuildSpanGeometry(span);
       path = path.GetOutlinedPathGeometry();
-      DrawAdornment(span, path);
+
+      var adornment = MakeAdornment(span, path, depth);
+      layer.AddAdornment(
+        AdornmentPositioningBehavior.TextRelative, span,
+        TAG, adornment, null
+        );
     }
 
     public void Stop() {
@@ -72,16 +85,18 @@ namespace Winterdom.Viasfora.Text {
       path.FillRule = FillRule.Nonzero;
       foreach ( var line in this.view.TextViewLines ) {
         if ( line.Start > span.End ) break;
-        if ( line.ContainsBufferPosition(span.Start)
-          || line.ContainsBufferPosition(span.End) 
-          || line.Start >= span.Start ) {
+        if ( LineIntersectsSpan(line, span) ) {
           var lineGeometry = BuildLineGeometry(span, line);
-          if ( !lineGeometry.IsEmpty() ) {
-            path.AddGeometry(lineGeometry);
-          }
+          path.AddGeometry(lineGeometry);
         }
       }
       return path;
+    }
+
+    private bool LineIntersectsSpan(ITextViewLine line, SnapshotSpan span) {
+      return line.ContainsBufferPosition(span.Start)
+          || line.ContainsBufferPosition(span.End)
+          || line.Start >= span.Start;
     }
 
     private Geometry BuildLineGeometry(SnapshotSpan span, ITextViewLine line) {
@@ -105,28 +120,42 @@ namespace Winterdom.Viasfora.Text {
       return new RectangleGeometry(new Rect(left, top, right-left, bottom-top));
     }
 
-    private void DrawAdornment(SnapshotSpan span, Geometry spanGeometry) {
+    private UIElement MakeAdornment(SnapshotSpan span, Geometry spanGeometry, int depth) {
+      var brush = GetRainbowBrush(depth);
+
       GeometryDrawing geometry = new GeometryDrawing(
-        Brushes.Transparent, 
-        this.borderPen, 
+        MakeBackgroundBrush(brush),
+        new Pen(brush, 1),
         spanGeometry
         );
 
-      geometry.Freeze();
+      if ( geometry.CanFreeze ) geometry.Freeze();
       DrawingImage drawing = new DrawingImage(geometry);
-      drawing.Freeze();
+      if ( drawing.CanFreeze ) drawing.Freeze();
 
-      Image image = new Image();
-      image.Source = drawing;
-      image.UseLayoutRounding = false;
+      Image image = new Image {
+        Source = drawing,
+        UseLayoutRounding = false
+      };
 
       Canvas.SetLeft(image, spanGeometry.Bounds.Left);
       Canvas.SetTop(image, spanGeometry.Bounds.Top);
 
-      layer.AddAdornment(
-        AdornmentPositioningBehavior.TextRelative, span,
-        TAG, image, null
-        );
+      return image;
+    }
+
+    private Brush GetRainbowBrush(int depth) {
+      var rainbow = rainbowTags[depth % rainbowTags.Length];
+      var properties = formatMap.GetTextProperties(rainbow);
+      return properties.ForegroundBrush;
+    }
+
+    private Brush MakeBackgroundBrush(Brush brush) {
+      SolidColorBrush scb = brush as SolidColorBrush;
+      if ( scb == null ) return Brushes.Transparent;
+      Brush newBrush = new SolidColorBrush(scb.Color);
+      newBrush.Opacity = 0.05;
+      return newBrush;
     }
   }
 }
