@@ -57,18 +57,54 @@ namespace Winterdom.Viasfora.Text {
     private void StartRainbowAdornment() {
       if ( startedEffect ) return;
       startedEffect = true;
-      var caret = this.theView.Caret.Position.BufferPosition;
-      var buffer = TextEditor.GetPrimaryBuffer(this.theView);
+
+      SnapshotPoint bufferPos;
+      if ( !TryMapCaretToBuffer(out bufferPos) ) {
+        return;
+      }
+
+      ITextBuffer buffer = bufferPos.Snapshot.TextBuffer;
       RainbowProvider provider;
       if ( !buffer.Properties.TryGetProperty(typeof(RainbowProvider), out provider) ) {
         return;
       }
-      Tuple<BracePos, BracePos> braces = provider.BraceCache.GetBracesAround(caret);
+      Tuple<BracePos, BracePos> braces = provider.BraceCache.GetBracesAround(bufferPos);
       if ( braces == null ) return;
-      SnapshotPoint opening = new SnapshotPoint(caret.Snapshot, braces.Item1.Position);
-      SnapshotPoint closing = new SnapshotPoint(caret.Snapshot, braces.Item2.Position);
-      RainbowAdornment adornment = RainbowAdornment.Get(this.theView);
-      adornment.Start(opening, closing);
+      SnapshotPoint opening = new SnapshotPoint(bufferPos.Snapshot, braces.Item1.Position);
+      SnapshotPoint closing = new SnapshotPoint(bufferPos.Snapshot, braces.Item2.Position);
+
+      if ( TryMapToView(opening, out opening) && TryMapToView(closing, out closing) ) {
+        RainbowAdornment adornment = RainbowAdornment.Get(this.theView);
+        adornment.Start(opening, closing);
+      }
+    }
+
+    private bool TryMapToView(SnapshotPoint pos, out SnapshotPoint result) {
+      result = new SnapshotPoint();
+      var target = this.theView.TextBuffer;
+      var temp = this.theView.BufferGraph.MapUpToBuffer(
+        pos, PointTrackingMode.Negative,
+        PositionAffinity.Successor, target
+      );
+      if ( temp != null ) {
+        result = temp.Value;
+        return true;
+      }
+      return false;
+    }
+    private bool TryMapCaretToBuffer(out SnapshotPoint pos) {
+      var caret = this.theView.Caret.Position.BufferPosition;
+      pos = new SnapshotPoint();
+      var result = this.theView.BufferGraph.MapDownToFirstMatch(
+        caret, PointTrackingMode.Negative,
+        snapshot => snapshot.TextBuffer.Properties.ContainsProperty(typeof(RainbowProvider)),
+        PositionAffinity.Successor
+        );
+      if ( result != null ) {
+        pos = result.Value;
+        return true;
+      }
+      return false;
     }
 
     private void StopRainbowAdornment() {
