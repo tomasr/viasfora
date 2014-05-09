@@ -71,7 +71,7 @@ namespace Winterdom.Viasfora.Text {
 
       if ( TryMapToView(opening, out opening) 
         && TryMapToView(closing, out closing) ) {
-        RainbowAdornment adornment = RainbowAdornment.Get(this.theView);
+        RainbowHighlight adornment = RainbowHighlight.Get(this.theView);
         adornment.Start(opening, closing, braces.Item1.Depth);
       }
     }
@@ -106,7 +106,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void StopRainbowAdornment() {
-      RainbowAdornment adornment = RainbowAdornment.Get(this.theView);
+      RainbowHighlight adornment = RainbowHighlight.Get(this.theView);
       adornment.Stop();
       startedEffect = false;
     }

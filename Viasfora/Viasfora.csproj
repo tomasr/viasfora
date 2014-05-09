@@ -192,7 +192,7 @@
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
     <Compile Include="Languages\Sql.cs" />
-    <Compile Include="Text\RainbowAdornment.cs" />
+    <Compile Include="Text\RainbowHighlight.cs" />
     <Compile Include="Text\RainbowColorTagger.cs" />
     <Compile Include="Text\RainbowKeyProcessor.cs" />
     <Compile Include="Text\RainbowProvider.cs" />

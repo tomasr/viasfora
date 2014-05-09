@@ -14,10 +14,10 @@ namespace Winterdom.Viasfora.Text {
   [Export(typeof(IWpfTextViewCreationListener))]
   [ContentType("text")]
   [TextViewRole(PredefinedTextViewRoles.Document)]
-  public class RainbowAdornmentProvider : IWpfTextViewCreationListener {
+  public class RainbowHilightProvider : IWpfTextViewCreationListener {
 
     [Export(typeof(AdornmentLayerDefinition))]
-    [Name(RainbowAdornment.LAYER)]
+    [Name(RainbowHighlight.LAYER)]
     [Order(After = PredefinedAdornmentLayers.Text)]
     [TextViewRole(PredefinedTextViewRoles.Document)]
     public AdornmentLayerDefinition editorAdornmentLayer = null;
@@ -33,22 +33,22 @@ namespace Winterdom.Viasfora.Text {
         );
       var formatMap = formatMapService.GetClassificationFormatMap(textView);
       textView.Properties.AddProperty(
-        RainbowAdornment.KEY, 
-        new RainbowAdornment(textView, formatMap, rainbowTags)
+        RainbowHighlight.KEY, 
+        new RainbowHighlight(textView, formatMap, rainbowTags)
         );
     }
   }
   
-  public class RainbowAdornment {
-    public const String LAYER = "viasfora.rainbow.layer";
+  public class RainbowHighlight {
+    public const String LAYER = "viasfora.rainbow.highlight";
     public const String TAG = "viasfora.rainbow";
-    public static object KEY = typeof(RainbowAdornment);
+    public static object KEY = typeof(RainbowHighlight);
     private IAdornmentLayer layer;
     private IWpfTextView view;
     private IClassificationFormatMap formatMap;
     private IClassificationType[] rainbowTags;
 
-    public RainbowAdornment(
+    public RainbowHighlight(
         IWpfTextView textView, 
         IClassificationFormatMap map, 
         IClassificationType[] rainbowTags) {
@@ -59,8 +59,8 @@ namespace Winterdom.Viasfora.Text {
     }
 
 
-    public static RainbowAdornment Get(ITextView view) {
-      return view.Properties.GetProperty<RainbowAdornment>(KEY);
+    public static RainbowHighlight Get(ITextView view) {
+      return view.Properties.GetProperty<RainbowHighlight>(KEY);
     }
 
     public void Start(SnapshotPoint opening, SnapshotPoint closing, int depth) {
