@@ -36,6 +36,10 @@ namespace Winterdom.Viasfora.Util {
       return new TagSpan<RainbowTag>(span, new RainbowTag(type));
     }
 
+    public SnapshotPoint ToPoint(ITextSnapshot snapshot) {
+      return new SnapshotPoint(snapshot, Position);
+    }
+
     public override string ToString() {
       return String.Format("'{0}' ({1}) {3}", Brace, Position, Depth);
     }

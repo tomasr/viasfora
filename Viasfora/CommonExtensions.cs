@@ -1,0 +1,20 @@
+﻿using Microsoft.VisualStudio.Utilities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace Winterdom.Viasfora {
+  public static class CommonExtensions {
+    public static bool Has<T>(this IPropertyOwner owner) {
+      return owner.Properties.ContainsProperty(typeof(T));
+    }
+    public static T Get<T>(this IPropertyOwner owner) where T : class {
+      T t;
+      if ( owner.Properties.TryGetProperty(typeof(T), out t) ) {
+        return t;
+      }
+      return null;
+    }
+  }
+}

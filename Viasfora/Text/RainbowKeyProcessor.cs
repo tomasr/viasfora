@@ -60,16 +60,17 @@ namespace Winterdom.Viasfora.Text {
       }
 
       ITextBuffer buffer = bufferPos.Snapshot.TextBuffer;
-      RainbowProvider provider;
-      if ( !buffer.Properties.TryGetProperty(typeof(RainbowProvider), out provider) ) {
+      RainbowProvider provider = buffer.Get<RainbowProvider>();
+      if ( provider == null ) {
         return;
       }
-      Tuple<BracePos, BracePos> braces = provider.BraceCache.GetBracesAround(bufferPos);
+      var braces = provider.BraceCache.GetBracesAround(bufferPos);
       if ( braces == null ) return;
-      SnapshotPoint opening = new SnapshotPoint(bufferPos.Snapshot, braces.Item1.Position);
-      SnapshotPoint closing = new SnapshotPoint(bufferPos.Snapshot, braces.Item2.Position);
+      SnapshotPoint opening = braces.Item1.ToPoint(bufferPos.Snapshot);
+      SnapshotPoint closing = braces.Item2.ToPoint(bufferPos.Snapshot);
 
-      if ( TryMapToView(opening, out opening) && TryMapToView(closing, out closing) ) {
+      if ( TryMapToView(opening, out opening) 
+        && TryMapToView(closing, out closing) ) {
         RainbowAdornment adornment = RainbowAdornment.Get(this.theView);
         adornment.Start(opening, closing, braces.Item1.Depth);
       }
@@ -88,12 +89,13 @@ namespace Winterdom.Viasfora.Text {
       }
       return false;
     }
+
     private bool TryMapCaretToBuffer(out SnapshotPoint pos) {
       var caret = this.theView.Caret.Position.BufferPosition;
       pos = new SnapshotPoint();
       var result = this.theView.BufferGraph.MapDownToFirstMatch(
         caret, PointTrackingMode.Negative,
-        snapshot => snapshot.TextBuffer.Properties.ContainsProperty(typeof(RainbowProvider)),
+        snapshot => snapshot.TextBuffer.Has<RainbowProvider>(),
         PositionAffinity.Successor
         );
       if ( result != null ) {
