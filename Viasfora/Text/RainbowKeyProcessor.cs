@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Text {
   }
 
   public class RainbowKeyProcessor : KeyProcessor {
-    private ITextView theView;
+    private readonly ITextView theView;
     private Stopwatch timer = new Stopwatch();
     private bool startedEffect = false;
     private TimeSpan pressTime;

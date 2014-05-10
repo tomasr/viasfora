@@ -20,7 +20,7 @@ namespace Winterdom.Viasfora.Text {
     [Name(RainbowHighlight.LAYER)]
     [Order(After = PredefinedAdornmentLayers.Text)]
     [TextViewRole(PredefinedTextViewRoles.Document)]
-    public AdornmentLayerDefinition editorAdornmentLayer = null;
+    public AdornmentLayerDefinition HighlightLayer = null;
 
     [Import]
     private IClassificationFormatMapService formatMapService = null;
@@ -43,10 +43,10 @@ namespace Winterdom.Viasfora.Text {
     public const String LAYER = "viasfora.rainbow.highlight";
     public const String TAG = "viasfora.rainbow";
     public static object KEY = typeof(RainbowHighlight);
-    private IAdornmentLayer layer;
-    private IWpfTextView view;
-    private IClassificationFormatMap formatMap;
-    private IClassificationType[] rainbowTags;
+    private readonly IAdornmentLayer layer;
+    private readonly IWpfTextView view;
+    private readonly IClassificationFormatMap formatMap;
+    private readonly IClassificationType[] rainbowTags;
 
     public RainbowHighlight(
         IWpfTextView textView, 
