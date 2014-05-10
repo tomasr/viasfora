@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.Text {
   [Export(typeof(IKeyProcessorProvider))]
   [Name("viasfora.rainbow.key.provider")]
   [Order(After="Default")]
-  [TextViewRole(PredefinedTextViewRoles.Editable)]
+  [TextViewRole(PredefinedTextViewRoles.Document)]
   [ContentType("text")]
   public class RainbowKeyProcessorProvider : IKeyProcessorProvider {
 
@@ -31,12 +31,23 @@ namespace Winterdom.Viasfora.Text {
       pressTime = TimeSpan.FromMilliseconds(VsfSettings.RainbowCtrlTimer);
     }
 
+    // Strange things:
+    // If a Peek-Definition window is opened, and the user
+    // holds the key down on it, the main textview will
+    // get the event, instead of the embedded window.
+    //
+    // I guess I'm probably doing something wrong,
+    // such as not marking up this key processor correctly
+    // so that the embedded window gets the event,
+    // but for now, just use the event source
+    // as a work around.
     public override void KeyDown(KeyEventArgs args) {
+      ITextView actualView = GetViewFromEvent(args);
       if ( args.Key == Key.LeftCtrl ) {
         if ( timer.IsRunning ) {
           if ( timer.Elapsed >= pressTime ) {
             timer.Stop();
-            StartRainbowHighlight();
+            StartRainbowHighlight(actualView);
           }
         } else {
           timer.Start();
@@ -46,17 +57,23 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    public override void KeyUp(KeyEventArgs args) {
-      timer.Stop();
-      StopRainbowHighlight();
+    private ITextView GetViewFromEvent(KeyEventArgs args) {
+      ITextView view = args.OriginalSource as ITextView;
+      return view ?? this.theView;
     }
 
-    private void StartRainbowHighlight() {
+    public override void KeyUp(KeyEventArgs args) {
+      ITextView actualView = GetViewFromEvent(args);
+      timer.Stop();
+      StopRainbowHighlight(actualView);
+    }
+
+    private void StartRainbowHighlight(ITextView view) {
       if ( startedEffect ) return;
       startedEffect = true;
 
       SnapshotPoint bufferPos;
-      if ( !TryMapCaretToBuffer(out bufferPos) ) {
+      if ( !TryMapCaretToBuffer(view, out bufferPos) ) {
         return;
       }
 
@@ -70,25 +87,27 @@ namespace Winterdom.Viasfora.Text {
       SnapshotPoint opening = braces.Item1.ToPoint(bufferPos.Snapshot);
       SnapshotPoint closing = braces.Item2.ToPoint(bufferPos.Snapshot);
 
-      if ( TryMapToView(opening, out opening) 
-        && TryMapToView(closing, out closing) ) {
-        RainbowHighlight highlight = RainbowHighlight.Get(this.theView);
-        highlight.Start(opening, closing, braces.Item1.Depth);
+      if ( TryMapToView(view, opening, out opening) 
+        && TryMapToView(view, closing, out closing) ) {
+        RainbowHighlight highlight = RainbowHighlight.Get(view);
+        if ( highlight != null ) {
+          highlight.Start(opening, closing, braces.Item1.Depth);
+        }
       }
     }
 
-    private void StopRainbowHighlight() {
-      RainbowHighlight highlight = RainbowHighlight.Get(this.theView);
+    private void StopRainbowHighlight(ITextView view) {
+      RainbowHighlight highlight = RainbowHighlight.Get(view);
       if ( highlight != null ) {
         highlight.Stop();
       }
       startedEffect = false;
     }
 
-    private bool TryMapToView(SnapshotPoint pos, out SnapshotPoint result) {
+    private bool TryMapToView(ITextView view, SnapshotPoint pos, out SnapshotPoint result) {
       result = new SnapshotPoint();
-      var target = this.theView.TextBuffer;
-      var temp = this.theView.BufferGraph.MapUpToBuffer(
+      var target = view.TextBuffer;
+      var temp = view.BufferGraph.MapUpToBuffer(
         pos, PointTrackingMode.Negative,
         PositionAffinity.Successor, target
       );
@@ -99,10 +118,10 @@ namespace Winterdom.Viasfora.Text {
       return false;
     }
 
-    private bool TryMapCaretToBuffer(out SnapshotPoint pos) {
-      var caret = this.theView.Caret.Position.BufferPosition;
+    private bool TryMapCaretToBuffer(ITextView view, out SnapshotPoint pos) {
+      var caret = view.Caret.Position.BufferPosition;
       pos = new SnapshotPoint();
-      var result = this.theView.BufferGraph.MapDownToFirstMatch(
+      var result = view.BufferGraph.MapDownToFirstMatch(
         caret, PointTrackingMode.Negative,
         snapshot => snapshot.TextBuffer.Has<RainbowProvider>(),
         PositionAffinity.Successor

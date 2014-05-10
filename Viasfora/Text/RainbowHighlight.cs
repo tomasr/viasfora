@@ -14,12 +14,12 @@ namespace Winterdom.Viasfora.Text {
   [Export(typeof(IWpfTextViewCreationListener))]
   [ContentType("text")]
   [TextViewRole(PredefinedTextViewRoles.Document)]
+  [TextViewRole(ViewRoles.EmbeddedPeekTextView)]
   public class RainbowHilightProvider : IWpfTextViewCreationListener {
 
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(RainbowHighlight.LAYER)]
     [Order(After = PredefinedAdornmentLayers.Text)]
-    [TextViewRole(PredefinedTextViewRoles.Document)]
     public AdornmentLayerDefinition HighlightLayer = null;
 
     [Import]
