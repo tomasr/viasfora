@@ -24,16 +24,17 @@ namespace Winterdom.Viasfora.Text {
   public class RainbowKeyProcessor : KeyProcessor {
     private ITextView theView;
     private Stopwatch timer = new Stopwatch();
-    public const long PRESS_TIME = 300;
     private bool startedEffect = false;
+    private TimeSpan pressTime;
     public RainbowKeyProcessor(ITextView textView) {
       this.theView = textView;
+      pressTime = TimeSpan.FromMilliseconds(VsfSettings.RainbowCtrlTimer);
     }
 
     public override void KeyDown(KeyEventArgs args) {
       if ( args.Key == Key.LeftCtrl ) {
         if ( timer.IsRunning ) {
-          if ( timer.ElapsedMilliseconds >= PRESS_TIME ) {
+          if ( timer.Elapsed >= pressTime ) {
             timer.Stop();
             StartRainbowAdornment();
           }
