@@ -76,6 +76,7 @@
     <Compile Include="Commands\AddOutliningCommand.cs" />
     <Compile Include="Commands\PresentationModeCommand.cs" />
     <Compile Include="Commands\VsCommand.cs" />
+    <Compile Include="CommonExtensions.cs" />
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Design\StringListConverter.cs" />
@@ -191,7 +192,9 @@
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
     <Compile Include="Languages\Sql.cs" />
+    <Compile Include="Text\RainbowHighlight.cs" />
     <Compile Include="Text\RainbowColorTagger.cs" />
+    <Compile Include="Text\RainbowKeyProcessor.cs" />
     <Compile Include="Text\RainbowProvider.cs" />
     <Compile Include="Text\RainbowTaggerProvider.cs" />
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />

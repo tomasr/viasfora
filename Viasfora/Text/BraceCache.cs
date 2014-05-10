@@ -73,6 +73,53 @@ namespace Winterdom.Viasfora.Text {
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
     }
 
+    public Tuple<BracePos, BracePos> GetBracesAround(SnapshotPoint point) {
+      if ( point.Snapshot != this.Snapshot ) {
+        return null;
+      }
+
+      int openIndex;
+      var opening = FindClosestOpeningBrace(point.Position, out openIndex);
+      if ( opening == null ) {
+        return null;
+      }
+
+      for ( int i = openIndex + 1; i < this.braces.Count; i++ ) {
+        if ( i == this.braces.Count - 1 ) {
+          // continue parsing the document if necessary
+          this.ContinueParsing(this.LastParsedPosition, this.Snapshot.Length);
+        }
+        BracePos closing = this.braces[i];
+        if ( this.IsOpeningBrace(closing.Brace) )
+          continue;
+        if ( this.braceList[opening.Value.Brace] == closing.Brace
+            && closing.Depth == opening.Value.Depth ) {
+          return new Tuple<BracePos, BracePos>(opening.Value, closing);
+        }
+      }
+      return null;
+    }
+
+    private BracePos? FindClosestOpeningBrace(int position, out int openIndex) {
+      openIndex = FindIndexOfBraceBefore(position);
+      if ( openIndex < 0 ) {
+        return null;
+      }
+      int pairs = 0;
+      while ( openIndex >= 0 ) {
+        BracePos current = this.braces[openIndex];
+        if ( !IsOpeningBrace(current.Brace) ) {
+          pairs++;
+        } else if ( pairs == 0 ) {
+          return current;
+        } else {
+          pairs--;
+        }
+        openIndex--;
+      }
+      return null;
+    }
+
     // We don't want to parse the document in small spans
     // as it is to expensive, so force a larger span if
     // necessary. However, if we've already parsed
