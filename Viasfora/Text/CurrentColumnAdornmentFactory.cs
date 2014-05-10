@@ -22,7 +22,6 @@ namespace Winterdom.Viasfora.Text {
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(Constants.COLUMN_HIGHLIGHT)]
     [Order(Before = AdornmentLayers.InterLine)]
-    [TextViewRole(PredefinedTextViewRoles.Document)]
     public AdornmentLayerDefinition editorAdornmentLayer = null;
 
     public void TextViewCreated(IWpfTextView textView) {
