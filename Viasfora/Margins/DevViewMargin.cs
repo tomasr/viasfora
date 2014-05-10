@@ -23,6 +23,7 @@ namespace Winterdom.Viasfora.Margins {
       this.visual = new DevMarginVisual(model);
       this.visual.ViewBuffer += OnViewBuffer;
       VsfSettings.SettingsUpdated += OnSettingsUpdated;
+      this.wpfTextViewHost.Closed += OnTextViewHostClosed;
 
       UpdateVisibility();
       InitializeTextView();
@@ -48,12 +49,7 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     public void Dispose() {
-      if ( this.textView != null ) {
-        this.textView.BufferGraph.GraphBuffersChanged -= OnGraphBuffersChanged;
-        this.textView.BufferGraph.GraphBufferContentTypeChanged -= OnGraphBufferContentTypeChanged;
-        this.textView.Caret.PositionChanged -= OnCaretPositionChanged;
-        this.textView.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
-      }
+      Cleanup();
     }
 
     private void InitializeTextView() {
@@ -62,6 +58,28 @@ namespace Winterdom.Viasfora.Margins {
       this.textView.BufferGraph.GraphBufferContentTypeChanged += OnGraphBufferContentTypeChanged;
       this.textView.Caret.PositionChanged += OnCaretPositionChanged;
       this.textView.TextViewModel.EditBuffer.PostChanged += OnBufferPostChanged;
+    }
+
+    private void Cleanup() {
+      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+      if ( this.wpfTextViewHost != null ) {
+        this.wpfTextViewHost.Closed -= OnTextViewHostClosed;
+      }
+      if ( this.textView != null ) {
+        this.textView.BufferGraph.GraphBuffersChanged -= OnGraphBuffersChanged;
+        this.textView.BufferGraph.GraphBufferContentTypeChanged -= OnGraphBufferContentTypeChanged;
+        this.textView.Caret.PositionChanged -= OnCaretPositionChanged;
+        this.textView.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
+        this.textView = null;
+      }
+      if ( this.visual != null ) {
+        this.visual.ViewBuffer -= OnViewBuffer;
+        this.visual = null;
+      }
+    }
+
+    private void OnTextViewHostClosed(object sender, EventArgs e) {
+      Cleanup();
     }
 
     private void OnBufferPostChanged(object sender, EventArgs e) {
