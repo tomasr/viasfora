@@ -19,7 +19,7 @@ namespace Winterdom.Viasfora.Text {
   [Export(typeof(IVsTextViewCreationListener))]
   [Name("viasfora.text.completion.handler")]
   [ContentType("text")]
-  [TextViewRole(PredefinedTextViewRoles.Editable)]
+  [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
   public class PlainTextCompletionHandlerProvider : IVsTextViewCreationListener {
     [Import]
     internal IVsEditorAdaptersFactoryService AdapterService { get; set; }
