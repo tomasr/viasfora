@@ -100,7 +100,7 @@ namespace Winterdom.Viasfora.Text {
       if ( line.ContainsBufferPosition(span.Start) ) {
         var bounds = line.GetCharacterBounds(span.Start);
         left = bounds.Left;
-        top = bounds.Top;
+        top = line.TextTop;
       } else {
         left = line.Left;
         top = line.Top;
@@ -108,7 +108,7 @@ namespace Winterdom.Viasfora.Text {
       if ( line.ContainsBufferPosition(span.End) ) {
         var bounds = line.GetCharacterBounds(span.End);
         right = bounds.Right;
-        bottom = bounds.Bottom;
+        bottom = line.TextBottom;
       } else {
         right = Math.Max(line.Right, this.view.ViewportRight - 1);
         bottom = line.Bottom;
