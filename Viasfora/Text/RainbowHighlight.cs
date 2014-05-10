@@ -32,17 +32,13 @@ namespace Winterdom.Viasfora.Text {
         registryService, Constants.MAX_RAINBOW_DEPTH
         );
       var formatMap = formatMapService.GetClassificationFormatMap(textView);
-      textView.Properties.AddProperty(
-        RainbowHighlight.KEY, 
-        new RainbowHighlight(textView, formatMap, rainbowTags)
-        );
+      textView.Set(new RainbowHighlight(textView, formatMap, rainbowTags));
     }
   }
   
   public class RainbowHighlight {
     public const String LAYER = "viasfora.rainbow.highlight";
     public const String TAG = "viasfora.rainbow";
-    public static object KEY = typeof(RainbowHighlight);
     private readonly IAdornmentLayer layer;
     private readonly IWpfTextView view;
     private readonly IClassificationFormatMap formatMap;
@@ -60,7 +56,7 @@ namespace Winterdom.Viasfora.Text {
 
 
     public static RainbowHighlight Get(ITextView view) {
-      return view.Properties.GetProperty<RainbowHighlight>(KEY);
+      return view.Get<RainbowHighlight>();
     }
 
     public void Start(SnapshotPoint opening, SnapshotPoint closing, int depth) {

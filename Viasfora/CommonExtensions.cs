@@ -16,5 +16,8 @@ namespace Winterdom.Viasfora {
       }
       return null;
     }
+    public static void Set<T>(this IPropertyOwner owner, T value) { 
+      owner.Properties.AddProperty(typeof(T), value);
+    }
   }
 }

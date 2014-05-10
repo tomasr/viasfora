@@ -36,7 +36,7 @@ namespace Winterdom.Viasfora.Text {
         if ( timer.IsRunning ) {
           if ( timer.Elapsed >= pressTime ) {
             timer.Stop();
-            StartRainbowAdornment();
+            StartRainbowHighlight();
           }
         } else {
           timer.Start();
@@ -48,10 +48,10 @@ namespace Winterdom.Viasfora.Text {
 
     public override void KeyUp(KeyEventArgs args) {
       timer.Stop();
-      StopRainbowAdornment();
+      StopRainbowHighlight();
     }
 
-    private void StartRainbowAdornment() {
+    private void StartRainbowHighlight() {
       if ( startedEffect ) return;
       startedEffect = true;
 
@@ -72,9 +72,17 @@ namespace Winterdom.Viasfora.Text {
 
       if ( TryMapToView(opening, out opening) 
         && TryMapToView(closing, out closing) ) {
-        RainbowHighlight adornment = RainbowHighlight.Get(this.theView);
-        adornment.Start(opening, closing, braces.Item1.Depth);
+        RainbowHighlight highlight = RainbowHighlight.Get(this.theView);
+        highlight.Start(opening, closing, braces.Item1.Depth);
       }
+    }
+
+    private void StopRainbowHighlight() {
+      RainbowHighlight highlight = RainbowHighlight.Get(this.theView);
+      if ( highlight != null ) {
+        highlight.Stop();
+      }
+      startedEffect = false;
     }
 
     private bool TryMapToView(SnapshotPoint pos, out SnapshotPoint result) {
@@ -106,10 +114,5 @@ namespace Winterdom.Viasfora.Text {
       return false;
     }
 
-    private void StopRainbowAdornment() {
-      RainbowHighlight adornment = RainbowHighlight.Get(this.theView);
-      adornment.Stop();
-      startedEffect = false;
-    }
   }
 }
