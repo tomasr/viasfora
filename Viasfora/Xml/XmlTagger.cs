@@ -108,7 +108,7 @@ namespace Winterdom.Viasfora.Xml {
             foundClosingTag = true;
           } else if ( text == ":" && lastSpan.HasValue && VsfSettings.XmlnsPrefixHighlightEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlPrefixClassification);
-          } else if ( text.IndexOf('>') > 0 && foundClosingTag && VsfSettings.XmlCloseTagHighlightEnabled ) {
+          } else if ( text.IndexOf('>') >= 0 && foundClosingTag && VsfSettings.XmlCloseTagHighlightEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlCloseTagClassification);
             foundClosingTag = false;
           }
