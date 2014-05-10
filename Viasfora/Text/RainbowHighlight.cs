@@ -19,7 +19,7 @@ namespace Winterdom.Viasfora.Text {
 
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(RainbowHighlight.LAYER)]
-    [Order(After = PredefinedAdornmentLayers.Text)]
+    [Order(After = PredefinedAdornmentLayers.Text, Before=AdornmentLayers.InterLine)]
     public AdornmentLayerDefinition HighlightLayer = null;
 
     [Import]
