@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Utilities;
+using System.Windows.Shapes;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -119,25 +120,17 @@ namespace Winterdom.Viasfora.Text {
     private UIElement MakeAdornment(SnapshotSpan span, Geometry spanGeometry, int depth) {
       var brush = GetRainbowBrush(depth);
 
-      GeometryDrawing geometry = new GeometryDrawing(
-        MakeBackgroundBrush(brush),
-        new Pen(brush, 1),
-        spanGeometry
-        );
+      if ( spanGeometry.CanFreeze ) {
+        spanGeometry.Freeze();
+      }
 
-      if ( geometry.CanFreeze ) geometry.Freeze();
-      DrawingImage drawing = new DrawingImage(geometry);
-      if ( drawing.CanFreeze ) drawing.Freeze();
+      Path path = new Path();
+      path.Data = spanGeometry;
+      path.Stroke = brush;
+      path.StrokeThickness = 1;
+      path.Fill = MakeBackgroundBrush(brush);
 
-      Image image = new Image {
-        Source = drawing,
-        UseLayoutRounding = false
-      };
-
-      Canvas.SetLeft(image, spanGeometry.Bounds.Left);
-      Canvas.SetTop(image, spanGeometry.Bounds.Top);
-
-      return image;
+      return path;
     }
 
     private Brush GetRainbowBrush(int depth) {
