@@ -43,6 +43,7 @@ namespace Winterdom.Viasfora.Text {
     private IOleCommandTarget nextCommandHandler;
     private ITextView textView;
     private ICompletionSession session;
+    private bool sessionStartedByCommand;
 
     public PlainTextCompletionCommandHandler(
           PlainTextCompletionHandlerProvider provider,
@@ -88,7 +89,7 @@ namespace Winterdom.Viasfora.Text {
             // commands if there isn't already an Intellisense
             // provider
             if ( !ReSharper.Installed && !NextHandlerHandlesCommand(pguidCmdGroup, nCmdID) ) {
-              handled = this.StartSession();
+              handled = this.StartSession(true);
             } 
             break;
           case VSConstants.VSStd2KCmdID.RETURN:
@@ -114,7 +115,7 @@ namespace Winterdom.Viasfora.Text {
       } else if ( pguidCmdGroup == Guids.VsfTextEditorCmdSet ) {
         switch ( (int)nCmdID ) {
           case PkgCmdIdList.cmdidCompleteWord:
-            handled = StartSession();
+            handled = StartSession(true);
             break;
         }
       }
@@ -146,7 +147,7 @@ namespace Winterdom.Viasfora.Text {
       }       
     }
 
-    private bool StartSession() {
+    private bool StartSession(bool byCommand) {
       // do not start a session if there's already another
       // provider that has started one
       var active = provider.CompletionBroker.GetSessions(textView)
@@ -156,14 +157,20 @@ namespace Winterdom.Viasfora.Text {
       // already have an active session, so continue
       if ( session != null && !session.IsDismissed )
         return false;
+      this.sessionStartedByCommand = byCommand;
       this.TriggerCompletion();
       return true;
     }
 
     private bool CancelSession() {
+      // if we handled the command, still let it
+      // be handled by the next handler.
+      // This is useful with VsVim, so that pressing esc
+      // to cancel completion can drop you back to
+      // normal mode
       if ( session != null ) {
         session.Dismiss();
-        return true;
+        return sessionStartedByCommand;
       }
       return false;
     }
@@ -190,7 +197,7 @@ namespace Winterdom.Viasfora.Text {
         return false;
       }
       if ( !ReSharper.Installed ) {
-        return StartSession();
+        return StartSession(false);
       }
       return false;
     }
