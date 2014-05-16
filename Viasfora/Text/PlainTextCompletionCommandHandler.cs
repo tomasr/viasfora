@@ -13,6 +13,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.VisualStudio.Text.Operations;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -27,6 +28,8 @@ namespace Winterdom.Viasfora.Text {
     internal ICompletionBroker CompletionBroker { get; set; }
     [Import]
     internal SVsServiceProvider ServiceProvider { get; set; }
+    [Import]
+    internal IEditorOperationsFactoryService EditorOperationsFactory { get; set; }
     public void VsTextViewCreated(IVsTextView textViewAdapter) {
       ITextView textView = AdapterService.GetWpfTextView(textViewAdapter);
       if ( textView == null )
@@ -143,23 +146,26 @@ namespace Winterdom.Viasfora.Text {
 
     private void Filter() {
       if ( session != null && !session.IsDismissed ) {
-        session.Filter();
+        // the buffer change might have triggered
+        // another session
+        if ( AnySessionsActive() ) {
+          CancelSession();
+        } else {
+          session.Filter();
+        }
       }       
     }
 
     private bool StartSession(bool byCommand) {
       // do not start a session if there's already another
       // provider that has started one
-      var active = provider.CompletionBroker.GetSessions(textView)
-                           .Any(s => !s.IsDismissed);
-      if ( active )
+      if ( AnySessionsActive() )
         return false;
       // already have an active session, so continue
       if ( session != null && !session.IsDismissed )
         return false;
       this.sessionStartedByCommand = byCommand;
-      this.TriggerCompletion();
-      return true;
+      return this.TriggerCompletion();
     }
 
     private bool CancelSession() {
@@ -213,19 +219,33 @@ namespace Winterdom.Viasfora.Text {
       return nCmdID == (uint)VSConstants.VSStd2KCmdID.RETURN
           || nCmdID != (uint)VSConstants.VSStd2KCmdID.TAB;
     }
+    private bool AnySessionsActive() {
+      var sessions = provider.CompletionBroker.GetSessions(textView);
+      if ( this.session != null ) {
+        return sessions.Any(s => s != this.session && !s.IsDismissed);
+      }
+      return sessions.Any(s => !s.IsDismissed);
+    }
+
     private bool TriggerCompletion() {
       if ( session != null ) {
         session.Dismiss();
       }
-      // locate trigger point
+      PrepareTriggerPoint();
+      // since we might have modified the 
+      // buffer, check if that didn't kick another session
+      if ( AnySessionsActive() ) {
+        return false;
+      }
+
       var caretPoint = textView.Caret.Position.BufferPosition;
       var snapshot = caretPoint.Snapshot;
 
       var triggerPoint = snapshot.CreateTrackingPoint(
-                            caretPoint.Position, 
-                            PointTrackingMode.Positive);
+                            caretPoint, 
+                            PointTrackingMode.Negative);
       session = provider.CompletionBroker.CreateCompletionSession(
-                            this.textView, triggerPoint, true);
+                            this.textView, triggerPoint, false);
       if ( session != null ) {
         session.Dismissed += this.OnSessionDismissed;
         PlainTextCompletionContext.Add(session);
@@ -233,6 +253,15 @@ namespace Winterdom.Viasfora.Text {
         return true;
       }
       return false;
+    }
+
+    private void PrepareTriggerPoint() {
+      if ( textView.Caret.InVirtualSpace ) {
+        var editorOps = this.provider.EditorOperationsFactory.GetEditorOperations(this.textView);
+        if ( editorOps != null ) {
+          editorOps.InsertText("");
+        }
+      }
     }
 
     private void OnSessionDismissed(object sender, EventArgs e) {
