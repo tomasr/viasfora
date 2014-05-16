@@ -29,7 +29,7 @@ namespace Winterdom.Viasfora.Text {
       this.formatMap = formatMap;
       this.formatType = formatType;
       this.columnRect = new Rectangle();
-      layer = view.GetAdornmentLayer(Constants.LINE_HIGHLIGHT);
+      layer = view.GetAdornmentLayer(Constants.COLUMN_HIGHLIGHT);
 
       view.Caret.PositionChanged += OnCaretPositionChanged;
       view.ViewportWidthChanged += OnViewportChanged;
