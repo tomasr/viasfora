@@ -28,6 +28,8 @@ namespace Winterdom.Viasfora.Text {
     private TimeSpan pressTime;
     public RainbowKeyProcessor(ITextView textView) {
       this.theView = textView;
+      this.theView.LostAggregateFocus += OnLostFocus;
+      this.theView.Closed += OnViewClosed;
       pressTime = TimeSpan.FromMilliseconds(VsfSettings.RainbowCtrlTimer);
     }
 
@@ -41,7 +43,7 @@ namespace Winterdom.Viasfora.Text {
     // so that the embedded window gets the event,
     // but for now, just use the event source
     // as a work around.
-    public override void KeyDown(KeyEventArgs args) {
+    public override void PreviewKeyDown(KeyEventArgs args) {
       ITextView actualView = GetViewFromEvent(args);
       if ( args.Key == Key.LeftCtrl ) {
         if ( timer.IsRunning ) {
@@ -62,10 +64,19 @@ namespace Winterdom.Viasfora.Text {
       return view ?? this.theView;
     }
 
-    public override void KeyUp(KeyEventArgs args) {
+    public override void PreviewKeyUp(KeyEventArgs args) {
       ITextView actualView = GetViewFromEvent(args);
       timer.Stop();
       StopRainbowHighlight(actualView);
+    }
+
+    private void OnViewClosed(object sender, EventArgs e) {
+      this.theView.LostAggregateFocus -= OnLostFocus;
+    }
+
+    private void OnLostFocus(object sender, EventArgs e) {
+      timer.Stop();
+      StopRainbowHighlight(this.theView);
     }
 
     private void StartRainbowHighlight(ITextView view) {
