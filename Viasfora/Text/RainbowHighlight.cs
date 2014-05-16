@@ -55,7 +55,6 @@ namespace Winterdom.Viasfora.Text {
       layer = view.GetAdornmentLayer(LAYER);
     }
 
-
     public static RainbowHighlight Get(ITextView view) {
       return view.Get<RainbowHighlight>();
     }
@@ -109,7 +108,7 @@ namespace Winterdom.Viasfora.Text {
       if ( line.ContainsBufferPosition(span.End) ) {
         var bounds = line.GetCharacterBounds(span.End);
         right = bounds.Right;
-        bottom = line.TextBottom;
+        bottom = line.TextBottom + 1;
       } else {
         right = Math.Max(line.Right, this.view.ViewportRight - 1);
         bottom = line.Bottom;
