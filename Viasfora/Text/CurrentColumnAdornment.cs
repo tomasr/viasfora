@@ -49,6 +49,12 @@ namespace Winterdom.Viasfora.Text {
       CreateDrawingObjects();
       RedrawAdornments();
     }
+    void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
+      // the user changed something in Fonts and Colors, so
+      // recreate our adornments
+      CreateDrawingObjects();
+      RedrawAdornments();
+    }
     void OnViewClosed(object sender, EventArgs e) {
       view.Caret.PositionChanged -= OnCaretPositionChanged;
       if ( view.TextViewModel != null && view.TextViewModel.EditBuffer != null ) {
@@ -61,11 +67,6 @@ namespace Winterdom.Viasfora.Text {
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
     }
     void OnViewportChanged(object sender, EventArgs e) {
-      RedrawAdornments();
-    }
-    void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
-      // the user changed something in Fonts and Colors, so
-      // recreate our adornments
       RedrawAdornments();
     }
     void OnCaretPositionChanged(object sender, CaretPositionChangedEventArgs e) {
