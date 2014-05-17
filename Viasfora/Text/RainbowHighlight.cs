@@ -126,7 +126,7 @@ namespace Winterdom.Viasfora.Text {
       Path path = new Path();
       path.Data = spanGeometry;
       path.Stroke = brush;
-      path.StrokeThickness = 1;
+      path.StrokeThickness = 1.3;
       path.Fill = MakeBackgroundBrush(brush);
 
       return path;
@@ -142,7 +142,7 @@ namespace Winterdom.Viasfora.Text {
       SolidColorBrush scb = brush as SolidColorBrush;
       if ( scb == null ) return Brushes.Transparent;
       Brush newBrush = new SolidColorBrush(scb.Color);
-      newBrush.Opacity = 0.05;
+      newBrush.Opacity = 0.10;
       return newBrush;
     }
   }
