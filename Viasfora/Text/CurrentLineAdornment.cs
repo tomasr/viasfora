@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Linq;
+using System.Windows.Shapes;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
@@ -19,9 +20,7 @@ namespace Winterdom.Viasfora.Text {
     private IWpfTextView view;
     private IClassificationFormatMap formatMap;
     private IClassificationType formatType;
-    private Brush fillBrush;
-    private Pen borderPen;
-    private Image currentHighlight = null;
+    private Rectangle lineRect;
 
     public CurrentLineAdornment(
           IWpfTextView view, IClassificationFormatMap formatMap,
@@ -29,7 +28,8 @@ namespace Winterdom.Viasfora.Text {
       this.view = view;
       this.formatMap = formatMap;
       this.formatType = formatType;
-      layer = view.GetAdornmentLayer(Constants.LINE_HIGHLIGHT);
+      this.layer = view.GetAdornmentLayer(Constants.LINE_HIGHLIGHT);
+      this.lineRect = new Rectangle();
 
       view.Caret.PositionChanged += OnCaretPositionChanged;
       view.ViewportWidthChanged += OnViewportWidthChanged;
@@ -44,7 +44,6 @@ namespace Winterdom.Viasfora.Text {
     }
 
     void OnSettingsUpdated(object sender, EventArgs e) {
-      this.currentHighlight = null;
       CreateDrawingObjects();
       RedrawAdornments();
     }
@@ -63,9 +62,6 @@ namespace Winterdom.Viasfora.Text {
       RedrawAdornments();
     }
     void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
-      // the user changed something in Fonts and Colors, so
-      // recreate our adornments
-      this.currentHighlight = null;
       CreateDrawingObjects();
     }
     void OnCaretPositionChanged(object sender, CaretPositionChangedEventArgs e) {
@@ -80,7 +76,6 @@ namespace Winterdom.Viasfora.Text {
       SnapshotPoint caret = view.Caret.Position.BufferPosition;
       foreach ( var line in e.NewOrReformattedLines ) {
         if ( line.ContainsBufferPosition(caret) ) {
-          this.currentHighlight = null; // force recalculation
           this.CreateVisuals(line);
           break;
         }
@@ -94,18 +89,13 @@ namespace Winterdom.Viasfora.Text {
       TextFormattingRunProperties format =
          formatMap.GetTextProperties(formatType);
 
-      fillBrush = format.BackgroundBrush;
-      Brush penBrush = format.ForegroundBrush;
-      borderPen = new Pen(penBrush, VsfSettings.HighlightLineWidth);
-      borderPen.Freeze();
-      RedrawAdornments();
+      this.lineRect.Fill = format.BackgroundBrush;
+      this.lineRect.Stroke = format.ForegroundBrush;
+      this.lineRect.StrokeThickness = VsfSettings.HighlightLineWidth;
     }
     private void RedrawAdornments() {
       if ( view.TextViewLines != null ) {
-        if ( currentHighlight != null ) {
-          layer.RemoveAdornment(currentHighlight);
-        }
-        this.currentHighlight = null; // force redraw
+        layer.RemoveAllAdornments();
         var caret = view.Caret.Position;
         ITextViewLine line = GetLineByPos(caret);
         this.CreateVisuals(line);
@@ -131,38 +121,17 @@ namespace Winterdom.Viasfora.Text {
          new Point(Math.Max(view.ViewportRight - 2, line.TextRight), line.TextBottom)
       );
 
-      if ( NeedsNewImage(rc) ) {
-        Geometry g = new RectangleGeometry(rc, 0.5, 0.5);
-        GeometryDrawing drawing = new GeometryDrawing(fillBrush, borderPen, g);
-        drawing.Freeze();
-        DrawingImage drawingImage = new DrawingImage(drawing);
-        drawingImage.Freeze();
-        Image image = new Image();
-        // work around WPF rounding bug
-        image.UseLayoutRounding = false;
-        image.Source = drawingImage;
-        currentHighlight = image;
-      }
+      lineRect.Width = rc.Width;
+      lineRect.Height = rc.Height;
 
       //Align the image with the top of the bounds of the text geometry
-      Canvas.SetLeft(currentHighlight, rc.Left);
-      Canvas.SetTop(currentHighlight, rc.Top);
+      Canvas.SetLeft(lineRect, rc.Left);
+      Canvas.SetTop(lineRect, rc.Top);
 
       layer.AddAdornment(
          AdornmentPositioningBehavior.TextRelative, span,
-         CUR_LINE_TAG, currentHighlight, null
+         CUR_LINE_TAG, lineRect, null
       );
-    }
-    private bool NeedsNewImage(Rect rc) {
-      if ( currentHighlight == null )
-        return true;
-      if ( AreClose(currentHighlight.Width, rc.Width) )
-        return true;
-      return AreClose(currentHighlight.Height, rc.Height);
-    }
-    private bool AreClose(double d1, double d2) {
-      double diff = d1 - d2;
-      return Math.Abs(diff) < 0.1;
     }
   }
 

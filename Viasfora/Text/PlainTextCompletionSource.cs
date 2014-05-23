@@ -107,11 +107,33 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private ITrackingSpan GetApplicableToSpan(SnapshotPoint triggerPoint) {
+      // triggerPoint is at the caret insertion point. That is, 
+      // the character at triggerPoint is what is *after* the caret.
+      // we want to obtain is the prefix before said position
+      SnapshotSpan? word = null;
       ITextSnapshot snapshot = triggerPoint.Snapshot;
       SnapshotPoint end = triggerPoint;
       if ( end > 0 ) end -= 1;
-      var word = navigator.GetExtentOfWord(end);
-      return snapshot.CreateTrackingSpan(word.Span, SpanTrackingMode.EdgeInclusive);
+
+      char ch = end.GetChar();
+      if ( Char.IsWhiteSpace(ch) ) {
+        word = new SnapshotSpan(end + 1, 0);
+      } else if ( !IsIdentifierChar(ch) ) {
+          word = new SnapshotSpan(end+1, 0);
+      } else {
+        var extent = navigator.GetExtentOfWord(end);
+        if ( extent != null ) {
+          word = extent.Span;
+        }
+      }
+      if ( !word.HasValue ) {
+        word = new SnapshotSpan(end, end);
+      }
+      return snapshot.CreateTrackingSpan(word.Value, SpanTrackingMode.EdgeInclusive);
+    }
+
+    private bool IsIdentifierChar(char ch) {
+      return Char.IsLetterOrDigit(ch);
     }
 
     private struct BufferStats {

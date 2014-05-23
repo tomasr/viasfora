@@ -21,6 +21,7 @@ namespace Winterdom.Viasfora {
     const String XML_MATCH_TAGS_ENABLED = "XmlMatchTagsEnabled";
 
     const String RAINBOW_TAGS_ENABLED = "RainbowTagsEnabled";
+    const String RAINBOW_CTRL_TIMER = "RainbowCtrlTimer";
     const String PRESENTATION_MODE_ENABLED = "PresentationModeEnabled";
     const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
     const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
@@ -66,6 +67,10 @@ namespace Winterdom.Viasfora {
     public static bool RainbowTagsEnabled {
       get { return GetBoolean(RAINBOW_TAGS_ENABLED, true); }
       set { SetValue(RAINBOW_TAGS_ENABLED, value); }
+    }
+    public static long RainbowCtrlTimer {
+      get { return GetInt64(RAINBOW_CTRL_TIMER, 300); }
+      set { SetValue(RAINBOW_CTRL_TIMER, value); }
     }
     public static bool PresentationModeEnabled {
       get { return GetBoolean(PRESENTATION_MODE_ENABLED, true); }
@@ -119,6 +124,10 @@ namespace Winterdom.Viasfora {
     private static int GetInt32(String name, int defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToInt32(val);
+    }
+    private static long GetInt64(String name, long defval) {
+      String val = settings.Get(name);
+      return String.IsNullOrEmpty(val) ? defval : Convert.ToInt64(val);
     }
     private static double GetDouble(String name, double defval) {
       String val = settings.Get(name);

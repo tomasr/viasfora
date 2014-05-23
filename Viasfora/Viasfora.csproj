@@ -70,11 +70,13 @@
     <Compile Include="AdornmentLayers.cs" />
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
+    <Compile Include="Commands\CompleteWordCommand.cs" />
     <Compile Include="Commands\ClearOutliningCommand.cs" />
     <Compile Include="Commands\RemoveOutliningCommand.cs" />
     <Compile Include="Commands\AddOutliningCommand.cs" />
     <Compile Include="Commands\PresentationModeCommand.cs" />
     <Compile Include="Commands\VsCommand.cs" />
+    <Compile Include="CommonExtensions.cs" />
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Design\StringListConverter.cs" />
@@ -155,6 +157,7 @@
     </Compile>
     <Compile Include="PkgCmdIdList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReSharper.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
     <Compile Include="Settings\IPersistSettings.cs" />
@@ -189,7 +192,9 @@
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
     <Compile Include="Languages\Sql.cs" />
+    <Compile Include="Text\RainbowHighlight.cs" />
     <Compile Include="Text\RainbowColorTagger.cs" />
+    <Compile Include="Text\RainbowKeyProcessor.cs" />
     <Compile Include="Text\RainbowProvider.cs" />
     <Compile Include="Text\RainbowTaggerProvider.cs" />
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
@@ -219,6 +224,7 @@
     <Compile Include="Util\StringChars.cs" />
     <Compile Include="Languages\BraceExtractors\VbBraceExtractor.cs" />
     <Compile Include="Util\VsColors.cs" />
+    <Compile Include="ViewRoles.cs" />
     <Compile Include="VsfSettings.cs" />
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />

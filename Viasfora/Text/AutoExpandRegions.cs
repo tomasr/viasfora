@@ -21,9 +21,11 @@ namespace Winterdom.Viasfora.Text {
     public void TextViewCreated(IWpfTextView textView) {
       var expandMode = VsfSettings.AutoExpandRegions;
       var manager = outlining.GetOutliningManager(textView);
-      textView.Properties.GetOrCreateSingletonProperty(
-        () => new AutoExpander(textView, manager, expandMode)
-        );
+      if ( manager != null ) {
+        textView.Properties.GetOrCreateSingletonProperty(
+          () => new AutoExpander(textView, manager, expandMode)
+          );
+      }
     }
   }
 
@@ -37,12 +39,14 @@ namespace Winterdom.Viasfora.Text {
           IVsOutliningManager outlining,
           AutoExpandMode mode) {
       this.expandMode = mode;
+      this.theView = textView;
+      this.outliningManager = outlining;
 
+      this.theView.Closed += OnViewClosed;
+      VsfSettings.SettingsUpdated += OnSettingsUpdated;
       if ( expandMode == AutoExpandMode.Disable ) {
         outlining.Enabled = false;
       } else if ( expandMode == AutoExpandMode.Expand ) {
-        this.theView = textView;
-        this.outliningManager = outlining;
         // in most cases, this is enough to 
         // expand all outlining as necessary.
         // However, it does not appear to work
@@ -51,11 +55,19 @@ namespace Winterdom.Viasfora.Text {
         // collapsed and do it again just in case
         this.theView.LayoutChanged += OnLayoutChanged;
         this.outliningManager.RegionsCollapsed += OnRegionsCollapsed;
-        this.theView.Closed += OnViewClosed;
+      }
+    }
+
+    private void OnSettingsUpdated(object sender, EventArgs e) {
+      if ( VsfSettings.AutoExpandRegions == AutoExpandMode.Disable ) {
+        this.outliningManager.Enabled = false;
+      } else {
+        this.outliningManager.Enabled = true;
       }
     }
 
     private void OnViewClosed(object sender, EventArgs e) {
+      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
       this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
       this.theView.LayoutChanged -= OnLayoutChanged;
       this.theView = null;
@@ -74,8 +86,10 @@ namespace Winterdom.Viasfora.Text {
 
     private void ExpandAll() {
       var snapshot = theView.TextSnapshot;
-      SnapshotSpan span = new SnapshotSpan(snapshot, 0, snapshot.Length);
-      outliningManager.ExpandAll(span, collapsed => true);
+      if ( snapshot != null ) {
+        SnapshotSpan span = new SnapshotSpan(snapshot, 0, snapshot.Length);
+        outliningManager.ExpandAll(span, collapsed => true);
+      }
     }
   }
 }
