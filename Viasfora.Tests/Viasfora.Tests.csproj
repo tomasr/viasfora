@@ -54,6 +54,7 @@
     <Compile Include="BraceExtractors\PsBraceExtractorTests.cs" />
     <Compile Include="CommentParsers\GenericCommentParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sequences\CssEscapeSequenceParserTests.cs" />
     <Compile Include="Sequences\PsEscapeSequenceParserTests.cs" />
     <Compile Include="Sequences\CEscapeSequenceParserTests.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStoreTests.cs" />
