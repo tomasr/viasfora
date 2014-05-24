@@ -22,8 +22,28 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       this.state = stText;
     }
 
-    public IEnumerable<CharPos> Extract(ITextChars text) {
-      throw new NotImplementedException();
+    public IEnumerable<CharPos> Extract(ITextChars tc) {
+      while ( !tc.EndOfLine ) {
+        switch ( this.state ) {
+          default:
+            foreach ( var ch in ParseText(tc) ) {
+              yield return ch;
+            }
+            break;
+        }
+      }
+    }
+
+    private IEnumerable<CharPos> ParseText(ITextChars tc) {
+      while ( !tc.EndOfLine ) {
+        if ( lang.BraceList.Contains(tc.Char()) ) {
+          yield return new CharPos(tc.Char(), tc.AbsolutePosition);
+          tc.Next();
+        } else {
+          tc.Next();
+        }
+      }
+     
     }
   }
 }
