@@ -43,6 +43,11 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           this.state = stComment;
           tc.Skip(2);
           ParseComment(tc);
+        } else if ( tc.Char() == '/' && tc.NChar() == '/' ) {
+          // CSS doesn't really support single-line comments, 
+          // but SASS does, and it doesn't harm too
+          // much to implement it as a single thing
+          tc.SkipRemainder();
         } else if ( tc.Char() == '"' ) {
           this.state = stDoubleQuotedString;
           tc.Next();

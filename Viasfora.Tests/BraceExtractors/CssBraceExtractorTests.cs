@@ -43,6 +43,15 @@ video {
       Assert.Equal(0, chars.Count);
     }
     [Fact]
+    public void BracesInSingleLineCommentsAreIgnored() {
+      String input = @"
+some string() // this is a comment with (){}[] braces
+";
+      var extractor = new CssBraceExtractor(new Css());
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2, chars.Count);
+    }
+    [Fact]
     public void BracesInMultiLineCommentsAreIgnored() {
       String input = @"
 /* this is a comment
