@@ -27,6 +27,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(PowerShell.ContentType)]
   [ContentType(Css.ContentType)]
   [ContentType(Css.SassContentType)]
+  [ContentType(Css.LessContentType)]
   [TagType(typeof(RainbowTag))]
   public class RainbowTaggerProvider : IViewTaggerProvider {
     [Import]

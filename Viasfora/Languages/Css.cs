@@ -10,6 +10,7 @@ namespace Winterdom.Viasfora.Languages {
   public class Css : LanguageInfo {
     public const String ContentType = "css";
     public const String SassContentType = "SCSS";
+    public const String LessContentType = "LESS";
     public override String BraceList {
       get { return "()[]{}"; }
     }
@@ -18,7 +19,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return "CSS"; }
     }
     protected override String[] ContentTypes {
-      get { return new String[] { ContentType, SassContentType }; }
+      get { return new String[] { ContentType, SassContentType, LessContentType }; }
     }
     protected override String[] ControlFlowDefaults {
       get { return EMPTY; }
