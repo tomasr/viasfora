@@ -9,7 +9,7 @@ namespace Winterdom.Viasfora.Languages {
   public class Css : LanguageInfo {
     public const String ContentType = "css";
     public override String BraceList {
-      get { return "(){}"; }
+      get { return "()[]{}"; }
     }
 
     protected override String KeyName {
