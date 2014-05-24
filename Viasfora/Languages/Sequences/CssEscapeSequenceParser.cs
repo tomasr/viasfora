@@ -16,7 +16,21 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       this.start = 1;
     }
     public Span? Next() {
-    return null;
+      const int maxHexLen = 6;
+      while ( start < text.Length - 2 ) {
+        if ( text[start] == '\\' ) {
+          int len = 1;
+          while ( (start+len) < text.Length && IsHexDigit(text[start+len+1]) && len < maxHexLen ) {
+            len++;
+          }
+
+          Span span = new Span(start, len+1);
+          start += len + 1;
+          return span;
+        }
+        start++;
+      }
+      return null;
     }
     private bool IsHexDigit(char c) {
       if ( Char.IsDigit(c) ) return true;
