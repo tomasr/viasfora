@@ -101,6 +101,7 @@
     <Compile Include="Languages\BraceExtractors\PythonBraceExtractor.cs" />
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
+    <Compile Include="Languages\Css.cs" />
     <Compile Include="Languages\PowerShell.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
     <Compile Include="Languages\Json.cs" />

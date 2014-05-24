@@ -2,13 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
-  class JSON : CBasedLanguage {
-    public const String ContentType = "JSON";
+  public class Css : LanguageInfo {
+    public const String ContentType = "css";
+    public override String BraceList {
+      get { return "(){}"; }
+    }
 
+    protected override String KeyName {
+      get { return "CSS"; }
+    }
+    protected override String[] ContentTypes {
+      get { return new String[] { ContentType }; }
+    }
     protected override String[] ControlFlowDefaults {
       get { return EMPTY; }
     }
@@ -18,14 +26,9 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return EMPTY; }
     }
-    protected override String KeyName {
-      get { return "JSON"; }
-    }
-    protected override String[] ContentTypes {
-      get { return new String[] { ContentType }; }
-    }
+
     public override IBraceExtractor NewBraceExtractor() {
-      return new JScriptBraceExtractor(this);
+      throw new NotImplementedException();
     }
   }
 }
