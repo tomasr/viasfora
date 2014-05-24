@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
@@ -28,6 +29,9 @@ namespace Winterdom.Viasfora.Languages {
       get { return EMPTY; }
     }
 
+    public override IEscapeSequenceParser NewEscapeSequenceParser(string text) {
+      return new CssEscapeSequenceParser(text);
+    }
     public override IBraceExtractor NewBraceExtractor() {
       return new CssBraceExtractor(this);
     }
