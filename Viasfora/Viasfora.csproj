@@ -97,14 +97,17 @@
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="JsonExtensions.cs" />
+    <Compile Include="Languages\BraceExtractors\CssBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\PsBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\PythonBraceExtractor.cs" />
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
+    <Compile Include="Languages\Css.cs" />
     <Compile Include="Languages\PowerShell.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
     <Compile Include="Languages\Json.cs" />
     <Compile Include="Languages\Python.cs" />
+    <Compile Include="Languages\Sequences\CssEscapeSequenceParser.cs" />
     <Compile Include="Languages\Sequences\PsEscapeSequenceParser.cs" />
     <Compile Include="Languages\Sequences\CEscapeSequenceParser.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />

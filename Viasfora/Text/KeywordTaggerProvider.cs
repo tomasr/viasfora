@@ -25,6 +25,7 @@ namespace Winterdom.Viasfora.Text {
   [ContentType(TypeScript.ContentType)]
   [ContentType(Python.ContentType)]
   [ContentType(PowerShell.ContentType)]
+  [ContentType(Css.ContentType)]
   [TagType(typeof(KeywordTag))]
   public class KeywordTaggerProvider : IViewTaggerProvider {
     [Import]
