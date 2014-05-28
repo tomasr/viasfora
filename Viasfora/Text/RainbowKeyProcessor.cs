@@ -49,7 +49,8 @@ namespace Winterdom.Viasfora.Text {
         if ( timer.IsRunning ) {
           if ( timer.Elapsed >= pressTime ) {
             timer.Stop();
-            StartRainbowHighlight(actualView);
+            RainbowHighlightMode mode = VsfSettings.RainbowHighlightMode;
+            StartRainbowHighlight(actualView, mode);
           }
         } else {
           timer.Start();
@@ -79,7 +80,7 @@ namespace Winterdom.Viasfora.Text {
       StopRainbowHighlight(this.theView);
     }
 
-    private void StartRainbowHighlight(ITextView view) {
+    private void StartRainbowHighlight(ITextView view, RainbowHighlightMode mode) {
       if ( startedEffect ) return;
       startedEffect = true;
 
@@ -93,7 +94,7 @@ namespace Winterdom.Viasfora.Text {
       if ( provider == null ) {
         return;
       }
-      var braces = provider.BraceCache.GetBracesAround(bufferPos);
+      var braces = provider.BraceCache.GetBracePairFromPosition(bufferPos, mode);
       if ( braces == null ) return;
       SnapshotPoint opening = braces.Item1.ToPoint(bufferPos.Snapshot);
       SnapshotPoint closing = braces.Item2.ToPoint(bufferPos.Snapshot);

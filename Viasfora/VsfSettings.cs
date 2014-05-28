@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Settings;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora {
 
@@ -22,6 +23,8 @@ namespace Winterdom.Viasfora {
 
     const String RAINBOW_TAGS_ENABLED = "RainbowTagsEnabled";
     const String RAINBOW_CTRL_TIMER = "RainbowCtrlTimer";
+    const String RAINBOW_HIGHLIGHT_MODE = "RainbowHighlightMode";
+
     const String PRESENTATION_MODE_ENABLED = "PresentationModeEnabled";
     const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
     const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
@@ -71,6 +74,10 @@ namespace Winterdom.Viasfora {
     public static long RainbowCtrlTimer {
       get { return GetInt64(RAINBOW_CTRL_TIMER, 300); }
       set { SetValue(RAINBOW_CTRL_TIMER, value); }
+    }
+    public static RainbowHighlightMode RainbowHighlightMode {
+      get { return GetEnum(RAINBOW_HIGHLIGHT_MODE, RainbowHighlightMode.TrackInsertionPoint); }
+      set { SetValue(RAINBOW_HIGHLIGHT_MODE, value); }
     }
     public static bool PresentationModeEnabled {
       get { return GetBoolean(PRESENTATION_MODE_ENABLED, true); }
