@@ -73,13 +73,20 @@ namespace Winterdom.Viasfora.Text {
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
     }
 
-    public Tuple<BracePos, BracePos> GetBracesAround(SnapshotPoint point) {
-      if ( point.Snapshot != this.Snapshot ) {
+    public Tuple<BracePos, BracePos> GetBracePairFromPosition(SnapshotPoint point, RainbowHighlightMode mode) {
+      if ( point.Snapshot != this.Snapshot || point.Position >= Snapshot.Length ) {
         return null;
       }
 
-      int openIndex;
-      var opening = FindClosestOpeningBrace(point.Position, out openIndex);
+      int openIndex = -1;
+      BracePos? opening = null;
+
+
+      if ( mode == RainbowHighlightMode.TrackInsertionPoint ) {
+        opening = FindClosestOpeningBrace(point.Position, out openIndex);
+      } else {
+        opening = CheckForBraceAtPositionOrClosestOpeningBrace(point.Position, out openIndex);
+      }
       if ( opening == null ) {
         return null;
       }
@@ -98,6 +105,17 @@ namespace Winterdom.Viasfora.Text {
         }
       }
       return null;
+    }
+
+    private BracePos? CheckForBraceAtPositionOrClosestOpeningBrace(int position, out int openIndex) {
+      openIndex = FindIndexOfBraceAtOrAfter(position);
+      if ( openIndex >= 0 ) {
+        BracePos pos = this.braces[openIndex];
+        if ( IsOpeningBrace(pos.Brace) && pos.Position == position ) {
+          return pos;
+        }
+      }
+      return FindClosestOpeningBrace(position, out openIndex);
     }
 
     private BracePos? FindClosestOpeningBrace(int position, out int openIndex) {
