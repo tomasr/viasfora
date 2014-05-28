@@ -111,7 +111,7 @@ namespace Winterdom.Viasfora.Text {
       openIndex = FindIndexOfBraceAtOrAfter(position);
       if ( openIndex >= 0 ) {
         BracePos pos = this.braces[openIndex];
-        if ( pos.Position == position+1 ) {
+        if ( IsOpeningBrace(pos.Brace) && pos.Position == position ) {
           return pos;
         }
       }
