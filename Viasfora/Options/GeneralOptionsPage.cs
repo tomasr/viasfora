@@ -7,6 +7,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Design;
 using System.Drawing.Design;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.GeneralOptions)]
@@ -20,6 +21,7 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
+      VsfSettings.RainbowHighlightMode = RainbowHighlightMode;
       VsfSettings.DevMarginEnabled = DevMarginEnabled;
       VsfSettings.TextCompletionEnabled = TextCompletionEnabled;
       VsfSettings.AutoExpandRegions = AutoExpandRegions;
@@ -39,6 +41,7 @@ namespace Winterdom.Viasfora.Options {
       KeywordClassifierEnabled = VsfSettings.KeywordClassifierEnabled;
       EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
+      RainbowHighlightMode = VsfSettings.RainbowHighlightMode;
       DevMarginEnabled = VsfSettings.DevMarginEnabled;
       TextCompletionEnabled = VsfSettings.TextCompletionEnabled;
       AutoExpandRegions = VsfSettings.AutoExpandRegions;
@@ -87,8 +90,14 @@ namespace Winterdom.Viasfora.Options {
 
     [LocDisplayName("Enable Rainbow Braces")]
     [Description("Highlight matching braces using colors based on nesting")]
-    [Category("Text Editor")]
+    [Category("Rainbow Braces")]
     public bool RainbowTagsEnabled { get; set; }
+
+    [LocDisplayName("Rainbow Highlight Mode")]
+    [Description("Controls how the caret position is used to identify braces to highlight.")]
+    [Category("Rainbow Braces")]
+    public RainbowHighlightMode RainbowHighlightMode { get; set; }
+
 
     [LocDisplayName("Enable Developer Margin")]
     [Description("Enables the VS text editor extension developer margin")]
