@@ -85,11 +85,11 @@ namespace Winterdom.Viasfora.Margins {
     private void OnBufferPostChanged(object sender, EventArgs e) {
       // need to track buffer changes as well,
       // because text editing does not raise ITextCaret.PositionChanged
-      this.model.BufferPosition = this.textView.Caret.Position.BufferPosition;
+      UpdateCaretPosition(this.textView.Caret.Position);
     }
 
     private void OnCaretPositionChanged(object sender, CaretPositionChangedEventArgs e) {
-      this.model.BufferPosition = e.NewPosition.BufferPosition.Position;
+      UpdateCaretPosition(e.NewPosition);
     }
 
     private void OnGraphBufferContentTypeChanged(object sender, GraphBufferContentTypeChangedEventArgs e) {
@@ -108,6 +108,31 @@ namespace Winterdom.Viasfora.Margins {
     private void OnSettingsUpdated(object sender, EventArgs e) {
       if ( this.visual != null ) {
         UpdateVisibility();
+      }
+    }
+
+    private void UpdateCaretPosition(CaretPosition caret) {
+      ITextBuffer currentBuffer = GetSelectedBuffer();
+      SnapshotPoint? bufferPos = null;
+
+      if ( currentBuffer == caret.BufferPosition.Snapshot.TextBuffer ) {
+        bufferPos = caret.BufferPosition;
+      } else {
+        bufferPos = this.textView.BufferGraph.MapDownToBuffer(
+           caret.BufferPosition, PointTrackingMode.Negative,
+           currentBuffer, PositionAffinity.Predecessor
+           );
+        if ( !bufferPos.HasValue ) {
+          bufferPos = this.textView.BufferGraph.MapUpToBuffer(
+             caret.BufferPosition, PointTrackingMode.Negative,
+             PositionAffinity.Predecessor, currentBuffer
+             );
+        }
+      }
+      if ( bufferPos.HasValue ) {
+        this.model.BufferPosition = bufferPos.Value.Position.ToString();
+      } else {
+        this.model.BufferPosition = "--";
       }
     }
 
