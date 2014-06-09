@@ -145,7 +145,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void Filter() {
-      if ( session != null && !session.IsDismissed ) {
+      if ( session != null && session.IsStarted ) {
         // the buffer change might have triggered
         // another session
         if ( AnySessionsActive() ) {
