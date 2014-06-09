@@ -121,6 +121,11 @@
                 editor="guidTextEditor"
                 mod1="Control" key1="E"
                 mod2="Control" key2="T" />
+    <KeyBinding guid="guidVsfTextEditorCmdSet" 
+                id="cmdidCompleteWord"
+                editor="guidTextEditor"
+                mod1="Control" key1="K"
+                mod2="Control" key2="T" />
   </KeyBindings>
 
   <Symbols>
