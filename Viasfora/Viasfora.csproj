@@ -11,6 +11,7 @@
     <RootNamespace>Winterdom.Viasfora</RootNamespace>
     <AssemblyName>Winterdom.Viasfora</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DeployExtension Condition=" '$(AppVeyor)' != '' ">False</DeployExtension>
     <!--
          GeneratePkgDef is necessary so that the build will generatre
          the pkgdef file that will install our package.
