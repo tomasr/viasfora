@@ -1,0 +1,12 @@
+version: 1.9.{build}
+
+branches:
+  only:
+    - develop
+
+configuration: Release
+platform: AnyCPU
+
+artifacts:
+  - path: Viasfora\bin\$(configuration)\Winterdom.Viasfora.vsix
+    name: Viasfora
