@@ -83,6 +83,7 @@
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Design\StringListConverter.cs" />
+    <Compile Include="Design\XamlExtensions.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -339,6 +340,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\TreeViewItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\Buttons.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
