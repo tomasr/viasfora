@@ -123,6 +123,9 @@
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Options\IntellisenseOptions.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Options\PowerShellOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>

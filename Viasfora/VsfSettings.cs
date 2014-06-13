@@ -13,9 +13,12 @@ namespace Winterdom.Viasfora {
     const String CURRENT_LINE_ENABLED = "CurrentLineHighlightEnabled";
     const String CURRENT_COLUMN_ENABLED = "CurrentColumnHighlightEnabled";
     const String HIGHLIGHT_LINE_WIDTH = "HighlightLineWidth";
-    const String TEXT_COMPLETION_ENABLED = "TextCompletionEnabled";
     const String AUTO_EXPAND_REGIONS = "AutoExpandRegions";
     const String BOLD_AS_ITALICS_ENABLED = "BoldAsItalicsEnabled";
+
+    const String TEXT_COMPLETION_ENABLED = "TextCompletionEnabled";
+    const String TC_COMPLETE_DURING_TYPING = "TCCompleteDuringTyping";
+    const String TC_HANDLE_COMPLETE_WORD = "TCHandleCompleteWord";
 
     const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
@@ -106,6 +109,14 @@ namespace Winterdom.Viasfora {
     public static bool TextCompletionEnabled {
       get { return GetBoolean(TEXT_COMPLETION_ENABLED, true); }
       set { SetValue(TEXT_COMPLETION_ENABLED, value); }
+    }
+    public static bool TCCompleteDuringTyping {
+      get { return GetBoolean(TC_COMPLETE_DURING_TYPING, true); }
+      set { SetValue(TC_COMPLETE_DURING_TYPING, value); }
+    }
+    public static bool TCHandleCompleteWord {
+      get { return GetBoolean(TC_HANDLE_COMPLETE_WORD, false); }
+      set { SetValue(TC_HANDLE_COMPLETE_WORD, value); }
     }
     public static Text.AutoExpandMode AutoExpandRegions {
       get { return GetEnum(AUTO_EXPAND_REGIONS, Text.AutoExpandMode.No); }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing.Design;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Design;
-using System.Drawing.Design;
 using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Options {
@@ -23,7 +23,6 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
       VsfSettings.RainbowHighlightMode = RainbowHighlightMode;
       VsfSettings.DevMarginEnabled = DevMarginEnabled;
-      VsfSettings.TextCompletionEnabled = TextCompletionEnabled;
       VsfSettings.AutoExpandRegions = AutoExpandRegions;
       VsfSettings.BoldAsItalicsEnabled = BoldAsItalicsEnabled;
       VsfSettings.ModelinesEnabled = ModelinesEnabled;
@@ -43,7 +42,6 @@ namespace Winterdom.Viasfora.Options {
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
       RainbowHighlightMode = VsfSettings.RainbowHighlightMode;
       DevMarginEnabled = VsfSettings.DevMarginEnabled;
-      TextCompletionEnabled = VsfSettings.TextCompletionEnabled;
       AutoExpandRegions = VsfSettings.AutoExpandRegions;
       BoldAsItalicsEnabled = VsfSettings.BoldAsItalicsEnabled;
       ModelinesEnabled = VsfSettings.ModelinesEnabled;
@@ -104,10 +102,6 @@ namespace Winterdom.Viasfora.Options {
     [Category("Text Editor")]
     public bool DevMarginEnabled { get; set; }
 
-    [LocDisplayName("Enable Plain-Text Completion")]
-    [Description("Enables auto-completion based on the plain text of the current document")]
-    [Category("Text Editor")]
-    public bool TextCompletionEnabled { get; set; }
 
     [LocDisplayName("Expand Regions on Open")]
     [Description("Automatically expand collapsible regions when a new text view is opened")]
