@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Settings;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora {
 
@@ -12,9 +13,12 @@ namespace Winterdom.Viasfora {
     const String CURRENT_LINE_ENABLED = "CurrentLineHighlightEnabled";
     const String CURRENT_COLUMN_ENABLED = "CurrentColumnHighlightEnabled";
     const String HIGHLIGHT_LINE_WIDTH = "HighlightLineWidth";
-    const String TEXT_COMPLETION_ENABLED = "TextCompletionEnabled";
     const String AUTO_EXPAND_REGIONS = "AutoExpandRegions";
     const String BOLD_AS_ITALICS_ENABLED = "BoldAsItalicsEnabled";
+
+    const String TEXT_COMPLETION_ENABLED = "TextCompletionEnabled";
+    const String TC_COMPLETE_DURING_TYPING = "TCCompleteDuringTyping";
+    const String TC_HANDLE_COMPLETE_WORD = "TCHandleCompleteWord";
 
     const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
     const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
@@ -22,6 +26,8 @@ namespace Winterdom.Viasfora {
 
     const String RAINBOW_TAGS_ENABLED = "RainbowTagsEnabled";
     const String RAINBOW_CTRL_TIMER = "RainbowCtrlTimer";
+    const String RAINBOW_HIGHLIGHT_MODE = "RainbowHighlightMode";
+
     const String PRESENTATION_MODE_ENABLED = "PresentationModeEnabled";
     const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
     const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
@@ -72,6 +78,10 @@ namespace Winterdom.Viasfora {
       get { return GetInt64(RAINBOW_CTRL_TIMER, 300); }
       set { SetValue(RAINBOW_CTRL_TIMER, value); }
     }
+    public static RainbowHighlightMode RainbowHighlightMode {
+      get { return GetEnum(RAINBOW_HIGHLIGHT_MODE, RainbowHighlightMode.TrackInsertionPoint); }
+      set { SetValue(RAINBOW_HIGHLIGHT_MODE, value); }
+    }
     public static bool PresentationModeEnabled {
       get { return GetBoolean(PRESENTATION_MODE_ENABLED, true); }
       set { SetValue(PRESENTATION_MODE_ENABLED, value); }
@@ -99,6 +109,14 @@ namespace Winterdom.Viasfora {
     public static bool TextCompletionEnabled {
       get { return GetBoolean(TEXT_COMPLETION_ENABLED, true); }
       set { SetValue(TEXT_COMPLETION_ENABLED, value); }
+    }
+    public static bool TCCompleteDuringTyping {
+      get { return GetBoolean(TC_COMPLETE_DURING_TYPING, true); }
+      set { SetValue(TC_COMPLETE_DURING_TYPING, value); }
+    }
+    public static bool TCHandleCompleteWord {
+      get { return GetBoolean(TC_HANDLE_COMPLETE_WORD, false); }
+      set { SetValue(TC_HANDLE_COMPLETE_WORD, value); }
     }
     public static Text.AutoExpandMode AutoExpandRegions {
       get { return GetEnum(AUTO_EXPAND_REGIONS, Text.AutoExpandMode.No); }

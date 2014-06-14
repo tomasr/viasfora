@@ -112,6 +112,9 @@ namespace Winterdom.Viasfora.Text {
       // we want to obtain is the prefix before said position
       SnapshotSpan? word = null;
       ITextSnapshot snapshot = triggerPoint.Snapshot;
+      if ( snapshot.Length == 0 ) {
+        return snapshot.CreateTrackingSpan(new SnapshotSpan(triggerPoint, 0), SpanTrackingMode.EdgeInclusive);
+      }
       SnapshotPoint end = triggerPoint;
       if ( end > 0 ) end -= 1;
 
@@ -119,7 +122,7 @@ namespace Winterdom.Viasfora.Text {
       if ( Char.IsWhiteSpace(ch) ) {
         word = new SnapshotSpan(end + 1, 0);
       } else if ( !IsIdentifierChar(ch) ) {
-          word = new SnapshotSpan(end+1, 0);
+        word = new SnapshotSpan(end + 1, 0);
       } else {
         var extent = navigator.GetExtentOfWord(end);
         if ( extent != null ) {

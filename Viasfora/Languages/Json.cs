@@ -9,7 +9,6 @@ namespace Winterdom.Viasfora.Languages {
   class JSON : CBasedLanguage {
     public const String ContentType = "JSON";
 
-    static readonly String[] EMPTY = { };
     protected override String[] ControlFlowDefaults {
       get { return EMPTY; }
     }

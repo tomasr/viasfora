@@ -11,12 +11,12 @@ using Microsoft.VisualStudio.Utilities;
 namespace Winterdom.Viasfora.Margins {
   public class DevMarginViewModel : INotifyPropertyChanged {
     private ObservableCollection<BufferInfoViewModel> bufferGraph = new ObservableCollection<BufferInfoViewModel>();
-    private int bufferPosition;
+    private String bufferPosition;
     private BufferInfoViewModel selectedBuffer;
     public ReadOnlyObservableCollection<BufferInfoViewModel> BufferGraph {
       get { return new ReadOnlyObservableCollection<BufferInfoViewModel>(bufferGraph); }
     }
-    public int BufferPosition {
+    public String BufferPosition {
       get { return bufferPosition; }
       set { bufferPosition = value; NotifyChanged("BufferPosition"); }
     }

@@ -18,9 +18,11 @@
       <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="../Resources/ComboBox.xaml" />
         <ResourceDictionary Source="../Resources/Buttons.xaml" />
+        <ResourceDictionary Source="../Resources/TreeViewItem.xaml" />
       </ResourceDictionary.MergedDictionaries>
       <HierarchicalDataTemplate DataType="{x:Type vm:ContentTypeViewModel}"
-                                ItemsSource="{Binding BaseTypes}">
+                                ItemsSource="{Binding BaseTypes}"
+                                ItemContainerStyle="{StaticResource TreeViewItemTemplate}">
         <TextBlock Text="{Binding DisplayName}" />
       </HierarchicalDataTemplate>
       <Style TargetType="{x:Type TextBlock}">
@@ -93,7 +95,10 @@
               <StackPanel>
                 <TreeView MinHeight="100" MinWidth="195">
                   <TreeViewItem ItemsSource="{Binding BaseTypes}"
-                                Header="{Binding DisplayName}" />
+                                Header="{Binding DisplayName}"
+                                Style="{StaticResource TreeViewItemTemplate}"
+                                ItemContainerStyle="{StaticResource TreeViewItemTemplate}"
+                                />
                 </TreeView>
               </StackPanel>
             </ScrollViewer>

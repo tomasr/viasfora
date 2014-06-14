@@ -9,6 +9,8 @@ using Winterdom.Viasfora.Util;
 namespace Winterdom.Viasfora.Languages {
   class VB : LanguageInfo {
     public const String ContentType = "Basic";
+    public const String VBScriptContentType = "vbscript";
+
     static readonly String[] VB_KEYWORDS = {
          "goto", "resume", "throw", "exit", "stop",
          "do", "loop", "for", "next", "for each",
@@ -36,7 +38,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return "VB"; }
     }
     protected override String[] ContentTypes {
-      get { return new String[] { ContentType }; }
+      get { return new String[] { ContentType, VBScriptContentType }; }
     }
     public override string BraceList {
       get { return "()"; }

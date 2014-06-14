@@ -67,6 +67,18 @@ namespace Winterdom.Viasfora.Text {
             return VSConstants.S_OK;
         }
       }
+      if ( pguidCmdGroup == VSConstants.VSStd2K ) {
+        var cmd = (VSConstants.VSStd2KCmdID)prgCmds[0].cmdID;
+        switch ( cmd ) {
+          case VSConstants.VSStd2KCmdID.AUTOCOMPLETE:
+          case VSConstants.VSStd2KCmdID.COMPLETEWORD:
+            if ( VsfSettings.TCHandleCompleteWord ) {
+              prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_ENABLED | (uint)OLECMDF.OLECMDF_SUPPORTED;
+              return VSConstants.S_OK;
+            }
+            break;
+        }
+      }
       return nextCommandHandler.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
     }
 
@@ -91,9 +103,11 @@ namespace Winterdom.Viasfora.Text {
             // by the language provider, so only handle these
             // commands if there isn't already an Intellisense
             // provider
-            if ( !ReSharper.Installed && !NextHandlerHandlesCommand(pguidCmdGroup, nCmdID) ) {
-              handled = this.StartSession(true);
-            } 
+            if ( VsfSettings.TCHandleCompleteWord ) {
+              if ( !ReSharper.Installed && !NextHandlerHandlesCommand(pguidCmdGroup, nCmdID) ) {
+                handled = this.StartSession(true);
+              } 
+            }
             break;
           case VSConstants.VSStd2KCmdID.RETURN:
             handled = CompleteWord(false);
@@ -145,7 +159,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void Filter() {
-      if ( session != null && !session.IsDismissed ) {
+      if ( session != null && session.IsStarted ) {
         // the buffer change might have triggered
         // another session
         if ( AnySessionsActive() ) {
@@ -202,7 +216,7 @@ namespace Winterdom.Viasfora.Text {
         }
         return false;
       }
-      if ( !ReSharper.Installed ) {
+      if ( VsfSettings.TCCompleteDuringTyping && !ReSharper.Installed ) {
         return StartSession(false);
       }
       return false;

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing.Design;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Design;
-using System.Drawing.Design;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.GeneralOptions)]
@@ -20,8 +21,8 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
+      VsfSettings.RainbowHighlightMode = RainbowHighlightMode;
       VsfSettings.DevMarginEnabled = DevMarginEnabled;
-      VsfSettings.TextCompletionEnabled = TextCompletionEnabled;
       VsfSettings.AutoExpandRegions = AutoExpandRegions;
       VsfSettings.BoldAsItalicsEnabled = BoldAsItalicsEnabled;
       VsfSettings.ModelinesEnabled = ModelinesEnabled;
@@ -39,8 +40,8 @@ namespace Winterdom.Viasfora.Options {
       KeywordClassifierEnabled = VsfSettings.KeywordClassifierEnabled;
       EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
+      RainbowHighlightMode = VsfSettings.RainbowHighlightMode;
       DevMarginEnabled = VsfSettings.DevMarginEnabled;
-      TextCompletionEnabled = VsfSettings.TextCompletionEnabled;
       AutoExpandRegions = VsfSettings.AutoExpandRegions;
       BoldAsItalicsEnabled = VsfSettings.BoldAsItalicsEnabled;
       ModelinesEnabled = VsfSettings.ModelinesEnabled;
@@ -87,18 +88,20 @@ namespace Winterdom.Viasfora.Options {
 
     [LocDisplayName("Enable Rainbow Braces")]
     [Description("Highlight matching braces using colors based on nesting")]
-    [Category("Text Editor")]
+    [Category("Rainbow Braces")]
     public bool RainbowTagsEnabled { get; set; }
+
+    [LocDisplayName("Rainbow Highlight Mode")]
+    [Description("Controls how the caret position is used to identify braces to highlight.")]
+    [Category("Rainbow Braces")]
+    public RainbowHighlightMode RainbowHighlightMode { get; set; }
+
 
     [LocDisplayName("Enable Developer Margin")]
     [Description("Enables the VS text editor extension developer margin")]
     [Category("Text Editor")]
     public bool DevMarginEnabled { get; set; }
 
-    [LocDisplayName("Enable Plain-Text Completion")]
-    [Description("Enables auto-completion based on the plain text of the current document")]
-    [Category("Text Editor")]
-    public bool TextCompletionEnabled { get; set; }
 
     [LocDisplayName("Expand Regions on Open")]
     [Description("Automatically expand collapsible regions when a new text view is opened")]

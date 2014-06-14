@@ -9,6 +9,7 @@ using Winterdom.Viasfora.Languages.CommentParsers;
 namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo {
     private static StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
+    protected static readonly String[] EMPTY = { };
 
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }
