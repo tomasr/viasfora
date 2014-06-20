@@ -48,12 +48,17 @@ namespace Winterdom.Viasfora.Text {
       RedrawAdornments();
     }
     void OnViewClosed(object sender, EventArgs e) {
+      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
       view.Caret.PositionChanged -= OnCaretPositionChanged;
       view.ViewportWidthChanged -= OnViewportWidthChanged;
       view.LayoutChanged -= OnLayoutChanged;
       view.ViewportLeftChanged -= OnViewportLeftChanged;
       view.Closed -= OnViewClosed;
-      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+      view = null;
+      formatMap.ClassificationFormatMappingChanged -= OnClassificationFormatMappingChanged;
+      formatMap = null;
+      layer = null;
+      formatType = null;
     }
     void OnViewportLeftChanged(object sender, EventArgs e) {
       RedrawAdornments();

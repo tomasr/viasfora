@@ -70,6 +70,7 @@ namespace Winterdom.Viasfora.Text {
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
       this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
       this.theView.LayoutChanged -= OnLayoutChanged;
+      this.theView.Closed -= OnViewClosed;
       this.theView = null;
       this.outliningManager = null;
     }

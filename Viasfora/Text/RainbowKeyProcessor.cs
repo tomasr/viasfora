@@ -73,6 +73,7 @@ namespace Winterdom.Viasfora.Text {
 
     private void OnViewClosed(object sender, EventArgs e) {
       this.theView.LostAggregateFocus -= OnLostFocus;
+      this.theView.Closed -= OnViewClosed;
     }
 
     private void OnLostFocus(object sender, EventArgs e) {
