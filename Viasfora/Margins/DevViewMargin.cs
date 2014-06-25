@@ -64,6 +64,7 @@ namespace Winterdom.Viasfora.Margins {
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
       if ( this.wpfTextViewHost != null ) {
         this.wpfTextViewHost.Closed -= OnTextViewHostClosed;
+        this.wpfTextViewHost = null;
       }
       if ( this.textView != null ) {
         this.textView.BufferGraph.GraphBuffersChanged -= OnGraphBuffersChanged;
@@ -76,6 +77,7 @@ namespace Winterdom.Viasfora.Margins {
         this.visual.ViewBuffer -= OnViewBuffer;
         this.visual = null;
       }
+      this.extensionRegistry = null;
     }
 
     private void OnTextViewHostClosed(object sender, EventArgs e) {
