@@ -112,6 +112,7 @@
     <Compile Include="Languages\Json.cs" />
     <Compile Include="Languages\Python.cs" />
     <Compile Include="Languages\Sequences\CssEscapeSequenceParser.cs" />
+    <Compile Include="Languages\Sequences\FSharpEscapeSequenceParser.cs" />
     <Compile Include="Languages\Sequences\PsEscapeSequenceParser.cs" />
     <Compile Include="Languages\Sequences\CEscapeSequenceParser.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />

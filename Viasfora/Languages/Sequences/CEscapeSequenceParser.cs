@@ -42,6 +42,10 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       }
       return null;
     }
+
+    protected void SetStart(int newStart) {
+      this.start = newStart;
+    }
     private bool IsHexDigit(char c) {
       if ( Char.IsDigit(c) ) return true;
       return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');

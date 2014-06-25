@@ -32,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.Text.Data, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL"/>
+    <Reference Include="Microsoft.VisualStudio.Text.Data, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -53,6 +53,7 @@
     <Compile Include="BraceExtractors\PsBraceExtractorTests.cs" />
     <Compile Include="CommentParsers\GenericCommentParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sequences\FSharpEscapeSequenceParserTests.cs" />
     <Compile Include="Sequences\CssEscapeSequenceParserTests.cs" />
     <Compile Include="Sequences\PsEscapeSequenceParserTests.cs" />
     <Compile Include="Sequences\CEscapeSequenceParserTests.cs" />
