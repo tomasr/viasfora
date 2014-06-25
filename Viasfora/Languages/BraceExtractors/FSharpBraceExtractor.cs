@@ -10,7 +10,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     const int stText = 0;
     const int stString = 1;
     const int stChar = 2;
-    const int stMultiLineString = 3;
+    const int stVerbatimString = 3;
     const int stMultiLineComment = 4;
     const int stTripleQuotedString = 5;
     private int status = stText;
@@ -30,7 +30,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           case stString: ParseString(tc); break;
           case stChar: ParseCharLiteral(tc); break;
           case stMultiLineComment: ParseMultiLineComment(tc); break;
-          case stMultiLineString: ParseMultiLineString(tc); break;
+          case stVerbatimString: ParseVerbatimString(tc); break;
           case stTripleQuotedString: ParseTripleQuotedString(tc); break;
           default: 
             foreach ( var p in ParseText(tc) ) {
@@ -51,9 +51,9 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
         } else if ( tc.Char() == '/' && tc.NChar() == '/' ) {
           tc.SkipRemainder();
         } else if ( tc.Char() == '@' && tc.NChar() == '"' ) {
-          this.status = stMultiLineString;
+          this.status = stVerbatimString;
           tc.Skip(2);
-          this.ParseMultiLineString(tc);
+          this.ParseVerbatimString(tc);
         } else if ( tc.Char() == '"' && tc.NChar() == '"' && tc.NNChar() == '"' ) {
           this.status = stTripleQuotedString;
           tc.Skip(3);
@@ -102,15 +102,15 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           tc.Skip(2);
         } else if ( tc.Char() == '"' ) {
           tc.Next();
+          this.status = stText;
           break;
         } else {
           tc.Next();
         }
       }
-      this.status = stText;
     }
 
-    private void ParseMultiLineString(ITextChars tc) {
+    private void ParseVerbatimString(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         if ( tc.Char() == '"' ) {
           tc.Next();
