@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BraceExtractors\FSharpBraceExtractorTests.cs" />
     <Compile Include="BraceExtractors\CssBraceExtractorTests.cs" />
     <Compile Include="BraceExtractors\PsBraceExtractorTests.cs" />
     <Compile Include="CommentParsers\GenericCommentParserTests.cs" />

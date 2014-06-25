@@ -8,7 +8,7 @@ using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
-  class FSharp : LanguageInfo {
+  public class FSharp : LanguageInfo {
     public const String ContentType = "F#";
     static readonly String[] KEYWORDS = {
          "if", "then", "elif", "else", "match", "with",
