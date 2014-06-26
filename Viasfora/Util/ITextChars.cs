@@ -14,6 +14,10 @@ namespace Winterdom.Viasfora.Util {
     void Next();
     void Skip(int count);
     void SkipRemainder();
+    void Mark();
+    void ClearMark();
+    void BackToMark();
+
     String PreviousToken();
     String GetRemainder();
   }

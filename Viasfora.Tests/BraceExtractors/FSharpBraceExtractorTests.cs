@@ -37,6 +37,33 @@ namespace Viasfora.Tests.BraceExtractors {
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
+    [Fact]
+    public void IgnoreParensInSingleQuotes() {
+      String input = @"
+let munge (s : string) = s.Replace("" "", """").Replace('(', '.').Replace(')', '.')
+";
+      var extractor = new FSharpBraceExtractor(new FSharp());
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(8, chars.Count);
+    }
+    [Fact]
+    public void HandleParensInIncompleteSingleQuotesProperly() {
+      String input = @"
+let munge (s : string) = s.Replace("" "", """").Replace('()
+";
+      var extractor = new FSharpBraceExtractor(new FSharp());
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(6, chars.Count);
+    }
+    [Fact]
+    public void HandleGenericsCorrectly() {
+      String input = @"
+let function1 (x: 'a) (y: 'a)
+";
+      var extractor = new FSharpBraceExtractor(new FSharp());
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
 
     private IList<CharPos> Extract(IBraceExtractor extractor, string input, int start, int state) {
       extractor.Reset();

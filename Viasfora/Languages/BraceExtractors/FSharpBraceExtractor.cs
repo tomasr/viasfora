@@ -65,9 +65,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
         } else if ( tc.Char() == '<' && tc.NChar() == '\'') {
           // this is just a generic parameter, so skip it already
           tc.Skip(2);
-        } else if ( (tc.Char() == '\'' && tc.NChar() == '\\') 
-                 || (tc.Char() == '\'' && tc.NNChar() == '\'') ) {
-          // char literal
+        } else if ( (tc.Char() == '\'' ) ) {
           this.status = stString;
           tc.Next();
           this.ParseCharLiteral(tc);
@@ -81,14 +79,29 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     }
 
     private void ParseCharLiteral(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '\\' ) {
-          // skip over escape sequences
-          tc.Skip(2);
-        } else if ( tc.Char() == '\'' ) {
+      // valid:
+      // - 'a'
+      // - '\b'
+      // - '\uaaaa'
+      // - '()
+      // not valid:
+      // - 'a, 
+      // - 'a 
+      // - 'a) 
+      // mark is just after the opening '
+      if ( tc.Char() == '\\' ) {
+        // skip until next quote
+        tc.Skip(2);
+        while ( !tc.EndOfLine && tc.Char() != '\'' ) {
           tc.Next();
-          break;
-        } else {
+        }
+        tc.Next();
+      } else {
+        // skip the first char, as it's going to be a literal
+        // however, if the next char isn't a ', assume
+        // this is a generic declaration
+        tc.Next();
+        if ( tc.Char() == '\'' ) {
           tc.Next();
         }
       }
