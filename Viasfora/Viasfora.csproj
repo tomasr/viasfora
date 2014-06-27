@@ -227,6 +227,7 @@
     <Compile Include="Languages\CommentParsers\CBasedFirstLineCommentParser.cs" />
     <Compile Include="Util\IFirstLineCommentParser.cs" />
     <Compile Include="Util\IModeLineParser.cs" />
+    <Compile Include="Util\RegexEntry.cs" />
     <Compile Include="Util\SimpleTokenizer.cs" />
     <Compile Include="Languages\BraceExtractors\SqlBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\CBraceExtractor.cs" />

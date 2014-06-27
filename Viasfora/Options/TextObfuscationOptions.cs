@@ -8,37 +8,32 @@ using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Design;
 using Winterdom.Viasfora.Text;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Options {
-  [Guid(Guids.IntellisenseOptions)]
-  public class IntellisenseOptions : DialogPage {
+  [Guid(Guids.TextObfuscationOptions)]
+  public class TextObfuscationOptions : DialogPage {
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
-      VsfSettings.TextCompletionEnabled = TextCompletionEnabled;
-      VsfSettings.TCCompleteDuringTyping = CompleteDuringTyping;
-      VsfSettings.TCHandleCompleteWord = HandleCompleteWord;
+      VsfSettings.TextObfuscationEnabled = this.TextObfuscationEnabled;
+      VsfSettings.TextObfuscationRegexes = Expressions.ListToJson();
+      VsfSettings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
-      TextCompletionEnabled = VsfSettings.TextCompletionEnabled;
-      CompleteDuringTyping = VsfSettings.TCCompleteDuringTyping;
-      HandleCompleteWord = VsfSettings.TCHandleCompleteWord;
-      VsfSettings.Save();
+      this.TextObfuscationEnabled = VsfSettings.TextObfuscationEnabled;
+      this.Expressions = VsfSettings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
     }
 
-    [LocDisplayName("Enable Plain-Text Completion")]
-    [Description("Enables auto-completion based on the plain text of the current document")]
-    [Category("Completion")]
-    public bool TextCompletionEnabled { get; set; }
+    [LocDisplayName("Enable Obfuscation")]
+    [Description("Enables obfuscation of text that matches the configured expressions")]
+    [Category("Obfuscation")]
+    public bool TextObfuscationEnabled { get; set; }
 
-    [LocDisplayName("Complete During Typing")]
-    [Description("Automatically complete words as text is typed")]
-    [Category("Options")]
-    public bool CompleteDuringTyping { get; set; }
-
-    [LocDisplayName("Handle Complete Word")]
-    [Description("Respond to the built-in Complete Word command in Visual Studio")]
-    [Category("Options")]
-    public bool HandleCompleteWord { get; set; }
+    [LocDisplayName("Expressions")]
+    [Description("Expressions used to define what text to obfuscate")]
+    [Category("Obfuscation")]
+    [Editor(typeof(System.ComponentModel.Design.CollectionEditor), typeof(UITypeEditor))]
+    public List<RegexEntry> Expressions { get; set; }
   }
 }
