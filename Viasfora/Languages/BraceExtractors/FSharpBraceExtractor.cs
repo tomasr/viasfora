@@ -65,8 +65,11 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
         } else if ( tc.Char() == '<' && tc.NChar() == '\'') {
           // this is just a generic parameter, so skip it already
           tc.Skip(2);
-        } else if ( (tc.Char() == '\'' ) ) {
-          this.status = stString;
+        } else if ( Char.IsLetterOrDigit(tc.Char()) && tc.NChar() == '\'' ) {
+          // identifier like c'
+          tc.Skip(2);
+        } else if ( tc.Char() == '\'' ) {
+          this.status = stChar;
           tc.Next();
           this.ParseCharLiteral(tc);
         } else if ( lang.BraceList.IndexOf(tc.Char()) >= 0 ) {
