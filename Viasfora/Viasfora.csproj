@@ -126,6 +126,12 @@
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Options\TextObfuscationDialogPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Options\TextObfuscationDialogPage.Designer.cs">
+      <DependentUpon>TextObfuscationDialogPage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Options\TextObfuscationOptions.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -273,6 +279,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Winterdom.Viasfora.Util.RegexEntry.datasource" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -344,6 +351,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Options\PresentationModeDialogPage.resx">
       <DependentUpon>PresentationModeDialogPage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Options\TextObfuscationDialogPage.resx">
+      <DependentUpon>TextObfuscationDialogPage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
