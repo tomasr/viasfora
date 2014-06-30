@@ -75,6 +75,7 @@
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
     <Compile Include="Commands\CompleteWordCommand.cs" />
     <Compile Include="Commands\ClearOutliningCommand.cs" />
+    <Compile Include="Commands\ObfuscateTextCommand.cs" />
     <Compile Include="Commands\RemoveOutliningCommand.cs" />
     <Compile Include="Commands\AddOutliningCommand.cs" />
     <Compile Include="Commands\PresentationModeCommand.cs" />
@@ -92,6 +93,7 @@
     </Compile>
     <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
+    <Compile Include="EditorFormats\ObfuscatedTextFormat.cs" />
     <Compile Include="EditorFormats\RainbowFormats.cs" />
     <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
     <Compile Include="EditorFormats\XmlClosingTagFormat.cs" />
@@ -182,6 +184,7 @@
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="Settings\SuoPersistUserSettings.cs" />
     <Compile Include="SnapshotExtensions.cs" />
+    <Compile Include="Tags\ObfuscatedTextTag.cs" />
     <Compile Include="Tags\OutliningGlyphTag.cs" />
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
@@ -215,6 +218,7 @@
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
+    <Compile Include="Text\TextObfuscation.cs" />
     <Compile Include="Text\UserOutliningTaggerProvider.cs" />
     <Compile Include="Util\IEscapeSequenceParser.cs" />
     <Compile Include="Util\ITokenizer.cs" />

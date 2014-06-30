@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Text;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,8 @@ namespace Winterdom.Viasfora.Util {
     private String name;
     private String regex;
     private ExpressionKind kind;
+    private ExpressionOptions options;
+    private Regex compiledExpression;
 
     public String Name {
       get { return this.name; }
@@ -27,10 +30,40 @@ namespace Winterdom.Viasfora.Util {
       get { return this.kind; }
       set { this.kind = value; }
     }
+    public ExpressionOptions Options {
+      get { return this.options; }
+      set { this.options = value; }
+    }
 
     public Regex GetRegex() {
-      return new Regex(this.RegularExpression, RegexOptions.Compiled);
+      if ( compiledExpression == null ) {
+        compiledExpression = new Regex(this.RegularExpression, RegexOptions.Compiled);
+      }
+      return compiledExpression;
     }
+
+    public IEnumerable<SnapshotSpan> Match(ITextSnapshotLine line) {
+      if ( line.Length == 0 ) {
+        yield break;
+      }
+      ITextSnapshot snapshot = line.Snapshot;
+      var matches = GetRegex().Matches(line.GetText());
+      foreach ( Match m in matches ) {
+        switch ( Options ) {
+          case ExpressionOptions.HideMatch:
+            yield return new SnapshotSpan(snapshot, 
+              line.Start + m.Index, m.Length);
+            break;
+          case Util.ExpressionOptions.HideGroups:
+            for ( int g = 1; g < m.Groups.Count; g++ ) {
+              yield return new SnapshotSpan(snapshot, 
+                line.Start + m.Groups[g].Index, m.Groups[g].Length);
+            }
+            break;
+        }
+      }
+    }
+
     public bool IsValid() {
       try {
         var temp = new Regex(this.RegularExpression);
@@ -44,5 +77,11 @@ namespace Winterdom.Viasfora.Util {
   // added for extensibility later on
   public enum ExpressionKind {
     RegularExpression = 0
+  }
+  public enum ExpressionOptions {
+    // Hide the entire match
+    HideMatch = 0,
+    // Hide individual capture groups
+    HideGroups = 1
   }
 }

@@ -131,6 +131,7 @@ namespace Winterdom.Viasfora {
 
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
       commands.Add(new PresentationModeCommand(this, mcs));
+      commands.Add(new ObfuscateTextCommand(this, mcs));
     }
     private void InitializeTextEditorCommands(OleMenuCommandService mcs) {
       commands.Add(new AddOutliningCommand(this, mcs));

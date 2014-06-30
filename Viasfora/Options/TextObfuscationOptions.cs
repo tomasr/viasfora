@@ -15,20 +15,13 @@ namespace Winterdom.Viasfora.Options {
   public class TextObfuscationOptions : DialogPage {
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
-      VsfSettings.TextObfuscationEnabled = this.TextObfuscationEnabled;
       VsfSettings.TextObfuscationRegexes = Expressions.ListToJson();
       VsfSettings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
-      this.TextObfuscationEnabled = VsfSettings.TextObfuscationEnabled;
       this.Expressions = VsfSettings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
     }
-
-    [LocDisplayName("Enable Obfuscation")]
-    [Description("Enables obfuscation of text that matches the configured expressions")]
-    [Category("Obfuscation")]
-    public bool TextObfuscationEnabled { get; set; }
 
     [LocDisplayName("Expressions")]
     [Description("Expressions used to define what text to obfuscate")]

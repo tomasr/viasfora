@@ -23,6 +23,8 @@ namespace Winterdom.Viasfora {
     public const String RAINBOW_8 = RAINBOW + "8";
     public const String RAINBOW_9 = RAINBOW + "9";
 
+    public const String OBFUSCATED_TEXT = "viasfora.text.obfuscated";
+
     public const String CT_XML = "XML";
     public const String CT_XAML = "XAML";
     public const String CT_HTML = "HTML";

@@ -35,7 +35,6 @@ namespace Winterdom.Viasfora {
     const String MODELINES_NUMLINES = "ModelinesNumLines";
     const String DEVMARGIN_ENABLED = "DeveloperMarginEnabled";
 
-    const String TEXTOBF_ENABLED = "TextObfuscationEnabled";
     const String TEXTOBF_REGEXES = "TextObfuscationRegexes";
 
     private static ISettingsStore settings = VsfPackage.GetGlobalSettingsStore();
@@ -128,10 +127,6 @@ namespace Winterdom.Viasfora {
     public static bool BoldAsItalicsEnabled {
       get { return GetBoolean(BOLD_AS_ITALICS_ENABLED, false); }
       set { SetValue(BOLD_AS_ITALICS_ENABLED, value); }
-    }
-    public static bool TextObfuscationEnabled {
-      get { return GetBoolean(TEXTOBF_ENABLED, false); }
-      set { SetValue(TEXTOBF_ENABLED, value); }
     }
     public static String TextObfuscationRegexes {
       get { return GetValue(TEXTOBF_REGEXES, ""); }
