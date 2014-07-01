@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.EditorFormats {
       this.ForegroundColor = Colors.Transparent;
       this.ForegroundOpacity = 0;
       this.BackgroundOpacity = 0.7;
-      this.BackgroundColor = Colors.Linen;
+      this.BackgroundColor = Colors.WhiteSmoke;
       this.ForegroundCustomizable = false;
     }
   }
