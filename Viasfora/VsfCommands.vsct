@@ -58,6 +58,13 @@
           <ButtonText>Presentation Mode</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidVsfViewCmdSet" id="cmdidObfuscateText" priority="0x0104" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_VIEW_TOOLBARS"/>
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <ButtonText>Obfuscate Text</ButtonText>
+        </Strings>
+      </Button>
 
 
       <!--
@@ -126,6 +133,11 @@
                 editor="guidTextEditor"
                 mod1="Control" key1="K"
                 mod2="Control" key2="T" />
+    <KeyBinding guid="guidVsfViewCmdSet" 
+                id="cmdidObfuscateText"
+                editor="guidTextEditor"
+                mod1="Control" key1="E"
+                mod2="Control" key2="O" />
   </KeyBindings>
 
   <Symbols>
@@ -135,6 +147,7 @@
     <!-- top level View menu commands -->
     <GuidSymbol name="guidVsfViewCmdSet" value="{14e93c73-144b-4909-9cdc-694be6125e8c}">
       <IDSymbol name="cmdidPresentationMode" value="0x1020" />
+      <IDSymbol name="cmdidObfuscateText" value="0x1021" />
     </GuidSymbol>
 
     <!-- text editor right-click menu commands -->

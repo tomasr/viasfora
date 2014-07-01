@@ -17,13 +17,13 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.TextCompletionEnabled = TextCompletionEnabled;
       VsfSettings.TCCompleteDuringTyping = CompleteDuringTyping;
       VsfSettings.TCHandleCompleteWord = HandleCompleteWord;
+      VsfSettings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
       TextCompletionEnabled = VsfSettings.TextCompletionEnabled;
       CompleteDuringTyping = VsfSettings.TCCompleteDuringTyping;
       HandleCompleteWord = VsfSettings.TCHandleCompleteWord;
-      VsfSettings.Save();
     }
 
     [LocDisplayName("Enable Plain-Text Completion")]
