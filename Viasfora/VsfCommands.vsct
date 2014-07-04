@@ -154,16 +154,29 @@
                 editor="guidTextEditor"
                 mod1="Control" key1="E"
                 mod2="Control" key2="T" />
+
     <KeyBinding guid="guidVsfTextEditorCmdSet" 
                 id="cmdidCompleteWord"
                 editor="guidTextEditor"
                 mod1="Control" key1="K"
                 mod2="Control" key2="T" />
+
     <KeyBinding guid="guidVsfViewCmdSet" 
                 id="cmdidObfuscateText"
                 editor="guidTextEditor"
                 mod1="Control" key1="E"
                 mod2="Control" key2="O" />
+
+    <KeyBinding guid="guidVsfTextEditorCmdSet" 
+                id="cmdidRainbowPrevious"
+                editor="guidTextEditor"
+                mod1="Control Alt" key1="VK_OEM_COMMA"
+                />
+    <KeyBinding guid="guidVsfTextEditorCmdSet" 
+                id="cmdidRainbowNext"
+                editor="guidTextEditor"
+                mod1="Control Alt" key1="VK_OEM_PERIOD"
+                />
   </KeyBindings>
 
   <Symbols>
