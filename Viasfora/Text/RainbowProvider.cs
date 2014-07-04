@@ -46,6 +46,34 @@ namespace Winterdom.Viasfora.Text {
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
     }
 
+    public static bool TryMapCaretToBuffer(ITextView view, out SnapshotPoint pos) {
+      var caret = view.Caret.Position.BufferPosition;
+      pos = new SnapshotPoint();
+      var result = view.BufferGraph.MapDownToFirstMatch(
+        caret, PointTrackingMode.Negative,
+        snapshot => snapshot.TextBuffer.Has<RainbowProvider>(),
+        PositionAffinity.Successor
+        );
+      if ( result != null ) {
+        pos = result.Value;
+        return true;
+      }
+      return false;
+    }
+    public static bool TryMapToView(ITextView view, SnapshotPoint pos, out SnapshotPoint result) {
+      result = new SnapshotPoint();
+      var target = view.TextBuffer;
+      var temp = view.BufferGraph.MapUpToBuffer(
+        pos, PointTrackingMode.Negative,
+        PositionAffinity.Successor, target
+      );
+      if ( temp != null ) {
+        result = temp.Value;
+        return true;
+      }
+      return false;
+    }
+
     private void OnViewClosed(object sender, EventArgs e) {
       if ( this.TextView != null ) {
         this.TextView.Closed -= OnViewClosed;
