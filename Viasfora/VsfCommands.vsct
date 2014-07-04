@@ -56,7 +56,7 @@
     <Buttons>
       <Button guid="guidVsfViewCmdSet" id="cmdidPresentationMode" priority="0x0103" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_VIEW_TOOLBARS"/>
-        <Icon guid="guidImages" id="1"/>
+        <Icon guid="guidImages" id="bmpPresentationMode"/>
         <CommandFlag>IconAndText</CommandFlag>
         <Strings>
           <ButtonText>Presentation Mode</ButtonText>
@@ -76,7 +76,7 @@
       -->
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidAddOutlining" priority="0x0001" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
-        <Icon guid="guidImages" id="2"/>
+        <Icon guid="guidImages" id="bmpAddOutlining"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>IconAndText</CommandFlag>
         <Strings>
@@ -86,7 +86,7 @@
       </Button>
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidRemoveOutlining" priority="0x0002" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
-        <Icon guid="guidImages" id="3"/>
+        <Icon guid="guidImages" id="bmpRemoveOutlining"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>IconAndText</CommandFlag>
         <Strings>
@@ -114,7 +114,9 @@
 
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidRainbowPrevious" priority="0x0020" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupRainbowMenu"/>
+        <Icon guid="guidImages" id="bmpRainbowPrevious"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
         <Strings>
           <CommandName>Rainbow Previous</CommandName>
           <ButtonText>Rainbow Previous</ButtonText>
@@ -123,7 +125,9 @@
 
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidRainbowNext" priority="0x0020" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupRainbowMenu"/>
+        <Icon guid="guidImages" id="bmpRainbowNext"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
         <Strings>
           <CommandName>Rainbow Next</CommandName>
           <ButtonText>Rainbow Next</ButtonText>
@@ -133,7 +137,7 @@
 
     <Bitmaps>
       <Bitmap guid="guidImages" href="Resources\cmdImages.bmp"
-              usedList="bmpPresentationMode, bmpAddOutlining, bmpRemoveOutlining"/>
+              usedList="bmpPresentationMode, bmpAddOutlining, bmpRemoveOutlining, bmpRainbowPrevious, bmpRainbowNext"/>
     </Bitmaps>
   </Commands>
 
@@ -191,6 +195,8 @@
       <IDSymbol name="bmpPresentationMode" value="1" />
       <IDSymbol name="bmpAddOutlining" value="2" />
       <IDSymbol name="bmpRemoveOutlining" value="3" />
+      <IDSymbol name="bmpRainbowPrevious" value="4" />
+      <IDSymbol name="bmpRainbowNext" value="5" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>
