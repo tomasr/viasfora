@@ -215,6 +215,7 @@
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
     <Compile Include="Languages\Sql.cs" />
+    <Compile Include="Text\RainbowCommandHandler.cs" />
     <Compile Include="Text\RainbowHighlight.cs" />
     <Compile Include="Text\RainbowColorTagger.cs" />
     <Compile Include="Text\RainbowHighlightMode.cs" />
