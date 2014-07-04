@@ -81,7 +81,7 @@ namespace Winterdom.Viasfora {
       set { SetValue(RAINBOW_CTRL_TIMER, value); }
     }
     public static RainbowHighlightMode RainbowHighlightMode {
-      get { return GetEnum(RAINBOW_HIGHLIGHT_MODE, RainbowHighlightMode.TrackInsertionPoint); }
+      get { return GetEnum(RAINBOW_HIGHLIGHT_MODE, RainbowHighlightMode.TrackNextScope); }
       set { SetValue(RAINBOW_HIGHLIGHT_MODE, value); }
     }
     public static bool PresentationModeEnabled {
