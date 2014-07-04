@@ -47,6 +47,10 @@
       <Group guid="guidVsfTextEditorCmdSet" id="groupIntellisenseMenu" priority="0xA101">
         <Parent guid="guidVsfTextEditorCmdSet" id="menuTextEditorMenu"/>
       </Group>
+      <!-- subgroup that contains our rainbow commands -->
+      <Group guid="guidVsfTextEditorCmdSet" id="groupRainbowMenu" priority="0xA102">
+        <Parent guid="guidVsfTextEditorCmdSet" id="menuTextEditorMenu"/>
+      </Group>
     </Groups>
 
     <Buttons>
@@ -107,6 +111,24 @@
           <ButtonText>Complete Plain-Text Word</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidVsfTextEditorCmdSet" id="cmdidRainbowPrevious" priority="0x0020" type="Button">
+        <Parent guid="guidVsfTextEditorCmdSet" id="groupRainbowMenu"/>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <Strings>
+          <CommandName>Rainbow Previous</CommandName>
+          <ButtonText>Rainbow Previous</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidVsfTextEditorCmdSet" id="cmdidRainbowNext" priority="0x0020" type="Button">
+        <Parent guid="guidVsfTextEditorCmdSet" id="groupRainbowMenu"/>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <Strings>
+          <CommandName>Rainbow Next</CommandName>
+          <ButtonText>Rainbow Next</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <Bitmaps>
@@ -156,10 +178,13 @@
       <IDSymbol name="groupTextEditorMenu" value="0x0101" />
       <IDSymbol name="groupEditMenu" value="0x0102" />
       <IDSymbol name="groupIntellisenseMenu" value="0x0104" />
+      <IDSymbol name="groupRainbowMenu" value="0x0105" />
       <IDSymbol name="cmdidAddOutlining" value="0x1101" />
       <IDSymbol name="cmdidRemoveOutlining" value="0x1102" />
       <IDSymbol name="cmdidClearOutlining" value="0x1103" />
       <IDSymbol name="cmdidCompleteWord" value="0x1401" />
+      <IDSymbol name="cmdidRainbowPrevious" value="0x1501" />
+      <IDSymbol name="cmdidRainbowNext" value="0x1502" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{04d40cc8-b432-4d13-9e6e-436222ef2930}">

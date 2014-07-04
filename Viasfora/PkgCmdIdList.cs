@@ -13,5 +13,7 @@ namespace Winterdom.Viasfora {
     public const int cmdidClearOutlining = 0x1103;
 
     public const int cmdidCompleteWord = 0x1401;
+    public const int cmdidRainbowPrevious = 0x1501;
+    public const int cmdidRainbowNext = 0x1502;
   }
 }
