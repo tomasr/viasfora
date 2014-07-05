@@ -19,6 +19,7 @@
         <ResourceDictionary Source="../Resources/ComboBox.xaml" />
         <ResourceDictionary Source="../Resources/Buttons.xaml" />
         <ResourceDictionary Source="../Resources/TreeViewItem.xaml" />
+        <ResourceDictionary Source="../Resources/ListBox.xaml" />
       </ResourceDictionary.MergedDictionaries>
       <HierarchicalDataTemplate DataType="{x:Type vm:ContentTypeViewModel}"
                                 ItemsSource="{Binding BaseTypes}"
@@ -40,6 +41,11 @@
       <Style TargetType="TreeViewItem">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static util:VsColors.CommandBarTextActiveBrushKey}}" />
         <Setter Property="IsExpanded" Value="true" />
+      </Style>
+      <Style TargetType="ListBox">
+        <Setter Property="BorderBrush" Value="{DynamicResource {x:Static util:VsColors.DropDownPopupBorderBrushKey}}" />
+        <Setter Property="Padding" Value="1,1,1,1" />
+        <Setter Property="Background" Value="{DynamicResource {x:Static util:VsColors.DropDownPopupBackgroundBeginBrushKey}}" />
       </Style>
     </ResourceDictionary>
   </UserControl.Resources>
@@ -100,6 +106,37 @@
                                 ItemContainerStyle="{StaticResource TreeViewItemTemplate}"
                                 />
                 </TreeView>
+              </StackPanel>
+            </ScrollViewer>
+          </Border>
+        </Grid>
+      </Popup>
+
+      
+      
+      <ToggleButton x:Name="TVRToggleButton"
+                    Padding="4,0,4,0"
+                    Margin="2,0,2,0"
+                    Width="24"
+                    Height="24"
+                    ToolTip="Show Text View Roles"
+                    Template="{StaticResource TogleButtonTemplate}">
+        <Image Source="../Resources/ShowTVR.ico" />
+      </ToggleButton>
+      <Popup Name="TextViewRolePopup"
+             IsOpen="{Binding IsChecked, ElementName=TVRToggleButton}"
+             Focusable="false"
+             StaysOpen="false"
+             Placement="Top"
+             PlacementTarget="{Binding ElementName=TVRToggleButton}">
+        <Grid>
+          <Border BorderThickness="1,1,1,1"
+                  BorderBrush="{DynamicResource {x:Static util:VsColors.DropDownPopupBorderBrushKey}}">
+            <ScrollViewer Margin="0,0,0,0" SnapsToDevicePixels="True">
+              <StackPanel>
+                <ListBox MinHeight="100" MinWidth="195"
+                         ItemsSource="{Binding TextViewRoles}">
+                </ListBox>
               </StackPanel>
             </ScrollViewer>
           </Border>

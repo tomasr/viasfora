@@ -330,6 +330,7 @@
     <Resource Include="Resources\OpenBuffer.ico" />
     <Resource Include="Resources\ShowCT.ico" />
     <Resource Include="Resources\PlainTextCompletion.ico" />
+    <Resource Include="Resources\ShowTVR.ico" />
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -363,6 +364,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\ListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\TreeViewItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -28,6 +28,7 @@ namespace Winterdom.Viasfora.Margins {
       UpdateVisibility();
       InitializeTextView();
       RefreshBufferGraphList();
+      this.model.RefreshView(wpfTextViewHost.TextView);
     }
 
     public FrameworkElement VisualElement {
