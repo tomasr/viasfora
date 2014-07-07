@@ -9,7 +9,7 @@ using System.Windows.Controls;
 
 namespace Winterdom.Viasfora.Contracts {
   public interface IToolTipWindow {
-    void Show(int lineNumber, Size windowSize);
+    UIElement Show(int lineNumber, Size windowSize);
     void Close();
   }
 }

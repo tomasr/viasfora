@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using Microsoft.VisualStudio.Text.Editor;
 using Winterdom.Viasfora.Contracts;
+using System.Windows.Controls;
 
 namespace Winterdom.Viasfora.Util {
   [Export(typeof(IToolTipWindowProvider))]
@@ -29,7 +30,10 @@ namespace Winterdom.Viasfora.Util {
       this.provider = provider;
     }
 
-    public void Show(int lineNumber, Size windowSize) {
+    public UIElement Show(int lineNumber, Size windowSize) {
+      var block = new TextBlock();
+      block.Text = "This is a test";
+      return block;
     }
     public void Close() {
     }
