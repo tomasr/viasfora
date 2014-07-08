@@ -73,6 +73,25 @@ namespace Winterdom.Viasfora.Text {
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
     }
 
+    // returns the brace pair when the point is already a brace
+    public Tuple<BracePos, BracePos> GetBracePair(SnapshotPoint point) {
+      if ( point.Snapshot != this.Snapshot || point.Position >= Snapshot.Length ) {
+        return null;
+      }
+      int index = FindIndexOfBraceAtOrAfter(point.Position);
+      if ( index < 0 ) return null;
+      BracePos one = this.braces[index];
+      if ( one.Position != point.Position ) {
+        return null;
+      }
+
+      if ( IsOpeningBrace(one.Brace) ) {
+        return GetBracePairFromPosition(point, RainbowHighlightMode.TrackNextScope);
+      } else {
+        return GetBracePairFromPosition(point, RainbowHighlightMode.TrackInsertionPoint);
+      }
+    }
+
     public Tuple<BracePos, BracePos> GetBracePairFromPosition(SnapshotPoint point, RainbowHighlightMode mode) {
       if ( point.Snapshot != this.Snapshot || point.Position >= Snapshot.Length ) {
         return null;

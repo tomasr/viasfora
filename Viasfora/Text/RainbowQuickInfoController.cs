@@ -49,8 +49,12 @@ namespace Winterdom.Viasfora.Text {
 
     public void Detach(ITextView textView) {
       if ( this.textView == textView ) {
-        textView.MouseHover -= this.OnMouseHover;
-        textView = null;
+        this.textView.MouseHover -= this.OnMouseHover;
+        this.textView = null;
+        if ( this.toolTipWindow != null ) {
+          this.toolTipWindow.Dispose();
+          this.toolTipWindow = null;
+        }
       }
     }
 
@@ -64,25 +68,18 @@ namespace Winterdom.Viasfora.Text {
 
     private void OnMouseHover(object sender, MouseHoverEventArgs e) {
       SnapshotPoint mousePos = new SnapshotPoint(e.View.TextSnapshot, e.Position);
-      /*
-      SnapshotPoint bufferPos;
-      if ( !RainbowProvider.TryMapPosToBuffer(e.View, mousePos, out bufferPos) ) {
-        return;
-      }
-      ITrackingPoint triggerPoint = bufferPos.Snapshot.CreateTrackingPoint(
-        bufferPos.Position, PointTrackingMode.Positive);
-      if ( provider.QuickInfoBroker.IsQuickInfoActive(textView) ) {
-        session = provider.QuickInfoBroker.TriggerQuickInfo(e.View, triggerPoint, true);
-      }
-      */
 
+      // Check to see if there is a RainbowTag under the Mouse
+      // and if the tag is a closing brace
       var span = new SnapshotSpan(mousePos, 1);
       var tagSpan = aggregator.GetTags(span).FirstOrDefault();
       if ( tagSpan != null ) {
         char ch = mousePos.GetChar();
         LanguageInfo lang = VsfPackage.LookupLanguage(mousePos.Snapshot.ContentType);
-        if ( lang == null ) return;
-        if ( lang.BraceList.IndexOf(ch) % 2 == 0 ) return;
+        if ( lang == null )
+          return;
+        if ( lang.BraceList.IndexOf(ch) % 2 == 0 )
+          return;
         PresentQuickInfo(e.View, mousePos);
       }
     }
@@ -97,12 +94,16 @@ namespace Winterdom.Viasfora.Text {
       if ( toolTipWindow == null ) {
         toolTipWindow = this.provider.ToolTipProvider.CreateToolTip(view);
       }
+
+      toolTipWindow.SetSize(60, 5);
+
       if ( !provider.QuickInfoBroker.IsQuickInfoActive(view) ) {
         session = provider.QuickInfoBroker.CreateQuickInfoSession(view, triggerPoint, true);
         session.Set(toolTipWindow);
         session.Start();
       }
     }
+
   }
 
 }

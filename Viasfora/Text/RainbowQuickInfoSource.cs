@@ -38,14 +38,38 @@ namespace Winterdom.Viasfora.Text {
       if ( !subjectTriggerPoint.HasValue ) {
         return;
       }
+
+      SnapshotSpan? openSpan = FindOpenSpan(subjectTriggerPoint.Value);
+      if ( openSpan == null ) {
+        return;
+      }
+
       var toolTipWindow = session.Get<IToolTipWindow>();
       if ( toolTipWindow != null ) {
         var span = new SnapshotSpan(subjectTriggerPoint.Value, 1);
         applicableToSpan = span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgePositive);
 
-        var element = toolTipWindow.Show(100, new Size(100, 100));
+        var element = toolTipWindow.GetWindow(openSpan.Value);
         quickInfoContent.Add(element);
       }
+    }
+
+    private SnapshotSpan? FindOpenSpan(SnapshotPoint closeBrace) {
+      var rainbow = this.textBuffer.Get<RainbowProvider>();
+      if ( rainbow == null ) {
+        return null;
+      }
+
+      var bracePair = rainbow.BraceCache.GetBracePair(closeBrace);
+      if ( bracePair == null ) {
+        return null;
+      }
+      SnapshotPoint openBrace = new SnapshotPoint(
+            rainbow.BraceCache.Snapshot,
+            bracePair.Item1.Position);
+
+      var line = rainbow.BraceCache.Snapshot.GetLineFromPosition(openBrace);
+      return line.Extent;
     }
 
     public void Dispose() {
