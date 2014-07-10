@@ -89,16 +89,26 @@ namespace Winterdom.Viasfora.Text {
       }
       ITrackingPoint triggerPoint = bufferPos.Snapshot.CreateTrackingPoint(
         bufferPos.Position, PointTrackingMode.Positive);
-      if ( toolTipWindow == null ) {
-        toolTipWindow = this.provider.ToolTipProvider.CreateToolTip(view);
-      }
-
-      toolTipWindow.SetSize(60, 5);
 
       if ( !provider.QuickInfoBroker.IsQuickInfoActive(view) ) {
         session = provider.QuickInfoBroker.CreateQuickInfoSession(view, triggerPoint, true);
+        session.Dismissed += OnSessionDismissed;
+
+        toolTipWindow = this.provider.ToolTipProvider.CreateToolTip(view);
+        toolTipWindow.SetSize(60, 5);
+
         session.Set(toolTipWindow);
         session.Start();
+      }
+    }
+
+    private void OnSessionDismissed(object sender, EventArgs e) {
+      if ( this.session != null ) {
+        this.session.Dismissed -= OnSessionDismissed;
+        if ( this.toolTipWindow != null ) {
+          this.toolTipWindow.Dispose();
+          this.toolTipWindow = null;
+        }
       }
     }
   }

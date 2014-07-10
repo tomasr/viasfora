@@ -41,8 +41,9 @@ namespace Winterdom.Viasfora.Util {
       if ( tipView == null ) {
         CreateTipView();
       }
-      double width = widthChars * this.tipView.FormattedLineSource.ColumnWidth;
-      double height = heightChars * this.tipView.FormattedLineSource.LineHeight;
+      double zoom = tipView.ZoomLevel / 100.0;
+      double width = zoom * widthChars * this.tipView.FormattedLineSource.ColumnWidth;
+      double height = zoom * heightChars * this.tipView.FormattedLineSource.LineHeight;
       this.holder.Width = width + 3;
       this.holder.Height = height + 3;
       this.linesDisplayed = heightChars;
@@ -114,16 +115,9 @@ namespace Winterdom.Viasfora.Util {
 
       this.holder = new Border();
       this.holder.Margin = new Thickness(0);
-      this.holder.BorderThickness = new Thickness(4);
+      this.holder.BorderThickness = new Thickness(0);
+      this.holder.Padding = new Thickness(0);
       this.holder.Child = this.tipView.VisualElement;
-      this.holder.IsVisibleChanged += OnHolderVisibleChanged;
-    }
-
-    private void OnHolderVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
-      if ( !this.holder.IsVisible ) {
-        this.holder.IsVisibleChanged -= OnHolderVisibleChanged;
-        ReleaseView();
-      }
     }
 
     public void Dispose() {
