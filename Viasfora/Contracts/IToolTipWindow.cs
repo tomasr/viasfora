@@ -11,6 +11,6 @@ using Microsoft.VisualStudio.Text.Editor;
 namespace Winterdom.Viasfora.Contracts {
   public interface IToolTipWindow : IDisposable {
     void SetSize(int widthChars, int heightChars);
-    UIElement GetWindow(SnapshotSpan span);
+    UIElement GetWindow(SnapshotPoint bufferPosition);
   }
 }

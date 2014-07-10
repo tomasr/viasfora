@@ -78,8 +78,6 @@ namespace Winterdom.Viasfora.Text {
         LanguageInfo lang = VsfPackage.LookupLanguage(mousePos.Snapshot.ContentType);
         if ( lang == null )
           return;
-        if ( lang.BraceList.IndexOf(ch) % 2 == 0 )
-          return;
         PresentQuickInfo(e.View, mousePos);
       }
     }
@@ -103,7 +101,5 @@ namespace Winterdom.Viasfora.Text {
         session.Start();
       }
     }
-
   }
-
 }

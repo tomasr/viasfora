@@ -33,43 +33,48 @@ namespace Winterdom.Viasfora.Text {
 
     public void AugmentQuickInfoSession(IQuickInfoSession session, IList<object> quickInfoContent, out ITrackingSpan applicableToSpan) {
       applicableToSpan = null;
-      SnapshotPoint? subjectTriggerPoint =
-        session.GetTriggerPoint(textBuffer.CurrentSnapshot);
-      if ( !subjectTriggerPoint.HasValue ) {
+      SnapshotPoint? triggerPoint = session.GetTriggerPoint(textBuffer.CurrentSnapshot);
+      if ( !triggerPoint.HasValue ) {
         return;
       }
 
-      SnapshotSpan? openSpan = FindOpenSpan(subjectTriggerPoint.Value);
-      if ( openSpan == null ) {
+      SnapshotPoint? otherBrace = FindOtherBrace(triggerPoint.Value);
+      if ( otherBrace == null || IsTooClose(triggerPoint.Value, otherBrace.Value) ) {
         return;
       }
 
       var toolTipWindow = session.Get<IToolTipWindow>();
       if ( toolTipWindow != null ) {
-        var span = new SnapshotSpan(subjectTriggerPoint.Value, 1);
+        var span = new SnapshotSpan(triggerPoint.Value, 1);
         applicableToSpan = span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgePositive);
 
-        var element = toolTipWindow.GetWindow(openSpan.Value);
-        quickInfoContent.Add(element);
+        var element = toolTipWindow.GetWindow(otherBrace.Value);
+        if ( element != null ) {
+          quickInfoContent.Add(element);
+        }
       }
     }
 
-    private SnapshotSpan? FindOpenSpan(SnapshotPoint closeBrace) {
+    private bool IsTooClose(SnapshotPoint point1, SnapshotPoint point2) {
+      int distance = Math.Abs(point1 - point2);
+      return distance < 100;
+    }
+
+    private SnapshotPoint? FindOtherBrace(SnapshotPoint brace) {
       var rainbow = this.textBuffer.Get<RainbowProvider>();
       if ( rainbow == null ) {
         return null;
       }
 
-      var bracePair = rainbow.BraceCache.GetBracePair(closeBrace);
+      var bracePair = rainbow.BraceCache.GetBracePair(brace);
       if ( bracePair == null ) {
         return null;
       }
-      SnapshotPoint openBrace = new SnapshotPoint(
-            rainbow.BraceCache.Snapshot,
-            bracePair.Item1.Position);
-
-      var line = rainbow.BraceCache.Snapshot.GetLineFromPosition(openBrace);
-      return line.Extent;
+      if ( brace.Position == bracePair.Item1.Position ) {
+        return bracePair.Item2.ToPoint(brace.Snapshot);
+      } else {
+        return bracePair.Item1.ToPoint(brace.Snapshot);
+      }
     }
 
     public void Dispose() {

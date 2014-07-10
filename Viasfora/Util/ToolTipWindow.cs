@@ -10,6 +10,7 @@ using System.Windows.Controls;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Text.Formatting;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Util {
   [Export(typeof(IToolTipWindowProvider))]
@@ -29,6 +30,7 @@ namespace Winterdom.Viasfora.Util {
     private ToolTipWindowProvider provider;
     private IWpfTextView tipView;
     private Border holder;
+    private int linesDisplayed;
 
     public ToolTipWindow(ITextView source, ToolTipWindowProvider provider) {
       this.sourceTextView = source;
@@ -41,40 +43,55 @@ namespace Winterdom.Viasfora.Util {
       }
       double width = widthChars * this.tipView.FormattedLineSource.ColumnWidth;
       double height = heightChars * this.tipView.FormattedLineSource.LineHeight;
-      this.holder.Width = width + 10;
-      this.holder.Height = height + 10;
+      this.holder.Width = width + 3;
+      this.holder.Height = height + 3;
+      this.linesDisplayed = heightChars;
     }
 
-    public UIElement GetWindow(SnapshotSpan span) {
+    public UIElement GetWindow(SnapshotPoint bufferPosition) {
       if ( tipView == null ) {
         CreateTipView();
       }
-      SnapshotSpan viewSpan = MapSpanToView(span);
-      this.tipView.ViewScroller.EnsureSpanVisible(
-        viewSpan, EnsureSpanVisibleOptions.AlwaysCenter
+      SnapshotPoint viewPos;
+      if ( !RainbowProvider.TryMapToView(this.tipView, bufferPosition, out viewPos) ) {
+        return null;
+      }
+      this.tipView.DisplayTextLineContainingBufferPosition(
+        viewPos, this.tipView.LineHeight, ViewRelativePosition.Top
         );
-      SetViewportLeft(viewSpan);
+      SetViewportLeft();
+      // it could very well be that after this
+      // the brace we're interested in isn't visible
+      // (it's beyond the viewport right)
+      // so let's make it visible
+      this.tipView.ViewScroller.EnsureSpanVisible(new SnapshotSpan(viewPos, 1));
       return this.holder;
     }
 
-    private void SetViewportLeft(SnapshotSpan viewSpan) {
+    private void SetViewportLeft() {
       double leftMost = 0;
-      var line = this.tipView.TextViewLines.GetTextViewLineContainingBufferPosition(viewSpan.Start);
-      while ( line.VisibilityState != VisibilityState.Hidden ) {
+      var lines = this.tipView.TextViewLines;
+      // walk all lines from the first visible one
+      var line = lines.GetTextViewLineContainingYCoordinate(
+        this.tipView.ViewportTop
+        );
+      int lineNum = lines.IndexOf(line);
+      for ( int i = 0; i < linesDisplayed && lineNum + i < lines.Count; i++ ) {
+        line = lines[lineNum + i];
+        // find the first significant char in the line
+        // and check it's left position
         var firstNonWhiteSpace = FindFirstNonWhiteSpaceChar(line);
-        if ( firstNonWhiteSpace == null ) continue;
-        var bounds = line.GetCharacterBounds(firstNonWhiteSpace.Value);
-        if ( leftMost == 0 || bounds.Left < leftMost ) {
-          leftMost = bounds.Left;
-        }
-        if ( line.IsLastTextViewLineForSnapshotLine ) {
-          break;
+        if ( firstNonWhiteSpace != null ) {
+          var bounds = line.GetCharacterBounds(firstNonWhiteSpace.Value);
+          if ( leftMost == 0 || bounds.Left < leftMost ) {
+            leftMost = bounds.Left;
+          }
         }
       }
-      this.tipView.ViewScroller.ScrollViewportHorizontallyByPixels(leftMost);
+      this.tipView.ViewportLeft = leftMost;
     }
 
-    private SnapshotPoint? FindFirstNonWhiteSpaceChar(IWpfTextViewLine line) {
+    private SnapshotPoint? FindFirstNonWhiteSpaceChar(ITextViewLine line) {
       SnapshotSpan span = line.Extent;
       for ( SnapshotPoint i = span.Start; i < span.End; i += 1 ) {
         if ( !Char.IsWhiteSpace(i.GetChar()) ) {
@@ -84,33 +101,50 @@ namespace Winterdom.Viasfora.Util {
       return null;
     }
 
-    private SnapshotSpan MapSpanToView(SnapshotSpan span) {
-      var spanCollection = this.tipView.BufferGraph.MapUpToBuffer(
-        span, SpanTrackingMode.EdgePositive,
-        this.tipView.TextSnapshot.TextBuffer);
-      return spanCollection.First();
-    }
-
-
     private void CreateTipView() {
       var roles = this.provider.EditorFactory.CreateTextViewRoleSet("ViasforaToolTip");
       var model = new TipTextViewModel(this.sourceTextView);
       var options = this.provider.OptionsFactory.GlobalOptions;
       this.tipView = this.provider.EditorFactory.CreateTextView(model, roles, options);
 
+      IWpfTextView wpfSource = this.sourceTextView as IWpfTextView;
+      if ( wpfSource != null ) {
+        this.tipView.ZoomLevel = wpfSource.ZoomLevel;
+      }
+
       this.holder = new Border();
+      this.holder.Margin = new Thickness(0);
+      this.holder.BorderThickness = new Thickness(4);
       this.holder.Child = this.tipView.VisualElement;
+      this.holder.IsVisibleChanged += OnHolderVisibleChanged;
+    }
+
+    private void OnHolderVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+      if ( !this.holder.IsVisible ) {
+        this.holder.IsVisibleChanged -= OnHolderVisibleChanged;
+        ReleaseView();
+      }
     }
 
     public void Dispose() {
-      if ( this.tipView != null ) {
-        this.holder.Child = null;
-        this.tipView.Close();
-        this.tipView = null;
-      }
+      ReleaseView();
       this.sourceTextView = null;
     }
 
+    public void ReleaseView() {
+      if ( this.tipView != null ) {
+        this.holder.Child = null;
+        try {
+          this.tipView.Close();
+        } catch {
+          // swallow exceptions just in case
+          // we get disposed after the source view
+        }
+        this.tipView = null;
+      }
+      this.holder = null;
+    }
+    
     class TipTextViewModel : ITextViewModel {
       private ITextView sourceView;
       private PropertyCollection properties;
@@ -123,11 +157,9 @@ namespace Winterdom.Viasfora.Util {
       public ITextBuffer DataBuffer {
         get { return sourceView.TextViewModel.DataBuffer; }
       }
-
       public ITextDataModel DataModel {
         get { return sourceView.TextViewModel.DataModel; }
       }
-
       public ITextBuffer EditBuffer {
         get { return sourceView.TextViewModel.EditBuffer; }
       }
@@ -137,7 +169,6 @@ namespace Winterdom.Viasfora.Util {
       public PropertyCollection Properties {
         get { return this.properties; }
       }
-
 
       public SnapshotPoint GetNearestPointInVisualBuffer(SnapshotPoint editBufferPoint) {
         return this.sourceView.TextViewModel.GetNearestPointInVisualBuffer(editBufferPoint);
