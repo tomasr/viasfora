@@ -29,7 +29,6 @@ namespace Winterdom.Viasfora.Util {
     private ITextView sourceTextView;
     private ToolTipWindowProvider provider;
     private IWpfTextView tipView;
-    private Border holder;
     private int linesDisplayed;
 
     public ToolTipWindow(ITextView source, ToolTipWindowProvider provider) {
@@ -44,8 +43,9 @@ namespace Winterdom.Viasfora.Util {
       double zoom = tipView.ZoomLevel / 100.0;
       double width = zoom * widthChars * this.tipView.FormattedLineSource.ColumnWidth;
       double height = zoom * heightChars * this.tipView.FormattedLineSource.LineHeight;
-      this.holder.Width = width + 3;
-      this.holder.Height = height + 3;
+      this.tipView.VisualElement.Width = width;
+      this.tipView.VisualElement.Height = height;
+      this.tipView.VisualElement.Margin = new Thickness(3);
       this.linesDisplayed = heightChars;
     }
 
@@ -66,7 +66,7 @@ namespace Winterdom.Viasfora.Util {
       // (it's beyond the viewport right)
       // so let's make it visible
       this.tipView.ViewScroller.EnsureSpanVisible(new SnapshotSpan(viewPos, 1));
-      return this.holder;
+      return this.tipView.VisualElement;
     }
 
     private void SetViewportLeft() {
@@ -112,12 +112,6 @@ namespace Winterdom.Viasfora.Util {
       if ( wpfSource != null ) {
         this.tipView.ZoomLevel = wpfSource.ZoomLevel;
       }
-
-      this.holder = new Border();
-      this.holder.Margin = new Thickness(0);
-      this.holder.BorderThickness = new Thickness(0);
-      this.holder.Padding = new Thickness(0);
-      this.holder.Child = this.tipView.VisualElement;
     }
 
     public void Dispose() {
@@ -127,7 +121,6 @@ namespace Winterdom.Viasfora.Util {
 
     public void ReleaseView() {
       if ( this.tipView != null ) {
-        this.holder.Child = null;
         try {
           this.tipView.Close();
         } catch {
@@ -136,7 +129,6 @@ namespace Winterdom.Viasfora.Util {
         }
         this.tipView = null;
       }
-      this.holder = null;
     }
     
     class TipTextViewModel : ITextViewModel {
