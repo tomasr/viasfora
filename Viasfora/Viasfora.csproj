@@ -53,6 +53,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -83,6 +84,8 @@
     <Compile Include="CommonExtensions.cs" />
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Contracts\IToolTipWindow.cs" />
+    <Compile Include="Contracts\IToolTipWindowProvider.cs" />
     <Compile Include="Design\StringListConverter.cs" />
     <Compile Include="Design\XamlExtensions.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
@@ -221,10 +224,12 @@
     <Compile Include="Text\RainbowHighlightMode.cs" />
     <Compile Include="Text\RainbowKeyProcessor.cs" />
     <Compile Include="Text\RainbowProvider.cs" />
+    <Compile Include="Text\RainbowQuickInfoSource.cs" />
     <Compile Include="Text\RainbowTaggerProvider.cs" />
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
+    <Compile Include="Text\RainbowQuickInfoController.cs" />
     <Compile Include="Text\TextObfuscation.cs" />
     <Compile Include="Text\UserOutliningTaggerProvider.cs" />
     <Compile Include="Util\IEscapeSequenceParser.cs" />
@@ -250,6 +255,7 @@
     <Compile Include="Util\LineChars.cs" />
     <Compile Include="Util\StringChars.cs" />
     <Compile Include="Languages\BraceExtractors\VbBraceExtractor.cs" />
+    <Compile Include="Util\ToolTipWindow.cs" />
     <Compile Include="Util\VsColors.cs" />
     <Compile Include="ViewRoles.cs" />
     <Compile Include="VsfSettings.cs" />

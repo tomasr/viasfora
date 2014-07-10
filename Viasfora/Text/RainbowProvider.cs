@@ -48,9 +48,12 @@ namespace Winterdom.Viasfora.Text {
 
     public static bool TryMapCaretToBuffer(ITextView view, out SnapshotPoint pos) {
       var caret = view.Caret.Position.BufferPosition;
+      return TryMapPosToBuffer(view, caret, out pos);
+    }
+    public static bool TryMapPosToBuffer(ITextView view, SnapshotPoint viewPos, out SnapshotPoint pos) {
       pos = new SnapshotPoint();
       var result = view.BufferGraph.MapDownToFirstMatch(
-        caret, PointTrackingMode.Negative,
+        viewPos, PointTrackingMode.Negative,
         snapshot => snapshot.TextBuffer.Has<RainbowProvider>(),
         PositionAffinity.Successor
         );

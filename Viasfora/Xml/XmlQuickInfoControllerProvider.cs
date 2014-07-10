@@ -19,7 +19,6 @@ namespace Winterdom.Viasfora.Xml {
   internal class XmlQuickInfoControllerProvider : IIntellisenseControllerProvider {
     [Import]
     internal IQuickInfoBroker QuickInfoBroker { get; set; }
-    internal ITagAggregator<ClassificationTag> Aggregator { get; set; }
 
     public IIntellisenseController TryCreateIntellisenseController(
         ITextView textView, IList<ITextBuffer> subjectBuffers) {
