@@ -86,6 +86,9 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Contracts\IToolTipWindow.cs" />
     <Compile Include="Contracts\IToolTipWindowProvider.cs" />
+    <Compile Include="Design\QuickInfoPresenter.xaml.cs">
+      <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Design\StringListConverter.cs" />
     <Compile Include="Design\XamlExtensions.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
@@ -224,6 +227,7 @@
     <Compile Include="Text\RainbowHighlightMode.cs" />
     <Compile Include="Text\RainbowKeyProcessor.cs" />
     <Compile Include="Text\RainbowProvider.cs" />
+    <Compile Include="Text\RainbowQuickInfoPresenter.cs" />
     <Compile Include="Text\RainbowQuickInfoSource.cs" />
     <Compile Include="Text\RainbowTaggerProvider.cs" />
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
@@ -370,6 +374,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Design\QuickInfoPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\ListBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
