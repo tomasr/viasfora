@@ -4,12 +4,12 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Windows;
-using Microsoft.VisualStudio.Text.Editor;
-using Winterdom.Viasfora.Contracts;
 using System.Windows.Controls;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Utilities;
+using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
+using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Util {
@@ -30,6 +30,8 @@ namespace Winterdom.Viasfora.Util {
     private ToolTipWindowProvider provider;
     private IWpfTextView tipView;
     private int linesDisplayed;
+    private SnapshotPoint pointToDisplay;
+    private Border wrapper;
 
     public ToolTipWindow(ITextView source, ToolTipWindowProvider provider) {
       this.sourceTextView = source;
@@ -43,9 +45,9 @@ namespace Winterdom.Viasfora.Util {
       double zoom = tipView.ZoomLevel / 100.0;
       double width = zoom * widthChars * this.tipView.FormattedLineSource.ColumnWidth;
       double height = zoom * heightChars * this.tipView.FormattedLineSource.LineHeight;
-      this.tipView.VisualElement.Width = width;
-      this.tipView.VisualElement.Height = height;
-      this.tipView.VisualElement.Margin = new Thickness(3);
+      this.wrapper.Width = width;
+      this.wrapper.Height = height;
+      this.wrapper.Padding = new Thickness(3);
       this.linesDisplayed = heightChars;
     }
 
@@ -53,9 +55,29 @@ namespace Winterdom.Viasfora.Util {
       if ( tipView == null ) {
         CreateTipView();
       }
+      this.pointToDisplay = bufferPosition;
+      return this.wrapper;
+    }
+
+    public void Dispose() {
+      ReleaseView();
+      this.sourceTextView = null;
+    }
+
+    // Delay scrolling the view until it has been sized
+    // because otherwise this fails in VS2010 (though
+    // works fine in VS2013)
+    private void OnViewportWidthChanged(object sender, EventArgs e) {
+      this.tipView.ViewportWidthChanged -= this.OnViewportWidthChanged;
+      if ( this.tipView.ViewportRight > this.tipView.ViewportLeft ) {
+        this.ScrollIntoView(this.pointToDisplay);
+      }
+    }
+
+    private void ScrollIntoView(SnapshotPoint bufferPosition) {
       SnapshotPoint viewPos;
       if ( !RainbowProvider.TryMapToView(this.tipView, bufferPosition, out viewPos) ) {
-        return null;
+        return;
       }
       this.tipView.DisplayTextLineContainingBufferPosition(
         viewPos, this.tipView.LineHeight, ViewRelativePosition.Top
@@ -66,7 +88,6 @@ namespace Winterdom.Viasfora.Util {
       // (it's beyond the viewport right)
       // so let's make it visible
       this.tipView.ViewScroller.EnsureSpanVisible(new SnapshotSpan(viewPos, 1));
-      return this.tipView.VisualElement;
     }
 
     private void SetViewportLeft() {
@@ -105,22 +126,25 @@ namespace Winterdom.Viasfora.Util {
     private void CreateTipView() {
       var roles = this.provider.EditorFactory.CreateTextViewRoleSet("ViasforaToolTip");
       var model = new TipTextViewModel(this.sourceTextView);
-      var options = this.provider.OptionsFactory.GlobalOptions;
+      var options = this.provider.OptionsFactory.GetOptions(this.sourceTextView);
+      options.SetOptionValue(DefaultTextViewOptions.IsViewportLeftClippedId, true);
       this.tipView = this.provider.EditorFactory.CreateTextView(model, roles, options);
+      this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
       IWpfTextView wpfSource = this.sourceTextView as IWpfTextView;
       if ( wpfSource != null ) {
         this.tipView.ZoomLevel = wpfSource.ZoomLevel;
+      } else {
+        this.tipView.ZoomLevel = 100;
       }
+      this.wrapper = new Border();
+      this.wrapper.Child = this.tipView.VisualElement;
     }
 
-    public void Dispose() {
-      ReleaseView();
-      this.sourceTextView = null;
-    }
-
-    public void ReleaseView() {
+    private void ReleaseView() {
       if ( this.tipView != null ) {
+        this.tipView.ViewportWidthChanged -= this.OnViewportWidthChanged;
+        this.wrapper.Child = null;
         try {
           this.tipView.Close();
         } catch {
