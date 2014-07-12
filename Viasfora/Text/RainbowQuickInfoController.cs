@@ -71,7 +71,7 @@ namespace Winterdom.Viasfora.Text {
 
       // Check to see if there is a RainbowTag under the Mouse
       // and if the tag is a closing brace
-      var span = new SnapshotSpan(mousePos, 1);
+      var span = new SnapshotSpan(mousePos, 0);
       var tagSpan = aggregator.GetTags(span).FirstOrDefault();
       if ( tagSpan != null ) {
         char ch = mousePos.GetChar();
