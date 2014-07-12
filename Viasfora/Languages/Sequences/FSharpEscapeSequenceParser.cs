@@ -71,7 +71,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     private Span? TryParseShortUnicode() {
       // \Uhhhhhhhh
       for ( int i = 0; i < 4; i++ ) {
-        if ( !IsHexDigit(text.Char()) ) {
+        if ( !text.Char().IsHexDigit() ) {
           return null;
         }
         text.Next();
@@ -81,16 +81,12 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     private Span? TryParseLongUnicode() {
       // \Uhhhhhhhh
       for ( int i = 0; i < 8; i++ ) {
-        if ( !IsHexDigit(text.Char()) ) {
+        if ( !text.Char().IsHexDigit() ) {
           return null;
         }
         text.Next();
       }
       return new Span(text.Position - 10, 10);
-    }
-    private bool IsHexDigit(char c) {
-      if ( Char.IsDigit(c) ) return true;
-      return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
     }
   }
 }

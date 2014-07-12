@@ -20,7 +20,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       while ( start < text.Length - 2 ) {
         if ( text[start] == '\\' ) {
           int len = 1;
-          while ( (start+len) < text.Length && IsHexDigit(text[start+len+1]) && len < maxHexLen ) {
+          while ( (start+len) < text.Length && text[start+len+1].IsHexDigit() && len < maxHexLen ) {
             len++;
           }
 
@@ -31,10 +31,6 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         start++;
       }
       return null;
-    }
-    private bool IsHexDigit(char c) {
-      if ( Char.IsDigit(c) ) return true;
-      return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
     }
   }
 }
