@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Tags;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
 
   class RainbowProvider  {
     public ITextBuffer TextBuffer { get; private set; }

@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Design;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Options {

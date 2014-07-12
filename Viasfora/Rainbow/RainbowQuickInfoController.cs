@@ -1,18 +1,18 @@
-﻿using Microsoft.VisualStudio.Language.Intellisense;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Tagging;
-using Microsoft.VisualStudio.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualStudio.Language.Intellisense;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Tagging;
+using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Tags;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
   [Export(typeof(IIntellisenseControllerProvider))]
   [Name("viasfora.rainbow.qicontroller")]
   [ContentType("text")]

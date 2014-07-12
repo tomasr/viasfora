@@ -208,7 +208,7 @@
     <Compile Include="Text\PlainTextCompletionContext.cs" />
     <Compile Include="Text\PlainTextCompletionSource.cs" />
     <Compile Include="Text\PlainTextCompletionSourceProvider.cs" />
-    <Compile Include="Text\BraceCache.cs" />
+    <Compile Include="Rainbow\BraceCache.cs" />
     <Compile Include="Text\BufferOutlines.cs" />
     <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
     <Compile Include="Text\CurrentColumnAdornment.cs" />

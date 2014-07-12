@@ -13,7 +13,7 @@ using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
   [Export(typeof(IVsTextViewCreationListener))]
   [Name("viasfora.rainbow.handler")]
   [ContentType("text")]

@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Util;
 using Microsoft.VisualStudio.Text;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(IKeyProcessorProvider))]
   [Name("viasfora.rainbow.key.provider")]
