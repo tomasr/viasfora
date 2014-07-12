@@ -6,7 +6,7 @@ using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text;
-using Winterdom.Viasfora.Text;
+using Winterdom.Viasfora.Outlining;
 
 namespace Winterdom.Viasfora.Commands {
   public class ClearOutliningCommand : VsCommand {

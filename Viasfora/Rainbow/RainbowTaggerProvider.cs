@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Tags;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(IViewTaggerProvider))]
   [ContentType(CSharp.ContentType)]

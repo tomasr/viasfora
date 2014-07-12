@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Text;
+using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Util {
   [Export(typeof(IToolTipWindowProvider))]

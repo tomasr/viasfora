@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
   public class BraceCache {
     private List<BracePos> braces = new List<BracePos>();
     private SortedList<char, char> braceList = new SortedList<char, char>();

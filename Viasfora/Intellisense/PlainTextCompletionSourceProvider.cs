@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Utilities;
-using Microsoft.VisualStudio.Text.Editor;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Intellisense {
   [Export(typeof(ICompletionSourceProvider))]
   [ContentType("text"), ContentType("projection")]
   [Name("viasfora.text.completion.source")]

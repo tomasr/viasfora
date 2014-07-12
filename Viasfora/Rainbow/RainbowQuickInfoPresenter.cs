@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Design;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
   [Export(typeof(IIntellisensePresenterProvider))]
   [Name("viasfora.rainbow.qipresenter")]
   [Order(Before="Default Quick Info Presenter")]

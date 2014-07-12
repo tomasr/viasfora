@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Text;
 
@@ -120,8 +121,8 @@ namespace Winterdom.Viasfora {
       get { return GetBoolean(TC_HANDLE_COMPLETE_WORD, false); }
       set { SetValue(TC_HANDLE_COMPLETE_WORD, value); }
     }
-    public static Text.AutoExpandMode AutoExpandRegions {
-      get { return GetEnum(AUTO_EXPAND_REGIONS, Text.AutoExpandMode.No); }
+    public static Outlining.AutoExpandMode AutoExpandRegions {
+      get { return GetEnum(AUTO_EXPAND_REGIONS, Outlining.AutoExpandMode.No); }
       set { SetValue(AUTO_EXPAND_REGIONS, value); }
     }
     public static bool BoldAsItalicsEnabled {
