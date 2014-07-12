@@ -84,6 +84,7 @@
     <Compile Include="CommonExtensions.cs" />
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Contracts\ILanguage.cs" />
     <Compile Include="Contracts\IToolTipWindow.cs" />
     <Compile Include="Contracts\IToolTipWindowProvider.cs" />
     <Compile Include="Design\QuickInfoPresenter.xaml.cs">
