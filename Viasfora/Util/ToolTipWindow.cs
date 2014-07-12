@@ -126,8 +126,11 @@ namespace Winterdom.Viasfora.Util {
     private void CreateTipView() {
       var roles = this.provider.EditorFactory.CreateTextViewRoleSet("ViasforaToolTip");
       var model = new TipTextViewModel(this.sourceTextView);
+
       var options = this.provider.OptionsFactory.GetOptions(this.sourceTextView);
       options.SetOptionValue(DefaultTextViewOptions.IsViewportLeftClippedId, true);
+      options.SetOptionValue(Constants.WordWrapStyleId, WordWrapStyles.None);
+
       this.tipView = this.provider.EditorFactory.CreateTextView(model, roles, options);
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
