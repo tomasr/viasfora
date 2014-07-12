@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.Editor;
 using Winterdom.Viasfora.Commands;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Settings;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -67,8 +68,8 @@ namespace Winterdom.Viasfora {
       languageList.Add(new Css());
     }
 
-    public static LanguageInfo LookupLanguage(IContentType contentType) {
-      foreach ( LanguageInfo li in languageList ) {
+    public static ILanguage LookupLanguage(IContentType contentType) {
+      foreach ( ILanguage li in languageList ) {
         if ( li.MatchesContentType(contentType) )
           return li;
       }

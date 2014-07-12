@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Winterdom.Viasfora.Languages;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
@@ -26,7 +26,7 @@ namespace Winterdom.Viasfora.Text {
       if ( snapshot.LineCount <= numLine ) {
         return;
       }
-      LanguageInfo language = VsfPackage.LookupLanguage(snapshot.ContentType);
+      ILanguage language = VsfPackage.LookupLanguage(snapshot.ContentType);
       if ( language == null ) return;
 
       var firstLine = snapshot.GetLineFromLineNumber(numLine);

@@ -9,7 +9,6 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Rainbow {
@@ -75,9 +74,6 @@ namespace Winterdom.Viasfora.Rainbow {
       var tagSpan = aggregator.GetTags(span).FirstOrDefault();
       if ( tagSpan != null ) {
         char ch = mousePos.GetChar();
-        LanguageInfo lang = VsfPackage.LookupLanguage(mousePos.Snapshot.ContentType);
-        if ( lang == null )
-          return;
         PresentQuickInfo(e.View, mousePos);
       }
     }

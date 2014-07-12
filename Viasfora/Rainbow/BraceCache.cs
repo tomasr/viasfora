@@ -4,8 +4,8 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Util;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Rainbow {
   public class BraceCache {
@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private SortedList<char, char> braceList = new SortedList<char, char>();
     public ITextSnapshot Snapshot { get; private set; }
     public int LastParsedPosition { get; private set; }
-    public LanguageInfo Language { get; private set; }
+    public ILanguage Language { get; private set; }
     private IBraceExtractor braceExtractor;
 
     public BraceCache(ITextSnapshot snapshot, IContentType contentType) {

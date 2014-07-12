@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Languages;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Text {
@@ -46,7 +46,7 @@ namespace Winterdom.Viasfora.Text {
       if ( spans.Count == 0 ) {
         yield break;
       }
-      LanguageInfo lang = GetKeywordsByContentType(theBuffer.ContentType);
+      ILanguage lang = GetKeywordsByContentType(theBuffer.ContentType);
       bool eshe = VsfSettings.EscapeSeqHighlightEnabled;
       bool kce = VsfSettings.KeywordClassifierEnabled;
       if ( !(kce || eshe) ) {
@@ -94,7 +94,7 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private ITagSpan<KeywordTag> IsInterestingKeyword(LanguageInfo lang, SnapshotSpan cs) {
+    private ITagSpan<KeywordTag> IsInterestingKeyword(ILanguage lang, SnapshotSpan cs) {
       if ( cs.IsEmpty ) return null;
       String text = cs.GetText();
       if ( lang.IsControlFlowKeyword(text) ) {
@@ -108,7 +108,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(
-          LanguageInfo lang, SnapshotSpan cs) {
+          ILanguage lang, SnapshotSpan cs) {
       if ( cs.IsEmpty ) yield break;
       String text = cs.GetText();
 
@@ -123,12 +123,7 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private bool IsHexDigit(char c) {
-      if ( Char.IsDigit(c) ) return true;
-      return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
-    }
-
-    private LanguageInfo GetKeywordsByContentType(IContentType contentType) {
+    private ILanguage GetKeywordsByContentType(IContentType contentType) {
       return VsfPackage.LookupLanguage(contentType);
     }
   }

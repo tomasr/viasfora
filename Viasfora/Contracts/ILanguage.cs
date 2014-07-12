@@ -18,5 +18,6 @@ namespace Winterdom.Viasfora.Contracts {
     bool IsControlFlowKeyword(String text);
     bool IsVisibilityKeyword(String text);
     bool IsLinqKeyword(String text);
+    bool MatchesContentType(IContentType contentType);
   }
 }
