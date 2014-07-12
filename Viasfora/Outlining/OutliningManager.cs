@@ -8,10 +8,8 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Text.Editor;
 using Winterdom.Viasfora.Tags;
 
-namespace Winterdom.Viasfora.Text
-{
-  public class OutliningManager : IUserOutlining, IOutliningManager
-  {
+namespace Winterdom.Viasfora.Outlining {
+  public class OutliningManager : IUserOutlining, IOutliningManager {
     private BufferOutlines regions;
     private static readonly SnapshotSpan[] empty = new SnapshotSpan[0];
     private OutliningTagger outliningTagger;
@@ -86,8 +84,7 @@ namespace Winterdom.Viasfora.Text
       UpdateUserSettings(snapshot.TextBuffer, snapshot);
     }
 
-    private void RaiseTagsChanged(SnapshotSpan span)
-    {
+    private void RaiseTagsChanged(SnapshotSpan span) {
       this.outliningTagger.RaiseTagsChanged(span);
       this.glyphTagger.RaiseTagsChanged(span);
     }

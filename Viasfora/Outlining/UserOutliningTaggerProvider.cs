@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(ITaggerProvider))]
   [ContentType("Text")]
   [TagType(typeof(IOutliningRegionTag))]

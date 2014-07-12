@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Settings;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Outlining {
   public class BufferOutlines {
     private List<ITrackingSpan> regions = new List<ITrackingSpan>();
 

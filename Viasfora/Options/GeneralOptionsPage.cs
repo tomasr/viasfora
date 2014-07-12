@@ -107,7 +107,7 @@ namespace Winterdom.Viasfora.Options {
     [LocDisplayName("Expand Regions on Open")]
     [Description("Automatically expand collapsible regions when a new text view is opened")]
     [Category("Text Editor")]
-    public Text.AutoExpandMode AutoExpandRegions { get; set; }
+    public Outlining.AutoExpandMode AutoExpandRegions { get; set; }
 
     [LocDisplayName("Enable 'Bold As Italics'")]
     [Description("Render bold fonts using italics instead")]

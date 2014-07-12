@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Outlining {
   public interface IUserOutlining {
     IEnumerable<SnapshotSpan> GetTags(NormalizedSnapshotSpanCollection spans);
     void Add(SnapshotSpan span);
