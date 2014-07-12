@@ -19,16 +19,18 @@ namespace Winterdom.Viasfora.Text {
     private KeywordTag visClassification;
     private KeywordTag stringEscapeClassification;
     private ITagAggregator<IClassificationTag> aggregator;
+    private ILanguageFactory langFactory;
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 #pragma warning restore 67
 
-    internal KeywordTagger(
-          ITextBuffer buffer,
-          IClassificationTypeRegistryService registry,
-          ITagAggregator<IClassificationTag> aggregator) {
+    internal KeywordTagger(ITextBuffer buffer, KeywordTaggerProvider provider) {
       theBuffer = buffer;
+      this.aggregator = provider.Aggregator.CreateTagAggregator<IClassificationTag>(buffer);
+      this.langFactory = provider.LanguageFactory;
+
+      var registry = provider.ClassificationRegistry;
       keywordClassification =
          new KeywordTag(registry.GetClassificationType(Constants.KEYWORD_CLASSIF_NAME));
       linqClassification =
@@ -39,7 +41,6 @@ namespace Winterdom.Viasfora.Text {
          new KeywordTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
 
       VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
-      this.aggregator = aggregator;
     }
 
     public IEnumerable<ITagSpan<KeywordTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
@@ -124,7 +125,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private ILanguage GetKeywordsByContentType(IContentType contentType) {
-      return VsfPackage.LookupLanguage(contentType);
+      return this.langFactory.TryCreateLanguage(contentType);
     }
   }
 }

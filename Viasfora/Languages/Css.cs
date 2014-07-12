@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
+  [Export(typeof(ILanguage))]
   public class Css : LanguageInfo {
     public const String ContentType = "css";
     public const String SassContentType = "SCSS";

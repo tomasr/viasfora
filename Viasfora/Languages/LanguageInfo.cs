@@ -34,7 +34,7 @@ namespace Winterdom.Viasfora.Languages {
       return null;
     }
 
-    public bool MatchesContentType(IContentType contentType) {
+    public virtual bool MatchesContentType(IContentType contentType) {
       foreach ( String str in this.ContentTypes ) {
         if ( contentType.IsOfType(str) ) 
           return true;

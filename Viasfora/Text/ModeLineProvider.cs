@@ -11,13 +11,15 @@ namespace Winterdom.Viasfora.Text {
   public class ModeLineProvider {
     private IWpfTextView theView;
     private static Dictionary<String, Action<IWpfTextView, String>> optionMap;
+    private ILanguageFactory langFactory;
 
     static ModeLineProvider() {
       optionMap = new Dictionary<string, Action<IWpfTextView, String>>();
       InitializeOptionMap();
     }
-    public ModeLineProvider(IWpfTextView view) {
+    public ModeLineProvider(IWpfTextView view, ILanguageFactory langFactory) {
       this.theView = view;
+      this.langFactory = langFactory;
     }
 
     public void ParseModeline(int numLine) {
@@ -26,7 +28,7 @@ namespace Winterdom.Viasfora.Text {
       if ( snapshot.LineCount <= numLine ) {
         return;
       }
-      ILanguage language = VsfPackage.LookupLanguage(snapshot.ContentType);
+      ILanguage language = langFactory.TryCreateLanguage(snapshot);
       if ( language == null ) return;
 
       var firstLine = snapshot.GetLineFromLineNumber(numLine);

@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Tags;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -32,16 +33,14 @@ namespace Winterdom.Viasfora.Text {
   [TagType(typeof(KeywordTag))]
   public class KeywordTaggerProvider : IViewTaggerProvider {
     [Import]
-    internal IClassificationTypeRegistryService ClassificationRegistry = null;
+    public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
     [Import]
-    internal IBufferTagAggregatorFactoryService Aggregator = null;
+    public IBufferTagAggregatorFactoryService Aggregator { get; set; }
+    [Import]
+    public ILanguageFactory LanguageFactory { get; set; }
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
-      return new KeywordTagger(
-         buffer,
-         ClassificationRegistry,
-         Aggregator.CreateTagAggregator<IClassificationTag>(buffer)
-      ) as ITagger<T>;
+      return new KeywordTagger(buffer, this) as ITagger<T>;
     }
   }
 

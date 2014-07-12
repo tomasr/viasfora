@@ -16,10 +16,10 @@ namespace Winterdom.Viasfora.Rainbow {
     public ILanguage Language { get; private set; }
     private IBraceExtractor braceExtractor;
 
-    public BraceCache(ITextSnapshot snapshot, IContentType contentType) {
+    public BraceCache(ITextSnapshot snapshot, ILanguage language) {
       this.Snapshot = snapshot;
       this.LastParsedPosition = -1;
-      this.Language = VsfPackage.LookupLanguage(contentType);
+      this.Language = language;
       if ( this.Language != null ) {
         this.braceExtractor = this.Language.NewBraceExtractor();
 
