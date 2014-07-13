@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Winterdom.Viasfora.Languages;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.BraceExtractors {
@@ -14,9 +14,9 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     const int stHereExpandableString = 4;
     const int stMultiLineComment = 5;
     private int status = stText;
-    private LanguageInfo lang;
+    private ILanguage lang;
 
-    public PsBraceExtractor(LanguageInfo lang) {
+    public PsBraceExtractor(ILanguage lang) {
       this.lang = lang;
     }
 

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Util;
 using Winterdom.Viasfora.Languages.CommentParsers;
 
 namespace Winterdom.Viasfora.Languages {
-  public abstract class LanguageInfo {
+  public abstract class LanguageInfo : ILanguage {
     private static StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
     protected static readonly String[] EMPTY = { };
 
@@ -33,7 +34,7 @@ namespace Winterdom.Viasfora.Languages {
       return null;
     }
 
-    public bool MatchesContentType(IContentType contentType) {
+    public virtual bool MatchesContentType(IContentType contentType) {
       foreach ( String str in this.ContentTypes ) {
         if ( contentType.IsOfType(str) ) 
           return true;

@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Rainbow {
@@ -18,6 +19,8 @@ namespace Winterdom.Viasfora.Rainbow {
     public BraceCache BraceCache { get; private set; }
     public ITextView TextView { get; private set; }
     public IClassificationTypeRegistryService Registry { get; private set; }
+    public ILanguageFactory LanguageFactory { get; private set; }
+    public RainbowTaggerProvider Provider { get; private set; }
     public Dispatcher Dispatcher { get; private set; }
     public RainbowColorTagger ColorTagger { get; private set; }
 
@@ -28,10 +31,11 @@ namespace Winterdom.Viasfora.Rainbow {
     internal RainbowProvider(
           ITextView view,
           ITextBuffer buffer,
-          IClassificationTypeRegistryService registry) {
+          RainbowTaggerProvider provider) {
       this.TextView = view;
       this.TextBuffer = buffer;
-      this.Registry = registry;
+      this.Registry = provider.ClassificationRegistry;
+      this.LanguageFactory = provider.LanguageFactory;
       this.ColorTagger = new RainbowColorTagger(this);
 
       SetLanguage(buffer.ContentType);
@@ -162,7 +166,8 @@ namespace Winterdom.Viasfora.Rainbow {
 
     private void SetLanguage(IContentType contentType) {
       if ( TextBuffer != null ) {
-        this.BraceCache = new BraceCache(this.TextBuffer.CurrentSnapshot, contentType);
+        var lang = LanguageFactory.TryCreateLanguage(contentType);
+        this.BraceCache = new BraceCache(this.TextBuffer.CurrentSnapshot, lang);
       }
     }
 

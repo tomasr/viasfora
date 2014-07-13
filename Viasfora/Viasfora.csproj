@@ -84,6 +84,8 @@
     <Compile Include="CommonExtensions.cs" />
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Contracts\ILanguage.cs" />
+    <Compile Include="Contracts\ILanguageFactory.cs" />
     <Compile Include="Contracts\IToolTipWindow.cs" />
     <Compile Include="Contracts\IToolTipWindowProvider.cs" />
     <Compile Include="Design\QuickInfoPresenter.xaml.cs">
@@ -115,6 +117,7 @@
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
     <Compile Include="Languages\Css.cs" />
+    <Compile Include="Languages\LanguageFactory.cs" />
     <Compile Include="Languages\PowerShell.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
     <Compile Include="Languages\Json.cs" />
