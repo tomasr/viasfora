@@ -118,6 +118,14 @@ namespace Winterdom.Viasfora {
       return true;
     }
 
+    public static void DisplayMessageInStatusBar(string message) {
+      IVsStatusbar bar = (IVsStatusbar)
+        ServiceProvider.GlobalProvider.GetService(typeof(SVsStatusbar));
+      if ( bar != null ) {
+        bar.SetText(message);
+      }
+    }
+
     //
     // Ugly hack: We write the buffer contents into a
     // temporary file, then open this in the standard
