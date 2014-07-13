@@ -56,6 +56,10 @@ namespace Winterdom.Viasfora.Util {
         CreateTipView();
       }
       this.pointToDisplay = bufferPosition;
+      var line = this.tipView.TextViewLines.GetTextViewLineContainingBufferPosition(bufferPosition);
+      int index = this.tipView.TextViewLines.IndexOf(line);
+      this.tipView.Set(new ViewTipProperty(index));
+
       return this.wrapper;
     }
 
@@ -124,7 +128,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     private void CreateTipView() {
-      var roles = this.provider.EditorFactory.CreateTextViewRoleSet("ViasforaToolTip");
+      var roles = this.provider.EditorFactory.CreateTextViewRoleSet(ViewRoles.ToolTipView);
       var model = new TipTextViewModel(this.sourceTextView);
 
       var options = this.provider.OptionsFactory.CreateOptions();
