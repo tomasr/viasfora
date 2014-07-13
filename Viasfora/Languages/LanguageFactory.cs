@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora.Languages {
   public class LanguageFactory : ILanguageFactory {
     [ImportMany]
     public List<ILanguage> Languages { get; set; }
+    private static ILanguage defaultLang = new DefaultLanguage();
 
     public ILanguage TryCreateLanguage(IContentType contentType) {
       foreach ( ILanguage lang in Languages ) {
@@ -19,7 +20,7 @@ namespace Winterdom.Viasfora.Languages {
           return lang;
         }
       }
-      return new DefaultLanguage();
+      return defaultLang;
     }
 
     public ILanguage TryCreateLanguage(ITextBuffer textBuffer) {
