@@ -52,4 +52,17 @@ namespace Winterdom.Viasfora.EditorFormats {
       this.ForegroundColor = Colors.RoyalBlue;
     }
   }
+
+  [Export(typeof(EditorFormatDefinition))]
+  [ClassificationType(ClassificationTypeNames = Constants.RAINBOW_TIP_HIGHLIGHT)]
+  [Name(Constants.RAINBOW_TIP_HIGHLIGHT)]
+  [UserVisible(true)]
+  [Order(After = Priority.High)]
+  public sealed class RainbowTipHighlightFormat : EditorFormatDefinition {
+    public RainbowTipHighlightFormat() {
+      this.DisplayName = "Viasfora Rainbow Tip Highlight";
+      this.BackgroundColor = Colors.Turquoise;
+      this.ForegroundCustomizable = false;
+    }
+  }
 }

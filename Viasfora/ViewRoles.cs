@@ -8,5 +8,6 @@ namespace Winterdom.Viasfora {
   public static class ViewRoles {
     public const String EmbeddedPeekTextView = "EMBEDDED_PEEK_TEXT_VIEW";
 		public const String CodeDefinitionView = "CODEDEFINITION";
+    public const String ToolTipView = "VIASFORA_TOOLTIP";
   }
 }
