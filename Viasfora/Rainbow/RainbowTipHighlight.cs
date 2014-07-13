@@ -27,10 +27,10 @@ namespace Winterdom.Viasfora.Rainbow {
     public AdornmentLayerDefinition HighlightLayer = null;
 
     [Import]
-    public IClassificationFormatMapService FormatMapService { get; set; }
+    public IEditorFormatMapService FormatMapService { get; set; }
 
     public void TextViewCreated(IWpfTextView textView) {
-      var formatMap = FormatMapService.GetClassificationFormatMap(textView);
+      var formatMap = FormatMapService.GetEditorFormatMap(textView);
       textView.Set(new RainbowTipHighlight(textView, formatMap));
     }
   }
@@ -39,10 +39,10 @@ namespace Winterdom.Viasfora.Rainbow {
     public const String LAYER = "viasfora.rainbow.tip.highlight";
     public const String TAG = "viasfora.rainbow.tip";
     private IWpfTextView textView;
-    private IClassificationFormatMap formatMap;
+    private IEditorFormatMap formatMap;
     private IAdornmentLayer layer;
 
-    public RainbowTipHighlight(IWpfTextView textView, IClassificationFormatMap formatMap) {
+    public RainbowTipHighlight(IWpfTextView textView, IEditorFormatMap formatMap) {
       this.textView = textView;
       this.formatMap = formatMap;
       this.layer = textView.GetAdornmentLayer(LAYER);
@@ -90,10 +90,16 @@ namespace Winterdom.Viasfora.Rainbow {
          new Point(Math.Max(textView.ViewportRight, line.TextRight), line.TextBottom)
       );
 
+      var properties = this.formatMap.GetProperties(Constants.RAINBOW_TIP_HIGHLIGHT);
+      rc = CreateVisual(line.Extent, rc, properties);
+    }
+
+    private Rect CreateVisual(SnapshotSpan span, Rect rc, ResourceDictionary properties) {
       Rectangle highlight = new Rectangle();
       highlight.UseLayoutRounding = true;
       highlight.SnapsToDevicePixels = true;
-      highlight.Fill = Brushes.Aqua;
+      highlight.Fill = new SolidColorBrush((Color)properties["BackgroundColor"]);
+      highlight.Opacity = 0.10;
       highlight.Width = rc.Width;
       highlight.Height = rc.Height;
 
@@ -102,9 +108,10 @@ namespace Winterdom.Viasfora.Rainbow {
       Canvas.SetTop(highlight, rc.Top);
 
       layer.AddAdornment(
-         AdornmentPositioningBehavior.TextRelative, line.Extent,
+         AdornmentPositioningBehavior.TextRelative, span,
          TAG, highlight, null
       );
+      return rc;
     }
   }
 }
