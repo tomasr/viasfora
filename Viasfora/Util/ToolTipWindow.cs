@@ -56,9 +56,7 @@ namespace Winterdom.Viasfora.Util {
         CreateTipView();
       }
       this.pointToDisplay = bufferPosition;
-      var line = this.tipView.TextViewLines.GetTextViewLineContainingBufferPosition(bufferPosition);
-      int index = this.tipView.TextViewLines.IndexOf(line);
-      this.tipView.Set(new ViewTipProperty(index));
+      this.tipView.Set(new ViewTipProperty(bufferPosition));
 
       return this.wrapper;
     }

@@ -10,19 +10,20 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Shapes;
 using Winterdom.Viasfora.Tags;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Rainbow {
-  [Export(typeof(IViewTaggerProvider))]
+  [Export(typeof(IWpfTextViewCreationListener))]
   [ContentType("text")]
   [TextViewRole(ViewRoles.ToolTipView)]
   public class RainbowTipHighlightProvider : IWpfTextViewCreationListener {
 
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(RainbowTipHighlight.LAYER)]
-    [Order(After = PredefinedAdornmentLayers.Text, Before=AdornmentLayers.InterLine)]
+    [Order(Before = PredefinedAdornmentLayers.Selection)]
     public AdornmentLayerDefinition HighlightLayer = null;
 
     [Import]
@@ -48,10 +49,17 @@ namespace Winterdom.Viasfora.Rainbow {
 
       AddHighlight();
       this.textView.Closed += OnViewClosed;
-      this.textView.ViewportWidthChanged += OnViewportWidthChanged;
+      this.textView.ViewportWidthChanged += OnViewportSizeChanged;
+      this.textView.ViewportHeightChanged += OnViewportSizeChanged;
+      this.textView.LayoutChanged += OnLayoutChanged;
     }
 
-    private void OnViewportWidthChanged(object sender, EventArgs e) {
+    private void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
+      this.layer.RemoveAllAdornments();
+      AddHighlight();
+    }
+
+    private void OnViewportSizeChanged(object sender, EventArgs e) {
       this.layer.RemoveAllAdornments();
       AddHighlight();
     }
@@ -59,6 +67,8 @@ namespace Winterdom.Viasfora.Rainbow {
     private void OnViewClosed(object sender, EventArgs e) {
       if ( this.textView != null ) {
         this.textView.Closed -= OnViewClosed;
+        this.textView.ViewportWidthChanged -= OnViewportSizeChanged;
+        this.textView.ViewportHeightChanged -= OnViewportSizeChanged;
         this.textView = null;
         this.formatMap = null;
         this.layer = null;
@@ -68,17 +78,26 @@ namespace Winterdom.Viasfora.Rainbow {
     private void AddHighlight() {
       // get size
       ViewTipProperty viewTip = this.textView.Get<ViewTipProperty>();
-      var line = this.textView.TextViewLines[viewTip.LineNumber];
+      if ( viewTip == null ) {
+        return;
+      }
+      var line = this.textView.TextViewLines.GetTextViewLineContainingBufferPosition(viewTip.Position);
+      if ( line == null ) {
+        return;
+      }
       Rect rc = new Rect(
          new Point(textView.ViewportLeft, line.TextTop),
-         new Point(Math.Max(textView.ViewportRight - 2, line.TextRight), line.TextBottom)
+         new Point(Math.Max(textView.ViewportRight, line.TextRight), line.TextBottom)
       );
 
       Rectangle highlight = new Rectangle();
+      highlight.UseLayoutRounding = true;
+      highlight.SnapsToDevicePixels = true;
+      highlight.Fill = Brushes.Aqua;
       highlight.Width = rc.Width;
       highlight.Height = rc.Height;
 
-      //Align the image with the top of the bounds of the text geometry
+      // Align the image with the top of the bounds of the text geometry
       Canvas.SetLeft(highlight, rc.Left);
       Canvas.SetTop(highlight, rc.Top);
 
