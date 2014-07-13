@@ -15,7 +15,7 @@ using Winterdom.Viasfora.Tags;
 using System.Windows.Input;
 using Microsoft.VisualStudio.Text;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IGlyphFactoryProvider))]
   [Export(typeof(IGlyphMouseProcessorProvider))]
   [ContentType("Text")]

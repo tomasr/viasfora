@@ -53,6 +53,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -75,6 +76,7 @@
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
     <Compile Include="Commands\CompleteWordCommand.cs" />
     <Compile Include="Commands\ClearOutliningCommand.cs" />
+    <Compile Include="Commands\ObfuscateTextCommand.cs" />
     <Compile Include="Commands\RemoveOutliningCommand.cs" />
     <Compile Include="Commands\AddOutliningCommand.cs" />
     <Compile Include="Commands\PresentationModeCommand.cs" />
@@ -82,6 +84,13 @@
     <Compile Include="CommonExtensions.cs" />
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Contracts\ILanguage.cs" />
+    <Compile Include="Contracts\ILanguageFactory.cs" />
+    <Compile Include="Contracts\IToolTipWindow.cs" />
+    <Compile Include="Contracts\IToolTipWindowProvider.cs" />
+    <Compile Include="Design\QuickInfoPresenter.xaml.cs">
+      <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Design\StringListConverter.cs" />
     <Compile Include="Design\XamlExtensions.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
@@ -92,6 +101,7 @@
     </Compile>
     <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
+    <Compile Include="EditorFormats\ObfuscatedTextFormat.cs" />
     <Compile Include="EditorFormats\RainbowFormats.cs" />
     <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
     <Compile Include="EditorFormats\XmlClosingTagFormat.cs" />
@@ -107,11 +117,13 @@
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\PythonFirstLineCommentParser.cs" />
     <Compile Include="Languages\Css.cs" />
+    <Compile Include="Languages\LanguageFactory.cs" />
     <Compile Include="Languages\PowerShell.cs" />
     <Compile Include="Languages\DefaultLanguage.cs" />
     <Compile Include="Languages\Json.cs" />
     <Compile Include="Languages\Python.cs" />
     <Compile Include="Languages\Sequences\CssEscapeSequenceParser.cs" />
+    <Compile Include="Languages\Sequences\FSharpEscapeSequenceParser.cs" />
     <Compile Include="Languages\Sequences\PsEscapeSequenceParser.cs" />
     <Compile Include="Languages\Sequences\CEscapeSequenceParser.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />
@@ -121,6 +133,15 @@
     <Compile Include="Margins\DevMarginViewModel.cs" />
     <Compile Include="Margins\DevViewMargin.cs" />
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\TextObfuscationDialogPage.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Options\TextObfuscationDialogPage.Designer.cs">
+      <DependentUpon>TextObfuscationDialogPage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Options\TextObfuscationOptions.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Options\IntellisenseOptions.cs">
@@ -167,6 +188,7 @@
     </Compile>
     <Compile Include="PkgCmdIdList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rainbow\RainbowTipHighlight.cs" />
     <Compile Include="ReSharper.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
@@ -178,40 +200,46 @@
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="Settings\SuoPersistUserSettings.cs" />
     <Compile Include="SnapshotExtensions.cs" />
+    <Compile Include="Tags\ObfuscatedTextTag.cs" />
     <Compile Include="Tags\OutliningGlyphTag.cs" />
     <Compile Include="Tags\RainbowTag.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
     <Compile Include="TextEditor.cs" />
-    <Compile Include="Text\AutoExpandMode.cs" />
-    <Compile Include="Text\AutoExpandRegions.cs" />
+    <Compile Include="Outlining\AutoExpandMode.cs" />
+    <Compile Include="Outlining\AutoExpandRegions.cs" />
     <Compile Include="Text\BoldAsItalics.cs" />
-    <Compile Include="Text\PlainTextCompletionCommandHandler.cs" />
-    <Compile Include="Text\PlainTextCompletionContext.cs" />
-    <Compile Include="Text\PlainTextCompletionSource.cs" />
-    <Compile Include="Text\PlainTextCompletionSourceProvider.cs" />
-    <Compile Include="Text\BraceCache.cs" />
-    <Compile Include="Text\BufferOutlines.cs" />
+    <Compile Include="Intellisense\PlainTextCompletionCommandHandler.cs" />
+    <Compile Include="Intellisense\PlainTextCompletionContext.cs" />
+    <Compile Include="Intellisense\PlainTextCompletionSource.cs" />
+    <Compile Include="Intellisense\PlainTextCompletionSourceProvider.cs" />
+    <Compile Include="Rainbow\BraceCache.cs" />
+    <Compile Include="Outlining\BufferOutlines.cs" />
     <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
     <Compile Include="Text\CurrentColumnAdornment.cs" />
-    <Compile Include="Text\IUserOutlining.cs" />
+    <Compile Include="Outlining\IUserOutlining.cs" />
     <Compile Include="Text\ModelineFactory.cs" />
     <Compile Include="Text\ModeLineProvider.cs" />
-    <Compile Include="Text\OutliningGlyphFactoryProvider.cs" />
-    <Compile Include="Text\OutliningManager.cs" />
+    <Compile Include="Outlining\OutliningGlyphFactoryProvider.cs" />
+    <Compile Include="Outlining\OutliningManager.cs" />
     <Compile Include="Text\PresentationMode.cs" />
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Languages\TypeScript.cs" />
     <Compile Include="Languages\Sql.cs" />
-    <Compile Include="Text\RainbowHighlight.cs" />
-    <Compile Include="Text\RainbowColorTagger.cs" />
-    <Compile Include="Text\RainbowHighlightMode.cs" />
-    <Compile Include="Text\RainbowKeyProcessor.cs" />
-    <Compile Include="Text\RainbowProvider.cs" />
-    <Compile Include="Text\RainbowTaggerProvider.cs" />
+    <Compile Include="Rainbow\RainbowCommandHandler.cs" />
+    <Compile Include="Rainbow\RainbowHighlight.cs" />
+    <Compile Include="Rainbow\RainbowColorTagger.cs" />
+    <Compile Include="Rainbow\RainbowHighlightMode.cs" />
+    <Compile Include="Rainbow\RainbowKeyProcessor.cs" />
+    <Compile Include="Rainbow\RainbowProvider.cs" />
+    <Compile Include="Rainbow\RainbowQuickInfoPresenter.cs" />
+    <Compile Include="Rainbow\RainbowQuickInfoSource.cs" />
+    <Compile Include="Rainbow\RainbowTaggerProvider.cs" />
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
-    <Compile Include="Text\UserOutliningTaggerProvider.cs" />
+    <Compile Include="Rainbow\RainbowQuickInfoController.cs" />
+    <Compile Include="Text\TextObfuscation.cs" />
+    <Compile Include="Outlining\UserOutliningTaggerProvider.cs" />
     <Compile Include="Util\IEscapeSequenceParser.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
@@ -223,6 +251,7 @@
     <Compile Include="Languages\CommentParsers\CBasedFirstLineCommentParser.cs" />
     <Compile Include="Util\IFirstLineCommentParser.cs" />
     <Compile Include="Util\IModeLineParser.cs" />
+    <Compile Include="Util\RegexEntry.cs" />
     <Compile Include="Util\SimpleTokenizer.cs" />
     <Compile Include="Languages\BraceExtractors\SqlBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\CBraceExtractor.cs" />
@@ -234,6 +263,8 @@
     <Compile Include="Util\LineChars.cs" />
     <Compile Include="Util\StringChars.cs" />
     <Compile Include="Languages\BraceExtractors\VbBraceExtractor.cs" />
+    <Compile Include="Util\ToolTipWindow.cs" />
+    <Compile Include="Util\ViewTipProperty.cs" />
     <Compile Include="Util\VsColors.cs" />
     <Compile Include="ViewRoles.cs" />
     <Compile Include="VsfSettings.cs" />
@@ -264,6 +295,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\Winterdom.Viasfora.Util.RegexEntry.datasource" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -313,6 +345,7 @@
     <Resource Include="Resources\OpenBuffer.ico" />
     <Resource Include="Resources\ShowCT.ico" />
     <Resource Include="Resources\PlainTextCompletion.ico" />
+    <Resource Include="Resources\ShowTVR.ico" />
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -336,6 +369,9 @@
     <EmbeddedResource Include="Options\PresentationModeDialogPage.resx">
       <DependentUpon>PresentationModeDialogPage.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Options\TextObfuscationDialogPage.resx">
+      <DependentUpon>TextObfuscationDialogPage.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
@@ -343,6 +379,14 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Design\QuickInfoPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\ListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\TreeViewItem.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

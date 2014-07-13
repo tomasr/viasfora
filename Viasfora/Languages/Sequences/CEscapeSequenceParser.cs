@@ -27,7 +27,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
           char f = text[start + 1];
           // not perfect, but close enough for first version
           if ( f == 'x' || f == 'X' || f == 'u' || f == 'U' ) {
-            while ( (start + len) < text.Length && IsHexDigit(text[start + len + 1]) ) {
+            while ( (start + len) < text.Length && text[start + len + 1].IsHexDigit() ) {
               len++;
             }
           }
@@ -42,9 +42,9 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       }
       return null;
     }
-    private bool IsHexDigit(char c) {
-      if ( Char.IsDigit(c) ) return true;
-      return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+
+    protected void SetStart(int newStart) {
+      this.start = newStart;
     }
   }
 }

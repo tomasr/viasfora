@@ -9,8 +9,9 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Tags;
+using Winterdom.Viasfora.Contracts;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(IViewTaggerProvider))]
   [ContentType(CSharp.ContentType)]
@@ -32,7 +33,9 @@ namespace Winterdom.Viasfora.Text {
   [TagType(typeof(RainbowTag))]
   public class RainbowTaggerProvider : IViewTaggerProvider {
     [Import]
-    internal IClassificationTypeRegistryService ClassificationRegistry = null;
+    public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
+    [Import]
+    public ILanguageFactory LanguageFactory { get; set; }
 
     public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
       // for a complex editor such as the HTMLX editor in VS2013
@@ -40,7 +43,7 @@ namespace Winterdom.Viasfora.Text {
       // so this cannot be a singleton property, but we need to shim it based on
       // the buffer, not the view
       RainbowProvider prov = buffer.Properties.GetOrCreateSingletonProperty(
-        () => new RainbowProvider(view, buffer, ClassificationRegistry)
+        () => new RainbowProvider(view, buffer, this)
         );
       return prov.ColorTagger as ITagger<T>;
     }

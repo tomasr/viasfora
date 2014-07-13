@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Utilities;
 using IVsOutliningManager = Microsoft.VisualStudio.Text.Outlining.IOutliningManager;
 using IVsOutliningManagerService = Microsoft.VisualStudio.Text.Outlining.IOutliningManagerService;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IWpfTextViewCreationListener))]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   [Name("Viasfora.auto-expand-regions")]
@@ -70,6 +70,7 @@ namespace Winterdom.Viasfora.Text {
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
       this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
       this.theView.LayoutChanged -= OnLayoutChanged;
+      this.theView.Closed -= OnViewClosed;
       this.theView = null;
       this.outliningManager = null;
     }

@@ -47,15 +47,26 @@
       <Group guid="guidVsfTextEditorCmdSet" id="groupIntellisenseMenu" priority="0xA101">
         <Parent guid="guidVsfTextEditorCmdSet" id="menuTextEditorMenu"/>
       </Group>
+      <!-- subgroup that contains our rainbow commands -->
+      <Group guid="guidVsfTextEditorCmdSet" id="groupRainbowMenu" priority="0xA102">
+        <Parent guid="guidVsfTextEditorCmdSet" id="menuTextEditorMenu"/>
+      </Group>
     </Groups>
 
     <Buttons>
       <Button guid="guidVsfViewCmdSet" id="cmdidPresentationMode" priority="0x0103" type="Button">
         <Parent guid="guidSHLMainMenu" id="IDG_VS_VIEW_TOOLBARS"/>
-        <Icon guid="guidImages" id="1"/>
+        <Icon guid="guidImages" id="bmpPresentationMode"/>
         <CommandFlag>IconAndText</CommandFlag>
         <Strings>
           <ButtonText>Presentation Mode</ButtonText>
+        </Strings>
+      </Button>
+      <Button guid="guidVsfViewCmdSet" id="cmdidObfuscateText" priority="0x0104" type="Button">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_VIEW_TOOLBARS"/>
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <ButtonText>Obfuscate Text</ButtonText>
         </Strings>
       </Button>
 
@@ -65,7 +76,7 @@
       -->
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidAddOutlining" priority="0x0001" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
-        <Icon guid="guidImages" id="2"/>
+        <Icon guid="guidImages" id="bmpAddOutlining"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>IconAndText</CommandFlag>
         <Strings>
@@ -75,7 +86,7 @@
       </Button>
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidRemoveOutlining" priority="0x0002" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
-        <Icon guid="guidImages" id="3"/>
+        <Icon guid="guidImages" id="bmpRemoveOutlining"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>IconAndText</CommandFlag>
         <Strings>
@@ -100,11 +111,33 @@
           <ButtonText>Complete Plain-Text Word</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidVsfTextEditorCmdSet" id="cmdidRainbowPrevious" priority="0x0020" type="Button">
+        <Parent guid="guidVsfTextEditorCmdSet" id="groupRainbowMenu"/>
+        <Icon guid="guidImages" id="bmpRainbowPrevious"/>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <CommandName>Rainbow Previous</CommandName>
+          <ButtonText>Rainbow Previous</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidVsfTextEditorCmdSet" id="cmdidRainbowNext" priority="0x0020" type="Button">
+        <Parent guid="guidVsfTextEditorCmdSet" id="groupRainbowMenu"/>
+        <Icon guid="guidImages" id="bmpRainbowNext"/>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <CommandName>Rainbow Next</CommandName>
+          <ButtonText>Rainbow Next</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <Bitmaps>
       <Bitmap guid="guidImages" href="Resources\cmdImages.bmp"
-              usedList="bmpPresentationMode, bmpAddOutlining, bmpRemoveOutlining"/>
+              usedList="bmpPresentationMode, bmpAddOutlining, bmpRemoveOutlining, bmpRainbowPrevious, bmpRainbowNext"/>
     </Bitmaps>
   </Commands>
 
@@ -121,11 +154,29 @@
                 editor="guidTextEditor"
                 mod1="Control" key1="E"
                 mod2="Control" key2="T" />
+
     <KeyBinding guid="guidVsfTextEditorCmdSet" 
                 id="cmdidCompleteWord"
                 editor="guidTextEditor"
                 mod1="Control" key1="K"
                 mod2="Control" key2="T" />
+
+    <KeyBinding guid="guidVsfViewCmdSet" 
+                id="cmdidObfuscateText"
+                editor="guidTextEditor"
+                mod1="Control" key1="E"
+                mod2="Control" key2="O" />
+
+    <KeyBinding guid="guidVsfTextEditorCmdSet" 
+                id="cmdidRainbowPrevious"
+                editor="guidTextEditor"
+                mod1="Control Alt" key1="VK_OEM_COMMA"
+                />
+    <KeyBinding guid="guidVsfTextEditorCmdSet" 
+                id="cmdidRainbowNext"
+                editor="guidTextEditor"
+                mod1="Control Alt" key1="VK_OEM_PERIOD"
+                />
   </KeyBindings>
 
   <Symbols>
@@ -135,6 +186,7 @@
     <!-- top level View menu commands -->
     <GuidSymbol name="guidVsfViewCmdSet" value="{14e93c73-144b-4909-9cdc-694be6125e8c}">
       <IDSymbol name="cmdidPresentationMode" value="0x1020" />
+      <IDSymbol name="cmdidObfuscateText" value="0x1021" />
     </GuidSymbol>
 
     <!-- text editor right-click menu commands -->
@@ -143,16 +195,21 @@
       <IDSymbol name="groupTextEditorMenu" value="0x0101" />
       <IDSymbol name="groupEditMenu" value="0x0102" />
       <IDSymbol name="groupIntellisenseMenu" value="0x0104" />
+      <IDSymbol name="groupRainbowMenu" value="0x0105" />
       <IDSymbol name="cmdidAddOutlining" value="0x1101" />
       <IDSymbol name="cmdidRemoveOutlining" value="0x1102" />
       <IDSymbol name="cmdidClearOutlining" value="0x1103" />
       <IDSymbol name="cmdidCompleteWord" value="0x1401" />
+      <IDSymbol name="cmdidRainbowPrevious" value="0x1501" />
+      <IDSymbol name="cmdidRainbowNext" value="0x1502" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{04d40cc8-b432-4d13-9e6e-436222ef2930}">
       <IDSymbol name="bmpPresentationMode" value="1" />
       <IDSymbol name="bmpAddOutlining" value="2" />
       <IDSymbol name="bmpRemoveOutlining" value="3" />
+      <IDSymbol name="bmpRainbowPrevious" value="4" />
+      <IDSymbol name="bmpRainbowNext" value="5" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

@@ -21,6 +21,16 @@ namespace Winterdom.Viasfora {
       }
       return null;
     }
+    public static List<T> ListFromJson<T>(this String json) {
+      var list = JsonConvert.DeserializeObject<List<T>>(json);
+      if ( list == null ) {
+        list = new List<T>();
+      }
+      return list;
+    }
+    public static String ListToJson<T>(this IEnumerable<T> elements) {
+      return JsonConvert.SerializeObject(elements);
+    }
 
     private static bool ReadExpected(this JsonTextReader reader, JsonToken expected) {
       if ( reader.Read() ) {

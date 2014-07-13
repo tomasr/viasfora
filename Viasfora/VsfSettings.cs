@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Text;
 
@@ -34,6 +35,8 @@ namespace Winterdom.Viasfora {
     const String MODELINES_ENABLED = "ModelinesEnabled";
     const String MODELINES_NUMLINES = "ModelinesNumLines";
     const String DEVMARGIN_ENABLED = "DeveloperMarginEnabled";
+
+    const String TEXTOBF_REGEXES = "TextObfuscationRegexes";
 
     private static ISettingsStore settings = VsfPackage.GetGlobalSettingsStore();
     public static event EventHandler SettingsUpdated;
@@ -79,7 +82,7 @@ namespace Winterdom.Viasfora {
       set { SetValue(RAINBOW_CTRL_TIMER, value); }
     }
     public static RainbowHighlightMode RainbowHighlightMode {
-      get { return GetEnum(RAINBOW_HIGHLIGHT_MODE, RainbowHighlightMode.TrackInsertionPoint); }
+      get { return GetEnum(RAINBOW_HIGHLIGHT_MODE, RainbowHighlightMode.TrackNextScope); }
       set { SetValue(RAINBOW_HIGHLIGHT_MODE, value); }
     }
     public static bool PresentationModeEnabled {
@@ -118,13 +121,17 @@ namespace Winterdom.Viasfora {
       get { return GetBoolean(TC_HANDLE_COMPLETE_WORD, false); }
       set { SetValue(TC_HANDLE_COMPLETE_WORD, value); }
     }
-    public static Text.AutoExpandMode AutoExpandRegions {
-      get { return GetEnum(AUTO_EXPAND_REGIONS, Text.AutoExpandMode.No); }
+    public static Outlining.AutoExpandMode AutoExpandRegions {
+      get { return GetEnum(AUTO_EXPAND_REGIONS, Outlining.AutoExpandMode.No); }
       set { SetValue(AUTO_EXPAND_REGIONS, value); }
     }
     public static bool BoldAsItalicsEnabled {
       get { return GetBoolean(BOLD_AS_ITALICS_ENABLED, false); }
       set { SetValue(BOLD_AS_ITALICS_ENABLED, value); }
+    }
+    public static String TextObfuscationRegexes {
+      get { return GetValue(TEXTOBF_REGEXES, ""); }
+      set { SetValue(TEXTOBF_REGEXES, value); }
     }
 
     public static void Save() {

@@ -4,22 +4,22 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Util;
+using Winterdom.Viasfora.Contracts;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
   public class BraceCache {
     private List<BracePos> braces = new List<BracePos>();
     private SortedList<char, char> braceList = new SortedList<char, char>();
     public ITextSnapshot Snapshot { get; private set; }
     public int LastParsedPosition { get; private set; }
-    public LanguageInfo Language { get; private set; }
+    public ILanguage Language { get; private set; }
     private IBraceExtractor braceExtractor;
 
-    public BraceCache(ITextSnapshot snapshot, IContentType contentType) {
+    public BraceCache(ITextSnapshot snapshot, ILanguage language) {
       this.Snapshot = snapshot;
       this.LastParsedPosition = -1;
-      this.Language = VsfPackage.LookupLanguage(contentType);
+      this.Language = language;
       if ( this.Language != null ) {
         this.braceExtractor = this.Language.NewBraceExtractor();
 
@@ -71,6 +71,25 @@ namespace Winterdom.Viasfora.Text {
       if ( this.Language == null ) return new BracePos[0];
       SnapshotSpan span = new SnapshotSpan(Snapshot, position, Snapshot.Length - position);
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
+    }
+
+    // returns the brace pair when the point is already a brace
+    public Tuple<BracePos, BracePos> GetBracePair(SnapshotPoint point) {
+      if ( point.Snapshot != this.Snapshot || point.Position >= Snapshot.Length ) {
+        return null;
+      }
+      int index = FindIndexOfBraceAtOrAfter(point.Position);
+      if ( index < 0 ) return null;
+      BracePos one = this.braces[index];
+      if ( one.Position != point.Position ) {
+        return null;
+      }
+
+      if ( IsOpeningBrace(one.Brace) ) {
+        return GetBracePairFromPosition(point, RainbowHighlightMode.TrackNextScope);
+      } else {
+        return GetBracePairFromPosition(point, RainbowHighlightMode.TrackInsertionPoint);
+      }
     }
 
     public Tuple<BracePos, BracePos> GetBracePairFromPosition(SnapshotPoint point, RainbowHighlightMode mode) {

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
-using System.Windows.Media.Imaging;
-using System.Collections.ObjectModel;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Intellisense {
   public class PlainTextCompletionSource : ICompletionSource {
     private ITextBuffer theBuffer;
     private ITextStructureNavigator navigator;

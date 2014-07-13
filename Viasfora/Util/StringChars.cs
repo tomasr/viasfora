@@ -8,6 +8,8 @@ namespace Winterdom.Viasfora.Util {
     private String text;
     private int position;
     private int length;
+    private int mark;
+    const int NO_MARK = -1;
     const char EOT = '\0';
     public int Position {
       get { return position; }
@@ -25,6 +27,7 @@ namespace Winterdom.Viasfora.Util {
       this.text = text;
       this.length = text.Length;
       this.position = start;
+      this.mark = NO_MARK;
     }
 
     public char Char() {
@@ -49,6 +52,19 @@ namespace Winterdom.Viasfora.Util {
 
     public void SkipRemainder() {
       this.position = this.length;
+    }
+
+    public void Mark() {
+      this.mark = Position;
+    }
+    public void ClearMark() {
+      this.mark = NO_MARK;
+    }
+    public void BackToMark() {
+      if ( this.mark != NO_MARK ) {
+        this.position = this.mark;
+        ClearMark();
+      }
     }
 
     public String PreviousToken() {

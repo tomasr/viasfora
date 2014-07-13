@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 using Winterdom.Viasfora.Tags;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
   class RainbowColorTagger : ITagger<RainbowTag> {
     private RainbowProvider provider;
     private IClassificationType[] rainbowTags;

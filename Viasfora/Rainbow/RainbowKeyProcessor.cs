@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Util;
 using Microsoft.VisualStudio.Text;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(IKeyProcessorProvider))]
   [Name("viasfora.rainbow.key.provider")]
@@ -73,6 +73,7 @@ namespace Winterdom.Viasfora.Text {
 
     private void OnViewClosed(object sender, EventArgs e) {
       this.theView.LostAggregateFocus -= OnLostFocus;
+      this.theView.Closed -= OnViewClosed;
     }
 
     private void OnLostFocus(object sender, EventArgs e) {
@@ -85,7 +86,7 @@ namespace Winterdom.Viasfora.Text {
       startedEffect = true;
 
       SnapshotPoint bufferPos;
-      if ( !TryMapCaretToBuffer(view, out bufferPos) ) {
+      if ( !RainbowProvider.TryMapCaretToBuffer(view, out bufferPos) ) {
         return;
       }
 
@@ -99,8 +100,8 @@ namespace Winterdom.Viasfora.Text {
       SnapshotPoint opening = braces.Item1.ToPoint(bufferPos.Snapshot);
       SnapshotPoint closing = braces.Item2.ToPoint(bufferPos.Snapshot);
 
-      if ( TryMapToView(view, opening, out opening) 
-        && TryMapToView(view, closing, out closing) ) {
+      if ( RainbowProvider.TryMapToView(view, opening, out opening) 
+        && RainbowProvider.TryMapToView(view, closing, out closing) ) {
         RainbowHighlight highlight = RainbowHighlight.Get(view);
         if ( highlight != null ) {
           highlight.Start(opening, closing, braces.Item1.Depth);
@@ -115,35 +116,5 @@ namespace Winterdom.Viasfora.Text {
       }
       startedEffect = false;
     }
-
-    private bool TryMapToView(ITextView view, SnapshotPoint pos, out SnapshotPoint result) {
-      result = new SnapshotPoint();
-      var target = view.TextBuffer;
-      var temp = view.BufferGraph.MapUpToBuffer(
-        pos, PointTrackingMode.Negative,
-        PositionAffinity.Successor, target
-      );
-      if ( temp != null ) {
-        result = temp.Value;
-        return true;
-      }
-      return false;
-    }
-
-    private bool TryMapCaretToBuffer(ITextView view, out SnapshotPoint pos) {
-      var caret = view.Caret.Position.BufferPosition;
-      pos = new SnapshotPoint();
-      var result = view.BufferGraph.MapDownToFirstMatch(
-        caret, PointTrackingMode.Negative,
-        snapshot => snapshot.TextBuffer.Has<RainbowProvider>(),
-        PositionAffinity.Successor
-        );
-      if ( result != null ) {
-        pos = result.Value;
-        return true;
-      }
-      return false;
-    }
-
   }
 }

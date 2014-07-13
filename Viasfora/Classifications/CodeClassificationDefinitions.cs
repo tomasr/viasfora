@@ -40,5 +40,8 @@ namespace Winterdom.Viasfora.Classifications {
     [Export, Name(Constants.RAINBOW_4)]
     internal static ClassificationTypeDefinition Rainbow4ClassificationType = null;
 
+    [Export, Name(Constants.OBFUSCATED_TEXT)]
+    internal static ClassificationTypeDefinition ObfuscatedTextType = null;
+
   } 
 }

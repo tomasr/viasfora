@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
   public enum RainbowHighlightMode {
     /// <summary>
     /// The caret point is used as the "insertion" point

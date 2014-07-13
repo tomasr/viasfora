@@ -28,6 +28,7 @@ namespace Winterdom.Viasfora.Margins {
       UpdateVisibility();
       InitializeTextView();
       RefreshBufferGraphList();
+      this.model.RefreshView(wpfTextViewHost.TextView);
     }
 
     public FrameworkElement VisualElement {
@@ -64,6 +65,7 @@ namespace Winterdom.Viasfora.Margins {
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
       if ( this.wpfTextViewHost != null ) {
         this.wpfTextViewHost.Closed -= OnTextViewHostClosed;
+        this.wpfTextViewHost = null;
       }
       if ( this.textView != null ) {
         this.textView.BufferGraph.GraphBuffersChanged -= OnGraphBuffersChanged;
@@ -76,6 +78,7 @@ namespace Winterdom.Viasfora.Margins {
         this.visual.ViewBuffer -= OnViewBuffer;
         this.visual = null;
       }
+      this.extensionRegistry = null;
     }
 
     private void OnTextViewHostClosed(object sender, EventArgs e) {
@@ -102,7 +105,9 @@ namespace Winterdom.Viasfora.Margins {
 
     private void OnViewBuffer(object sender, EventArgs e) {
       var buffer = GetSelectedBuffer();
-      OpenBufferInEditor(buffer);
+      if ( buffer != null ) {
+        OpenBufferInEditor(buffer);
+      }
     }
 
     private void OnSettingsUpdated(object sender, EventArgs e) {
@@ -113,6 +118,9 @@ namespace Winterdom.Viasfora.Margins {
 
     private void UpdateCaretPosition(CaretPosition caret) {
       ITextBuffer currentBuffer = GetSelectedBuffer();
+      if ( currentBuffer == null ) {
+        return;
+      }
       SnapshotPoint? bufferPos = null;
 
       if ( currentBuffer == caret.BufferPosition.Snapshot.TextBuffer ) {
@@ -143,6 +151,10 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     private ITextBuffer GetSelectedBuffer() {
+      if ( this.textView == null || this.textView.BufferGraph == null )
+        return null;
+      if ( this.model.SelectedBuffer == null )
+        return null;
       var buffers = this.textView.BufferGraph.GetTextBuffers(b => true);
       int selectedIndex = this.model.SelectedBuffer.Index;
       foreach ( var b in buffers ) {
@@ -151,15 +163,15 @@ namespace Winterdom.Viasfora.Margins {
       }
       return null;
     }
-    private void OpenBufferInEditor(ITextBuffer b) {
+    private void OpenBufferInEditor(ITextBuffer buffer) {
       try {
         String extension = extensionRegistry
-          .GetExtensionsForContentType(b.ContentType)
+          .GetExtensionsForContentType(buffer.ContentType)
           .FirstOrDefault();
         if ( String.IsNullOrEmpty(extension) ) {
-          TextEditor.OpenBufferInPlainTextEditorAsReadOnly(b);
+          TextEditor.OpenBufferInPlainTextEditorAsReadOnly(buffer);
         } else {
-          TextEditor.OpenBufferInEditorAsReadOnly(b, extension);
+          TextEditor.OpenBufferInEditorAsReadOnly(buffer, extension);
         }
       } catch ( Exception ex ) {
         MessageBox.Show(ex.Message, "Viasfora Error", MessageBoxButton.OK, MessageBoxImage.Error);

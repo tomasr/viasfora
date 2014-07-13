@@ -15,8 +15,8 @@ using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Editor;
 using Winterdom.Viasfora.Commands;
-using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Settings;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -26,6 +26,7 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.PresentationModeOptionsPage), "Viasfora", "Presentation Mode", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.IntellisenseOptions), "Viasfora", "Intellisense", 0, 0, true)]
+  [ProvideOptionPage(typeof(Options.TextObfuscationOptions), "Viasfora", "Text Hiding", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.AllLanguagesOptionsPage), "Viasfora", "Languages", 0, 0, false)]
   [ProvideOptionPage(typeof(Options.CSharpOptionsPage), "Viasfora\\Languages", "C#", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.CppOptionsPage), "Viasfora\\Languages", "C/C++", 0, 0, true)]
@@ -40,8 +41,6 @@ namespace Winterdom.Viasfora {
   public sealed class VsfPackage : Package {
     public const String USER_OPTIONS_KEY = "VsfUserOptions";
 
-    private static readonly LanguageInfo DefaultLanguage = new DefaultLanguage();
-    private static List<LanguageInfo> languageList;
     public static VsfPackage Instance { get; private set; }
 
     public static bool PresentationModeTurnedOn { get; set; }
@@ -50,29 +49,6 @@ namespace Winterdom.Viasfora {
     public Version VsVersion { get; private set; }
     private IVsActivityLog activityLog;
     private List<VsCommand> commands = new List<VsCommand>();
-
-    static VsfPackage() {
-      languageList = new List<LanguageInfo>();
-      languageList.Add(new Cpp());
-      languageList.Add(new CSharp());
-      languageList.Add(new JScript());
-      languageList.Add(new JSON());
-      languageList.Add(new VB());
-      languageList.Add(new FSharp());
-      languageList.Add(new Sql());
-      languageList.Add(new TypeScript());
-      languageList.Add(new Python());
-      languageList.Add(new PowerShell());
-      languageList.Add(new Css());
-    }
-
-    public static LanguageInfo LookupLanguage(IContentType contentType) {
-      foreach ( LanguageInfo li in languageList ) {
-        if ( li.MatchesContentType(contentType) )
-          return li;
-      }
-      return new DefaultLanguage();
-    }
 
     public static int GetPresentationModeZoomLevel() {
       return PresentationModeTurnedOn
@@ -130,6 +106,7 @@ namespace Winterdom.Viasfora {
 
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
       commands.Add(new PresentationModeCommand(this, mcs));
+      commands.Add(new ObfuscateTextCommand(this, mcs));
     }
     private void InitializeTextEditorCommands(OleMenuCommandService mcs) {
       commands.Add(new AddOutliningCommand(this, mcs));

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
+  [Export(typeof(ILanguage))]
   class VB : LanguageInfo {
     public const String ContentType = "Basic";
     public const String VBScriptContentType = "vbscript";

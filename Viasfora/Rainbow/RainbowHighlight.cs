@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Utilities;
 using System.Windows.Shapes;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(IWpfTextViewCreationListener))]
   [ContentType("text")]

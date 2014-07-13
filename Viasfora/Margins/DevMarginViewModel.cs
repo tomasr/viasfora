@@ -7,10 +7,12 @@ using System.Text;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.VisualStudio.Text.Editor;
 
 namespace Winterdom.Viasfora.Margins {
   public class DevMarginViewModel : INotifyPropertyChanged {
     private ObservableCollection<BufferInfoViewModel> bufferGraph = new ObservableCollection<BufferInfoViewModel>();
+    private ObservableCollection<String> textViewRoles = new ObservableCollection<string>();
     private String bufferPosition;
     private BufferInfoViewModel selectedBuffer;
     public ReadOnlyObservableCollection<BufferInfoViewModel> BufferGraph {
@@ -24,9 +26,18 @@ namespace Winterdom.Viasfora.Margins {
       get { return selectedBuffer; }
       set { selectedBuffer = value; NotifyChanged("SelectedBuffer"); }
     }
+    public ObservableCollection<String> TextViewRoles {
+      get { return this.textViewRoles; }
+    }
 
     public event PropertyChangedEventHandler PropertyChanged;
 
+    public void RefreshView(ITextView view) {
+      this.TextViewRoles.Clear();
+      foreach ( var role in view.Roles ) {
+        this.TextViewRoles.Add(role);
+      }
+    }
     public void RefreshBuffers(IBufferGraph graph) {
       this.bufferGraph.Clear();
       var buffers = graph.GetTextBuffers(b => true);

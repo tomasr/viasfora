@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
@@ -25,6 +26,9 @@ namespace Winterdom.Viasfora.Languages {
     }
     protected override string KeyName {
       get { return "Text"; }
+    }
+    public override bool MatchesContentType(IContentType contentType) {
+      return true;
     }
     public override IBraceExtractor NewBraceExtractor() {
       return new NoBraceExtractor();

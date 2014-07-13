@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Language.Intellisense;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Intellisense {
   // This is just a way for our completion 
   // command handler to signal the completion
   // source that it should return data.

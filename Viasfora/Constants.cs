@@ -23,6 +23,10 @@ namespace Winterdom.Viasfora {
     public const String RAINBOW_8 = RAINBOW + "8";
     public const String RAINBOW_9 = RAINBOW + "9";
 
+    public const String RAINBOW_TIP_HIGHLIGHT = "viasfora.rainbow.tip.highlight";
+
+    public const String OBFUSCATED_TEXT = "viasfora.text.obfuscated";
+
     public const String CT_XML = "XML";
     public const String CT_XAML = "XAML";
     public const String CT_HTML = "HTML";
@@ -36,5 +40,8 @@ namespace Winterdom.Viasfora {
 
     public const String STRING_COLLECTION_EDITOR = "System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
     public static int S_OK = 0;
+
+
+    public const String WordWrapStyleId = "TextView/WordWrapStyle";
   }
 }

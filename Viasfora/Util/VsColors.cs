@@ -97,7 +97,7 @@ namespace Winterdom.Viasfora.Util {
 
       // these don't really seem to have a match in VS2010...
       // so just watch it!
-      ToolTipBrushKey = Get("ToolTipBrushKey", null);
+      ToolTipBrushKey = Get("ToolTipBrushKey", SystemColors.ControlLightBrushKey);
       ToolTipTextBrushKey = Get("ToolTipTextBrushKey", SystemColors.InfoTextBrushKey);
       PanelHyperlinkBrushKey = Get("PanelHyperlinkBrushKey", SystemColors.HotTrackBrushKey);
     }

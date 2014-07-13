@@ -9,15 +9,18 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Tags;
 
-namespace Winterdom.Viasfora.Text {
+namespace Winterdom.Viasfora.Rainbow {
 
   class RainbowProvider  {
     public ITextBuffer TextBuffer { get; private set; }
     public BraceCache BraceCache { get; private set; }
     public ITextView TextView { get; private set; }
     public IClassificationTypeRegistryService Registry { get; private set; }
+    public ILanguageFactory LanguageFactory { get; private set; }
+    public RainbowTaggerProvider Provider { get; private set; }
     public Dispatcher Dispatcher { get; private set; }
     public RainbowColorTagger ColorTagger { get; private set; }
 
@@ -28,10 +31,11 @@ namespace Winterdom.Viasfora.Text {
     internal RainbowProvider(
           ITextView view,
           ITextBuffer buffer,
-          IClassificationTypeRegistryService registry) {
+          RainbowTaggerProvider provider) {
       this.TextView = view;
       this.TextBuffer = buffer;
-      this.Registry = registry;
+      this.Registry = provider.ClassificationRegistry;
+      this.LanguageFactory = provider.LanguageFactory;
       this.ColorTagger = new RainbowColorTagger(this);
 
       SetLanguage(buffer.ContentType);
@@ -44,6 +48,37 @@ namespace Winterdom.Viasfora.Text {
       this.Dispatcher = Dispatcher.CurrentDispatcher;
 
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
+    }
+
+    public static bool TryMapCaretToBuffer(ITextView view, out SnapshotPoint pos) {
+      var caret = view.Caret.Position.BufferPosition;
+      return TryMapPosToBuffer(view, caret, out pos);
+    }
+    public static bool TryMapPosToBuffer(ITextView view, SnapshotPoint viewPos, out SnapshotPoint pos) {
+      pos = new SnapshotPoint();
+      var result = view.BufferGraph.MapDownToFirstMatch(
+        viewPos, PointTrackingMode.Negative,
+        snapshot => snapshot.TextBuffer.Has<RainbowProvider>(),
+        PositionAffinity.Successor
+        );
+      if ( result != null ) {
+        pos = result.Value;
+        return true;
+      }
+      return false;
+    }
+    public static bool TryMapToView(ITextView view, SnapshotPoint pos, out SnapshotPoint result) {
+      result = new SnapshotPoint();
+      var target = view.TextBuffer;
+      var temp = view.BufferGraph.MapUpToBuffer(
+        pos, PointTrackingMode.Negative,
+        PositionAffinity.Successor, target
+      );
+      if ( temp != null ) {
+        result = temp.Value;
+        return true;
+      }
+      return false;
     }
 
     private void OnViewClosed(object sender, EventArgs e) {
@@ -131,7 +166,8 @@ namespace Winterdom.Viasfora.Text {
 
     private void SetLanguage(IContentType contentType) {
       if ( TextBuffer != null ) {
-        this.BraceCache = new BraceCache(this.TextBuffer.CurrentSnapshot, contentType);
+        var lang = LanguageFactory.TryCreateLanguage(contentType);
+        this.BraceCache = new BraceCache(this.TextBuffer.CurrentSnapshot, lang);
       }
     }
 

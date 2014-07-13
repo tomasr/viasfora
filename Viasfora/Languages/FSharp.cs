@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
-  class FSharp : LanguageInfo {
+  [Export(typeof(ILanguage))]
+  public class FSharp : LanguageInfo {
     public const String ContentType = "F#";
     static readonly String[] KEYWORDS = {
          "if", "then", "elif", "else", "match", "with",
@@ -43,7 +46,7 @@ namespace Winterdom.Viasfora.Languages {
       return new FSharpBraceExtractor(this);
     }
     public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
-      return new CEscapeSequenceParser(text);
+      return new FSharpEscapeSequenceParser(text);
     }
   }
 }
