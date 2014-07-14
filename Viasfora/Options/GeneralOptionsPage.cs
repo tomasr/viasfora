@@ -22,6 +22,7 @@ namespace Winterdom.Viasfora.Options {
       VsfSettings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
       VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
+      VsfSettings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
       VsfSettings.RainbowHighlightMode = RainbowHighlightMode;
       VsfSettings.DevMarginEnabled = DevMarginEnabled;
       VsfSettings.AutoExpandRegions = AutoExpandRegions;
@@ -42,6 +43,7 @@ namespace Winterdom.Viasfora.Options {
       EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
       RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
       RainbowHighlightMode = VsfSettings.RainbowHighlightMode;
+      RainbowToolTipsEnabled = VsfSettings.RainbowToolTipsEnabled;
       DevMarginEnabled = VsfSettings.DevMarginEnabled;
       AutoExpandRegions = VsfSettings.AutoExpandRegions;
       BoldAsItalicsEnabled = VsfSettings.BoldAsItalicsEnabled;
@@ -96,6 +98,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Controls how the caret position is used to identify braces to highlight.")]
     [Category("Rainbow Braces")]
     public RainbowHighlightMode RainbowHighlightMode { get; set; }
+
+    [LocDisplayName("Enable Rainbow ToolTips")]
+    [Description("Show a tooltip highlighting matching braces when you hover the mouse over a rainbow brace")]
+    [Category("Rainbow Braces")]
+    public bool RainbowToolTipsEnabled { get; set; }
 
 
     [LocDisplayName("Enable Developer Margin")]

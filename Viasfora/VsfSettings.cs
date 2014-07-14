@@ -28,6 +28,7 @@ namespace Winterdom.Viasfora {
     const String RAINBOW_TAGS_ENABLED = "RainbowTagsEnabled";
     const String RAINBOW_CTRL_TIMER = "RainbowCtrlTimer";
     const String RAINBOW_HIGHLIGHT_MODE = "RainbowHighlightMode";
+    const String RAINBOW_TOOLTIPS_ENABLED = "RainbowToolTipsEnabled";
 
     const String PRESENTATION_MODE_ENABLED = "PresentationModeEnabled";
     const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
@@ -84,6 +85,10 @@ namespace Winterdom.Viasfora {
     public static RainbowHighlightMode RainbowHighlightMode {
       get { return GetEnum(RAINBOW_HIGHLIGHT_MODE, RainbowHighlightMode.TrackNextScope); }
       set { SetValue(RAINBOW_HIGHLIGHT_MODE, value); }
+    }
+    public static bool RainbowToolTipsEnabled {
+      get { return GetBoolean(RAINBOW_TOOLTIPS_ENABLED, true); }
+      set { SetValue(RAINBOW_TOOLTIPS_ENABLED, value); }
     }
     public static bool PresentationModeEnabled {
       get { return GetBoolean(PRESENTATION_MODE_ENABLED, true); }

@@ -38,6 +38,9 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public void AugmentQuickInfoSession(IQuickInfoSession session, IList<object> quickInfoContent, out ITrackingSpan applicableToSpan) {
       applicableToSpan = null;
+      if ( !VsfSettings.RainbowToolTipsEnabled ) {
+        return;
+      }
       SnapshotPoint? triggerPoint = session.GetTriggerPoint(textBuffer.CurrentSnapshot);
       if ( !triggerPoint.HasValue ) {
         return;
