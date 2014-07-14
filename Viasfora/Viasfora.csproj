@@ -237,7 +237,6 @@
     <Compile Include="Languages\CommentParsers\SqlBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\FSharpBasedFirstLineCommentParser.cs" />
     <Compile Include="Languages\CommentParsers\VbFirstLineCommentParser.cs" />
-    <Compile Include="Rainbow\RainbowQuickInfoController.cs" />
     <Compile Include="Text\TextObfuscation.cs" />
     <Compile Include="Outlining\UserOutliningTaggerProvider.cs" />
     <Compile Include="Util\IEscapeSequenceParser.cs" />

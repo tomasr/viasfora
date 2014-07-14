@@ -17,7 +17,7 @@ namespace Winterdom.Viasfora.Rainbow {
     public IIntellisensePresenter TryCreateIntellisensePresenter(IIntellisenseSession session) {
       IQuickInfoSession qiSession = session as IQuickInfoSession;
       if ( qiSession != null ) {
-        if ( qiSession.Get<IToolTipWindow>() != null ) {
+        if ( qiSession.Get<RainbowTipProperty>() != null ) {
           return new RainbowQuickInfoPresenter(qiSession);
         }
       }

@@ -18,6 +18,8 @@ namespace Winterdom.Viasfora.Rainbow {
   [Name("viasfora.rainbow.qisource")]
   [ContentType("text")]
   public class RainbowQuickInfoSourceProvider : IQuickInfoSourceProvider {
+    [Import]
+    public IToolTipWindowProvider ToolTipProvider { get; set; }
 
     public IQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer) {
       return new RainbowQuickInfoSource(textBuffer, this);
@@ -27,6 +29,7 @@ namespace Winterdom.Viasfora.Rainbow {
   public class RainbowQuickInfoSource : IQuickInfoSource {
     private ITextBuffer textBuffer;
     private RainbowQuickInfoSourceProvider provider;
+    private IToolTipWindow toolTipWindow;
 
     public RainbowQuickInfoSource(ITextBuffer textBuffer, RainbowQuickInfoSourceProvider provider) {
       this.textBuffer = textBuffer;
@@ -40,24 +43,41 @@ namespace Winterdom.Viasfora.Rainbow {
         return;
       }
 
-      SnapshotPoint? otherBrace = FindOtherBrace(triggerPoint.Value);
-      if ( otherBrace == null ) {
+      SnapshotPoint? otherBrace;
+      if ( !FindOtherBrace(triggerPoint.Value, out otherBrace) ) {
+        // triggerPoint is not a brace
+        return;
+      }
+      if ( !otherBrace.HasValue ) {
         TextEditor.DisplayMessageInStatusBar("No matching brace found.");
         return;
       }
       if ( IsTooClose(triggerPoint.Value, otherBrace.Value) ) {
         return;
       }
+      session.Dismissed += OnSessionDismissed;
 
-      var toolTipWindow = session.Get<IToolTipWindow>();
-      if ( toolTipWindow != null ) {
-        var span = new SnapshotSpan(triggerPoint.Value, 1);
-        applicableToSpan = span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgePositive);
+      if ( toolTipWindow == null ) {
+        toolTipWindow = this.provider.ToolTipProvider.CreateToolTip(session.TextView);
+        toolTipWindow.SetSize(60, 5);
+      }
 
-        var element = toolTipWindow.GetWindow(otherBrace.Value);
-        if ( element != null ) {
-          quickInfoContent.Add(element);
-        }
+      var span = new SnapshotSpan(triggerPoint.Value, 1);
+      applicableToSpan = span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgePositive);
+
+      var element = toolTipWindow.GetWindow(otherBrace.Value);
+      if ( element != null ) {
+        quickInfoContent.Add(element);
+        session.Set(new RainbowTipProperty());
+      }
+    }
+
+    private void OnSessionDismissed(object sender, EventArgs e) {
+      IQuickInfoSession session = (IQuickInfoSession)sender;
+      session.Dismissed -= OnSessionDismissed;
+      if ( this.toolTipWindow != null ) {
+        this.toolTipWindow.Dispose();
+        this.toolTipWindow = null;
       }
     }
 
@@ -66,24 +86,33 @@ namespace Winterdom.Viasfora.Rainbow {
       return distance < 100;
     }
 
-    private SnapshotPoint? FindOtherBrace(SnapshotPoint brace) {
+    // returns true if brace is actually a brace.
+    private bool FindOtherBrace(SnapshotPoint possibleBrace, out SnapshotPoint? otherBrace) {
+      otherBrace = null;
       var rainbow = this.textBuffer.Get<RainbowProvider>();
       if ( rainbow == null ) {
-        return null;
+        return false;
       }
 
-      var bracePair = rainbow.BraceCache.GetBracePair(brace);
+      if ( !rainbow.BraceCache.Language.BraceList.Contains(possibleBrace.GetChar()) ) {
+        return false;
+      }
+      var bracePair = rainbow.BraceCache.GetBracePair(possibleBrace);
       if ( bracePair == null ) {
-        return null;
+        return true;
       }
-      if ( brace.Position == bracePair.Item1.Position ) {
-        return bracePair.Item2.ToPoint(brace.Snapshot);
+      if ( possibleBrace.Position == bracePair.Item1.Position ) {
+        otherBrace = bracePair.Item2.ToPoint(possibleBrace.Snapshot);
       } else {
-        return bracePair.Item1.ToPoint(brace.Snapshot);
+        otherBrace = bracePair.Item1.ToPoint(possibleBrace.Snapshot);
       }
+      return true;
     }
 
     public void Dispose() {
     }
+  }
+
+  public class RainbowTipProperty {
   }
 }
