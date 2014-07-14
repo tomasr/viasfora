@@ -81,8 +81,10 @@ namespace Winterdom.Viasfora.Text {
       }
     }
     private void OnBufferPostChanged(object sender, EventArgs e) {
-      layer.RemoveAllAdornments();
-      this.CreateVisuals(this.view.Caret.Position.VirtualBufferPosition);
+      if ( this.view != null ) {
+        layer.RemoveAllAdornments();
+        this.CreateVisuals(this.view.Caret.Position.VirtualBufferPosition);
+      }
     }
     private void OnViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       if ( e.VerticalTranslation ) {
