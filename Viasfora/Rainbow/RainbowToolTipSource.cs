@@ -15,23 +15,23 @@ using Microsoft.VisualStudio.Shell;
 namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(IQuickInfoSourceProvider))]
-  [Name("viasfora.rainbow.qisource")]
+  [Name("viasfora.rainbow.tooltip.source")]
   [ContentType("text")]
-  public class RainbowQuickInfoSourceProvider : IQuickInfoSourceProvider {
+  public class RainbowToolTipSourceProvider : IQuickInfoSourceProvider {
     [Import]
     public IToolTipWindowProvider ToolTipProvider { get; set; }
 
     public IQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer) {
-      return new RainbowQuickInfoSource(textBuffer, this);
+      return new RainbowToolTipSource(textBuffer, this);
     }
   }
 
-  public class RainbowQuickInfoSource : IQuickInfoSource {
+  public class RainbowToolTipSource : IQuickInfoSource {
     private ITextBuffer textBuffer;
-    private RainbowQuickInfoSourceProvider provider;
+    private RainbowToolTipSourceProvider provider;
     private IToolTipWindow toolTipWindow;
 
-    public RainbowQuickInfoSource(ITextBuffer textBuffer, RainbowQuickInfoSourceProvider provider) {
+    public RainbowToolTipSource(ITextBuffer textBuffer, RainbowToolTipSourceProvider provider) {
       this.textBuffer = textBuffer;
       this.provider = provider;
     }
@@ -71,7 +71,7 @@ namespace Winterdom.Viasfora.Rainbow {
       var element = toolTipWindow.GetWindow(otherBrace.Value);
       if ( element != null ) {
         quickInfoContent.Add(element);
-        session.Set(new RainbowTipProperty());
+        session.Set(new RainbowToolTipContext());
       }
     }
 
@@ -114,8 +114,5 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public void Dispose() {
     }
-  }
-
-  public class RainbowTipProperty {
   }
 }

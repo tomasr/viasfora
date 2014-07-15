@@ -10,22 +10,22 @@ using Winterdom.Viasfora.Design;
 
 namespace Winterdom.Viasfora.Rainbow {
   [Export(typeof(IIntellisensePresenterProvider))]
-  [Name("viasfora.rainbow.qipresenter")]
+  [Name("viasfora.rainbow.tooltip.presenter")]
   [Order(Before="Default Quick Info Presenter")]
   [ContentType("text")]
-  public class RainbowQuickInfoPresenterProvider : IIntellisensePresenterProvider {
+  public class RainbowToolTipPresenterProvider : IIntellisensePresenterProvider {
     public IIntellisensePresenter TryCreateIntellisensePresenter(IIntellisenseSession session) {
       IQuickInfoSession qiSession = session as IQuickInfoSession;
       if ( qiSession != null ) {
-        if ( qiSession.Get<RainbowTipProperty>() != null ) {
-          return new RainbowQuickInfoPresenter(qiSession);
+        if ( qiSession.Get<RainbowToolTipContext>() != null ) {
+          return new RainbowToolTipPresenter(qiSession);
         }
       }
       return null;
     }
   }
 
-  public class RainbowQuickInfoPresenter : IPopupIntellisensePresenter, IIntellisenseCommandTarget {
+  public class RainbowToolTipPresenter : IPopupIntellisensePresenter, IIntellisenseCommandTarget {
     private IQuickInfoSession session;
     private ITrackingSpan trackingSpan;
     private QuickInfoPresenter presenter;
@@ -57,7 +57,7 @@ namespace Winterdom.Viasfora.Rainbow {
     public event EventHandler<ValueChangedEventArgs<PopupStyles>> PopupStylesChanged;
 #pragma warning restore 0067
 
-    public RainbowQuickInfoPresenter(IQuickInfoSession qiSession) {
+    public RainbowToolTipPresenter(IQuickInfoSession qiSession) {
       this.session = qiSession;
       this.presenter = new QuickInfoPresenter();
       this.presenter.Opacity = 1.0;
