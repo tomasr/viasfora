@@ -46,36 +46,46 @@ namespace Winterdom.Viasfora.Text {
 
 
     void OnSettingsUpdated(object sender, EventArgs e) {
-      CreateDrawingObjects();
-      RedrawAdornments();
+      if ( this.view != null ) {
+        CreateDrawingObjects();
+        RedrawAdornments();
+      }
     }
     void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
-      // the user changed something in Fonts and Colors, so
-      // recreate our adornments
-      CreateDrawingObjects();
-      RedrawAdornments();
+      if ( this.view != null ) {
+        // the user changed something in Fonts and Colors, so
+        // recreate our adornments
+        CreateDrawingObjects();
+        RedrawAdornments();
+      }
     }
     void OnViewClosed(object sender, EventArgs e) {
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-      view.Caret.PositionChanged -= OnCaretPositionChanged;
-      if ( view.TextViewModel != null && view.TextViewModel.EditBuffer != null ) {
-        view.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
+      if ( this.view != null ) {
+        view.Caret.PositionChanged -= OnCaretPositionChanged;
+        if ( view.TextViewModel != null && view.TextViewModel.EditBuffer != null ) {
+          view.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
+        }
+        view.ViewportWidthChanged -= OnViewportChanged;
+        view.ViewportHeightChanged -= OnViewportChanged;
+        view.Closed -= OnViewClosed;
+        view.LayoutChanged -= OnViewLayoutChanged;
+        view = null;
       }
-      view.ViewportWidthChanged -= OnViewportChanged;
-      view.ViewportHeightChanged -= OnViewportChanged;
-      view.Closed -= OnViewClosed;
-      view.LayoutChanged -= OnViewLayoutChanged;
-      view = null;
 
-      formatMap.ClassificationFormatMappingChanged -= OnClassificationFormatMappingChanged;
-      formatMap = null;
+      if ( this.formatMap != null ) {
+        formatMap.ClassificationFormatMappingChanged -= OnClassificationFormatMappingChanged;
+        formatMap = null;
+      }
       formatType = null;
     }
     void OnViewportChanged(object sender, EventArgs e) {
-      RedrawAdornments();
+      if ( this.view != null ) {
+        RedrawAdornments();
+      }
     }
     void OnCaretPositionChanged(object sender, CaretPositionChangedEventArgs e) {
-      if ( e.NewPosition != e.OldPosition ) {
+      if ( e.NewPosition != e.OldPosition && this.view != null ) {
         layer.RemoveAllAdornments();
         this.CreateVisuals(e.NewPosition.VirtualBufferPosition);
       }
@@ -87,7 +97,7 @@ namespace Winterdom.Viasfora.Text {
       }
     }
     private void OnViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
-      if ( e.VerticalTranslation ) {
+      if ( this.view != null && e.VerticalTranslation ) {
         layer.RemoveAllAdornments();
         this.CreateVisuals(this.view.Caret.Position.VirtualBufferPosition);
       }
@@ -133,7 +143,7 @@ namespace Winterdom.Viasfora.Text {
         this.columnRect.Height -= 2;
       }
 
-      //Align the image with the top of the bounds of the text geometry
+      // Align the image with the top of the bounds of the text geometry
       Canvas.SetLeft(this.columnRect, charBounds.Left);
       Canvas.SetTop(this.columnRect, this.view.ViewportTop);
 
