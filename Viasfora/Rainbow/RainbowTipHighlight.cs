@@ -81,7 +81,11 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( viewTip == null ) {
         return;
       }
-      var line = this.textView.TextViewLines.GetTextViewLineContainingBufferPosition(viewTip.Position);
+      SnapshotPoint viewPos;
+      if ( !RainbowProvider.TryMapToView(this.textView, viewTip.Position, out viewPos) ) {
+        return;
+      }
+      var line = this.textView.TextViewLines.GetTextViewLineContainingBufferPosition(viewPos);
       if ( line == null ) {
         return;
       }
