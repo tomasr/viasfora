@@ -47,11 +47,11 @@ namespace Winterdom.Viasfora.Util {
       double height = zoom * heightChars * this.tipView.FormattedLineSource.LineHeight;
       this.wrapper.Width = width;
       this.wrapper.Height = height;
-      this.wrapper.Padding = new Thickness(3);
+      this.wrapper.BorderThickness = new Thickness(0);
       this.linesDisplayed = heightChars;
     }
 
-    public UIElement GetWindow(SnapshotPoint bufferPosition) {
+    public object GetWindow(SnapshotPoint bufferPosition) {
       if ( tipView == null ) {
         CreateTipView();
       }

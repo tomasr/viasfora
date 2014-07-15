@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.VisualStudio.Language.Intellisense;
 
 namespace Winterdom.Viasfora.Design {
   /// <summary>
@@ -23,7 +24,7 @@ namespace Winterdom.Viasfora.Design {
       InitializeComponent();
     }
 
-    public void BindToSource(ObservableCollection<object> source) {
+    public void BindToSource(BulkObservableCollection<object> source) {
       this.DataSource = source;
       this.DataContext = this.DataSource;
     }

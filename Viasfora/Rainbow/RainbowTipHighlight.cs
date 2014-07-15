@@ -1,9 +1,4 @@
-﻿using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Classification;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Tagging;
-using Microsoft.VisualStudio.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -12,6 +7,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Tagging;
+using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Tags;
 using Winterdom.Viasfora.Util;
 
@@ -81,7 +81,11 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( viewTip == null ) {
         return;
       }
-      var line = this.textView.TextViewLines.GetTextViewLineContainingBufferPosition(viewTip.Position);
+      SnapshotPoint viewPos;
+      if ( !RainbowProvider.TryMapToView(this.textView, viewTip.Position, out viewPos) ) {
+        return;
+      }
+      var line = this.textView.TextViewLines.GetTextViewLineContainingBufferPosition(viewPos);
       if ( line == null ) {
         return;
       }

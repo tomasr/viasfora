@@ -12,8 +12,8 @@
         <ResourceDictionary Source="../Resources/ListBox.xaml" />
       </ResourceDictionary.MergedDictionaries>
       <Style TargetType="Border" x:Key="OuterBorder">
-        <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="BorderThickness" Value="3" />
+        <Setter Property="CornerRadius" Value="3" />
         <Setter Property="BorderBrush" Value="{DynamicResource {x:Static util:VsColors.ToolTipBrushKey}}" />
         <Setter Property="Background" Value="{DynamicResource {x:Static util:VsColors.ToolTipBrushKey}}" />
       </Style>
@@ -23,11 +23,19 @@
         <Setter Property="Margin" Value="0,0,0,0" />
         <Setter Property="Background" Value="{DynamicResource {x:Static util:VsColors.ToolTipBrushKey}}" />
       </Style>
+      <DataTemplate x:Key="QuickInfoEntryTemplate">
+        <ListBoxItem Focusable="False">
+          <ContentControl Margin="0,0,0,0"
+                          Focusable="False"
+                          Content="{Binding Path=.}" />
+        </ListBoxItem>
+      </DataTemplate>
     </ResourceDictionary>
   </UserControl.Resources>
   <Grid>
     <ListBox x:Name="ContentList"
              ItemsSource="{Binding DataContext, ElementName=userControl}"
+             ItemTemplate="{StaticResource QuickInfoEntryTemplate}"
              >
       <ListBox.Template>
         <ControlTemplate>
