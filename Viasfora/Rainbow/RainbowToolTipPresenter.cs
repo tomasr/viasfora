@@ -63,7 +63,8 @@ namespace Winterdom.Viasfora.Rainbow {
       this.presenter.Opacity = 1.0;
       this.presenter.SnapsToDevicePixels = true;
       this.presenter.BindToSource(qiSession.QuickInfoContent);
-      this.PopupStyles = PopupStyles.DismissOnMouseLeaveText | PopupStyles.PositionClosest;
+      this.PopupStyles = PopupStyles.DismissOnMouseLeaveText
+        | PopupStyles.PositionClosest;
       // This part is the key to making this work
       // so that the default quick info implementation
       // actually picks this up and displays our control
