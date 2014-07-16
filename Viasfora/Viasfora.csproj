@@ -139,6 +139,9 @@
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Options\TextObfuscationDialog.xaml.cs">
+      <DependentUpon>TextObfuscationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Options\TextObfuscationDialogPage.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -385,6 +388,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Design\QuickInfoPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Options\TextObfuscationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -166,6 +166,12 @@ namespace Winterdom.Viasfora.Design {
       }
     }
 
+    protected void MoveFocusToNext() {
+      if ( this.Child != null ) {
+        this.Child.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+      }
+    }
+
     /// <summary>
     /// Subclass of ElementHost designed to work around focus problems with ElementHost.
     /// </summary>
