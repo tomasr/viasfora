@@ -20,9 +20,6 @@ namespace Winterdom.Viasfora.Util {
     public String RegularExpression {
       get { return this.regex; }
       set {
-        if ( String.IsNullOrEmpty(value) ) {
-          throw new ArgumentException("value", "Regular expression must be provided");
-        }
         this.regex = value;
       }
     }
@@ -36,6 +33,9 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public Regex GetRegex() {
+      if ( String.IsNullOrEmpty(this.RegularExpression) ) {
+        return null;
+      }
       if ( compiledExpression == null ) {
         compiledExpression = new Regex(this.RegularExpression, RegexOptions.Compiled);
       }
@@ -43,7 +43,8 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public IEnumerable<SnapshotSpan> Match(ITextSnapshotLine line) {
-      if ( line.Length == 0 ) {
+      Regex regex = GetRegex();
+      if ( line.Length == 0 || regex == null ) {
         yield break;
       }
       ITextSnapshot snapshot = line.Snapshot;
@@ -65,6 +66,9 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public bool IsValid() {
+      if ( String.IsNullOrEmpty(this.RegularExpression) ) {
+        return false;
+      }
       try {
         var temp = new Regex(this.RegularExpression);
         return true;

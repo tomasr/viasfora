@@ -88,10 +88,14 @@
     <Compile Include="Contracts\ILanguageFactory.cs" />
     <Compile Include="Contracts\IToolTipWindow.cs" />
     <Compile Include="Contracts\IToolTipWindowProvider.cs" />
+    <Compile Include="Design\NativeMethods.cs" />
     <Compile Include="Design\QuickInfoPresenter.xaml.cs">
       <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Design\StringListConverter.cs" />
+    <Compile Include="Design\UIElementDialogPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Design\XamlExtensions.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
       <SubType>UserControl</SubType>
@@ -135,11 +139,8 @@
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Options\TextObfuscationDialogPage.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Options\TextObfuscationDialogPage.Designer.cs">
-      <DependentUpon>TextObfuscationDialogPage.cs</DependentUpon>
+    <Compile Include="Options\TextObfuscationDialog.xaml.cs">
+      <DependentUpon>TextObfuscationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Options\TextObfuscationOptions.cs">
       <SubType>Component</SubType>
@@ -295,7 +296,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="Properties\DataSources\Winterdom.Viasfora.Util.RegexEntry.datasource" />
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
@@ -336,6 +336,7 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\cmdImages.bmp" />
@@ -369,9 +370,6 @@
     <EmbeddedResource Include="Options\PresentationModeDialogPage.resx">
       <DependentUpon>PresentationModeDialogPage.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Options\TextObfuscationDialogPage.resx">
-      <DependentUpon>TextObfuscationDialogPage.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
@@ -380,6 +378,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Design\QuickInfoPresenter.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Options\TextObfuscationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
