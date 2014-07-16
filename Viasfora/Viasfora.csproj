@@ -88,10 +88,14 @@
     <Compile Include="Contracts\ILanguageFactory.cs" />
     <Compile Include="Contracts\IToolTipWindow.cs" />
     <Compile Include="Contracts\IToolTipWindowProvider.cs" />
+    <Compile Include="Design\NativeMethods.cs" />
     <Compile Include="Design\QuickInfoPresenter.xaml.cs">
       <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>
     </Compile>
     <Compile Include="Design\StringListConverter.cs" />
+    <Compile Include="Design\UIElementDialogPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Design\XamlExtensions.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
       <SubType>UserControl</SubType>
@@ -336,6 +340,7 @@
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\cmdImages.bmp" />
