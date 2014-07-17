@@ -135,11 +135,13 @@ namespace Winterdom.Viasfora.Util {
       var roles = this.provider.EditorFactory.CreateTextViewRoleSet(ViewRoles.ToolTipView);
       var model = new TipTextViewModel(this.sourceTextView);
 
-      var options = this.provider.OptionsFactory.CreateOptions();
+      var options = this.provider.OptionsFactory.GlobalOptions;
+      this.tipView = this.provider.EditorFactory.CreateTextView(model, roles, options);
+      options = this.tipView.Options;
       options.SetOptionValue(DefaultTextViewOptions.IsViewportLeftClippedId, true);
       options.SetOptionValue(Constants.WordWrapStyleId, WordWrapStyles.None);
+      options.SetOptionValue(Constants.ViewProhibitUserInput, true);
 
-      this.tipView = this.provider.EditorFactory.CreateTextView(model, roles, options);
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
       this.tipView.ZoomLevel = GetSourceZoomFactor() * ZoomFactor * 100;
@@ -189,22 +191,29 @@ namespace Winterdom.Viasfora.Util {
         get { return sourceView.TextViewModel.EditBuffer; }
       }
       public ITextBuffer VisualBuffer {
-        get { return sourceView.TextViewModel.VisualBuffer; }
+        get { return this.EditBuffer; }
       }
       public PropertyCollection Properties {
         get { return this.properties; }
       }
 
       public SnapshotPoint GetNearestPointInVisualBuffer(SnapshotPoint editBufferPoint) {
-        return this.sourceView.TextViewModel.GetNearestPointInVisualBuffer(editBufferPoint);
+        // editBufferPoint MUST be in the editBuffer according to the docs
+        if ( editBufferPoint.Snapshot.TextBuffer != this.EditBuffer )
+          throw new InvalidOperationException("editBufferPoint is not on the edit buffer");
+        return editBufferPoint.TranslateTo(this.EditBuffer.CurrentSnapshot, PointTrackingMode.Positive);
       }
 
       public SnapshotPoint GetNearestPointInVisualSnapshot(SnapshotPoint editBufferPoint, ITextSnapshot targetVisualSnapshot, PointTrackingMode trackingMode) {
-        return this.sourceView.TextViewModel.GetNearestPointInVisualSnapshot(editBufferPoint, targetVisualSnapshot, trackingMode);
+        // editBufferPoint MUST be in the editBuffer according to the docs
+        if ( editBufferPoint.Snapshot.TextBuffer != this.EditBuffer )
+          throw new InvalidOperationException("editBufferPoint is not on the edit buffer");
+        return editBufferPoint.TranslateTo(targetVisualSnapshot, PointTrackingMode.Positive);
       }
 
       public bool IsPointInVisualBuffer(SnapshotPoint editBufferPoint, PositionAffinity affinity) {
-        return this.sourceView.TextViewModel.IsPointInVisualBuffer(editBufferPoint, affinity);
+        // editBufferPoint MUST be in the editBuffer according to the docs
+        return editBufferPoint.Snapshot.TextBuffer == this.EditBuffer;
       }
 
       public void Dispose() {

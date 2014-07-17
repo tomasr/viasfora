@@ -43,5 +43,6 @@ namespace Winterdom.Viasfora {
 
 
     public const String WordWrapStyleId = "TextView/WordWrapStyle";
+    public const String ViewProhibitUserInput = "TextView/ProhibitUserInput";
   }
 }
