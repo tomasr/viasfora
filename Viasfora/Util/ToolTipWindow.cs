@@ -43,7 +43,10 @@ namespace Winterdom.Viasfora.Util {
         CreateTipView();
       }
       double zoom = tipView.ZoomLevel / 100.0;
-      double width = zoom * widthChars * this.tipView.FormattedLineSource.ColumnWidth;
+      double width = Math.Max(
+        0.60 * this.sourceTextView.ViewportWidth,
+        zoom * widthChars * this.tipView.FormattedLineSource.ColumnWidth
+        );
       double height = zoom * heightChars * this.tipView.FormattedLineSource.LineHeight;
       this.wrapper.Width = width;
       this.wrapper.Height = height;
@@ -138,7 +141,7 @@ namespace Winterdom.Viasfora.Util {
 
       IWpfTextView wpfSource = this.sourceTextView as IWpfTextView;
       if ( wpfSource != null ) {
-        this.tipView.ZoomLevel = wpfSource.ZoomLevel;
+        this.tipView.ZoomLevel = 0.8 * wpfSource.ZoomLevel;
       } else {
         this.tipView.ZoomLevel = 100;
       }
