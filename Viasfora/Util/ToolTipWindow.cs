@@ -32,6 +32,8 @@ namespace Winterdom.Viasfora.Util {
     private int linesDisplayed;
     private SnapshotPoint pointToDisplay;
     private Border wrapper;
+    const double ZoomFactor = 0.80;
+    const double WidthFactor = 0.60;
 
     public ToolTipWindow(ITextView source, ToolTipWindowProvider provider) {
       this.sourceTextView = source;
@@ -42,12 +44,13 @@ namespace Winterdom.Viasfora.Util {
       if ( tipView == null ) {
         CreateTipView();
       }
-      double zoom = tipView.ZoomLevel / 100.0;
+      double zoom = (tipView.ZoomLevel / 100.0);
+      double sourceZoom = this.GetSourceZoomFactor();
       double width = Math.Max(
-        0.60 * this.sourceTextView.ViewportWidth,
+        sourceZoom * WidthFactor * this.sourceTextView.ViewportWidth,
         zoom * widthChars * this.tipView.FormattedLineSource.ColumnWidth
         );
-      double height = zoom * heightChars * this.tipView.FormattedLineSource.LineHeight;
+      double height = zoom * heightChars * this.tipView.LineHeight;
       this.wrapper.Width = width;
       this.wrapper.Height = height;
       this.wrapper.BorderThickness = new Thickness(0);
@@ -139,14 +142,18 @@ namespace Winterdom.Viasfora.Util {
       this.tipView = this.provider.EditorFactory.CreateTextView(model, roles, options);
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
-      IWpfTextView wpfSource = this.sourceTextView as IWpfTextView;
-      if ( wpfSource != null ) {
-        this.tipView.ZoomLevel = 0.8 * wpfSource.ZoomLevel;
-      } else {
-        this.tipView.ZoomLevel = 100;
-      }
+      this.tipView.ZoomLevel = GetSourceZoomFactor() * ZoomFactor * 100;
       this.wrapper = new Border();
       this.wrapper.Child = this.tipView.VisualElement;
+    }
+
+    private double GetSourceZoomFactor() {
+      IWpfTextView wpfSource = this.sourceTextView as IWpfTextView;
+      if ( wpfSource != null ) {
+        return wpfSource.ZoomLevel / 100;
+      } else {
+        return 1.0;
+      }
     }
 
     private void ReleaseView() {
