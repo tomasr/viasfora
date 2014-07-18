@@ -172,6 +172,17 @@ namespace Winterdom.Viasfora.Util {
       }
     }
     
+    // TextViewModel for our ToolTip window
+    // Notice that we simply return the corresponding buffers
+    // from the TextViewModel of the source view
+    // Originally, we returned the ViewBuffer as well,
+    // but it was causing a NullReferenceException during
+    // the initial layout of the window when it was based on
+    // a Peek Definition Window coming from metadata 
+    // (apparently because the original window has
+    // regions collapsed by default).
+    // Returning the EditBuffer as the ViewBuffer appears
+    // to work around this.
     class TipTextViewModel : ITextViewModel {
       private ITextView sourceView;
       private PropertyCollection properties;
@@ -216,6 +227,9 @@ namespace Winterdom.Viasfora.Util {
         return editBufferPoint.Snapshot.TextBuffer == this.EditBuffer;
       }
 
+      // Notice we do NOT do anything on the Dispose() call
+      // as we don't own the buffers; the source view will
+      // dispose them.
       public void Dispose() {
       }
     }
