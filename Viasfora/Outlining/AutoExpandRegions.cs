@@ -53,9 +53,17 @@ namespace Winterdom.Viasfora.Outlining {
         // if the solution is just opened
         // so take notice of when regions are
         // collapsed and do it again just in case
+        // Try expanding it when the window gets focus
+        // as a last chance for Visual Basic
         this.theView.LayoutChanged += OnLayoutChanged;
         this.outliningManager.RegionsCollapsed += OnRegionsCollapsed;
+        this.theView.GotAggregateFocus += OnGotFocus;
       }
+    }
+
+    private void OnGotFocus(object sender, EventArgs e) {
+      this.theView.GotAggregateFocus -= OnGotFocus;
+      ExpandAll();
     }
 
     private void OnSettingsUpdated(object sender, EventArgs e) {
@@ -70,19 +78,20 @@ namespace Winterdom.Viasfora.Outlining {
       VsfSettings.SettingsUpdated -= OnSettingsUpdated;
       this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
       this.theView.LayoutChanged -= OnLayoutChanged;
+      this.theView.GotAggregateFocus -= OnGotFocus;
       this.theView.Closed -= OnViewClosed;
       this.theView = null;
       this.outliningManager = null;
     }
 
     private void OnRegionsCollapsed(object sender, RegionsCollapsedEventArgs e) {
-      ExpandAll();
       this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
+      ExpandAll();
     }
 
     private void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
-      ExpandAll();
       this.theView.LayoutChanged -= OnLayoutChanged;
+      ExpandAll();
     }
 
     private void ExpandAll() {
