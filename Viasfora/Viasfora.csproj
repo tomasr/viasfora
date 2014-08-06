@@ -202,6 +202,7 @@
     <Compile Include="Settings\OutlineSettings.cs" />
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="Settings\SuoPersistUserSettings.cs" />
+    <Compile Include="Settings\VsfSettings.cs" />
     <Compile Include="SnapshotExtensions.cs" />
     <Compile Include="Tags\ObfuscatedTextTag.cs" />
     <Compile Include="Tags\OutliningGlyphTag.cs" />
