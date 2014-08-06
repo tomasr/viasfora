@@ -17,8 +17,10 @@ namespace Winterdom.Viasfora.Margins {
   public class DevMarginProvider : IWpfTextViewMarginProvider {
     [Import]
     private IFileExtensionRegistryService ferService = null;
+    [Import]
+    private IVsfSettings settings = null;
     public IWpfTextViewMargin CreateMargin(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin marginContainer) {
-      return new DevViewMargin(wpfTextViewHost, ferService);
+      return new DevViewMargin(wpfTextViewHost, ferService, settings);
     }
   }
   

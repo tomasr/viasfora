@@ -13,16 +13,20 @@ namespace Winterdom.Viasfora.Margins {
     private IFileExtensionRegistryService extensionRegistry;
     private IWpfTextViewHost wpfTextViewHost;
     private IWpfTextView textView;
+    private IVsfSettings settings;
     private DevMarginVisual visual;
     private DevMarginViewModel model;
 
-    public DevViewMargin(IWpfTextViewHost wpfTextViewHost, IFileExtensionRegistryService fers) {
+    public DevViewMargin(IWpfTextViewHost wpfTextViewHost, 
+            IFileExtensionRegistryService fers,
+            IVsfSettings settings) {
       model = new DevMarginViewModel();
       this.wpfTextViewHost = wpfTextViewHost;
       this.extensionRegistry = fers;
       this.visual = new DevMarginVisual(model);
       this.visual.ViewBuffer += OnViewBuffer;
-      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+      this.settings = settings;
+      this.settings.SettingsChanged += OnSettingsChanged;
       this.wpfTextViewHost.Closed += OnTextViewHostClosed;
 
       UpdateVisibility();
@@ -36,7 +40,7 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     public bool Enabled {
-      get { return VsfSettings.DevMarginEnabled;  }
+      get { return settings != null ? settings.DevMarginEnabled : false;  }
     }
 
     public ITextViewMargin GetTextViewMargin(string marginName) {
@@ -62,7 +66,6 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     private void Cleanup() {
-      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
       if ( this.wpfTextViewHost != null ) {
         this.wpfTextViewHost.Closed -= OnTextViewHostClosed;
         this.wpfTextViewHost = null;
@@ -77,6 +80,10 @@ namespace Winterdom.Viasfora.Margins {
       if ( this.visual != null ) {
         this.visual.ViewBuffer -= OnViewBuffer;
         this.visual = null;
+      }
+      if ( this.settings != null ) {
+        this.settings.SettingsChanged -= OnSettingsChanged;
+        this.settings = null;
       }
       this.extensionRegistry = null;
     }
@@ -110,7 +117,7 @@ namespace Winterdom.Viasfora.Margins {
       }
     }
 
-    private void OnSettingsUpdated(object sender, EventArgs e) {
+    private void OnSettingsChanged(object sender, EventArgs e) {
       if ( this.visual != null ) {
         UpdateVisibility();
       }
