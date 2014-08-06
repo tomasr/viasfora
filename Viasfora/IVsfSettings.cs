@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Rainbow;
 
-namespace Winterdom.Viasfora.Settings {
+namespace Winterdom.Viasfora {
   public interface IVsfSettings {
     bool KeywordClassifierEnabled { get; set; }
     bool EscapeSeqHighlightEnabled { get; set; }

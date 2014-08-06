@@ -20,6 +20,7 @@ namespace Winterdom.Viasfora.Rainbow {
     public ITextView TextView { get; private set; }
     public IClassificationTypeRegistryService Registry { get; private set; }
     public ILanguageFactory LanguageFactory { get; private set; }
+    public IVsfSettings Settings { get; private set; }
     public RainbowTaggerProvider Provider { get; private set; }
     public Dispatcher Dispatcher { get; private set; }
     public RainbowColorTagger ColorTagger { get; private set; }
@@ -36,6 +37,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.TextBuffer = buffer;
       this.Registry = provider.ClassificationRegistry;
       this.LanguageFactory = provider.LanguageFactory;
+      this.Settings = provider.Settings;
       this.ColorTagger = new RainbowColorTagger(this);
 
       SetLanguage(buffer.ContentType);
@@ -44,7 +46,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.TextView.Closed += OnViewClosed;
       this.TextBuffer.ChangedLowPriority += this.BufferChanged;
       this.TextBuffer.ContentTypeChanged += this.ContentTypeChanged;
-      VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
+      this.Settings.SettingsChanged += this.OnSettingsChanged;
       this.Dispatcher = Dispatcher.CurrentDispatcher;
 
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
@@ -87,7 +89,7 @@ namespace Winterdom.Viasfora.Rainbow {
         this.TextView = null;
       }
       if ( TextBuffer != null ) {
-        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+        Settings.SettingsChanged -= OnSettingsChanged;
         TextBuffer.ChangedLowPriority -= this.BufferChanged;
         TextBuffer.ContentTypeChanged -= this.ContentTypeChanged;
         TextBuffer = null;
@@ -171,12 +173,12 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
-    void OnSettingsUpdated(object sender, EventArgs e) {
+    void OnSettingsChanged(object sender, EventArgs e) {
       this.UpdateBraceList(new SnapshotPoint(this.TextBuffer.CurrentSnapshot, 0));
     }
 
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
-      if ( VsfSettings.RainbowTagsEnabled ) {
+      if ( Settings.RainbowTagsEnabled ) {
         // the snapshot changed, so we need to pretty much update
         // everything so that it matches.
         if ( e.Changes.Count > 0 ) {

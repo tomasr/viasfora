@@ -20,6 +20,8 @@ namespace Winterdom.Viasfora.Rainbow {
   public class RainbowToolTipSourceProvider : IQuickInfoSourceProvider {
     [Import]
     public IToolTipWindowProvider ToolTipProvider { get; set; }
+    [Import]
+    public IVsfSettings Settings { get; set; }
 
     public IQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer) {
       return new RainbowToolTipSource(textBuffer, this);
@@ -38,7 +40,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public void AugmentQuickInfoSession(IQuickInfoSession session, IList<object> quickInfoContent, out ITrackingSpan applicableToSpan) {
       applicableToSpan = null;
-      if ( !VsfSettings.RainbowToolTipsEnabled ) {
+      if ( !provider.Settings.RainbowToolTipsEnabled ) {
         return;
       }
       SnapshotPoint? triggerPoint = session.GetTriggerPoint(textBuffer.CurrentSnapshot);

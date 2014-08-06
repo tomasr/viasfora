@@ -36,6 +36,8 @@ namespace Winterdom.Viasfora.Rainbow {
     public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
     [Import]
     public ILanguageFactory LanguageFactory { get; set; }
+    [Import]
+    public IVsfSettings Settings { get; set; }
 
     public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
       // for a complex editor such as the HTMLX editor in VS2013
