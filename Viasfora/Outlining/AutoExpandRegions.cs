@@ -18,12 +18,13 @@ namespace Winterdom.Viasfora.Outlining {
   public class AutoExpandRegionsListener : IWpfTextViewCreationListener {
     [Import]
     private IVsOutliningManagerService outlining = null;
+    [Import]
+    private IVsfSettings settings = null;
     public void TextViewCreated(IWpfTextView textView) {
-      var expandMode = VsfSettings.AutoExpandRegions;
       var manager = outlining.GetOutliningManager(textView);
       if ( manager != null ) {
         textView.Properties.GetOrCreateSingletonProperty(
-          () => new AutoExpander(textView, manager, expandMode)
+          () => new AutoExpander(textView, manager, settings)
           );
       }
     }
@@ -33,17 +34,20 @@ namespace Winterdom.Viasfora.Outlining {
     private IWpfTextView theView;
     private IVsOutliningManager outliningManager;
     private AutoExpandMode expandMode;
+    private IVsfSettings settings;
 
     public AutoExpander(
           IWpfTextView textView, 
           IVsOutliningManager outlining,
-          AutoExpandMode mode) {
-      this.expandMode = mode;
+          IVsfSettings settings) {
+      this.settings = settings;
       this.theView = textView;
       this.outliningManager = outlining;
+      this.expandMode = settings.AutoExpandRegions;
 
       this.theView.Closed += OnViewClosed;
-      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+      this.settings.SettingsChanged += OnSettingsChanged;
+
       if ( expandMode == AutoExpandMode.Disable ) {
         outlining.Enabled = false;
       } else if ( expandMode == AutoExpandMode.Expand ) {
@@ -66,8 +70,8 @@ namespace Winterdom.Viasfora.Outlining {
       ExpandAll();
     }
 
-    private void OnSettingsUpdated(object sender, EventArgs e) {
-      if ( VsfSettings.AutoExpandRegions == AutoExpandMode.Disable ) {
+    private void OnSettingsChanged(object sender, EventArgs e) {
+      if ( settings.AutoExpandRegions == AutoExpandMode.Disable ) {
         this.outliningManager.Enabled = false;
       } else {
         this.outliningManager.Enabled = true;
@@ -75,7 +79,8 @@ namespace Winterdom.Viasfora.Outlining {
     }
 
     private void OnViewClosed(object sender, EventArgs e) {
-      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+      this.settings.SettingsChanged -= OnSettingsChanged;
+      this.settings = null;
       this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
       this.theView.LayoutChanged -= OnLayoutChanged;
       this.theView.GotAggregateFocus -= OnGotFocus;
