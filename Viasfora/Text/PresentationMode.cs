@@ -7,10 +7,14 @@ using System.Text;
 namespace Winterdom.Viasfora.Text {
   public class PresentationMode {
     private IWpfTextView theView;
-    public PresentationMode(IWpfTextView textView) {
+    private IVsfSettings settings;
+    public PresentationMode(IWpfTextView textView, IVsfSettings settings) {
       this.theView = textView;
+      this.settings = settings;
+
       VsfPackage.PresentationModeChanged += OnPresentationModeChanged;
-      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+
+      settings.SettingsChanged += OnSettingsChanged;
       textView.Closed += OnTextViewClosed;
       textView.ViewportWidthChanged += OnViewportWidthChanged;
     }
@@ -26,14 +30,17 @@ namespace Winterdom.Viasfora.Text {
       SetZoomLevel(theView);
     }
 
-    void OnSettingsUpdated(object sender, EventArgs e) {
+    void OnSettingsChanged(object sender, EventArgs e) {
       SetZoomLevel(theView);
     }
 
     void OnTextViewClosed(object sender, EventArgs e) {
+      if ( this.settings != null ) {
+        this.settings.SettingsChanged -= OnSettingsChanged;
+        this.settings = null;
+      }
       if ( theView != null ) {
         VsfPackage.PresentationModeChanged -= OnPresentationModeChanged;
-        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
         theView.Closed -= OnTextViewClosed;
         theView.ViewportWidthChanged -= OnViewportWidthChanged;
         theView = null;

@@ -38,6 +38,8 @@ namespace Winterdom.Viasfora.Text {
     public IBufferTagAggregatorFactoryService Aggregator { get; set; }
     [Import]
     public ILanguageFactory LanguageFactory { get; set; }
+    [Import]
+    public IVsfSettings Settings { get; set; }
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       return new KeywordTagger(buffer, this) as ITagger<T>;

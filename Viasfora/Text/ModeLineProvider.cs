@@ -17,9 +17,9 @@ namespace Winterdom.Viasfora.Text {
       optionMap = new Dictionary<string, Action<IWpfTextView, String>>();
       InitializeOptionMap();
     }
-    public ModeLineProvider(IWpfTextView view, ILanguageFactory langFactory) {
+    public ModeLineProvider(IWpfTextView view, ModelineFactory factory) {
       this.theView = view;
-      this.langFactory = langFactory;
+      this.langFactory = factory.LanguageFactory;
     }
 
     public void ParseModeline(int numLine) {

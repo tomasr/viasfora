@@ -14,11 +14,13 @@ namespace Winterdom.Viasfora.Text {
   public class ModelineFactory : IWpfTextViewCreationListener {
     [Import]
     public ILanguageFactory LanguageFactory { get; set; }
+    [Import]
+    public IVsfSettings Settings { get; set; }
 
     public void TextViewCreated(IWpfTextView textView) {
-      if ( VsfSettings.ModelinesEnabled ) {
-        ModeLineProvider provider = new ModeLineProvider(textView, LanguageFactory);
-        for ( int i = 0; i < VsfSettings.ModelinesNumLines; i++ ) {
+      if ( Settings.ModelinesEnabled ) {
+        ModeLineProvider provider = new ModeLineProvider(textView, this);
+        for ( int i = 0; i < Settings.ModelinesNumLines; i++ ) {
           provider.ParseModeline(i);
         }
       }
