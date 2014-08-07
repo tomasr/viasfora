@@ -192,6 +192,7 @@
     <Compile Include="Rainbow\RainbowTipHighlight.cs" />
     <Compile Include="Rainbow\RainbowToolTipContext.cs" />
     <Compile Include="ReSharper.cs" />
+    <Compile Include="SettingsContext.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
     <Compile Include="Settings\IPersistSettings.cs" />

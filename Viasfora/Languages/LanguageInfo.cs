@@ -63,7 +63,7 @@ namespace Winterdom.Viasfora.Languages {
     protected abstract String[] ControlFlowDefaults { get; }
     protected abstract String[] LinqDefaults { get; }
     protected abstract String[] VisibilityDefaults { get; }
-    protected abstract String KeyName { get; }
+    public abstract String KeyName { get; }
 
     protected String[] Get(String name, String[] defaults) {
       String[] values = settings.GetValue(this.KeyName + "_" + name, null).AsList();

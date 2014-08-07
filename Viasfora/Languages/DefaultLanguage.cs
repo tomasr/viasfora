@@ -24,7 +24,7 @@ namespace Winterdom.Viasfora.Languages {
     protected override string[] ContentTypes {
       get { return empty; }
     }
-    protected override string KeyName {
+    public override string KeyName {
       get { return "Text"; }
     }
     public override bool MatchesContentType(IContentType contentType) {

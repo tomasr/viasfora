@@ -31,8 +31,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return CS_VIS_KEYWORDS; }
     }
-    protected override String KeyName {
-      get { return "CSharp"; }
+    public override String KeyName {
+      get { return Constants.CSharp; }
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType }; }

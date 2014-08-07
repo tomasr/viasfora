@@ -31,8 +31,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return VISIBILITY; }
     }
-    protected override String KeyName {
-      get { return "TypeScript"; }
+    public override String KeyName {
+      get { return Constants.TypeScript; }
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType }; }

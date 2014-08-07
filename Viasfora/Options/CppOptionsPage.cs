@@ -6,18 +6,19 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
-using Winterdom.Viasfora.Languages;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.CppOptions)]
   public class CppOptionsPage : DialogPage {
-    private Cpp language = new Cpp();
+    private ILanguage language = SettingsContext.GetLanguage(Constants.Cpp);
 
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
       language.ControlFlow = ControlFlowKeywords.ToArray();
       language.Visibility = VisibilityKeywords.ToArray();
-      VsfSettings.Save();
+      var settings = SettingsContext.GetSettings();
+      settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();

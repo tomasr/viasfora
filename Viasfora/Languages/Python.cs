@@ -34,8 +34,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return VIS_KEYWORDS; }
     }
-    protected override String KeyName {
-      get { return "Python"; }
+    public override String KeyName {
+      get { return Constants.Python; }
     }
     public override IBraceExtractor NewBraceExtractor() {
       return new PythonBraceExtractor(this);

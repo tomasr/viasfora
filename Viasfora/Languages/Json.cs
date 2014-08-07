@@ -21,8 +21,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return EMPTY; }
     }
-    protected override String KeyName {
-      get { return "JSON"; }
+    public override String KeyName {
+      get { return Constants.Json; }
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType }; }
