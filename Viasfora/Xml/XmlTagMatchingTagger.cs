@@ -18,27 +18,33 @@ namespace Winterdom.Viasfora.Xml {
   public class XmlTagMatchingTagger : ITagger<TextMarkerTag>, IDisposable {
     private ITextView theView;
     private ITextBuffer theBuffer;
+    private IVsfSettings settings;
     private SnapshotSpan? currentSpan;
     private ITagAggregator<IClassificationTag> aggregator;
     private IMarkupLanguage language;
 
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
-    public XmlTagMatchingTagger(ITextView textView, ITextBuffer buffer, ITagAggregator<IClassificationTag> aggregator) {
+    public XmlTagMatchingTagger(
+            ITextView textView, ITextBuffer buffer, 
+            ITagAggregator<IClassificationTag> aggregator,
+            IVsfSettings settings) {
       this.theView = textView;
       this.theBuffer = buffer;
       this.aggregator = aggregator;
+      this.settings = settings;
       this.currentSpan = null;
 
       this.language = new XmlMarkup();
 
+      this.theView.Closed += OnViewClosed;
       this.theView.Caret.PositionChanged += CaretPositionChanged;
       this.theView.LayoutChanged += ViewLayoutChanged;
-      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+      this.settings.SettingsChanged += OnSettingsChanged;
     }
 
     public IEnumerable<ITagSpan<TextMarkerTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      if ( !VsfSettings.XmlMatchTagsEnabled ) yield break;
+      if ( !settings.XmlMatchTagsEnabled ) yield break;
       if ( spans.Count == 0 ) yield break;
       if ( !currentSpan.HasValue ) yield break;
 
@@ -214,16 +220,30 @@ namespace Winterdom.Viasfora.Xml {
     }
 
     public void Dispose() {
-      if ( theBuffer != null ) {
-        this.theView.Caret.PositionChanged -= CaretPositionChanged;
-        this.theView.LayoutChanged -= ViewLayoutChanged;
-        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-        theBuffer = null;
-      }
     }
 
-    void OnSettingsUpdated(object sender, EventArgs e) {
-      UpdateAtCaretPosition(theView.Caret.Position);
+    private void OnViewClosed(object sender, EventArgs e) {
+      if ( this.theView != null ) {
+        this.theView.Closed -= OnViewClosed;
+        this.theView.Caret.PositionChanged -= CaretPositionChanged;
+        this.theView.LayoutChanged -= ViewLayoutChanged;
+        this.theView = null;
+      }
+      if ( this.settings != null ) {
+        this.settings.SettingsChanged -= OnSettingsChanged;
+        this.settings = null;
+      }
+      if ( this.aggregator != null ) {
+        this.aggregator.Dispose();
+        this.aggregator = null;
+      }
+      theBuffer = null;
+    }
+
+    private void OnSettingsChanged(object sender, EventArgs e) {
+      if ( this.theView != null ) {
+        UpdateAtCaretPosition(theView.Caret.Position);
+      }
     }
 
     private void ViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {

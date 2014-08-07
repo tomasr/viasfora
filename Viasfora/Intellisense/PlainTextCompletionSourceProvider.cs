@@ -19,10 +19,12 @@ namespace Winterdom.Viasfora.Intellisense {
     private ITextStructureNavigatorSelectorService navigatorSelector = null;
     [Import]
     private IContentTypeRegistryService ctRegistry = null;
+    [Import]
+    private IVsfSettings settings = null;
     public ICompletionSource TryCreateCompletionSource(ITextBuffer textBuffer) {
       var ct = ctRegistry.GetContentType("any");
       var navigator = navigatorSelector.CreateTextStructureNavigator(textBuffer, ct);
-      return new PlainTextCompletionSource(textBuffer, navigator);
+      return new PlainTextCompletionSource(textBuffer, navigator, settings);
     }
   }
 }

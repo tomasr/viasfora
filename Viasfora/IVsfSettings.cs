@@ -38,6 +38,8 @@ namespace Winterdom.Viasfora {
     String TextObfuscationRegexes { get; set; }
 
     event EventHandler SettingsChanged;
+    String GetValue(String name, String defaultValue);
+    void SetValue(String name, object value);
     void Load();
     void Save();
   }

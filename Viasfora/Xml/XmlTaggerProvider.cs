@@ -18,15 +18,18 @@ namespace Winterdom.Viasfora.Xml {
   [TagType(typeof(ClassificationTag))]
   public class XmlTaggerProvider : IViewTaggerProvider {
     [Import]
-    internal IClassificationTypeRegistryService ClassificationRegistry = null;
+    internal IClassificationTypeRegistryService ClassificationRegistry { get; set; }
     [Import]
-    internal IBufferTagAggregatorFactoryService Aggregator = null;
+    internal IBufferTagAggregatorFactoryService Aggregator { get; set; }
+    [Import]
+    internal IVsfSettings Settings { get; set; }
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       return new XmlTagger(
          buffer,
          ClassificationRegistry,
-         Aggregator.CreateTagAggregator<IClassificationTag>(buffer)
+         Aggregator.CreateTagAggregator<IClassificationTag>(buffer),
+         Settings
       ) as ITagger<T>;
     }
   }

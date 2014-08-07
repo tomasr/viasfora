@@ -16,13 +16,16 @@ namespace Winterdom.Viasfora.Xml {
   public class XmlTagMatchingTaggerProvider : IViewTaggerProvider {
     [Import]
     internal IBufferTagAggregatorFactoryService Aggregator = null;
+    [Import]
+    internal IVsfSettings Settings = null;
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       if ( textView == null ) return null;
       if ( textView.TextBuffer != buffer ) return null;
       return new XmlTagMatchingTagger(
           textView, buffer,
-          Aggregator.CreateTagAggregator<IClassificationTag>(buffer)
+          Aggregator.CreateTagAggregator<IClassificationTag>(buffer),
+          Settings
         ) as ITagger<T>;
     }
   }
