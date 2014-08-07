@@ -48,7 +48,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void SetZoomLevel(IWpfTextView textView) {
-      if ( VsfSettings.PresentationModeEnabled ) {
+      if ( this.settings.PresentationModeEnabled ) {
         int zoomLevel = VsfPackage.GetPresentationModeZoomLevel();
         textView.ZoomLevel = zoomLevel;
       }

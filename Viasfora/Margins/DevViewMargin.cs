@@ -23,11 +23,12 @@ namespace Winterdom.Viasfora.Margins {
       model = new DevMarginViewModel();
       this.wpfTextViewHost = wpfTextViewHost;
       this.extensionRegistry = fers;
-      this.visual = new DevMarginVisual(model);
-      this.visual.ViewBuffer += OnViewBuffer;
       this.settings = settings;
       this.settings.SettingsChanged += OnSettingsChanged;
       this.wpfTextViewHost.Closed += OnTextViewHostClosed;
+
+      this.visual = new DevMarginVisual(model, settings);
+      this.visual.ViewBuffer += OnViewBuffer;
 
       UpdateVisibility();
       InitializeTextView();
