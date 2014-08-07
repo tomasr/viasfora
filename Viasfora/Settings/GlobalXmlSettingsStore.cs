@@ -14,6 +14,8 @@ namespace Winterdom.Viasfora.Settings {
     private String filePath;
     Dictionary<String, String> settings = new Dictionary<String, String>();
 
+    public GlobalXmlSettingsStore() : this(null) {
+    }
     public GlobalXmlSettingsStore(String file) {
       ConfigurePath(file);
       Load();
