@@ -14,16 +14,18 @@ namespace Winterdom.Viasfora.Options {
   public class IntellisenseOptions : DialogPage {
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
-      VsfSettings.TextCompletionEnabled = TextCompletionEnabled;
-      VsfSettings.TCCompleteDuringTyping = CompleteDuringTyping;
-      VsfSettings.TCHandleCompleteWord = HandleCompleteWord;
-      VsfSettings.Save();
+      var settings = SettingsContext.GetSettings();
+      settings.TextCompletionEnabled = TextCompletionEnabled;
+      settings.TCCompleteDuringTyping = CompleteDuringTyping;
+      settings.TCHandleCompleteWord = HandleCompleteWord;
+      settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
-      TextCompletionEnabled = VsfSettings.TextCompletionEnabled;
-      CompleteDuringTyping = VsfSettings.TCCompleteDuringTyping;
-      HandleCompleteWord = VsfSettings.TCHandleCompleteWord;
+      var settings = SettingsContext.GetSettings();
+      TextCompletionEnabled = settings.TextCompletionEnabled;
+      CompleteDuringTyping = settings.TCCompleteDuringTyping;
+      HandleCompleteWord = settings.TCHandleCompleteWord;
     }
 
     [LocDisplayName("Enable Plain-Text Completion")]

@@ -142,7 +142,7 @@
     <Compile Include="Options\TextObfuscationDialog.xaml.cs">
       <DependentUpon>TextObfuscationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Options\TextObfuscationOptions.cs">
+    <Compile Include="Options\TextObfuscationOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Options\IntellisenseOptions.cs">

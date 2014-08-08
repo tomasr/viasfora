@@ -16,42 +16,44 @@ namespace Winterdom.Viasfora.Options {
 
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
-      VsfSettings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
-      VsfSettings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
-      VsfSettings.HighlightLineWidth = this.HighlightLineWidth;
-      VsfSettings.KeywordClassifierEnabled = KeywordClassifierEnabled;
-      VsfSettings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
-      VsfSettings.RainbowTagsEnabled = RainbowTagsEnabled;
-      VsfSettings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
-      VsfSettings.RainbowHighlightMode = RainbowHighlightMode;
-      VsfSettings.DevMarginEnabled = DevMarginEnabled;
-      VsfSettings.AutoExpandRegions = AutoExpandRegions;
-      VsfSettings.BoldAsItalicsEnabled = BoldAsItalicsEnabled;
-      VsfSettings.ModelinesEnabled = ModelinesEnabled;
-      VsfSettings.ModelinesNumLines = (int)ModelinesNumLines;
-      VsfSettings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
-      VsfSettings.XmlCloseTagHighlightEnabled = XmlCloseTagHighlightEnabled;
-      VsfSettings.XmlMatchTagsEnabled = XmlMatchTagsEnabled;
-      VsfSettings.Save();
+      var settings = SettingsContext.GetSettings();
+      settings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
+      settings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
+      settings.HighlightLineWidth = this.HighlightLineWidth;
+      settings.KeywordClassifierEnabled = KeywordClassifierEnabled;
+      settings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
+      settings.RainbowTagsEnabled = RainbowTagsEnabled;
+      settings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
+      settings.RainbowHighlightMode = RainbowHighlightMode;
+      settings.DevMarginEnabled = DevMarginEnabled;
+      settings.AutoExpandRegions = AutoExpandRegions;
+      settings.BoldAsItalicsEnabled = BoldAsItalicsEnabled;
+      settings.ModelinesEnabled = ModelinesEnabled;
+      settings.ModelinesNumLines = (int)ModelinesNumLines;
+      settings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
+      settings.XmlCloseTagHighlightEnabled = XmlCloseTagHighlightEnabled;
+      settings.XmlMatchTagsEnabled = XmlMatchTagsEnabled;
+      settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
-      CurrentLineHighlightEnabled = VsfSettings.CurrentLineHighlightEnabled;
-      CurrentColumnHighlightEnabled = VsfSettings.CurrentColumnHighlightEnabled;
-      highlightLineWidth = VsfSettings.HighlightLineWidth;
-      KeywordClassifierEnabled = VsfSettings.KeywordClassifierEnabled;
-      EscapeSeqHighlightEnabled = VsfSettings.EscapeSeqHighlightEnabled;
-      RainbowTagsEnabled = VsfSettings.RainbowTagsEnabled;
-      RainbowHighlightMode = VsfSettings.RainbowHighlightMode;
-      RainbowToolTipsEnabled = VsfSettings.RainbowToolTipsEnabled;
-      DevMarginEnabled = VsfSettings.DevMarginEnabled;
-      AutoExpandRegions = VsfSettings.AutoExpandRegions;
-      BoldAsItalicsEnabled = VsfSettings.BoldAsItalicsEnabled;
-      ModelinesEnabled = VsfSettings.ModelinesEnabled;
-      ModelinesNumLines = (uint)VsfSettings.ModelinesNumLines;
-      XmlnsPrefixHighlightEnabled = VsfSettings.XmlnsPrefixHighlightEnabled;
-      XmlCloseTagHighlightEnabled = VsfSettings.XmlCloseTagHighlightEnabled;
-      XmlMatchTagsEnabled = VsfSettings.XmlMatchTagsEnabled;
+      var settings = SettingsContext.GetSettings();
+      CurrentLineHighlightEnabled = settings.CurrentLineHighlightEnabled;
+      CurrentColumnHighlightEnabled = settings.CurrentColumnHighlightEnabled;
+      highlightLineWidth = settings.HighlightLineWidth;
+      KeywordClassifierEnabled = settings.KeywordClassifierEnabled;
+      EscapeSeqHighlightEnabled = settings.EscapeSeqHighlightEnabled;
+      RainbowTagsEnabled = settings.RainbowTagsEnabled;
+      RainbowHighlightMode = settings.RainbowHighlightMode;
+      RainbowToolTipsEnabled = settings.RainbowToolTipsEnabled;
+      DevMarginEnabled = settings.DevMarginEnabled;
+      AutoExpandRegions = settings.AutoExpandRegions;
+      BoldAsItalicsEnabled = settings.BoldAsItalicsEnabled;
+      ModelinesEnabled = settings.ModelinesEnabled;
+      ModelinesNumLines = (uint)settings.ModelinesNumLines;
+      XmlnsPrefixHighlightEnabled = settings.XmlnsPrefixHighlightEnabled;
+      XmlCloseTagHighlightEnabled = settings.XmlCloseTagHighlightEnabled;
+      XmlMatchTagsEnabled = settings.XmlMatchTagsEnabled;
     }
 
     // Text Editor Extensions

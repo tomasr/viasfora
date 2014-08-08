@@ -14,12 +14,12 @@ using System.Collections.ObjectModel;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.TextObfuscationOptions)]
-  public class TextObfuscationOptions : UIElementDialogPage {
+  public class TextObfuscationOptionsPage : UIElementDialogPage {
     private TextObfuscationDialog dialog;
     protected override System.Windows.UIElement Child {
       get { return dialog; }
     }
-    public TextObfuscationOptions() {
+    public TextObfuscationOptionsPage() {
      this.dialog = new TextObfuscationDialog();
     }
     public override void SaveSettingsToStorage() {
@@ -30,13 +30,16 @@ namespace Winterdom.Viasfora.Options {
       // propagated properly!
       MoveFocusToNext();
 
-      VsfSettings.TextObfuscationRegexes = dialog.Entries.ListToJson();
-      VsfSettings.Save();
+      var settings = SettingsContext.GetSettings();
+      settings.TextObfuscationRegexes = dialog.Entries.ListToJson();
+      settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
+      var settings = SettingsContext.GetSettings();
+
       this.dialog.Entries.Clear();
-      var entries = VsfSettings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
+      var entries = settings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
       foreach ( var entry in entries ) {
         this.dialog.Entries.Add(entry);
       }
