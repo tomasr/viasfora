@@ -271,7 +271,6 @@
     <Compile Include="Util\ViewTipProperty.cs" />
     <Compile Include="Util\VsColors.cs" />
     <Compile Include="ViewRoles.cs" />
-    <Compile Include="VsfSettings.cs" />
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />
     <Compile Include="StringExtensions.cs" />

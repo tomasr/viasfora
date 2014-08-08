@@ -51,9 +51,10 @@ namespace Winterdom.Viasfora {
     private List<VsCommand> commands = new List<VsCommand>();
 
     public static int GetPresentationModeZoomLevel() {
+      var settings = SettingsContext.GetSettings();
       return PresentationModeTurnedOn
-        ? VsfSettings.PresentationModeEnabledZoomLevel
-        : VsfSettings.PresentationModeDefaultZoomLevel;
+        ? settings.PresentationModeEnabledZoomLevel
+        : settings.PresentationModeDefaultZoomLevel;
     }
 
     protected override void Initialize() {
