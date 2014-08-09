@@ -5,8 +5,10 @@ branches:
     - master
     - develop
 
-configuration: Release
-platform: AnyCPU
+configuration:
+  - Release
+platform:
+  - Any CPU
 
 artifacts:
   - path: Viasfora\bin\$(configuration)\Winterdom.Viasfora.vsix
