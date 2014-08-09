@@ -21,19 +21,25 @@ namespace Winterdom.Viasfora.Text {
   public class BoldAsItalicsViewListener : IWpfTextViewCreationListener {
     [Import]
     private IClassificationFormatMapService formatService = null;
+    [Import]
+    private IVsfSettings settings = null;
     public void TextViewCreated(IWpfTextView textView) {
       var formatMap = formatService.GetClassificationFormatMap(textView);
       textView.Properties.GetOrCreateSingletonProperty(
-        () => new BoldAsItalicsFormatter(textView, formatMap)
+        () => new BoldAsItalicsFormatter(textView, formatMap, settings)
         );
     }
   }
 
   public class BoldAsItalicsFormatter {
     private IClassificationFormatMap formatMap;
+    private IVsfSettings settings;
     private bool working = false;
-    public BoldAsItalicsFormatter(IWpfTextView textView, IClassificationFormatMap map) {
+    public BoldAsItalicsFormatter(
+            IWpfTextView textView, IClassificationFormatMap map,
+            IVsfSettings settings) {
       this.formatMap = map;
+      this.settings = settings;
       textView.GotAggregateFocus += OnViewFocus;
       this.formatMap.ClassificationFormatMappingChanged += OnMappingChanged;
     }
@@ -48,7 +54,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void MakeBoldItalics() {
-      bool enabled = VsfSettings.BoldAsItalicsEnabled;
+      bool enabled = settings.BoldAsItalicsEnabled;
       if ( !enabled || working || formatMap.IsInBatchUpdate ) {
         return;
       }

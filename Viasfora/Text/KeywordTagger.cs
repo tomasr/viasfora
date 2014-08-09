@@ -20,6 +20,7 @@ namespace Winterdom.Viasfora.Text {
     private KeywordTag stringEscapeClassification;
     private ITagAggregator<IClassificationTag> aggregator;
     private ILanguageFactory langFactory;
+    private IVsfSettings settings;
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
@@ -40,7 +41,8 @@ namespace Winterdom.Viasfora.Text {
       stringEscapeClassification =
          new KeywordTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
 
-      VsfSettings.SettingsUpdated += this.OnSettingsUpdated;
+      this.settings = provider.Settings;
+      this.settings.SettingsChanged += this.OnSettingsChanged;
     }
 
     public IEnumerable<ITagSpan<KeywordTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
@@ -48,8 +50,8 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ILanguage lang = GetKeywordsByContentType(theBuffer.ContentType);
-      bool eshe = VsfSettings.EscapeSeqHighlightEnabled;
-      bool kce = VsfSettings.KeywordClassifierEnabled;
+      bool eshe = settings.EscapeSeqHighlightEnabled;
+      bool kce = settings.KeywordClassifierEnabled;
       if ( !(kce || eshe) ) {
         yield break;
       }
@@ -78,16 +80,19 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void Dispose() {
-      if ( theBuffer != null ) {
-        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-        theBuffer = null;
+      if ( settings != null ) {
+        settings.SettingsChanged -= OnSettingsChanged;
+        settings = null;
       }
       if ( aggregator != null ) {
         aggregator.Dispose();
         aggregator = null;
       }
+      theBuffer = null;
     }
-    void OnSettingsUpdated(object sender, EventArgs e) {
+    void OnSettingsChanged(object sender, EventArgs e) {
+      if ( this.theBuffer == null )
+        return;
       var tempEvent = TagsChanged;
       if ( tempEvent != null ) {
         tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(theBuffer.CurrentSnapshot, 0,

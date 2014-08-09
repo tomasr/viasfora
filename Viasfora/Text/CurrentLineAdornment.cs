@@ -20,14 +20,16 @@ namespace Winterdom.Viasfora.Text {
     private IWpfTextView view;
     private IClassificationFormatMap formatMap;
     private IClassificationType formatType;
+    private IVsfSettings settings;
     private Rectangle lineRect;
 
     public CurrentLineAdornment(
           IWpfTextView view, IClassificationFormatMap formatMap,
-          IClassificationType formatType) {
+          IClassificationType formatType, IVsfSettings settings) {
       this.view = view;
       this.formatMap = formatMap;
       this.formatType = formatType;
+      this.settings = settings;
       this.layer = view.GetAdornmentLayer(Constants.LINE_HIGHLIGHT);
       this.lineRect = new Rectangle();
 
@@ -36,27 +38,35 @@ namespace Winterdom.Viasfora.Text {
       view.LayoutChanged += OnLayoutChanged;
       view.ViewportLeftChanged += OnViewportLeftChanged;
       view.Closed += OnViewClosed;
-      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+
+      this.settings.SettingsChanged += OnSettingsChanged;
       formatMap.ClassificationFormatMappingChanged +=
          OnClassificationFormatMappingChanged;
 
       CreateDrawingObjects();
     }
 
-    void OnSettingsUpdated(object sender, EventArgs e) {
+    void OnSettingsChanged(object sender, EventArgs e) {
       CreateDrawingObjects();
       RedrawAdornments();
     }
     void OnViewClosed(object sender, EventArgs e) {
-      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-      view.Caret.PositionChanged -= OnCaretPositionChanged;
-      view.ViewportWidthChanged -= OnViewportWidthChanged;
-      view.LayoutChanged -= OnLayoutChanged;
-      view.ViewportLeftChanged -= OnViewportLeftChanged;
-      view.Closed -= OnViewClosed;
-      view = null;
-      formatMap.ClassificationFormatMappingChanged -= OnClassificationFormatMappingChanged;
-      formatMap = null;
+      if ( this.settings != null ) {
+        this.settings.SettingsChanged -= OnSettingsChanged;
+        this.settings = null;
+      }
+      if ( this.view != null ) {
+        view.Caret.PositionChanged -= OnCaretPositionChanged;
+        view.ViewportWidthChanged -= OnViewportWidthChanged;
+        view.LayoutChanged -= OnLayoutChanged;
+        view.ViewportLeftChanged -= OnViewportLeftChanged;
+        view.Closed -= OnViewClosed;
+        view = null;
+      }
+      if ( formatMap != null ) {
+        formatMap.ClassificationFormatMappingChanged -= OnClassificationFormatMappingChanged;
+        formatMap = null;
+      }
       layer = null;
       formatType = null;
     }
@@ -96,7 +106,7 @@ namespace Winterdom.Viasfora.Text {
 
       this.lineRect.Fill = format.BackgroundBrush;
       this.lineRect.Stroke = format.ForegroundBrush;
-      this.lineRect.StrokeThickness = VsfSettings.HighlightLineWidth;
+      this.lineRect.StrokeThickness = settings.HighlightLineWidth;
     }
     private void RedrawAdornments() {
       if ( view.TextViewLines != null ) {
@@ -114,7 +124,7 @@ namespace Winterdom.Viasfora.Text {
       return view.GetTextViewLineContainingBufferPosition(point);
     }
     private void CreateVisuals(ITextViewLine line) {
-      if ( !VsfSettings.CurrentLineHighlightEnabled ) {
+      if ( !settings.CurrentLineHighlightEnabled ) {
         return; // not enabled
       }
       IWpfTextViewLineCollection textViewLines = view.TextViewLines;

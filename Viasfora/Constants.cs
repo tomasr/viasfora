@@ -44,5 +44,18 @@ namespace Winterdom.Viasfora {
 
     public const String WordWrapStyleId = "TextView/WordWrapStyle";
     public const String ViewProhibitUserInput = "TextView/ProhibitUserInput";
+
+    // Languages
+    public const String Cpp = "Cpp";
+    public const String CSharp = "CSharp";
+    public const String Css = "CSS";
+    public const String FSharp = "FSharp";
+    public const String JS = "JScript";
+    public const String Json = "JSON";
+    public const String PowerShell = "PowerShell";
+    public const String Python = "Python";
+    public const String Sql = "Sql";
+    public const String TypeScript = "TypeScript";
+    public const String VB = "VB";
   }
 }

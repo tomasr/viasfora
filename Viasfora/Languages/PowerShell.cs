@@ -40,8 +40,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return VIS_KEYWORDS; }
     }
-    protected override String KeyName {
-      get { return "PowerShell"; }
+    public override String KeyName {
+      get { return Constants.PowerShell; }
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType }; }

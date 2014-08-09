@@ -142,7 +142,7 @@
     <Compile Include="Options\TextObfuscationDialog.xaml.cs">
       <DependentUpon>TextObfuscationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Options\TextObfuscationOptions.cs">
+    <Compile Include="Options\TextObfuscationOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Options\IntellisenseOptions.cs">
@@ -192,15 +192,18 @@
     <Compile Include="Rainbow\RainbowTipHighlight.cs" />
     <Compile Include="Rainbow\RainbowToolTipContext.cs" />
     <Compile Include="ReSharper.cs" />
+    <Compile Include="SettingsContext.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
     <Compile Include="Settings\IPersistSettings.cs" />
     <Compile Include="Settings\ISettingsObject.cs" />
     <Compile Include="Settings\ISettingsStore.cs" />
     <Compile Include="Settings\ISolutionUserSettings.cs" />
+    <Compile Include="IVsfSettings.cs" />
     <Compile Include="Settings\OutlineSettings.cs" />
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="Settings\SuoPersistUserSettings.cs" />
+    <Compile Include="Settings\VsfSettings.cs" />
     <Compile Include="SnapshotExtensions.cs" />
     <Compile Include="Tags\ObfuscatedTextTag.cs" />
     <Compile Include="Tags\OutliningGlyphTag.cs" />
@@ -268,7 +271,6 @@
     <Compile Include="Util\ViewTipProperty.cs" />
     <Compile Include="Util\VsColors.cs" />
     <Compile Include="ViewRoles.cs" />
-    <Compile Include="VsfSettings.cs" />
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />
     <Compile Include="StringExtensions.cs" />

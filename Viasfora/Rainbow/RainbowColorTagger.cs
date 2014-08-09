@@ -29,7 +29,7 @@ namespace Winterdom.Viasfora.Rainbow {
       return result;
     }
     public IEnumerable<ITagSpan<RainbowTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      if ( !VsfSettings.RainbowTagsEnabled ) {
+      if ( !provider.Settings.RainbowTagsEnabled ) {
         yield break;
       }
       if ( spans.Count == 0 ) {

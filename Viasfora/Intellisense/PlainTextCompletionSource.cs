@@ -13,22 +13,25 @@ namespace Winterdom.Viasfora.Intellisense {
   public class PlainTextCompletionSource : ICompletionSource {
     private ITextBuffer theBuffer;
     private ITextStructureNavigator navigator;
+    private IVsfSettings settings;
     private ImageSource glyphIcon;
     private IList<Completion> currentCompletions;
     private BufferStats bufferStatsOnCompletion;
 
     public PlainTextCompletionSource(
           ITextBuffer buffer,
-          ITextStructureNavigator structureNavigator) {
+          ITextStructureNavigator structureNavigator,
+          IVsfSettings settings) {
       this.theBuffer = buffer;
       this.navigator = structureNavigator;
+      this.settings = settings;
       glyphIcon = new BitmapImage(new Uri("pack://application:,,,/Winterdom.Viasfora;component/Resources/PlainTextCompletion.ico"));
     }
     public void Dispose() {
     }
 
     public void AugmentCompletionSession(ICompletionSession session, IList<CompletionSet> completionSets) {
-      if ( !VsfSettings.TextCompletionEnabled ) {
+      if ( !settings.TextCompletionEnabled ) {
         return;
       }
       if ( session.TextView.TextBuffer != this.theBuffer ) {

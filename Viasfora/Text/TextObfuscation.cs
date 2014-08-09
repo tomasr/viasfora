@@ -19,12 +19,14 @@ namespace Winterdom.Viasfora.Text {
   public class TextObfuscationProvider : IViewTaggerProvider {
     [Import]
     private IClassificationTypeRegistryService registryService = null;
+    [Import]
+    private IVsfSettings settings = null;
 
     public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
       var obfuscationType = 
         registryService.GetClassificationType(Constants.OBFUSCATED_TEXT);
       return new TextObfuscationTagger(
-                view, buffer, obfuscationType
+                view, buffer, obfuscationType, settings
               ) as ITagger<T>;
     }
   }
@@ -34,6 +36,7 @@ namespace Winterdom.Viasfora.Text {
     private ITextView theView;
     private ITextBuffer theBuffer;
     private IClassificationType obfuscationType;
+    private IVsfSettings settings;
     private bool enabled;
     private List<RegexEntry> expressionsToSearch;
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
@@ -41,15 +44,17 @@ namespace Winterdom.Viasfora.Text {
     public TextObfuscationTagger(
           ITextView view, 
           ITextBuffer buffer, 
-          IClassificationType obfuscationType) {
+          IClassificationType obfuscationType,
+          IVsfSettings settings) {
       this.theView = view;
       this.theBuffer = buffer;
       this.obfuscationType = obfuscationType;
       this.enabled = TextObfuscationState.Enabled;
+      this.settings = settings;
       this.expressionsToSearch = 
-        VsfSettings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
+        settings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
 
-      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+      this.settings.SettingsChanged += OnSettingsChanged;
       TextObfuscationState.EnabledChanged += OnEnabledChanged;
       this.theView.Closed += OnViewClosed;
     }
@@ -81,9 +86,12 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void OnViewClosed(object sender, EventArgs e) {
+      if ( this.settings != null ) {
+        this.settings.SettingsChanged -= OnSettingsChanged;
+        this.settings = null;
+      }
       if ( this.theView != null ) {
         this.theView.Closed -= OnViewClosed;
-        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
         TextObfuscationState.EnabledChanged -= OnEnabledChanged;
         this.theView = null;
         this.theBuffer = null;
@@ -97,9 +105,9 @@ namespace Winterdom.Viasfora.Text {
       SnapshotSpan span = new SnapshotSpan(snapshot, 0, snapshot.Length);
       ReportTagsChanged(span);
     }
-    private void OnSettingsUpdated(object sender, EventArgs e) {
+    private void OnSettingsChanged(object sender, EventArgs e) {
       this.expressionsToSearch = 
-        VsfSettings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
+        settings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
       ITextSnapshot snapshot = this.theBuffer.CurrentSnapshot;
       SnapshotSpan span = new SnapshotSpan(snapshot, 0, snapshot.Length);
       ReportTagsChanged(span);
