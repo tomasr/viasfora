@@ -126,7 +126,8 @@ namespace Winterdom.Viasfora.Text {
       return view.GetTextViewLineContainingBufferPosition(point);
     }
     private bool IsEnabled() {
-      return settings.CurrentLineHighlightEnabled;
+      return settings.CurrentLineHighlightEnabled
+          && !view.Options.GetOptionValue<bool>(ViewOptions.HighlightCurrentLineOption);
     }
     private void CreateVisuals(ITextViewLine line) {
       if ( !IsEnabled() ) {
