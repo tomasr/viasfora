@@ -71,7 +71,6 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AdornmentLayers.cs" />
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
     <Compile Include="Commands\CompleteWordCommand.cs" />
@@ -88,6 +87,7 @@
     <Compile Include="Contracts\ILanguageFactory.cs" />
     <Compile Include="Contracts\IToolTipWindow.cs" />
     <Compile Include="Contracts\IToolTipWindowProvider.cs" />
+    <Compile Include="DefaultNames.cs" />
     <Compile Include="Design\NativeMethods.cs" />
     <Compile Include="Design\QuickInfoPresenter.xaml.cs">
       <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>
@@ -270,7 +270,6 @@
     <Compile Include="Util\ToolTipWindow.cs" />
     <Compile Include="Util\ViewTipProperty.cs" />
     <Compile Include="Util\VsColors.cs" />
-    <Compile Include="ViewRoles.cs" />
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />
     <Compile Include="StringExtensions.cs" />

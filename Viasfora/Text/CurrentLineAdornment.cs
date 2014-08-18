@@ -38,6 +38,7 @@ namespace Winterdom.Viasfora.Text {
       view.LayoutChanged += OnLayoutChanged;
       view.ViewportLeftChanged += OnViewportLeftChanged;
       view.Closed += OnViewClosed;
+      view.Options.OptionChanged += OnSettingsChanged;
 
       this.settings.SettingsChanged += OnSettingsChanged;
       formatMap.ClassificationFormatMappingChanged +=
@@ -46,16 +47,13 @@ namespace Winterdom.Viasfora.Text {
       CreateDrawingObjects();
     }
 
-    void OnSettingsChanged(object sender, EventArgs e) {
-      CreateDrawingObjects();
-      RedrawAdornments();
-    }
     void OnViewClosed(object sender, EventArgs e) {
       if ( this.settings != null ) {
         this.settings.SettingsChanged -= OnSettingsChanged;
         this.settings = null;
       }
       if ( this.view != null ) {
+        view.Options.OptionChanged -= OnSettingsChanged;
         view.Caret.PositionChanged -= OnCaretPositionChanged;
         view.ViewportWidthChanged -= OnViewportWidthChanged;
         view.LayoutChanged -= OnLayoutChanged;
@@ -69,6 +67,10 @@ namespace Winterdom.Viasfora.Text {
       }
       layer = null;
       formatType = null;
+    }
+    void OnSettingsChanged(object sender, EventArgs e) {
+      CreateDrawingObjects();
+      RedrawAdornments();
     }
     void OnViewportLeftChanged(object sender, EventArgs e) {
       RedrawAdornments();
@@ -123,8 +125,11 @@ namespace Winterdom.Viasfora.Text {
       }
       return view.GetTextViewLineContainingBufferPosition(point);
     }
+    private bool IsEnabled() {
+      return settings.CurrentLineHighlightEnabled;
+    }
     private void CreateVisuals(ITextViewLine line) {
-      if ( !settings.CurrentLineHighlightEnabled ) {
+      if ( !IsEnabled() ) {
         return; // not enabled
       }
       IWpfTextViewLineCollection textViewLines = view.TextViewLines;
