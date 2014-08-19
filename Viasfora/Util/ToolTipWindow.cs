@@ -139,8 +139,8 @@ namespace Winterdom.Viasfora.Util {
       this.tipView = this.provider.EditorFactory.CreateTextView(model, roles, options);
       options = this.tipView.Options;
       options.SetOptionValue(DefaultTextViewOptions.IsViewportLeftClippedId, true);
-      options.SetOptionValue(Constants.WordWrapStyleId, WordWrapStyles.None);
-      options.SetOptionValue(Constants.ViewProhibitUserInput, true);
+      options.SetOptionValue(ViewOptions.WordWrapStyleId, WordWrapStyles.None);
+      options.SetOptionValue(ViewOptions.ViewProhibitUserInput, true);
 
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 

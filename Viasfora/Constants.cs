@@ -41,10 +41,6 @@ namespace Winterdom.Viasfora {
     public const String STRING_COLLECTION_EDITOR = "System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
     public static int S_OK = 0;
 
-
-    public const String WordWrapStyleId = "TextView/WordWrapStyle";
-    public const String ViewProhibitUserInput = "TextView/ProhibitUserInput";
-
     // Languages
     public const String Cpp = "Cpp";
     public const String CSharp = "CSharp";

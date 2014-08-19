@@ -17,5 +17,7 @@ namespace Winterdom.Viasfora {
 
   public static class ViewOptions {
     public const String HighlightCurrentLineOption = "Adornments/HighlightCurrentLine/Enable";
+    public const String WordWrapStyleId = "TextView/WordWrapStyle";
+    public const String ViewProhibitUserInput = "TextView/ProhibitUserInput";
   }
 }
