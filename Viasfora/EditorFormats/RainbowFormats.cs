@@ -104,7 +104,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow9Format : ClassificationFormatDefinition {
     public Rainbow9Format() {
       this.DisplayName = Constants.RAINBOW_9;
-      this.ForegroundColor = Colors.BlueViolet;
+      this.ForegroundColor = Colors.Green;
     }
   }
 
