@@ -52,6 +52,61 @@ namespace Winterdom.Viasfora.EditorFormats {
       this.ForegroundColor = Colors.DarkViolet;
     }
   }
+  [Export(typeof(EditorFormatDefinition))]
+  [ClassificationType(ClassificationTypeNames = Constants.RAINBOW_5)]
+  [Name(Constants.RAINBOW_5)]
+  [UserVisible(true)]
+  [Order(After = Priority.High)]
+  public sealed class Rainbow5Format : ClassificationFormatDefinition {
+    public Rainbow5Format() {
+      this.DisplayName = Constants.RAINBOW_5;
+      this.ForegroundColor = Colors.Gray;
+    }
+  }
+  [Export(typeof(EditorFormatDefinition))]
+  [ClassificationType(ClassificationTypeNames = Constants.RAINBOW_6)]
+  [Name(Constants.RAINBOW_6)]
+  [UserVisible(true)]
+  [Order(After = Priority.High)]
+  public sealed class Rainbow6Format : ClassificationFormatDefinition {
+    public Rainbow6Format() {
+      this.DisplayName = Constants.RAINBOW_6;
+      this.ForegroundColor = Colors.RoyalBlue;
+    }
+  }
+  [Export(typeof(EditorFormatDefinition))]
+  [ClassificationType(ClassificationTypeNames = Constants.RAINBOW_7)]
+  [Name(Constants.RAINBOW_7)]
+  [UserVisible(true)]
+  [Order(After = Priority.High)]
+  public sealed class Rainbow7Format : ClassificationFormatDefinition {
+    public Rainbow7Format() {
+      this.DisplayName = Constants.RAINBOW_7;
+      this.ForegroundColor = Colors.Crimson;
+    }
+  }
+  [Export(typeof(EditorFormatDefinition))]
+  [ClassificationType(ClassificationTypeNames = Constants.RAINBOW_8)]
+  [Name(Constants.RAINBOW_8)]
+  [UserVisible(true)]
+  [Order(After = Priority.High)]
+  public sealed class Rainbow8Format : ClassificationFormatDefinition {
+    public Rainbow8Format() {
+      this.DisplayName = Constants.RAINBOW_8;
+      this.ForegroundColor = Colors.DarkTurquoise;
+    }
+  }
+  [Export(typeof(EditorFormatDefinition))]
+  [ClassificationType(ClassificationTypeNames = Constants.RAINBOW_9)]
+  [Name(Constants.RAINBOW_9)]
+  [UserVisible(true)]
+  [Order(After = Priority.High)]
+  public sealed class Rainbow9Format : ClassificationFormatDefinition {
+    public Rainbow9Format() {
+      this.DisplayName = Constants.RAINBOW_9;
+      this.ForegroundColor = Colors.BlueViolet;
+    }
+  }
 
   [Export(typeof(EditorFormatDefinition))]
   [ClassificationType(ClassificationTypeNames = Constants.RAINBOW_TIP_HIGHLIGHT)]
