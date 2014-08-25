@@ -76,6 +76,10 @@ namespace Winterdom.Viasfora.Settings {
       get { return GetDouble(HIGHLIGHT_LINE_WIDTH, 1.4); }
       set { SetValue(HIGHLIGHT_LINE_WIDTH, value); }
     }
+    public int RainbowDepth {
+      get { return GetInt32("RainbowDepth", 4); }
+      set { SetValue("RainbowDepth", value); }
+    }
     public bool RainbowTagsEnabled {
       get { return GetBoolean(RAINBOW_TAGS_ENABLED, true); }
       set { SetValue(RAINBOW_TAGS_ENABLED, value); }

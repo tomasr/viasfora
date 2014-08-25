@@ -40,6 +40,21 @@ namespace Winterdom.Viasfora.Classifications {
     [Export, Name(Constants.RAINBOW_4)]
     internal static ClassificationTypeDefinition Rainbow4ClassificationType = null;
 
+    [Export, Name(Constants.RAINBOW_5)]
+    internal static ClassificationTypeDefinition Rainbow5ClassificationType = null;
+
+    [Export, Name(Constants.RAINBOW_6)]
+    internal static ClassificationTypeDefinition Rainbow6ClassificationType = null;
+
+    [Export, Name(Constants.RAINBOW_7)]
+    internal static ClassificationTypeDefinition Rainbow7ClassificationType = null;
+
+    [Export, Name(Constants.RAINBOW_8)]
+    internal static ClassificationTypeDefinition Rainbow8ClassificationType = null;
+
+    [Export, Name(Constants.RAINBOW_9)]
+    internal static ClassificationTypeDefinition Rainbow9ClassificationType = null;
+
     [Export, Name(Constants.OBFUSCATED_TEXT)]
     internal static ClassificationTypeDefinition ObfuscatedTextType = null;
 

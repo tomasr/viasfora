@@ -41,7 +41,7 @@ namespace Winterdom.Viasfora.Rainbow {
         yield break;
       }
       foreach ( var brace in braceCache.BracesInSpans(spans) ) {
-        var ctype = rainbowTags[brace.Depth % Constants.MAX_RAINBOW_DEPTH];
+        var ctype = rainbowTags[brace.Depth % this.provider.Settings.RainbowDepth];
         yield return brace.ToSpan(snapshot, ctype);
       }
     }
