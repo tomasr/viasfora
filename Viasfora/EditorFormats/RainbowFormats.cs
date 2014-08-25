@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow1Format : ClassificationFormatDefinition {
     public Rainbow1Format() {
       this.DisplayName = Constants.RAINBOW_1;
-      this.ForegroundColor = Colors.Crimson;
+      this.ForegroundColor = Color.FromArgb(0xff, 0xff, 0x99, 0x00);
     }
   }
   [Export(typeof(EditorFormatDefinition))]
@@ -27,7 +27,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow2Format : ClassificationFormatDefinition {
     public Rainbow2Format() {
       this.DisplayName = Constants.RAINBOW_2;
-      this.ForegroundColor = Colors.MediumOrchid;
+      this.ForegroundColor = Colors.DeepPink; //Colors.MediumVioletRed;
     }
   }
   [Export(typeof(EditorFormatDefinition))]
@@ -38,7 +38,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow3Format : ClassificationFormatDefinition {
     public Rainbow3Format() {
       this.DisplayName = Constants.RAINBOW_3;
-      this.ForegroundColor = Colors.LimeGreen;
+      this.ForegroundColor = Colors.YellowGreen; //MediumSeaGreen;
     }
   }
   [Export(typeof(EditorFormatDefinition))]
@@ -49,7 +49,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow4Format : ClassificationFormatDefinition {
     public Rainbow4Format() {
       this.DisplayName = Constants.RAINBOW_4;
-      this.ForegroundColor = Colors.RoyalBlue;
+      this.ForegroundColor = Colors.DarkViolet;
     }
   }
 
