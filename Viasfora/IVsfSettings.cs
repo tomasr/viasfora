@@ -17,6 +17,7 @@ namespace Winterdom.Viasfora {
     bool CurrentColumnHighlightEnabled { get; set; }
     double HighlightLineWidth { get; set; }
 
+    int RainbowDepth { get; set; }
     bool RainbowTagsEnabled { get; set; }
     long RainbowCtrlTimer { get; set; }
     RainbowHighlightMode RainbowHighlightMode { get; set; }
