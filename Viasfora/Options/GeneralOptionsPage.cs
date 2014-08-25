@@ -22,6 +22,7 @@ namespace Winterdom.Viasfora.Options {
       settings.HighlightLineWidth = this.HighlightLineWidth;
       settings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       settings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
+      settings.RainbowDepth = RainbowDepth;
       settings.RainbowTagsEnabled = RainbowTagsEnabled;
       settings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
       settings.RainbowHighlightMode = RainbowHighlightMode;
@@ -43,6 +44,7 @@ namespace Winterdom.Viasfora.Options {
       highlightLineWidth = settings.HighlightLineWidth;
       KeywordClassifierEnabled = settings.KeywordClassifierEnabled;
       EscapeSeqHighlightEnabled = settings.EscapeSeqHighlightEnabled;
+      RainbowDepth = settings.RainbowDepth;
       RainbowTagsEnabled = settings.RainbowTagsEnabled;
       RainbowHighlightMode = settings.RainbowHighlightMode;
       RainbowToolTipsEnabled = settings.RainbowToolTipsEnabled;
@@ -95,6 +97,20 @@ namespace Winterdom.Viasfora.Options {
     [Description("Highlight matching braces using colors based on nesting")]
     [Category("Rainbow Braces")]
     public bool RainbowTagsEnabled { get; set; }
+
+    private int rainbowDepth;
+    [LocDisplayName("Rainbow Depth")]
+    [Description("Controls how many different colors are used to render rainbow braces")]
+    [Category("Rainbow Braces")]
+    public int RainbowDepth {
+      get { return this.rainbowDepth; }
+      set {
+        if ( value <= 0 || value > Constants.MAX_RAINBOW_DEPTH ) {
+          throw new ArgumentOutOfRangeException("Value must be between 0 and 9");
+        }
+        this.rainbowDepth = value;
+      }
+    }
 
     [LocDisplayName("Rainbow Highlight Mode")]
     [Description("Controls how the caret position is used to identify braces to highlight.")]
