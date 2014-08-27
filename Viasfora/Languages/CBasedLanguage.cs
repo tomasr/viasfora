@@ -8,7 +8,7 @@ using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
-  abstract class CBasedLanguage : LanguageInfo {
+  public abstract class CBasedLanguage : LanguageInfo {
     public override string BraceList {
       get { return "(){}[]"; }
     }
