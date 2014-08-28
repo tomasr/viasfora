@@ -14,7 +14,7 @@ namespace Winterdom.Viasfora.Languages {
     }
 
     public override IBraceExtractor NewBraceExtractor() {
-      return new CBraceExtractor(this);
+      return new CBraceExtractor(this.BraceList);
     }
     public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
       return new CEscapeSequenceParser(text);
