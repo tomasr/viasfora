@@ -41,7 +41,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return Constants.Sql; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new SqlBraceExtractor(this);
+      return new SqlBraceExtractor(this.BraceList);
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType, ContentTypeAlt }; }

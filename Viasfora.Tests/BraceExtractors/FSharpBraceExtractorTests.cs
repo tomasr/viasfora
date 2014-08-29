@@ -9,31 +9,32 @@ using Xunit;
 
 namespace Viasfora.Tests.BraceExtractors {
   public class FSharpBraceExtractorTests {
+    const String BraceList = "(){}[]";
     [Fact]
     public void IgnoreBracesInTripleQuotes() {
       String input = "printfn \"\"\"(){}[]\"\"\"";
-      var extractor = new FSharpBraceExtractor(new FSharp());
+      var extractor = new FSharpBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
     [Fact]
     public void IgnoreBracesInTripleQuotes2() {
       String input = "printfn \"\"\"(){}\"[]\"\"\"";
-      var extractor = new FSharpBraceExtractor(new FSharp());
+      var extractor = new FSharpBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
     [Fact]
     public void IgnoreBracesInVerbatimStrings() {
       String input = "print @\"some()\r\ntext()\r\nsome more()\"";
-      var extractor = new FSharpBraceExtractor(new FSharp());
+      var extractor = new FSharpBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
     [Fact]
     public void IgnoreBracesInMultiLineString() {
       String input = "print \"some()\r\ntext()\r\nsome more()\"";
-      var extractor = new FSharpBraceExtractor(new FSharp());
+      var extractor = new FSharpBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -42,7 +43,7 @@ namespace Viasfora.Tests.BraceExtractors {
       String input = @"
 let munge (s : string) = s.Replace("" "", """").Replace('(', '.').Replace(')', '.')
 ";
-      var extractor = new FSharpBraceExtractor(new FSharp());
+      var extractor = new FSharpBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(8, chars.Count);
     }
@@ -51,7 +52,7 @@ let munge (s : string) = s.Replace("" "", """").Replace('(', '.').Replace(')', '
       String input = @"
 let munge (s : string) = s.Replace("" "", """").Replace('()
 ";
-      var extractor = new FSharpBraceExtractor(new FSharp());
+      var extractor = new FSharpBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(6, chars.Count);
     }
@@ -60,7 +61,7 @@ let munge (s : string) = s.Replace("" "", """").Replace('()
       String input = @"
 let function1 (x: 'a) (y: 'a)
 ";
-      var extractor = new FSharpBraceExtractor(new FSharp());
+      var extractor = new FSharpBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
@@ -70,7 +71,7 @@ let function1 (x: 'a) (y: 'a)
 let c' = 7
 let x = (3 + c')
 ";
-      var extractor = new FSharpBraceExtractor(new FSharp());
+      var extractor = new FSharpBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
