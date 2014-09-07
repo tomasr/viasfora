@@ -7,7 +7,7 @@ using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
-  class CSharp : CBasedLanguage {
+  public class CSharp : CBasedLanguage {
     public const String ContentType = "CSharp";
     static readonly String[] CS_KEYWORDS = {
          "if", "else", "while", "do", "for", "foreach", 

@@ -28,7 +28,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return new String[] { ContentType }; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new JScriptBraceExtractor(this);
+      return new JScriptBraceExtractor(this.BraceList);
     }
   }
 }

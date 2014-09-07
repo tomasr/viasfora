@@ -43,7 +43,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return "(){}[]"; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new FSharpBraceExtractor(this);
+      return new FSharpBraceExtractor(this.BraceList);
     }
     public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
       return new FSharpEscapeSequenceParser(text);

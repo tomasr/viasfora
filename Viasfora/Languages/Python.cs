@@ -38,7 +38,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return Constants.Python; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new PythonBraceExtractor(this);
+      return new PythonBraceExtractor(this.BraceList);
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType }; }

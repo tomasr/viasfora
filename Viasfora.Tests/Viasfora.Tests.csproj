@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BraceExtractors\CBraceExtractorTests.cs" />
     <Compile Include="BraceExtractors\FSharpBraceExtractorTests.cs" />
     <Compile Include="BraceExtractors\CssBraceExtractorTests.cs" />
     <Compile Include="BraceExtractors\PsBraceExtractorTests.cs" />
