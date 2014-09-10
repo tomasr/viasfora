@@ -14,10 +14,10 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     const int stHereExpandableString = 4;
     const int stMultiLineComment = 5;
     private int status = stText;
-    private ILanguage lang;
+    private String braceList;
 
-    public PsBraceExtractor(ILanguage lang) {
-      this.lang = lang;
+    public PsBraceExtractor(String braces) {
+      this.braceList = braces;
     }
 
     public void Reset() {
@@ -66,7 +66,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           this.status = stString;
           tc.Next();
           this.ParseString(tc);
-        } else if ( lang.BraceList.IndexOf(tc.Char()) >= 0 ) {
+        } else if ( braceList.IndexOf(tc.Char()) >= 0 ) {
           yield return new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
         } else {

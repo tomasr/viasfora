@@ -29,14 +29,14 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return new String[0]; }
     }
-    protected override String KeyName {
-      get { return "JScript"; }
+    public override String KeyName {
+      get { return Constants.JS; }
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType, ContentTypeVS2012 }; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new JScriptBraceExtractor(this);
+      return new JScriptBraceExtractor(this.BraceList);
     }
   }
 }

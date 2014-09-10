@@ -30,6 +30,9 @@ namespace Winterdom.Viasfora.Intellisense {
     internal SVsServiceProvider ServiceProvider { get; set; }
     [Import]
     internal IEditorOperationsFactoryService EditorOperationsFactory { get; set; }
+    [Import]
+    internal IVsfSettings Settings { get; set; }
+
     public void VsTextViewCreated(IVsTextView textViewAdapter) {
       ITextView textView = AdapterService.GetWpfTextView(textViewAdapter);
       if ( textView == null )
@@ -72,7 +75,7 @@ namespace Winterdom.Viasfora.Intellisense {
         switch ( cmd ) {
           case VSConstants.VSStd2KCmdID.AUTOCOMPLETE:
           case VSConstants.VSStd2KCmdID.COMPLETEWORD:
-            if ( VsfSettings.TCHandleCompleteWord ) {
+            if ( provider.Settings.TCHandleCompleteWord ) {
               prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_ENABLED | (uint)OLECMDF.OLECMDF_SUPPORTED;
               return VSConstants.S_OK;
             }
@@ -83,7 +86,7 @@ namespace Winterdom.Viasfora.Intellisense {
     }
 
     public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut) {
-      if ( !VsfSettings.TextCompletionEnabled ) {
+      if ( !provider.Settings.TextCompletionEnabled ) {
         return nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
       }
       if ( VsShellUtilities.IsInAutomationFunction(provider.ServiceProvider) ) {
@@ -103,7 +106,7 @@ namespace Winterdom.Viasfora.Intellisense {
             // by the language provider, so only handle these
             // commands if there isn't already an Intellisense
             // provider
-            if ( VsfSettings.TCHandleCompleteWord ) {
+            if ( provider.Settings.TCHandleCompleteWord ) {
               if ( !ReSharper.Installed && !NextHandlerHandlesCommand(pguidCmdGroup, nCmdID) ) {
                 handled = this.StartSession(true);
               } 
@@ -216,7 +219,7 @@ namespace Winterdom.Viasfora.Intellisense {
         }
         return false;
       }
-      if ( VsfSettings.TCCompleteDuringTyping && !ReSharper.Installed ) {
+      if ( provider.Settings.TCCompleteDuringTyping && !ReSharper.Installed ) {
         return StartSession(false);
       }
       return false;

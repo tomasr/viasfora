@@ -12,10 +12,11 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     const int stSingleQuotedString = 2;
     const int stDoubleQuotedString = 3;
     private int state;
-    private ILanguage lang;
+    private String braceList;
 
-    public CssBraceExtractor(ILanguage lang) {
-      this.lang = lang;
+    public CssBraceExtractor(String braces) {
+      this.braceList = braces;
+      this.Reset();
     }
 
     public void Reset() {
@@ -56,7 +57,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           this.state = stSingleQuotedString;
           tc.Next();
           ParseString(tc);
-        } else if ( lang.BraceList.Contains(tc.Char()) ) {
+        } else if ( braceList.Contains(tc.Char()) ) {
           yield return new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
         } else {

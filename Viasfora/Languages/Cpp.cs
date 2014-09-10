@@ -25,8 +25,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return CPP_VIS_KEYWORDS; }
     }
-    protected override String KeyName {
-      get { return "Cpp"; }
+    public override String KeyName {
+      get { return Constants.Cpp; }
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType }; }

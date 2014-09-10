@@ -20,14 +20,16 @@ namespace Winterdom.Viasfora.Text {
     private IWpfTextView view;
     private IClassificationFormatMap formatMap;
     private IClassificationType formatType;
+    private IVsfSettings settings;
     private Rectangle columnRect;
 
     public CurrentColumnAdornment(
           IWpfTextView view, IClassificationFormatMap formatMap,
-          IClassificationType formatType) {
+          IClassificationType formatType, IVsfSettings settings) {
       this.view = view;
       this.formatMap = formatMap;
       this.formatType = formatType;
+      this.settings = settings;
       this.columnRect = new Rectangle();
       layer = view.GetAdornmentLayer(Constants.COLUMN_HIGHLIGHT);
 
@@ -37,7 +39,8 @@ namespace Winterdom.Viasfora.Text {
       view.LayoutChanged += OnViewLayoutChanged;
       view.TextViewModel.EditBuffer.PostChanged += OnBufferPostChanged;
       view.Closed += OnViewClosed;
-      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+
+      this.settings.SettingsChanged += OnSettingsChanged;
       formatMap.ClassificationFormatMappingChanged +=
          OnClassificationFormatMappingChanged;
 
@@ -45,7 +48,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
 
-    void OnSettingsUpdated(object sender, EventArgs e) {
+    void OnSettingsChanged(object sender, EventArgs e) {
       if ( this.view != null ) {
         CreateDrawingObjects();
         RedrawAdornments();
@@ -60,7 +63,9 @@ namespace Winterdom.Viasfora.Text {
       }
     }
     void OnViewClosed(object sender, EventArgs e) {
-      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+      if ( this.settings != null ) {
+        this.settings.SettingsChanged -= OnSettingsChanged;
+      }
       if ( this.view != null ) {
         view.Caret.PositionChanged -= OnCaretPositionChanged;
         if ( view.TextViewModel != null && view.TextViewModel.EditBuffer != null ) {
@@ -110,7 +115,7 @@ namespace Winterdom.Viasfora.Text {
       TextFormattingRunProperties format =
          formatMap.GetTextProperties(formatType);
 
-      this.columnRect.StrokeThickness = VsfSettings.HighlightLineWidth;
+      this.columnRect.StrokeThickness = settings.HighlightLineWidth;
       this.columnRect.Stroke = format.ForegroundBrush;
       this.columnRect.Fill = format.BackgroundBrush;
     }
@@ -122,7 +127,7 @@ namespace Winterdom.Viasfora.Text {
       }
     }
     private void CreateVisuals(VirtualSnapshotPoint caretPosition) {
-      if ( !VsfSettings.CurrentColumnHighlightEnabled ) {
+      if ( !settings.CurrentColumnHighlightEnabled ) {
         return; // not enabled
       }
       IWpfTextViewLineCollection textViewLines = view.TextViewLines;

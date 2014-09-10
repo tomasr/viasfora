@@ -9,6 +9,7 @@ using Xunit;
 
 namespace Viasfora.Tests.BraceExtractors {
   public class CssBraceExtractorTests {
+    const String BraceList = "(){}[]";
     [Fact]
     public void SimpleRule() {
       String input = @"
@@ -17,7 +18,7 @@ canvas,
 video {
   display: inline-block;
 }";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
@@ -29,7 +30,7 @@ video {
   padding-left: 8px;
 }
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
@@ -38,7 +39,7 @@ video {
       String input = @"
 /* this is a comment with (){}[] braces */
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -47,7 +48,7 @@ video {
       String input = @"
 some string() // this is a comment with (){}[] braces
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
@@ -59,7 +60,7 @@ with (){}[]
 braces
 */
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -68,7 +69,7 @@ braces
       String input = @"
 '../fonts/glyphicons-halflings-regular.eot (){}'
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -77,7 +78,7 @@ braces
       String input = @"
 ""../fonts/glyphicons-halflings-regular.eot (){}""
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -86,7 +87,7 @@ braces
       String input = @"
 '\123eab../fonts/glyphicons-halflings-regular.eot\'(){}\''
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -95,7 +96,7 @@ braces
       String input = @"
 ""\123eab../fonts/glyphicons-halflings-regular.eot\'(){}\'""
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -106,7 +107,7 @@ braces
 some other string (){} \
 with more stuff'
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -119,7 +120,7 @@ with more stuff'
   src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
 }
 ";
-      var extractor = new CssBraceExtractor(new Css());
+      var extractor = new CssBraceExtractor(BraceList);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2+2+8*2, chars.Count);
     }

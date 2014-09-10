@@ -32,6 +32,8 @@ namespace Winterdom.Viasfora.Util {
     private int linesDisplayed;
     private SnapshotPoint pointToDisplay;
     private Border wrapper;
+    const double ZoomFactor = 0.80;
+    const double WidthFactor = 0.60;
 
     public ToolTipWindow(ITextView source, ToolTipWindowProvider provider) {
       this.sourceTextView = source;
@@ -42,9 +44,13 @@ namespace Winterdom.Viasfora.Util {
       if ( tipView == null ) {
         CreateTipView();
       }
-      double zoom = tipView.ZoomLevel / 100.0;
-      double width = zoom * widthChars * this.tipView.FormattedLineSource.ColumnWidth;
-      double height = zoom * heightChars * this.tipView.FormattedLineSource.LineHeight;
+      double zoom = (tipView.ZoomLevel / 100.0);
+      double sourceZoom = this.GetSourceZoomFactor();
+      double width = Math.Max(
+        sourceZoom * WidthFactor * this.sourceTextView.ViewportWidth,
+        zoom * widthChars * this.tipView.FormattedLineSource.ColumnWidth
+        );
+      double height = zoom * heightChars * this.tipView.LineHeight;
       this.wrapper.Width = width;
       this.wrapper.Height = height;
       this.wrapper.BorderThickness = new Thickness(0);
@@ -129,21 +135,27 @@ namespace Winterdom.Viasfora.Util {
       var roles = this.provider.EditorFactory.CreateTextViewRoleSet(ViewRoles.ToolTipView);
       var model = new TipTextViewModel(this.sourceTextView);
 
-      var options = this.provider.OptionsFactory.CreateOptions();
-      options.SetOptionValue(DefaultTextViewOptions.IsViewportLeftClippedId, true);
-      options.SetOptionValue(Constants.WordWrapStyleId, WordWrapStyles.None);
-
+      var options = this.provider.OptionsFactory.GlobalOptions;
       this.tipView = this.provider.EditorFactory.CreateTextView(model, roles, options);
+      options = this.tipView.Options;
+      options.SetOptionValue(DefaultTextViewOptions.IsViewportLeftClippedId, true);
+      options.SetOptionValue(ViewOptions.WordWrapStyleId, WordWrapStyles.None);
+      options.SetOptionValue(ViewOptions.ViewProhibitUserInput, true);
+
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
-      IWpfTextView wpfSource = this.sourceTextView as IWpfTextView;
-      if ( wpfSource != null ) {
-        this.tipView.ZoomLevel = wpfSource.ZoomLevel;
-      } else {
-        this.tipView.ZoomLevel = 100;
-      }
+      this.tipView.ZoomLevel = GetSourceZoomFactor() * ZoomFactor * 100;
       this.wrapper = new Border();
       this.wrapper.Child = this.tipView.VisualElement;
+    }
+
+    private double GetSourceZoomFactor() {
+      IWpfTextView wpfSource = this.sourceTextView as IWpfTextView;
+      if ( wpfSource != null ) {
+        return wpfSource.ZoomLevel / 100;
+      } else {
+        return 1.0;
+      }
     }
 
     private void ReleaseView() {
@@ -160,6 +172,17 @@ namespace Winterdom.Viasfora.Util {
       }
     }
     
+    // TextViewModel for our ToolTip window
+    // Notice that we simply return the corresponding buffers
+    // from the TextViewModel of the source view
+    // Originally, we returned the ViewBuffer as well,
+    // but it was causing a NullReferenceException during
+    // the initial layout of the window when it was based on
+    // a Peek Definition Window coming from metadata 
+    // (apparently because the original window has
+    // regions collapsed by default).
+    // Returning the EditBuffer as the ViewBuffer appears
+    // to work around this.
     class TipTextViewModel : ITextViewModel {
       private ITextView sourceView;
       private PropertyCollection properties;
@@ -179,24 +202,34 @@ namespace Winterdom.Viasfora.Util {
         get { return sourceView.TextViewModel.EditBuffer; }
       }
       public ITextBuffer VisualBuffer {
-        get { return sourceView.TextViewModel.VisualBuffer; }
+        get { return this.EditBuffer; }
       }
       public PropertyCollection Properties {
         get { return this.properties; }
       }
 
       public SnapshotPoint GetNearestPointInVisualBuffer(SnapshotPoint editBufferPoint) {
-        return this.sourceView.TextViewModel.GetNearestPointInVisualBuffer(editBufferPoint);
+        // editBufferPoint MUST be in the editBuffer according to the docs
+        if ( editBufferPoint.Snapshot.TextBuffer != this.EditBuffer )
+          throw new InvalidOperationException("editBufferPoint is not on the edit buffer");
+        return editBufferPoint.TranslateTo(this.EditBuffer.CurrentSnapshot, PointTrackingMode.Positive);
       }
 
       public SnapshotPoint GetNearestPointInVisualSnapshot(SnapshotPoint editBufferPoint, ITextSnapshot targetVisualSnapshot, PointTrackingMode trackingMode) {
-        return this.sourceView.TextViewModel.GetNearestPointInVisualSnapshot(editBufferPoint, targetVisualSnapshot, trackingMode);
+        // editBufferPoint MUST be in the editBuffer according to the docs
+        if ( editBufferPoint.Snapshot.TextBuffer != this.EditBuffer )
+          throw new InvalidOperationException("editBufferPoint is not on the edit buffer");
+        return editBufferPoint.TranslateTo(targetVisualSnapshot, PointTrackingMode.Positive);
       }
 
       public bool IsPointInVisualBuffer(SnapshotPoint editBufferPoint, PositionAffinity affinity) {
-        return this.sourceView.TextViewModel.IsPointInVisualBuffer(editBufferPoint, affinity);
+        // editBufferPoint MUST be in the editBuffer according to the docs
+        return editBufferPoint.Snapshot.TextBuffer == this.EditBuffer;
       }
 
+      // Notice we do NOT do anything on the Dispose() call
+      // as we don't own the buffers; the source view will
+      // dispose them.
       public void Dispose() {
       }
     }

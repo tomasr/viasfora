@@ -16,21 +16,26 @@ namespace Winterdom.Viasfora.Rainbow {
   [ContentType("text")]
   public class RainbowKeyProcessorProvider : IKeyProcessorProvider {
 
+    [Import]
+    public IVsfSettings Settings { get; set; }
+
     public KeyProcessor GetAssociatedProcessor(IWpfTextView wpfTextView) {
-      return new RainbowKeyProcessor(wpfTextView);
+      return new RainbowKeyProcessor(wpfTextView, Settings);
     }
   }
 
   public class RainbowKeyProcessor : KeyProcessor {
     private readonly ITextView theView;
+    private readonly IVsfSettings settings;
     private Stopwatch timer = new Stopwatch();
     private bool startedEffect = false;
     private TimeSpan pressTime;
-    public RainbowKeyProcessor(ITextView textView) {
+    public RainbowKeyProcessor(ITextView textView, IVsfSettings settings) {
       this.theView = textView;
       this.theView.LostAggregateFocus += OnLostFocus;
       this.theView.Closed += OnViewClosed;
-      pressTime = TimeSpan.FromMilliseconds(VsfSettings.RainbowCtrlTimer);
+      this.settings = settings;
+      pressTime = TimeSpan.FromMilliseconds(settings.RainbowCtrlTimer);
     }
 
     // Strange things:
@@ -49,7 +54,7 @@ namespace Winterdom.Viasfora.Rainbow {
         if ( timer.IsRunning ) {
           if ( timer.Elapsed >= pressTime ) {
             timer.Stop();
-            RainbowHighlightMode mode = VsfSettings.RainbowHighlightMode;
+            RainbowHighlightMode mode = settings.RainbowHighlightMode;
             StartRainbowHighlight(actualView, mode);
           }
         } else {

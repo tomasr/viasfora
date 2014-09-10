@@ -29,5 +29,13 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguage TryCreateLanguage(ITextSnapshot snapshot) {
       return TryCreateLanguage(snapshot.ContentType);
     }
+    public ILanguage TryCreateLanguage(String key) {
+      foreach ( ILanguage lang in Languages ) {
+        if ( lang.KeyName == key ) {
+          return lang;
+        }
+      }
+      return defaultLang;
+    }
   }
 }

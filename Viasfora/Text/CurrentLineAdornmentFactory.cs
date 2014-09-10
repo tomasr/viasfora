@@ -18,6 +18,8 @@ namespace Winterdom.Viasfora.Text {
     public IClassificationTypeRegistryService ClassificationRegistry = null;
     [Import]
     public IClassificationFormatMapService FormatMapService = null;
+    [Import]
+    public IVsfSettings Settings = null;
 
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(Constants.LINE_HIGHLIGHT)]
@@ -32,7 +34,7 @@ namespace Winterdom.Viasfora.Text {
          FormatMapService.GetClassificationFormatMap(textView);
       textView.Properties.GetOrCreateSingletonProperty(
         () => {
-          return new CurrentLineAdornment(textView, map, classification);
+          return new CurrentLineAdornment(textView, map, classification, Settings);
         });
     }
   }

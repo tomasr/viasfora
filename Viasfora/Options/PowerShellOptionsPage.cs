@@ -6,17 +6,19 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.PowerShellOptions)]
   public class PowerShellOptionsPage : DialogPage {
-    private PowerShell language = new PowerShell();
+    private ILanguage language = SettingsContext.GetLanguage(Constants.PowerShell);
 
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
       language.ControlFlow = ControlFlowKeywords.ToArray();
-      VsfSettings.Save();
+      var settings = SettingsContext.GetSettings();
+      settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();

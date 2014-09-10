@@ -33,8 +33,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return VIS_KEYWORDS; }
     }
-    protected override String KeyName {
-      get { return "FSharp"; }
+    public override String KeyName {
+      get { return Constants.FSharp; }
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType }; }
@@ -43,7 +43,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return "(){}[]"; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new FSharpBraceExtractor(this);
+      return new FSharpBraceExtractor(this.BraceList);
     }
     public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
       return new FSharpEscapeSequenceParser(text);

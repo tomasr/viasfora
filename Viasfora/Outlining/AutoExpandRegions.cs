@@ -18,12 +18,13 @@ namespace Winterdom.Viasfora.Outlining {
   public class AutoExpandRegionsListener : IWpfTextViewCreationListener {
     [Import]
     private IVsOutliningManagerService outlining = null;
+    [Import]
+    private IVsfSettings settings = null;
     public void TextViewCreated(IWpfTextView textView) {
-      var expandMode = VsfSettings.AutoExpandRegions;
       var manager = outlining.GetOutliningManager(textView);
       if ( manager != null ) {
         textView.Properties.GetOrCreateSingletonProperty(
-          () => new AutoExpander(textView, manager, expandMode)
+          () => new AutoExpander(textView, manager, settings)
           );
       }
     }
@@ -33,17 +34,20 @@ namespace Winterdom.Viasfora.Outlining {
     private IWpfTextView theView;
     private IVsOutliningManager outliningManager;
     private AutoExpandMode expandMode;
+    private IVsfSettings settings;
 
     public AutoExpander(
           IWpfTextView textView, 
           IVsOutliningManager outlining,
-          AutoExpandMode mode) {
-      this.expandMode = mode;
+          IVsfSettings settings) {
+      this.settings = settings;
       this.theView = textView;
       this.outliningManager = outlining;
+      this.expandMode = settings.AutoExpandRegions;
 
       this.theView.Closed += OnViewClosed;
-      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+      this.settings.SettingsChanged += OnSettingsChanged;
+
       if ( expandMode == AutoExpandMode.Disable ) {
         outlining.Enabled = false;
       } else if ( expandMode == AutoExpandMode.Expand ) {
@@ -53,13 +57,21 @@ namespace Winterdom.Viasfora.Outlining {
         // if the solution is just opened
         // so take notice of when regions are
         // collapsed and do it again just in case
+        // Try expanding it when the window gets focus
+        // as a last chance for Visual Basic
         this.theView.LayoutChanged += OnLayoutChanged;
         this.outliningManager.RegionsCollapsed += OnRegionsCollapsed;
+        this.theView.GotAggregateFocus += OnGotFocus;
       }
     }
 
-    private void OnSettingsUpdated(object sender, EventArgs e) {
-      if ( VsfSettings.AutoExpandRegions == AutoExpandMode.Disable ) {
+    private void OnGotFocus(object sender, EventArgs e) {
+      this.theView.GotAggregateFocus -= OnGotFocus;
+      ExpandAll();
+    }
+
+    private void OnSettingsChanged(object sender, EventArgs e) {
+      if ( settings.AutoExpandRegions == AutoExpandMode.Disable ) {
         this.outliningManager.Enabled = false;
       } else {
         this.outliningManager.Enabled = true;
@@ -67,22 +79,24 @@ namespace Winterdom.Viasfora.Outlining {
     }
 
     private void OnViewClosed(object sender, EventArgs e) {
-      VsfSettings.SettingsUpdated -= OnSettingsUpdated;
+      this.settings.SettingsChanged -= OnSettingsChanged;
+      this.settings = null;
       this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
       this.theView.LayoutChanged -= OnLayoutChanged;
+      this.theView.GotAggregateFocus -= OnGotFocus;
       this.theView.Closed -= OnViewClosed;
       this.theView = null;
       this.outliningManager = null;
     }
 
     private void OnRegionsCollapsed(object sender, RegionsCollapsedEventArgs e) {
-      ExpandAll();
       this.outliningManager.RegionsCollapsed -= OnRegionsCollapsed;
+      ExpandAll();
     }
 
     private void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
-      ExpandAll();
       this.theView.LayoutChanged -= OnLayoutChanged;
+      ExpandAll();
     }
 
     private void ExpandAll() {

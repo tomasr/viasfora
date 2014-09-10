@@ -29,7 +29,7 @@ namespace Winterdom.Viasfora.Rainbow {
       return result;
     }
     public IEnumerable<ITagSpan<RainbowTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      if ( !VsfSettings.RainbowTagsEnabled ) {
+      if ( !provider.Settings.RainbowTagsEnabled ) {
         yield break;
       }
       if ( spans.Count == 0 ) {
@@ -41,7 +41,7 @@ namespace Winterdom.Viasfora.Rainbow {
         yield break;
       }
       foreach ( var brace in braceCache.BracesInSpans(spans) ) {
-        var ctype = rainbowTags[brace.Depth % Constants.MAX_RAINBOW_DEPTH];
+        var ctype = rainbowTags[brace.Depth % this.provider.Settings.RainbowDepth];
         yield return brace.ToSpan(snapshot, ctype);
       }
     }

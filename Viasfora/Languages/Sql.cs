@@ -37,11 +37,11 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return VIS_KEYWORDS; }
     }
-    protected override String KeyName {
-      get { return "Sql"; }
+    public override String KeyName {
+      get { return Constants.Sql; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new SqlBraceExtractor(this);
+      return new SqlBraceExtractor(this.BraceList);
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType, ContentTypeAlt }; }

@@ -37,8 +37,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults {
       get { return VB_VIS_KEYWORDS; }
     }
-    protected override String KeyName {
-      get { return "VB"; }
+    public override String KeyName {
+      get { return Constants.VB; }
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType, VBScriptContentType }; }
@@ -47,7 +47,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return "()"; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new VbBraceExtractor(this);
+      return new VbBraceExtractor(this.BraceList);
     }
   }
 }

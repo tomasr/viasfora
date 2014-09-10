@@ -22,14 +22,16 @@ namespace Winterdom.Viasfora.Margins {
   public partial class DevMarginVisual : UserControl {
 
     public DevMarginViewModel Model { get; private set; }
+    private IVsfSettings settings;
     public event EventHandler ViewBuffer;
 
     public DevMarginVisual() {
       InitializeComponent();
     }
-    public DevMarginVisual(DevMarginViewModel model) : this() {
+    public DevMarginVisual(DevMarginViewModel model, IVsfSettings settings) : this() {
       this.Model = model;
       this.DataContext = Model;
+      this.settings = settings;
     }
 
     private void OnViewBufferClick(object sender, RoutedEventArgs e) {
@@ -38,8 +40,8 @@ namespace Winterdom.Viasfora.Margins {
       e.Handled = true;
     }
     private void OnCloseButtonClick(object sender, RoutedEventArgs e) {
-      VsfSettings.DevMarginEnabled = false;
-      VsfSettings.Save();
+      settings.DevMarginEnabled = false;
+      settings.Save();
       e.Handled = true;
     }
     private void OnViewCTClick(object sender, RequestNavigateEventArgs e) {

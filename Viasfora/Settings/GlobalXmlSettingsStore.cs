@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -7,11 +8,14 @@ using System.Xml;
 using System.Xml.Linq;
 
 namespace Winterdom.Viasfora.Settings {
+  [Export(typeof(ISettingsStore))]
   public class GlobalXmlSettingsStore : ISettingsStore {
     const String FILE_NAME = "viasfora.xml";
     private String filePath;
     Dictionary<String, String> settings = new Dictionary<String, String>();
 
+    public GlobalXmlSettingsStore() : this(null) {
+    }
     public GlobalXmlSettingsStore(String file) {
       ConfigurePath(file);
       Load();

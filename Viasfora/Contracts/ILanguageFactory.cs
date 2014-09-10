@@ -10,5 +10,6 @@ namespace Winterdom.Viasfora.Contracts {
     ILanguage TryCreateLanguage(IContentType contentType);
     ILanguage TryCreateLanguage(ITextBuffer textBuffer);
     ILanguage TryCreateLanguage(ITextSnapshot snapshot);
+    ILanguage TryCreateLanguage(String key);
   }
 }

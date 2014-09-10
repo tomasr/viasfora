@@ -18,8 +18,8 @@ namespace Winterdom.Viasfora.Languages {
       get { return "()[]{}"; }
     }
 
-    protected override String KeyName {
-      get { return "CSS"; }
+    public override String KeyName {
+      get { return Constants.Css; }
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType, SassContentType, LessContentType }; }
@@ -38,7 +38,7 @@ namespace Winterdom.Viasfora.Languages {
       return new CssEscapeSequenceParser(text);
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new CssBraceExtractor(this);
+      return new CssBraceExtractor(this.BraceList);
     }
   }
 }

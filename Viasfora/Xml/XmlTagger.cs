@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora.Xml {
 
   class XmlTagger : ITagger<ClassificationTag>, IDisposable {
     private ITextBuffer theBuffer;
+    private IVsfSettings settings;
     private ClassificationTag xmlCloseTagClassification;
     private ClassificationTag xmlPrefixClassification;
     private ClassificationTag xmlDelimiterClassification;
@@ -28,15 +29,17 @@ namespace Winterdom.Viasfora.Xml {
     internal XmlTagger(
         ITextBuffer buffer,
         IClassificationTypeRegistryService registry,
-        ITagAggregator<IClassificationTag> aggregator) {
-      theBuffer = buffer;
+        ITagAggregator<IClassificationTag> aggregator,
+        IVsfSettings settings) {
+      this.theBuffer = buffer;
+      this.settings = settings;
       xmlCloseTagClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.XML_CLOSING));
       xmlPrefixClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.XML_PREFIX));
       xmlDelimiterClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.DELIMITER));
-      VsfSettings.SettingsUpdated += OnSettingsUpdated;
+      settings.SettingsChanged += OnSettingsChanged;
       this.aggregator = aggregator;
     }
 
@@ -60,12 +63,13 @@ namespace Winterdom.Viasfora.Xml {
     }
 
     public void Dispose() {
-      if ( theBuffer != null ) {
-        VsfSettings.SettingsUpdated -= OnSettingsUpdated;
-        theBuffer = null;
+      if ( this.settings != null ) {
+        this.settings.SettingsChanged -= OnSettingsChanged;
+        this.settings = null;
       }
+      theBuffer = null;
     }
-    void OnSettingsUpdated(object sender, EventArgs e) {
+    void OnSettingsChanged(object sender, EventArgs e) {
       var tempEvent = TagsChanged;
       if ( tempEvent != null ) {
         tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(theBuffer.CurrentSnapshot, 0,
@@ -106,9 +110,9 @@ namespace Winterdom.Viasfora.Xml {
           String text = cs.GetText();
           if ( text.EndsWith("</") ) {
             foundClosingTag = true;
-          } else if ( text == ":" && lastSpan.HasValue && VsfSettings.XmlnsPrefixHighlightEnabled ) {
+          } else if ( text == ":" && lastSpan.HasValue && settings.XmlnsPrefixHighlightEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlPrefixClassification);
-          } else if ( text.IndexOf('>') >= 0 && foundClosingTag && VsfSettings.XmlCloseTagHighlightEnabled ) {
+          } else if ( text.IndexOf('>') >= 0 && foundClosingTag && settings.XmlCloseTagHighlightEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlCloseTagClassification);
             foundClosingTag = false;
           }
@@ -122,9 +126,9 @@ namespace Winterdom.Viasfora.Xml {
     private IEnumerable<ITagSpan<ClassificationTag>> ProcessXmlName(SnapshotSpan cs, bool isClosing) {
       String text = cs.GetText();
       int colon = text.IndexOf(':');
-      if ( colon < 0 && isClosing && VsfSettings.XmlCloseTagHighlightEnabled ) {
+      if ( colon < 0 && isClosing && settings.XmlCloseTagHighlightEnabled ) {
         yield return new TagSpan<ClassificationTag>(cs, xmlCloseTagClassification);
-      } else if ( colon > 0 && VsfSettings.XmlnsPrefixHighlightEnabled ) {
+      } else if ( colon > 0 && settings.XmlnsPrefixHighlightEnabled ) {
         string prefix = text.Substring(0, colon);
         string name = text.Substring(colon + 1);
 
@@ -133,11 +137,11 @@ namespace Winterdom.Viasfora.Xml {
         yield return new TagSpan<ClassificationTag>(new SnapshotSpan(
           cs.Start.Add(prefix.Length), 1), xmlDelimiterClassification);
 
-        if ( isClosing && VsfSettings.XmlCloseTagHighlightEnabled ) {
+        if ( isClosing && settings.XmlCloseTagHighlightEnabled ) {
           yield return new TagSpan<ClassificationTag>(new SnapshotSpan(
             cs.Start.Add(prefix.Length + 1), name.Length), xmlCloseTagClassification);
         }
-      } else if ( isClosing && VsfSettings.XmlCloseTagHighlightEnabled ) {
+      } else if ( isClosing && settings.XmlCloseTagHighlightEnabled ) {
         // XmlnsPrefix hl disabled, but we still want to highlight the closing tag
         yield return new TagSpan<ClassificationTag>(cs, xmlCloseTagClassification);
       }
