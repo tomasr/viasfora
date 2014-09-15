@@ -8,7 +8,7 @@ using Winterdom.Viasfora.Settings;
 namespace Winterdom.Viasfora.Outlining {
   public class UserOutliningManager : BaseOutliningManager {
 
-    protected UserOutliningManager(ITextBuffer buffer) : base(buffer){
+    protected UserOutliningManager(ITextBuffer buffer) : base(buffer) {
       LoadRegions(buffer);
     }
 

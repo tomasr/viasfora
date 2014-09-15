@@ -102,6 +102,14 @@
           <ButtonText>Clear Outlining</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidVsfTextEditorCmdSet" id="cmdidFeatureOutlining" priority="0x0004" type="Button">
+        <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <Strings>
+          <CommandName>Outline Selection</CommandName>
+          <ButtonText>Outline Selection</ButtonText>
+        </Strings>
+      </Button>
 
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidCompleteWord" priority="0x0010" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupIntellisenseMenu"/>
@@ -196,9 +204,12 @@
       <IDSymbol name="groupEditMenu" value="0x0102" />
       <IDSymbol name="groupIntellisenseMenu" value="0x0104" />
       <IDSymbol name="groupRainbowMenu" value="0x0105" />
+
       <IDSymbol name="cmdidAddOutlining" value="0x1101" />
       <IDSymbol name="cmdidRemoveOutlining" value="0x1102" />
       <IDSymbol name="cmdidClearOutlining" value="0x1103" />
+      <IDSymbol name="cmdidFeatureOutlining" value="0x1104" />
+
       <IDSymbol name="cmdidCompleteWord" value="0x1401" />
       <IDSymbol name="cmdidRainbowPrevious" value="0x1501" />
       <IDSymbol name="cmdidRainbowNext" value="0x1502" />
