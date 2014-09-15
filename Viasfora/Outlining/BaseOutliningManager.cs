@@ -9,28 +9,19 @@ using Microsoft.VisualStudio.Text.Editor;
 using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Outlining {
-  public class OutliningManager : IUserOutlining, IOutliningManager {
+  public abstract class BaseOutliningManager : IUserOutlining, IOutliningManager {
     private BufferOutlines regions;
     private static readonly SnapshotSpan[] empty = new SnapshotSpan[0];
     private OutliningTagger outliningTagger;
     private GlyphTagger glyphTagger;
 
-    private OutliningManager(ITextBuffer buffer) {
+    protected BaseOutliningManager(ITextBuffer buffer) {
       this.regions = new BufferOutlines();
       this.outliningTagger = new OutliningTagger(this);
       this.glyphTagger = new GlyphTagger(this);
       LoadRegions(buffer);
     }
 
-    public static IUserOutlining Get(ITextBuffer buffer) {
-      return buffer.Properties.GetOrCreateSingletonProperty(() => {
-        return new OutliningManager(buffer) as IUserOutlining;
-      });
-    }
-
-    public static IOutliningManager GetManager(ITextBuffer buffer) {
-      return Get(buffer) as IOutliningManager;
-    }
 
     public ITagger<IOutliningRegionTag> GetOutliningTagger() {
       return this.outliningTagger;

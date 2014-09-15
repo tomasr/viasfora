@@ -118,7 +118,7 @@ namespace Winterdom.Viasfora.Outlining {
 
       private void RemoveOutlineAt(SnapshotPoint snapshotPoint) {
         var textBuffer = this.theHost.TextView.TextBuffer;
-        IUserOutlining outlining = OutliningManager.Get(textBuffer);
+        IUserOutlining outlining = UserOutliningManager.Get(textBuffer);
         if ( outlining != null ) {
           outlining.RemoveAt(snapshotPoint);
         }

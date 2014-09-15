@@ -17,7 +17,7 @@ namespace Winterdom.Viasfora.Outlining {
   [TextViewRole(PredefinedTextViewRoles.Structured)]
   public class UserOutliningTaggerProvider : ITaggerProvider {
     public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
-      IOutliningManager manager = OutliningManager.GetManager(buffer);
+      IOutliningManager manager = UserOutliningManager.GetManager(buffer);
       if ( typeof(T) == typeof(IOutliningRegionTag) ) {
         return manager.GetOutliningTagger() as ITagger<T>;
       }
