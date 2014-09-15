@@ -18,27 +18,29 @@ namespace Winterdom.Viasfora.Commands {
 
     protected override void OnBeforeQueryStatus(object sender, EventArgs e) {
       base.OnBeforeQueryStatus(sender, e);
-      Command.Enabled = TextEditor.GetCurrentSelection() != null;
+      Command.Enabled = HasFeatureOutlines() || TextEditor.GetCurrentSelection() != null;
     }
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);
+      if ( HasFeatureOutlines() ) {
+        ClearOutlines();
+        return;
+      }
       ITextSelection selection = TextEditor.GetCurrentSelection();
-      if ( selection != null ) {
-        if ( selection.Mode == TextSelectionMode.Box ) {
-          // not supported, ignore for now;
-          return;
+      if ( selection == null || selection.Mode == TextSelectionMode.Box ) {
+        // not supported, ignore for now;
+        return;
+      }
+      ITextView view = selection.TextView;
+      SnapshotSpan? span = TextEditor.MapSelectionToPrimaryBuffer(selection);
+      if ( span.HasValue ) {
+        SnapshotSpan? beginSpan = CalculateBeginSpan(span.Value);
+        if ( beginSpan.HasValue ) {
+          AddOutlining(beginSpan.Value.Snapshot.TextBuffer, beginSpan.Value);
         }
-        ITextView view = selection.TextView;
-        SnapshotSpan? span = TextEditor.MapSelectionToPrimaryBuffer(selection);
-        if ( span.HasValue ) {
-          SnapshotSpan? beginSpan = CalculateBeginSpan(span.Value);
-          if ( beginSpan.HasValue ) {
-            AddOutlining(beginSpan.Value.Snapshot.TextBuffer, beginSpan.Value);
-          }
-          SnapshotSpan? endSpan = CalculateEndSpan(span.Value);
-          if ( endSpan.HasValue ) {
-            AddOutlining(endSpan.Value.Snapshot.TextBuffer, endSpan.Value);
-          }
+        SnapshotSpan? endSpan = CalculateEndSpan(span.Value);
+        if ( endSpan.HasValue ) {
+          AddOutlining(endSpan.Value.Snapshot.TextBuffer, endSpan.Value);
         }
       }
     }
@@ -68,5 +70,17 @@ namespace Winterdom.Viasfora.Commands {
       var outlines = FeatureOutliningManager.Get(buffer);
       outlines.Add(span);
     }
+    private void ClearOutlines() {
+      var view = TextEditor.GetCurrentView();
+      var outlines = FeatureOutliningManager.Get(view.TextBuffer);
+      outlines.RemoveAll(view.TextBuffer.CurrentSnapshot);
+    }
+
+    private bool HasFeatureOutlines() {
+      var view = TextEditor.GetCurrentView();
+      var outlines = FeatureOutliningManager.Get(view.TextBuffer);
+      return outlines.HasUserOutlines();
+    }
+
   }
 }
