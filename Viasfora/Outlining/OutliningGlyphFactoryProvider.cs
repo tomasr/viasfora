@@ -20,7 +20,7 @@ namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IGlyphMouseProcessorProvider))]
   [ContentType("Text")]
   [TagType(typeof(OutliningGlyphTag))]
-  [Name("VsfOutliningGlyph")]
+  [Name("viasfora.outlining.user.glyphs")]
   public class OutliningGlyphFactoryProvider : IGlyphFactoryProvider, IGlyphMouseProcessorProvider {
 
     [Import]
