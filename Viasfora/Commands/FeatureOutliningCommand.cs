@@ -59,6 +59,13 @@ namespace Winterdom.Viasfora.Commands {
     private SnapshotSpan? CalculateEndSpan(SnapshotSpan span) {
       var snapshot = span.Snapshot;
       int endsOnLine = snapshot.GetLineNumberFromPosition(span.End);
+      // it could be that the selection ends right at the start of a line
+      // in that case, start the collapse from there
+      var endingLine = snapshot.GetLineFromLineNumber(endsOnLine);
+      if ( endingLine.Start == span.End ) {
+        return new SnapshotSpan(snapshot, endingLine.Start, snapshot.Length - endingLine.Start);
+      }
+
       if ( endsOnLine < snapshot.LineCount - 1 ) {
         var nextLine = snapshot.GetLineFromLineNumber(endsOnLine + 1);
         return new SnapshotSpan(snapshot, nextLine.Start, snapshot.Length - nextLine.Start);
