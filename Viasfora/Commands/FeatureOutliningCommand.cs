@@ -42,6 +42,7 @@ namespace Winterdom.Viasfora.Commands {
         if ( endSpan.HasValue ) {
           AddOutlining(endSpan.Value.Snapshot.TextBuffer, endSpan.Value);
         }
+        CollapseOutlines(selection.TextView);
       }
     }
 
@@ -75,11 +76,14 @@ namespace Winterdom.Viasfora.Commands {
       var outlines = FeatureOutliningManager.Get(view.TextBuffer);
       outlines.RemoveAll(view.TextBuffer.CurrentSnapshot);
     }
-
     private bool HasFeatureOutlines() {
       var view = TextEditor.GetCurrentView();
       var outlines = FeatureOutliningManager.Get(view.TextBuffer);
       return outlines.HasUserOutlines();
+    }
+    private void CollapseOutlines(ITextView textView) {
+      var controller = FeatureOutliningController.Get(textView);
+      controller.CollapseRegions();
     }
 
   }

@@ -187,7 +187,9 @@
     <Compile Include="Options\GeneralOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Outlining\FeatureOutliningController.cs" />
     <Compile Include="Outlining\FeatureOutliningManager.cs" />
+    <Compile Include="Outlining\IFeatureOutliningController.cs" />
     <Compile Include="Outlining\UserOutliningManager.cs" />
     <Compile Include="Outlining\FeatureOutliningTaggerProvider.cs" />
     <Compile Include="PkgCmdIdList.cs" />
