@@ -105,6 +105,7 @@
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidFeatureOutlining" priority="0x0004" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
         <Strings>
           <CommandName>Outline Selection</CommandName>
           <ButtonText>Outline Selection</ButtonText>
@@ -185,6 +186,12 @@
                 editor="guidTextEditor"
                 mod1="Control Alt" key1="VK_OEM_PERIOD"
                 />
+
+    <KeyBinding guid="guidVsfTextEditorCmdSet" 
+                id="cmdidFeatureOutlining"
+                editor="guidTextEditor"
+                mod1="Control" key1="M"
+                mod2="Control" key2="F" />
   </KeyBindings>
 
   <Symbols>

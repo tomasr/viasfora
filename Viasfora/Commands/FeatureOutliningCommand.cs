@@ -18,7 +18,18 @@ namespace Winterdom.Viasfora.Commands {
 
     protected override void OnBeforeQueryStatus(object sender, EventArgs e) {
       base.OnBeforeQueryStatus(sender, e);
-      Command.Enabled = HasFeatureOutlines() || TextEditor.GetCurrentSelection() != null;
+      if ( TextEditor.GetCurrentView() != null ) {
+        if ( HasFeatureOutlines() ) {
+          Command.Text = "Remove Selection Outline";
+          Command.Enabled = true;
+          return;
+        } else if ( TextEditor.GetCurrentSelection() != null ) {
+          Command.Text = "Outline Selection";
+          Command.Enabled = true;
+          return;
+        }
+      }
+      Command.Enabled = false;
     }
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);
@@ -27,8 +38,7 @@ namespace Winterdom.Viasfora.Commands {
         return;
       }
       ITextSelection selection = TextEditor.GetCurrentSelection();
-      if ( selection == null || selection.Mode == TextSelectionMode.Box ) {
-        // not supported, ignore for now;
+      if ( selection == null ) {
         return;
       }
       ITextView view = selection.TextView;
