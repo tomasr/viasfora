@@ -43,6 +43,7 @@ namespace Winterdom.Viasfora.Outlining {
       this.currentDispatcher = Dispatcher.CurrentDispatcher;
       this.timer = new DispatcherTimer(DispatcherPriority.Background, this.currentDispatcher);
       this.timer.Tick += OnTimerTick;
+      this.timer.Interval = TimeSpan.FromMilliseconds(50);
 
       this.theView.Closed += OnViewClosed;
     }
@@ -84,9 +85,15 @@ namespace Winterdom.Viasfora.Outlining {
     }
 
     private void OnTextViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
-      this.theView.LayoutChanged -= OnTextViewLayoutChanged;
-      this.timer.Interval = TimeSpan.FromMilliseconds(100);
-      this.timer.Start();
+      if ( this.theView != null ) {
+        this.theView.LayoutChanged -= OnTextViewLayoutChanged;
+        // we can't do anything here because the LayoutChanged
+        // event fires while the view is still in layout
+        // so attempting to scroll it will cause an exception.
+        // Instead, fire a timer and check if the view is still in layout
+        // before attempting the operation
+        this.timer.Start();
+      } 
     }
 
     private void OnTimerTick(object sender, EventArgs e) {
