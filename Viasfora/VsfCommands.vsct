@@ -104,8 +104,10 @@
       </Button>
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidFeatureOutlining" priority="0x0004" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
+        <Icon guid="guidImages" id="bmpFeatureOutline"/>
         <CommandFlag>DefaultDisabled</CommandFlag>
         <CommandFlag>TextChanges</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
         <Strings>
           <CommandName>Outline Selection</CommandName>
           <ButtonText>Outline Selection</ButtonText>
@@ -146,7 +148,7 @@
 
     <Bitmaps>
       <Bitmap guid="guidImages" href="Resources\cmdImages.bmp"
-              usedList="bmpPresentationMode, bmpAddOutlining, bmpRemoveOutlining, bmpRainbowPrevious, bmpRainbowNext"/>
+              usedList="bmpPresentationMode, bmpAddOutlining, bmpRemoveOutlining, bmpRainbowPrevious, bmpRainbowNext, bmpFeatureOutline"/>
     </Bitmaps>
   </Commands>
 
@@ -228,6 +230,7 @@
       <IDSymbol name="bmpRemoveOutlining" value="3" />
       <IDSymbol name="bmpRainbowPrevious" value="4" />
       <IDSymbol name="bmpRainbowNext" value="5" />
+      <IDSymbol name="bmpFeatureOutline" value="6" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>
