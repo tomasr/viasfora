@@ -80,8 +80,8 @@ namespace Winterdom.Viasfora.Commands {
     }
     private void ClearOutlines() {
       var view = TextEditor.GetCurrentView();
-      var outlines = FeatureOutliningManager.Get(view.TextBuffer);
-      outlines.RemoveAll(view.TextBuffer.CurrentSnapshot);
+      var controller = FeatureOutliningController.Get(view);
+      controller.RemoveRegions();
     }
     private bool HasFeatureOutlines() {
       var view = TextEditor.GetCurrentView();

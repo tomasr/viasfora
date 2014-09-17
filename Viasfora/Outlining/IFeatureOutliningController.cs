@@ -6,5 +6,6 @@ using System.Text;
 namespace Winterdom.Viasfora.Outlining {
   public interface IFeatureOutliningController {
     void CollapseRegions();
+    void RemoveRegions();
   }
 }
