@@ -9,28 +9,18 @@ using Microsoft.VisualStudio.Text.Editor;
 using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Outlining {
-  public class OutliningManager : IUserOutlining, IOutliningManager {
-    private BufferOutlines regions;
+  public abstract class BaseOutliningManager : IUserOutlining, IOutliningManager {
+    protected BufferOutlines Regions { get; private set; }
     private static readonly SnapshotSpan[] empty = new SnapshotSpan[0];
     private OutliningTagger outliningTagger;
     private GlyphTagger glyphTagger;
 
-    private OutliningManager(ITextBuffer buffer) {
-      this.regions = new BufferOutlines();
+    protected BaseOutliningManager(ITextBuffer buffer) {
+      this.Regions = new BufferOutlines();
       this.outliningTagger = new OutliningTagger(this);
       this.glyphTagger = new GlyphTagger(this);
-      LoadRegions(buffer);
     }
 
-    public static IUserOutlining Get(ITextBuffer buffer) {
-      return buffer.Properties.GetOrCreateSingletonProperty(() => {
-        return new OutliningManager(buffer) as IUserOutlining;
-      });
-    }
-
-    public static IOutliningManager GetManager(ITextBuffer buffer) {
-      return Get(buffer) as IOutliningManager;
-    }
 
     public ITagger<IOutliningRegionTag> GetOutliningTagger() {
       return this.outliningTagger;
@@ -43,7 +33,7 @@ namespace Winterdom.Viasfora.Outlining {
     public IEnumerable<SnapshotSpan> GetTags(NormalizedSnapshotSpanCollection spans) {
       if ( spans.Count > 0 ) {
         var snapshot = spans[0].Snapshot;
-        return from trackingSpan in regions.Enumerate()
+        return from trackingSpan in Regions.Enumerate()
                let spSpan = trackingSpan.GetSpan(snapshot)
                where spans.IntersectsWith(new NormalizedSnapshotSpanCollection(spSpan))
                select spSpan;
@@ -52,36 +42,37 @@ namespace Winterdom.Viasfora.Outlining {
     }
 
     public void Add(SnapshotSpan span) {
-      regions.Add(span);
-      UpdateUserSettings(span.Snapshot.TextBuffer, span.Snapshot);
+      Regions.Add(span);
+      OnSpanAdded(span);
       RaiseTagsChanged(span);
     }
 
     public void RemoveAt(SnapshotPoint point) {
-      int index = regions.FindRegionContaining(point);
+      int index = Regions.FindRegionContaining(point);
       if ( index >= 0 ) {
-        var span = regions.RemoveAt(point.Snapshot, index);
-        UpdateUserSettings(point.Snapshot.TextBuffer, point.Snapshot);
+        var span = Regions.RemoveAt(point.Snapshot, index);
+        OnRegionRemoved(point);
         RaiseTagsChanged(span);
       }
     }
 
     public bool IsInOutliningRegion(SnapshotPoint point) {
-      return regions.FindRegionContaining(point) >= 0;
+      return Regions.FindRegionContaining(point) >= 0;
     }
 
     public bool HasUserOutlines() {
-      return regions.Count > 0;
+      return Regions.Count > 0;
     }
 
     public void RemoveAll(ITextSnapshot snapshot) {
-      var currentSpans = regions.Enumerate().ToList();
-      regions.Clear();
+      var currentSpans = Regions.Enumerate().ToList();
+      Regions.Clear();
       foreach ( var trackingSpan in currentSpans ) {
         var span = trackingSpan.GetSpan(snapshot);
         RaiseTagsChanged(span);
       }
-      UpdateUserSettings(snapshot.TextBuffer, snapshot);
+
+      OnAllRegionsRemoved(snapshot);
     }
 
     private void RaiseTagsChanged(SnapshotSpan span) {
@@ -89,33 +80,13 @@ namespace Winterdom.Viasfora.Outlining {
       this.glyphTagger.RaiseTagsChanged(span);
     }
     
-    private void LoadRegions(ITextBuffer buffer) {
-      var sus = VsSolution.GetUserSettings();
-      if ( sus == null ) {
-        return;
-      }
-      String filename = TextEditor.GetFileName(buffer);
-      if ( String.IsNullOrEmpty(filename) ) {
-        return;
-      }
-      filename = VsSolution.MakeRelativePath(filename);
-      OutlineSettings settings = sus.Load<OutlineSettings>(filename);
-      if ( settings != null ) {
-        this.regions.LoadStoredData(buffer.CurrentSnapshot, settings);
-      }
+    protected virtual void OnSpanAdded(SnapshotSpan span) {
     }
-    private void UpdateUserSettings(ITextBuffer buffer, ITextSnapshot snapshot) {
-      var sus = VsSolution.GetUserSettings();
-      if ( sus == null ) {
-        return;
-      }
-      String filename = TextEditor.GetFileName(buffer);
-      if ( String.IsNullOrEmpty(filename) ) {
-        return;
-      }
-      filename = VsSolution.MakeRelativePath(filename);
-      sus.Store(filename, regions.GetStorableData(snapshot));
+    protected virtual void OnRegionRemoved(SnapshotPoint point) {
     }
+    protected virtual void OnAllRegionsRemoved(ITextSnapshot snapshot) {
+    }
+
 
     private class OutliningTagger : ITagger<IOutliningRegionTag> {
       public event EventHandler<SnapshotSpanEventArgs> TagsChanged;

@@ -13,5 +13,8 @@ namespace Winterdom.Viasfora {
         ? mappedSpans[0] 
         : new SnapshotSpan(snapshot, 0, 0);
     }
+    public static SnapshotSpan GetSpan(this ITextSnapshot snapshot) {
+      return new SnapshotSpan(snapshot, 0, snapshot.Length);
+    }
   }
 }
