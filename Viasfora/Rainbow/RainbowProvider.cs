@@ -88,10 +88,6 @@ namespace Winterdom.Viasfora.Rainbow {
         this.TextView.Closed -= OnViewClosed;
         this.TextView = null;
       }
-      if ( Settings != null ) {
-        Settings.SettingsChanged -= OnSettingsChanged;
-        Settings = null;
-      }
       if ( TextBuffer != null ) {
         TextBuffer.ChangedLowPriority -= this.BufferChanged;
         TextBuffer.ContentTypeChanged -= this.ContentTypeChanged;
@@ -101,6 +97,10 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( this.dispatcherTimer != null ) {
         this.dispatcherTimer.Stop();
         this.dispatcherTimer = null;
+      }
+      if ( Settings != null ) {
+        Settings.SettingsChanged -= OnSettingsChanged;
+        Settings = null;
       }
     }
 

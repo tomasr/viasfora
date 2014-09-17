@@ -29,10 +29,12 @@ namespace Winterdom.Viasfora.Rainbow {
       return result;
     }
     public IEnumerable<ITagSpan<RainbowTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      if ( !provider.Settings.RainbowTagsEnabled ) {
+      // Needed to prevent race condition on some extensions
+      // using a Tag Aggregator while the view is being closed
+      if ( provider == null || provider.Settings == null  ) {
         yield break;
       }
-      if ( spans.Count == 0 ) {
+      if ( !provider.Settings.RainbowTagsEnabled || spans.Count == 0 ) {
         yield break;
       }
       BraceCache braceCache = provider.BraceCache;
