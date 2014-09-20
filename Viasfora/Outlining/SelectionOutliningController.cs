@@ -13,7 +13,7 @@ using System.Windows.Threading;
 namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IWpfTextViewCreationListener))]
   [TextViewRole(PredefinedTextViewRoles.Structured)]
-  [Name("Viasfora.outlining.selection.controller")]
+  [Name("viasfora.outlining.selection.controller")]
   [ContentType("any")]
   [ContentType("projection")]
   public class SelectionOutliningControllerListener : IWpfTextViewCreationListener {
