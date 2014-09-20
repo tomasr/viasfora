@@ -11,12 +11,12 @@ using Microsoft.VisualStudio.Text.Editor;
 
 namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(ITaggerProvider))]
-  [ContentType("Text")]
+  [ContentType("any")]
   [TagType(typeof(IOutliningRegionTag))]
   [TextViewRole(PredefinedTextViewRoles.Structured)]
-  public class FeatureOutliningTaggerProvider : ITaggerProvider {
+  public class SelectionOutliningTaggerProvider : ITaggerProvider {
     public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
-      IOutliningManager manager = FeatureOutliningManager.GetManager(buffer);
+      IOutliningManager manager = SelectionOutliningManager.GetManager(buffer);
       if ( typeof(T) == typeof(IOutliningRegionTag) ) {
         return manager.GetOutliningTagger() as ITagger<T>;
       }

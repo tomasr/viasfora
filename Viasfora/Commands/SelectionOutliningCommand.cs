@@ -9,8 +9,8 @@ using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Outlining;
 
 namespace Winterdom.Viasfora.Commands {
-  public class FeatureOutliningCommand : VsCommand {
-    public FeatureOutliningCommand(VsfPackage package, OleMenuCommandService omcs) 
+  public class SelectionOutliningCommand : VsCommand {
+    public SelectionOutliningCommand(VsfPackage package, OleMenuCommandService omcs) 
       : base(package, omcs) {
 
       Initialize(new Guid(Guids.guidVsfTextEditorCmdSet), PkgCmdIdList.cmdidFeatureOutlining);
@@ -85,21 +85,21 @@ namespace Winterdom.Viasfora.Commands {
 
 
     private void AddOutlining(ITextBuffer buffer, SnapshotSpan span) {
-      var outlines = FeatureOutliningManager.Get(buffer);
+      var outlines = SelectionOutliningManager.Get(buffer);
       outlines.Add(span);
     }
     private void ClearOutlines() {
       var view = TextEditor.GetCurrentView();
-      var controller = FeatureOutliningController.Get(view);
+      var controller = SelectionOutliningController.Get(view);
       controller.RemoveRegions();
     }
     private bool HasFeatureOutlines() {
       var view = TextEditor.GetCurrentView();
-      var outlines = FeatureOutliningManager.Get(view.TextBuffer);
+      var outlines = SelectionOutliningManager.Get(view.TextBuffer);
       return outlines.HasUserOutlines();
     }
     private void CollapseOutlines(ITextView textView) {
-      var controller = FeatureOutliningController.Get(textView);
+      var controller = SelectionOutliningController.Get(textView);
       controller.CollapseRegions();
     }
 

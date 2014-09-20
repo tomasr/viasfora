@@ -73,7 +73,7 @@
   <ItemGroup>
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
-    <Compile Include="Commands\FeatureOutliningCommand.cs" />
+    <Compile Include="Commands\SelectionOutliningCommand.cs" />
     <Compile Include="Commands\CompleteWordCommand.cs" />
     <Compile Include="Commands\ClearOutliningCommand.cs" />
     <Compile Include="Commands\ObfuscateTextCommand.cs" />
@@ -187,11 +187,11 @@
     <Compile Include="Options\GeneralOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Outlining\FeatureOutliningController.cs" />
-    <Compile Include="Outlining\FeatureOutliningManager.cs" />
-    <Compile Include="Outlining\IFeatureOutliningController.cs" />
+    <Compile Include="Outlining\SelectionOutliningController.cs" />
+    <Compile Include="Outlining\SelectionOutliningManager.cs" />
+    <Compile Include="Outlining\ISelectionOutliningController.cs" />
     <Compile Include="Outlining\UserOutliningManager.cs" />
-    <Compile Include="Outlining\FeatureOutliningTaggerProvider.cs" />
+    <Compile Include="Outlining\SelectionOutliningTaggerProvider.cs" />
     <Compile Include="PkgCmdIdList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rainbow\RainbowTipHighlight.cs" />

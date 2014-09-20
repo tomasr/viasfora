@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Outlining {
-  public interface IFeatureOutliningController {
+  public interface ISelectionOutliningController {
     void CollapseRegions();
     void RemoveRegions();
   }

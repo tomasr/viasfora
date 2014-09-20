@@ -5,13 +5,13 @@ using System.Text;
 using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Outlining {
-  public class FeatureOutliningManager : BaseOutliningManager {
-    protected FeatureOutliningManager(ITextBuffer buffer) : base(buffer) {
+  public class SelectionOutliningManager : BaseOutliningManager {
+    protected SelectionOutliningManager(ITextBuffer buffer) : base(buffer) {
     }
 
     public static IUserOutlining Get(ITextBuffer buffer) {
       return buffer.Properties.GetOrCreateSingletonProperty(() => {
-        return new FeatureOutliningManager(buffer);
+        return new SelectionOutliningManager(buffer);
       });
     }
 
