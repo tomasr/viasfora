@@ -18,7 +18,8 @@ namespace Winterdom.Viasfora.Commands {
 
     protected override void OnBeforeQueryStatus(object sender, EventArgs e) {
       base.OnBeforeQueryStatus(sender, e);
-      if ( TextEditor.GetCurrentView() != null ) {
+      var view = TextEditor.GetCurrentView();
+      if ( view != null && TextEditor.SupportsOutlines(view) ) {
         if ( HasFeatureOutlines() ) {
           Command.Text = "Remove Selection Outline";
           Command.Enabled = true;
@@ -31,6 +32,7 @@ namespace Winterdom.Viasfora.Commands {
       }
       Command.Enabled = false;
     }
+
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);
       if ( HasFeatureOutlines() ) {
@@ -42,7 +44,7 @@ namespace Winterdom.Viasfora.Commands {
         return;
       }
       ITextView view = selection.TextView;
-      SnapshotSpan? span = TextEditor.MapSelectionToPrimaryBuffer(selection);
+      SnapshotSpan? span = selection.StreamSelectionSpan.SnapshotSpan;
       if ( span.HasValue ) {
         SnapshotSpan? beginSpan = CalculateBeginSpan(span.Value);
         if ( beginSpan.HasValue ) {
@@ -86,21 +88,27 @@ namespace Winterdom.Viasfora.Commands {
 
     private void AddOutlining(ITextBuffer buffer, SnapshotSpan span) {
       var outlines = SelectionOutliningManager.Get(buffer);
-      outlines.Add(span);
+      if ( outlines != null ) {
+        outlines.Add(span);
+      }
+    }
+    private void CollapseOutlines(ITextView textView) {
+      var controller = SelectionOutliningController.Get(textView);
+      if ( controller != null ) {
+        controller.CollapseRegions();
+      }
     }
     private void ClearOutlines() {
       var view = TextEditor.GetCurrentView();
       var controller = SelectionOutliningController.Get(view);
-      controller.RemoveRegions();
+      if ( controller != null ) {
+        controller.RemoveRegions();
+      }
     }
     private bool HasFeatureOutlines() {
       var view = TextEditor.GetCurrentView();
       var outlines = SelectionOutliningManager.Get(view.TextBuffer);
-      return outlines.HasUserOutlines();
-    }
-    private void CollapseOutlines(ITextView textView) {
-      var controller = SelectionOutliningController.Get(textView);
-      controller.CollapseRegions();
+      return outlines != null && outlines.HasUserOutlines();
     }
 
   }

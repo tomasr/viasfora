@@ -12,9 +12,10 @@ using System.Windows.Threading;
 
 namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IWpfTextViewCreationListener))]
-  [TextViewRole(PredefinedTextViewRoles.Document)]
+  [TextViewRole(PredefinedTextViewRoles.Structured)]
   [Name("Viasfora.outlining.selection.controller")]
   [ContentType("any")]
+  [ContentType("projection")]
   public class SelectionOutliningControllerListener : IWpfTextViewCreationListener {
     [Import]
     private IVsOutliningManagerService outlining = null;
@@ -98,22 +99,31 @@ namespace Winterdom.Viasfora.Outlining {
     }
 
     private void OnTimerTick(object sender, EventArgs e) {
-      if ( this.theView == null || this.theView.InLayout ) {
+      var view = this.theView;
+      var timer = this.timer;
+      if ( view == null || view.InLayout ) {
         return;
       }
-      this.timer.Stop();
-      var selection = this.theView.Selection;
+      timer.Stop();
+      var selection = view.Selection;
       if ( selection != null ) {
-        this.theView.ViewScroller.EnsureSpanVisible(
-          selection.StreamSelectionSpan.SnapshotSpan
+        view.ViewScroller.EnsureSpanVisible(
+          selection.StreamSelectionSpan.SnapshotSpan,
+          EnsureSpanVisibleOptions.AlwaysCenter
         );
       } else {
-        var caretPos = this.theView.Caret.Position.BufferPosition;
-        var caretLine = this.theView.GetTextViewLineContainingBufferPosition(caretPos);
-        this.theView.DisplayTextLineContainingBufferPosition(
+        var caretPos = view.Caret.Position.BufferPosition;
+        var caretLine = view.GetTextViewLineContainingBufferPosition(caretPos);
+        /*
+        view.DisplayTextLineContainingBufferPosition(
           caretPos,
-          (this.theView.ViewportHeight + caretLine.TextHeight) / 2,
+          (view.ViewportHeight + caretLine.TextHeight) / 2,
           ViewRelativePosition.Top
+        );
+        */
+        view.ViewScroller.EnsureSpanVisible(
+          caretLine.Extent,
+          EnsureSpanVisibleOptions.AlwaysCenter
         );
       }
     }
