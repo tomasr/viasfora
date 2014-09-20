@@ -72,6 +72,7 @@ namespace Winterdom.Viasfora.Outlining {
       var allDoc = buffer.CurrentSnapshot.GetSpan();
 
       var regions = outlining.GetTags(new NormalizedSnapshotSpanCollection(allDoc));
+      this.theView.LayoutChanged += OnTextViewLayoutChanged;
       foreach ( var regionSpan in regions ) {
         CollapseRegion(regionSpan);
       }
@@ -101,13 +102,20 @@ namespace Winterdom.Viasfora.Outlining {
         return;
       }
       this.timer.Stop();
-      var caretPos = this.theView.Caret.Position.BufferPosition;
-      var caretLine = this.theView.GetTextViewLineContainingBufferPosition(caretPos);
-      this.theView.DisplayTextLineContainingBufferPosition(
-        caretPos,
-        (this.theView.ViewportHeight + caretLine.TextHeight) / 2,
-        ViewRelativePosition.Top
-      );
+      var selection = this.theView.Selection;
+      if ( selection != null ) {
+        this.theView.ViewScroller.EnsureSpanVisible(
+          selection.StreamSelectionSpan.SnapshotSpan
+        );
+      } else {
+        var caretPos = this.theView.Caret.Position.BufferPosition;
+        var caretLine = this.theView.GetTextViewLineContainingBufferPosition(caretPos);
+        this.theView.DisplayTextLineContainingBufferPosition(
+          caretPos,
+          (this.theView.ViewportHeight + caretLine.TextHeight) / 2,
+          ViewRelativePosition.Top
+        );
+      }
     }
 
     private void CollapseRegion(SnapshotSpan regionSpan) {
