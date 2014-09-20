@@ -18,7 +18,10 @@ namespace Winterdom.Viasfora.Commands {
 
     protected override void OnBeforeQueryStatus(object sender, EventArgs e) {
       base.OnBeforeQueryStatus(sender, e);
-      Command.Enabled = TextEditor.GetCurrentSelection() != null;
+      var view = TextEditor.GetCurrentView();
+      Command.Enabled = view != null
+                     && TextEditor.SupportsOutlines(view)
+                     && TextEditor.GetCurrentSelection() != null;
     }
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);
