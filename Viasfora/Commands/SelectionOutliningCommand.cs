@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Commands {
     public SelectionOutliningCommand(VsfPackage package, OleMenuCommandService omcs) 
       : base(package, omcs) {
 
-      Initialize(new Guid(Guids.guidVsfTextEditorCmdSet), PkgCmdIdList.cmdidFeatureOutlining);
+      Initialize(new Guid(Guids.guidVsfTextEditorCmdSet), PkgCmdIdList.cmdidSelectionOutlining);
     }
 
     protected override void OnBeforeQueryStatus(object sender, EventArgs e) {
