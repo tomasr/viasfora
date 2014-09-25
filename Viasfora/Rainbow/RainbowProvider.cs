@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
@@ -10,14 +11,14 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Rainbow {
 
-  class RainbowProvider  {
+  class RainbowProvider : IWeakEventListener {
     public ITextBuffer TextBuffer { get; private set; }
     public BraceCache BraceCache { get; private set; }
-    public ITextView TextView { get; private set; }
     public IClassificationTypeRegistryService Registry { get; private set; }
     public ILanguageFactory LanguageFactory { get; private set; }
     public IVsfSettings Settings { get; private set; }
@@ -30,10 +31,8 @@ namespace Winterdom.Viasfora.Rainbow {
     private int updatePendingFrom;
 
     internal RainbowProvider(
-          ITextView view,
           ITextBuffer buffer,
           RainbowTaggerProvider provider) {
-      this.TextView = view;
       this.TextBuffer = buffer;
       this.Registry = provider.ClassificationRegistry;
       this.LanguageFactory = provider.LanguageFactory;
@@ -43,11 +42,10 @@ namespace Winterdom.Viasfora.Rainbow {
       SetLanguage(buffer.ContentType);
 
       this.updatePendingFrom = -1;
-      this.TextView.Closed += OnViewClosed;
       this.TextBuffer.ChangedLowPriority += this.BufferChanged;
       this.TextBuffer.ContentTypeChanged += this.ContentTypeChanged;
-      this.Settings.SettingsChanged += this.OnSettingsChanged;
       this.Dispatcher = Dispatcher.CurrentDispatcher;
+      VsfSettingsEventManager.AddListener(this.Settings, this);
 
       UpdateBraceList(new SnapshotPoint(buffer.CurrentSnapshot, 0));
     }
@@ -83,12 +81,18 @@ namespace Winterdom.Viasfora.Rainbow {
       return false;
     }
 
-    private void OnViewClosed(object sender, EventArgs e) {
-      if ( this.TextView != null ) {
-        this.TextView.Closed -= OnViewClosed;
-        this.TextView = null;
+    private void SettingsChanged() {
+      if ( this.ColorTagger != null ) {
+        this.ColorTagger.SettingsChanged();
       }
+      this.UpdateBraceList(new SnapshotPoint(this.TextBuffer.CurrentSnapshot, 0));
+    }
+
+    private void UnsubscribeFromEvents() {
       if ( TextBuffer != null ) {
+        // ensure that we remove the property so that
+        // next time we create a new provider
+        TextBuffer.Properties.RemoveProperty(GetType());
         TextBuffer.ChangedLowPriority -= this.BufferChanged;
         TextBuffer.ContentTypeChanged -= this.ContentTypeChanged;
         TextBuffer = null;
@@ -99,7 +103,7 @@ namespace Winterdom.Viasfora.Rainbow {
         this.dispatcherTimer = null;
       }
       if ( Settings != null ) {
-        Settings.SettingsChanged -= OnSettingsChanged;
+        VsfSettingsEventManager.RemoveListener(this.Settings, this);
         Settings = null;
       }
     }
@@ -176,10 +180,6 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
-    void OnSettingsChanged(object sender, EventArgs e) {
-      this.UpdateBraceList(new SnapshotPoint(this.TextBuffer.CurrentSnapshot, 0));
-    }
-
     private void BufferChanged(object sender, TextContentChangedEventArgs e) {
       if ( Settings.RainbowTagsEnabled ) {
         // the snapshot changed, so we need to pretty much update
@@ -197,8 +197,15 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
+    public bool ReceiveWeakEvent(Type managerType, object sender, EventArgs e) {
+      // we only care about a single event
+      this.SettingsChanged();
+      return true;
+    }
+
     private void NotifyUpdateTags(SnapshotSpan span) {
       this.ColorTagger.NotifyUpdateTags(span);
     }
+
   }
 }

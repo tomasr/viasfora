@@ -56,5 +56,8 @@ namespace Winterdom.Viasfora.Rainbow {
         provider.Dispatcher.BeginInvoke(action, DispatcherPriority.Background);
       }
     }
+    public void SettingsChanged() {
+      this.rainbowTags = GetRainbows(provider.Registry, Constants.MAX_RAINBOW_DEPTH);
+    }
   }
 }

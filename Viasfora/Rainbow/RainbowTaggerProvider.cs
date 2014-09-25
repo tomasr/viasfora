@@ -13,7 +13,7 @@ using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Rainbow {
 
-  [Export(typeof(IViewTaggerProvider))]
+  [Export(typeof(ITaggerProvider))]
   [ContentType(CSharp.ContentType)]
   [ContentType(Cpp.ContentType)]
   [ContentType(JScript.ContentType)]
@@ -31,7 +31,7 @@ namespace Winterdom.Viasfora.Rainbow {
   [ContentType(Css.SassContentType)]
   [ContentType(Css.LessContentType)]
   [TagType(typeof(RainbowTag))]
-  public class RainbowTaggerProvider : IViewTaggerProvider {
+  public class RainbowTaggerProvider : ITaggerProvider {
     [Import]
     public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
     [Import]
@@ -39,13 +39,9 @@ namespace Winterdom.Viasfora.Rainbow {
     [Import]
     public IVsfSettings Settings { get; set; }
 
-    public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
-      // for a complex editor such as the HTMLX editor in VS2013
-      // we need to have multiple of these created, for different text buffers
-      // so this cannot be a singleton property, but we need to shim it based on
-      // the buffer, not the view
+    public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
       RainbowProvider prov = buffer.Properties.GetOrCreateSingletonProperty(
-        () => new RainbowProvider(view, buffer, this)
+        () => new RainbowProvider(buffer, this)
         );
       return prov.ColorTagger as ITagger<T>;
     }
