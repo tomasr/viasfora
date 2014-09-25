@@ -82,9 +82,6 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void SettingsChanged() {
-      if ( this.ColorTagger != null ) {
-        this.ColorTagger.SettingsChanged();
-      }
       this.UpdateBraceList(new SnapshotPoint(this.TextBuffer.CurrentSnapshot, 0));
     }
 
