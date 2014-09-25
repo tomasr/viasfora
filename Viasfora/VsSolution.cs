@@ -29,19 +29,22 @@ namespace Winterdom.Viasfora {
         return toPath;
       }
       // based on: http://stackoverflow.com/questions/275689/how-to-get-relative-path-from-absolute-path
-      Uri fromUri = new Uri(fromPath);
-      Uri toUri = new Uri(toPath);
+      Uri fromUri, toUri;
+      if ( Uri.TryCreate(fromPath, UriKind.Absolute, out fromUri)
+        && Uri.TryCreate(toPath, UriKind.Absolute, out toUri) ) {
+        if ( fromUri.Scheme != toUri.Scheme ) { return toPath; } // path can't be made relative.
 
-      if ( fromUri.Scheme != toUri.Scheme ) { return toPath; } // path can't be made relative.
+        Uri relativeUri = fromUri.MakeRelativeUri(toUri);
+        String relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
-      Uri relativeUri = fromUri.MakeRelativeUri(toUri);
-      String relativePath = Uri.UnescapeDataString(relativeUri.ToString());
+        if ( toUri.Scheme.ToUpperInvariant() == "FILE" ) {
+          relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        }
 
-      if ( toUri.Scheme.ToUpperInvariant() == "FILE" ) {
-        relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+        return relativePath;
       }
-
-      return relativePath;
+      // avoid invalid URI format exceptions
+      return toPath;
     }
 
     public static ISolutionUserSettings GetUserSettings() {
