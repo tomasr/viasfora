@@ -102,6 +102,17 @@
           <ButtonText>Clear Outlining</ButtonText>
         </Strings>
       </Button>
+      <Button guid="guidVsfTextEditorCmdSet" id="cmdidSelectionOutlining" priority="0x0004" type="Button">
+        <Parent guid="guidVsfTextEditorCmdSet" id="groupTextEditorMenu"/>
+        <Icon guid="guidImages" id="bmpFeatureOutline"/>
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <CommandFlag>TextChanges</CommandFlag>
+        <CommandFlag>IconAndText</CommandFlag>
+        <Strings>
+          <CommandName>Outline Selection</CommandName>
+          <ButtonText>Outline Selection</ButtonText>
+        </Strings>
+      </Button>
 
       <Button guid="guidVsfTextEditorCmdSet" id="cmdidCompleteWord" priority="0x0010" type="Button">
         <Parent guid="guidVsfTextEditorCmdSet" id="groupIntellisenseMenu"/>
@@ -137,7 +148,7 @@
 
     <Bitmaps>
       <Bitmap guid="guidImages" href="Resources\cmdImages.bmp"
-              usedList="bmpPresentationMode, bmpAddOutlining, bmpRemoveOutlining, bmpRainbowPrevious, bmpRainbowNext"/>
+              usedList="bmpPresentationMode, bmpAddOutlining, bmpRemoveOutlining, bmpRainbowPrevious, bmpRainbowNext, bmpFeatureOutline"/>
     </Bitmaps>
   </Commands>
 
@@ -177,6 +188,12 @@
                 editor="guidTextEditor"
                 mod1="Control Alt" key1="VK_OEM_PERIOD"
                 />
+
+    <KeyBinding guid="guidVsfTextEditorCmdSet" 
+                id="cmdidSelectionOutlining"
+                editor="guidTextEditor"
+                mod1="Control" key1="M"
+                mod2="Control" key2="F" />
   </KeyBindings>
 
   <Symbols>
@@ -196,9 +213,12 @@
       <IDSymbol name="groupEditMenu" value="0x0102" />
       <IDSymbol name="groupIntellisenseMenu" value="0x0104" />
       <IDSymbol name="groupRainbowMenu" value="0x0105" />
+
       <IDSymbol name="cmdidAddOutlining" value="0x1101" />
       <IDSymbol name="cmdidRemoveOutlining" value="0x1102" />
       <IDSymbol name="cmdidClearOutlining" value="0x1103" />
+      <IDSymbol name="cmdidSelectionOutlining" value="0x1104" />
+
       <IDSymbol name="cmdidCompleteWord" value="0x1401" />
       <IDSymbol name="cmdidRainbowPrevious" value="0x1501" />
       <IDSymbol name="cmdidRainbowNext" value="0x1502" />
@@ -210,6 +230,7 @@
       <IDSymbol name="bmpRemoveOutlining" value="3" />
       <IDSymbol name="bmpRainbowPrevious" value="4" />
       <IDSymbol name="bmpRainbowNext" value="5" />
+      <IDSymbol name="bmpFeatureOutline" value="6" />
     </GuidSymbol>
   </Symbols>
 </CommandTable>

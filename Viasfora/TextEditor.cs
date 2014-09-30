@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.TextManager.Interop;
-using Microsoft.VisualStudio.Editor;
-using Winterdom.Viasfora.Compatibility;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
 using VsOle = Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Text.Outlining;
+using Winterdom.Viasfora.Compatibility;
 
 namespace Winterdom.Viasfora {
   public static class TextEditor {
@@ -43,6 +44,15 @@ namespace Winterdom.Viasfora {
       var componentModel = new SComponentModel();
       var factory = componentModel.GetService<IVsEditorAdaptersFactoryService>();
       return factory.GetWpfTextView(textView);
+    }
+    public static bool SupportsOutlines(ITextView view) {
+      var componentModel = new SComponentModel();
+      var outliningService = componentModel.GetService<IOutliningManagerService>();
+      if ( outliningService == null ) {
+        return false;
+      }
+      var outliningManager = outliningService.GetOutliningManager(view);
+      return outliningManager != null && outliningManager.Enabled;
     }
 
     public static String GetFileName(ITextBuffer buffer) {

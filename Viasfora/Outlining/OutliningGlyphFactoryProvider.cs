@@ -20,7 +20,7 @@ namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IGlyphMouseProcessorProvider))]
   [ContentType("Text")]
   [TagType(typeof(OutliningGlyphTag))]
-  [Name("VsfOutliningGlyph")]
+  [Name("viasfora.outlining.user.glyphs")]
   public class OutliningGlyphFactoryProvider : IGlyphFactoryProvider, IGlyphMouseProcessorProvider {
 
     [Import]
@@ -118,7 +118,7 @@ namespace Winterdom.Viasfora.Outlining {
 
       private void RemoveOutlineAt(SnapshotPoint snapshotPoint) {
         var textBuffer = this.theHost.TextView.TextBuffer;
-        IUserOutlining outlining = OutliningManager.Get(textBuffer);
+        IUserOutlining outlining = UserOutliningManager.Get(textBuffer);
         if ( outlining != null ) {
           outlining.RemoveAt(snapshotPoint);
         }

@@ -98,6 +98,9 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( rainbow == null ) {
         return false;
       }
+      if ( !possibleBrace.IsValid() ) {
+        return false;
+      }
 
       if ( !rainbow.BraceCache.Language.BraceList.Contains(possibleBrace.GetChar()) ) {
         return false;
