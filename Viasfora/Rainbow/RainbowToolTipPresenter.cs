@@ -4,6 +4,7 @@ using System.Windows;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
+using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Design;
@@ -14,11 +15,16 @@ namespace Winterdom.Viasfora.Rainbow {
   [Order(Before="Default Quick Info Presenter")]
   [ContentType("text")]
   public class RainbowToolTipPresenterProvider : IIntellisensePresenterProvider {
+    [Import]
+    public ITextEditorFactoryService EditorFactory { get; set; }
+    [Import]
+    public IEditorOptionsFactoryService OptionsFactory { get; set; }
+
     public IIntellisensePresenter TryCreateIntellisensePresenter(IIntellisenseSession session) {
       IQuickInfoSession qiSession = session as IQuickInfoSession;
       if ( qiSession != null ) {
         if ( qiSession.Get<RainbowToolTipContext>() != null ) {
-          return new RainbowToolTipPresenter(qiSession);
+          return new RainbowToolTipPresenter(qiSession, this);
         }
       }
       return null;
@@ -57,9 +63,13 @@ namespace Winterdom.Viasfora.Rainbow {
     public event EventHandler<ValueChangedEventArgs<PopupStyles>> PopupStylesChanged;
 #pragma warning restore 0067
 
-    public RainbowToolTipPresenter(IQuickInfoSession qiSession) {
+    public RainbowToolTipPresenter(IQuickInfoSession qiSession, RainbowToolTipPresenterProvider provider) {
       this.session = qiSession;
+
       this.presenter = new QuickInfoPresenter();
+      this.presenter.EditorFactory = provider.EditorFactory;
+      this.presenter.OptionsFactory = provider.OptionsFactory;
+
       this.presenter.Opacity = 1.0;
       this.presenter.SnapsToDevicePixels = true;
       this.presenter.BindToSource(qiSession.QuickInfoContent);

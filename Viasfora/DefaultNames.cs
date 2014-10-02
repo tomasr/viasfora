@@ -20,4 +20,8 @@ namespace Winterdom.Viasfora {
     public const String WordWrapStyleId = "TextView/WordWrapStyle";
     public const String ViewProhibitUserInput = "TextView/ProhibitUserInput";
   }
+
+  public static class FontsAndColorsCategories {
+    public const String ToolTipFontAndColorCategory = "A9A5637F-B2A8-422E-8FB5-DFB4625F0111";
+  }
 }
