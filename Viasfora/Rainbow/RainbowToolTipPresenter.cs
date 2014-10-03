@@ -65,6 +65,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public RainbowToolTipPresenter(IQuickInfoSession qiSession, RainbowToolTipPresenterProvider provider) {
       this.session = qiSession;
+      this.session.Dismissed += OnSessionDimissed;
 
       this.presenter = new QuickInfoPresenter();
       this.presenter.EditorFactory = provider.EditorFactory;
@@ -95,6 +96,13 @@ namespace Winterdom.Viasfora.Rainbow {
           break;
       }
       return false;
+    }
+
+    private void OnSessionDimissed(object sender, EventArgs e) {
+      this.session.Dismissed -= this.OnSessionDimissed;
+      if ( this.presenter != null ) {
+        this.presenter.Close();
+      }
     }
   }
 }

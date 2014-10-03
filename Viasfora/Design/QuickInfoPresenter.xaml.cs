@@ -26,14 +26,26 @@ namespace Winterdom.Viasfora.Design {
 
     public IEditorOptionsFactoryService OptionsFactory { get; set; }
     public ITextEditorFactoryService EditorFactory { get; set; }
+    private List<IWpfTextView> viewsToRelease;
 
     public QuickInfoPresenter() {
       InitializeComponent();
     }
 
     public void BindToSource(BulkObservableCollection<object> source) {
+      this.viewsToRelease = new List<IWpfTextView>();
       this.DataSource = new ShadowedBOCollection(source, this.Map);
       this.DataContext = this.DataSource;
+    }
+
+    public void Close() {
+      foreach ( var view in this.viewsToRelease ) {
+        try {
+          view.Close();
+        } catch {
+        }
+      }
+      this.viewsToRelease.Clear();
     }
 
     private UIElement Map(object entry) {
@@ -63,6 +75,7 @@ namespace Winterdom.Viasfora.Design {
       );
 
       view.Background = Brushes.Transparent;
+      this.viewsToRelease.Add(view);
 
       Border border = new AutoSizeContainer();
       border.Background = Brushes.Transparent;
