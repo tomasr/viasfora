@@ -67,6 +67,7 @@ namespace Winterdom.Viasfora.Design {
       Border border = new AutoSizeContainer();
       border.Background = Brushes.Transparent;
       border.Child = view.VisualElement;
+      border.Margin = new Thickness(5, 3, 5, 3);
       return border;
     }
   }
