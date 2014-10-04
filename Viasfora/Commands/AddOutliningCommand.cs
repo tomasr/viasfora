@@ -41,6 +41,10 @@ namespace Winterdom.Viasfora.Commands {
         //SnapshotSpan? span = selection.StreamSelectionSpan.SnapshotSpan;
         if ( span != null ) {
           AddOutlining(span.Value.Snapshot.TextBuffer, span.Value);
+          var oc = OutliningController.Get(view);
+          if ( oc != null ) {
+            oc.CollapseRegion(span.Value);
+          }
         }
       }
     }

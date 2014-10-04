@@ -179,6 +179,13 @@
                 mod2="Control" key2="O" />
 
     <KeyBinding guid="guidVsfTextEditorCmdSet" 
+                id="cmdidAddOutlining"
+                editor="guidTextEditor"
+                mod1="Control" key1="M"
+                mod2="Control" key2="Y"
+                />
+
+    <KeyBinding guid="guidVsfTextEditorCmdSet" 
                 id="cmdidRainbowPrevious"
                 editor="guidTextEditor"
                 mod1="Control Alt" key1="VK_OEM_COMMA"

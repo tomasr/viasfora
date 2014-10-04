@@ -13,10 +13,10 @@ using System.Windows.Threading;
 namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IWpfTextViewCreationListener))]
   [TextViewRole(PredefinedTextViewRoles.Structured)]
-  [Name("viasfora.outlining.selection.controller")]
+  [Name("viasfora.outlining.controller")]
   [ContentType("any")]
   [ContentType("projection")]
-  public class SelectionOutliningControllerListener : IWpfTextViewCreationListener {
+  public class OutliningControllerListener : IWpfTextViewCreationListener {
     [Import]
     private IVsOutliningManagerService outlining = null;
 
@@ -24,21 +24,21 @@ namespace Winterdom.Viasfora.Outlining {
       var manager = outlining.GetOutliningManager(textView);
       if ( manager != null ) {
         textView.Properties.GetOrCreateSingletonProperty(
-          () => new SelectionOutliningController(textView, manager)
-            as ISelectionOutliningController
+          () => new OutliningController(textView, manager)
+            as IOutliningController
         );
       }
     }
   }
 
 
-  public class SelectionOutliningController : ISelectionOutliningController {
+  public class OutliningController : IOutliningController {
     private ITextView theView;
     private IVsOutliningManager outliningManager;
     private Dispatcher currentDispatcher;
     private DispatcherTimer timer;
 
-    public SelectionOutliningController(ITextView view, IVsOutliningManager manager) {
+    public OutliningController(ITextView view, IVsOutliningManager manager) {
       this.theView = view;
       this.outliningManager = manager;
       this.currentDispatcher = Dispatcher.CurrentDispatcher;
@@ -47,6 +47,42 @@ namespace Winterdom.Viasfora.Outlining {
       this.timer.Interval = TimeSpan.FromMilliseconds(50);
 
       this.theView.Closed += OnViewClosed;
+    }
+
+    public static IOutliningController Get(ITextView view) {
+      return view.Get<IOutliningController>();
+    }
+
+    public void CollapseSelectionRegions() {
+      var buffer = this.theView.TextBuffer;
+      var outlining = SelectionOutliningManager.Get(this.theView.TextBuffer);
+      var allDoc = buffer.CurrentSnapshot.GetSpan();
+
+      var regions = outlining.GetTags(new NormalizedSnapshotSpanCollection(allDoc));
+      this.theView.LayoutChanged += OnTextViewLayoutChanged;
+      foreach ( var regionSpan in regions ) {
+        TryCollapseRegion(regionSpan);
+      }
+    }
+    public void RemoveSelectionRegions() {
+      var buffer = this.theView.TextBuffer;
+      var outlining = SelectionOutliningManager.Get(this.theView.TextBuffer);
+
+      this.theView.LayoutChanged += OnTextViewLayoutChanged;
+      outlining.RemoveAll(buffer.CurrentSnapshot);
+    }
+    public void CollapseRegion(SnapshotSpan span) {
+      if ( this.theView.TextBuffer == span.Snapshot.TextBuffer ) {
+        TryCollapseRegion(span);
+        return;
+      }
+      var mappedSpans = this.theView.BufferGraph.MapUpToBuffer(
+        span, SpanTrackingMode.EdgePositive, 
+        this.theView.TextBuffer
+      );
+      foreach ( var ms in mappedSpans ) {
+        TryCollapseRegion(ms);
+      }
     }
 
     private void OnViewClosed(Object sender, EventArgs e) {
@@ -61,29 +97,6 @@ namespace Winterdom.Viasfora.Outlining {
       }
       this.outliningManager = null;
       this.currentDispatcher = null;
-    }
-
-    public static ISelectionOutliningController Get(ITextView view) {
-      return view.Get<ISelectionOutliningController>();
-    }
-
-    public void CollapseRegions() {
-      var buffer = this.theView.TextBuffer;
-      var outlining = SelectionOutliningManager.Get(this.theView.TextBuffer);
-      var allDoc = buffer.CurrentSnapshot.GetSpan();
-
-      var regions = outlining.GetTags(new NormalizedSnapshotSpanCollection(allDoc));
-      this.theView.LayoutChanged += OnTextViewLayoutChanged;
-      foreach ( var regionSpan in regions ) {
-        CollapseRegion(regionSpan);
-      }
-    }
-    public void RemoveRegions() {
-      var buffer = this.theView.TextBuffer;
-      var outlining = SelectionOutliningManager.Get(this.theView.TextBuffer);
-
-      this.theView.LayoutChanged += OnTextViewLayoutChanged;
-      outlining.RemoveAll(buffer.CurrentSnapshot);
     }
 
     private void OnTextViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
@@ -128,7 +141,7 @@ namespace Winterdom.Viasfora.Outlining {
       }
     }
 
-    private void CollapseRegion(SnapshotSpan regionSpan) {
+    private void TryCollapseRegion(SnapshotSpan regionSpan) {
       var collapsible = this.outliningManager.GetAllRegions(regionSpan);
       foreach ( var c in collapsible ) {
         if ( c.Extent.GetSpan(regionSpan.Snapshot) == regionSpan ) {

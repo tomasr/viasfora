@@ -93,16 +93,16 @@ namespace Winterdom.Viasfora.Commands {
       }
     }
     private void CollapseOutlines(ITextView textView) {
-      var controller = SelectionOutliningController.Get(textView);
+      var controller = OutliningController.Get(textView);
       if ( controller != null ) {
-        controller.CollapseRegions();
+        controller.CollapseSelectionRegions();
       }
     }
     private void ClearOutlines() {
       var view = TextEditor.GetCurrentView();
-      var controller = SelectionOutliningController.Get(view);
+      var controller = OutliningController.Get(view);
       if ( controller != null ) {
-        controller.RemoveRegions();
+        controller.RemoveSelectionRegions();
       }
     }
     private bool HasFeatureOutlines() {
