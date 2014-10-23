@@ -41,7 +41,7 @@ namespace Winterdom.Viasfora.Design {
   /// tabbing into and out of the WPF child HWND, and enables keyboard navigation
   /// within the WPF child HWND.
   /// </summary>
-  [ComVisible(true)]
+  //[ComVisible(true)]
   public abstract class UIElementDialogPage : DialogPage {
     /// <summary>
     /// Routed event used to determine whether or not key input in the dialog should be handled by the dialog or by
