@@ -49,6 +49,10 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
+    public void UpdateSnapshot(ITextSnapshot snapshot) {
+      this.Snapshot = snapshot;
+    }
+
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
       if ( this.Language == null ) yield break;
 
