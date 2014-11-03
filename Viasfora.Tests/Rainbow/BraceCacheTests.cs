@@ -13,7 +13,7 @@ namespace Viasfora.Tests.Rainbow {
   public class BraceCacheTests : VsfVsTestBase {
     [Fact]
     public void CanParseEntireFile() {
-      var textBuffer = GetTextBuffer("Rainbow1.txt");
+      var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
       var cache = new BraceCache(snapshot, GetLang(textBuffer));
       var span = snapshot.GetSpan();
@@ -22,7 +22,7 @@ namespace Viasfora.Tests.Rainbow {
 
     [Fact]
     public void CanInvalidate() {
-      var textBuffer = GetTextBuffer("Rainbow1.txt");
+      var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
       var cache = new BraceCache(snapshot, GetLang(textBuffer));
       var span = snapshot.GetSpan();
@@ -39,7 +39,7 @@ namespace Viasfora.Tests.Rainbow {
 
     [Fact]
     public void CanGetSurroundingBraces() {
-      var textBuffer = GetTextBuffer("Rainbow1.txt");
+      var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
       var cache = new BraceCache(snapshot, GetLang(textBuffer));
       var span = snapshot.GetSpan();
@@ -59,7 +59,7 @@ namespace Viasfora.Tests.Rainbow {
 
     [Fact]
     public void CanGetSurroundingBraces_TrackNextScope() {
-      var textBuffer = GetTextBuffer("Rainbow1.txt");
+      var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
       var cache = new BraceCache(snapshot, GetLang(textBuffer));
       var span = snapshot.GetSpan();
@@ -81,7 +81,7 @@ namespace Viasfora.Tests.Rainbow {
 
     [Fact]
     public void CanGetSurroundingBraces_TrackInsertionPoint() {
-      var textBuffer = GetTextBuffer("Rainbow1.txt");
+      var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
       var cache = new BraceCache(snapshot, GetLang(textBuffer));
       var span = snapshot.GetSpan();
@@ -101,12 +101,5 @@ namespace Viasfora.Tests.Rainbow {
       Assert.True(openingBrace.Position > matchingBraces.Item1.Position);
     }
 
-    private ITextBuffer GetTextBuffer(String file) {
-      var contentType = this.EditorHost.GetOrCreateContentType(CSharpContentType, "text");
-      return this.EditorHost.CreateTextBuffer(
-        contentType,
-        ReadResource(GetType().Namespace + "." + file)
-        );
-    }
   }
 }

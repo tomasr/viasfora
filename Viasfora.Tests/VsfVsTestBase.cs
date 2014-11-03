@@ -46,6 +46,13 @@ namespace Viasfora.Tests {
       return factory.TryCreateLanguage(buffer);
     }
 
+    public ITextBuffer GetCSharpTextBuffer(String file) {
+      var contentType = this.EditorHost.GetOrCreateContentType(CSharpContentType, "text");
+      return this.EditorHost.CreateTextBuffer(
+        contentType,
+        ReadResource(GetType().Namespace + "." + file)
+        );
+    }
 
     private VsfEditorHost GetOrCreateEditorHost() {
       if ( cachedEditorHost == null ) {
