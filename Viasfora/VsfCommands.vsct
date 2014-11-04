@@ -204,7 +204,7 @@
   </KeyBindings>
 
   <Symbols>
-    <GuidSymbol name="guidVsfPackage" value="{cd66bfea-4129-498f-a4fe-553f96f09c50}" />
+    <GuidSymbol name="guidVsfPackage" value="{3338742c-7926-4949-9e57-3fcbb8d0a976}" />
     <GuidSymbol name="guidTextEditor" value="{8b382828-6202-11d1-8870-0000f87579d2}" />
 
     <!-- top level View menu commands -->
