@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Tagging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,26 @@ namespace Viasfora.Tests.Outlining {
       var tags = manager.GetTags(allDocument).ToList();
       Assert.Equal(span1, tags.First());
       Assert.Equal(span2, tags.Last());
+    }
+
+    [Fact]
+    public void RaisesTagsChangedEvent() {
+      var textBuffer = GetCSharpTextBuffer("Outlining1.txt");
+      var snapshot = textBuffer.CurrentSnapshot;
+      var outlining = SelectionOutliningManager.Get(textBuffer);
+      var manager = SelectionOutliningManager.GetManager(textBuffer);
+
+      var tagger = manager.GetOutliningTagger();
+      SnapshotSpan? spanRaisedByEvent = null;
+
+      tagger.TagsChanged += (sender, e) => {
+        spanRaisedByEvent = e.Span;
+      };
+
+      var span1 = GetSpanFromLines(snapshot, 10, 15);
+      outlining.Add(span1);
+      Assert.True(spanRaisedByEvent.HasValue, "The TagsChanged event was not raised");
+      Assert.Equal(span1, spanRaisedByEvent.Value);
     }
 
     private SnapshotSpan GetSpanFromLines(ITextSnapshot snapshot, int start, int end) {
