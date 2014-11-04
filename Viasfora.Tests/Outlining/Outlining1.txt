@@ -323,4 +323,3 @@ namespace Winterdom.Viasfora.Rainbow {
       return false;
     }
   }
-}
