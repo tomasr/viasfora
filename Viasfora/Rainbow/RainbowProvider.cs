@@ -183,6 +183,14 @@ namespace Winterdom.Viasfora.Rainbow {
         // everything so that it matches.
         if ( e.Changes.Count > 0 ) {
           UpdateBraceList(e.After, e.Changes);
+        } else {
+          // this can happen on the Razor editor,
+          // where some changes on the buffer trigger
+          // the buffer changed event, but the collection
+          // is empty, so we just want to update the snapshot
+          // so that when we're asked for the tags we respond
+          // correctly to the message
+          this.BraceCache.UpdateSnapshot(e.After);
         }
       }
     }

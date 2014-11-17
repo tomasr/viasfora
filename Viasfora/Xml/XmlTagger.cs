@@ -112,7 +112,7 @@ namespace Winterdom.Viasfora.Xml {
             foundClosingTag = true;
           } else if ( text == ":" && lastSpan.HasValue && settings.XmlnsPrefixHighlightEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlPrefixClassification);
-          } else if ( text.IndexOf('>') >= 0 && foundClosingTag && settings.XmlCloseTagHighlightEnabled ) {
+          } else if ( text.IndexOf('>') >= 0 && lastSpan.HasValue && foundClosingTag && settings.XmlCloseTagHighlightEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlCloseTagClassification);
             foundClosingTag = false;
           }

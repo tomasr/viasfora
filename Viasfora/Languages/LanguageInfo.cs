@@ -12,8 +12,9 @@ namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo : ILanguage {
     private static StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
     protected static readonly String[] EMPTY = { };
+    // TODO: consider obtaining this through a constructor
     [Import]
-    internal IVsfSettings settings = null;
+    public IVsfSettings Settings { get; set; }
 
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }
@@ -66,13 +67,13 @@ namespace Winterdom.Viasfora.Languages {
     public abstract String KeyName { get; }
 
     protected String[] Get(String name, String[] defaults) {
-      String[] values = settings.GetValue(this.KeyName + "_" + name, null).AsList();
+      String[] values = Settings.GetValue(this.KeyName + "_" + name, null).AsList();
       if ( values == null || values.Length == 0 )
         values = defaults;
       return values;
     }
     protected void Set(String name, IEnumerable<String> values) {
-      settings.SetValue(this.KeyName + "_" + name, values.FromList());
+      Settings.SetValue(this.KeyName + "_" + name, values.FromList());
     }
   }
 }

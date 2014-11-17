@@ -6,21 +6,21 @@ using System.Text;
 namespace Winterdom.Viasfora {
 
   public static class Guids {
-    public const String VSPackage = "cd66bfea-4129-498f-a4fe-553f96f09c50";
-    public const String GeneralOptions = "3596b0f1-3871-433a-b0eb-0b7ca6fbf1db";
-    public const String PresentationModeOptions = "ffc7a7a2-a38c-4366-8951-cd99e72b6b48";
-    public const String AllLanguagesOptions = "aa3f2d40-f096-4756-9d3f-3603e4832cbc";
-    public const String CSharpOptions = "02061a1a-9108-448c-9c75-2a34c7e1ee4b";
-    public const String CppOptions = "239690b1-521d-4af5-97e6-f3d41af0d215";
-    public const String JScriptOptions = "7df14282-8e2c-4376-ac97-2bafae1cbb31";
-    public const String VBOptions = "73293572-9e3f-47d3-b135-3d43f1b17ec0";
-    public const String FSharpOptions = "8128a707-91dd-45f1-91f7-a4ebad2facd9";
-    public const String SqlOptions = "a2796d78-d8d7-4a8b-8760-4e2c5b388289";
-    public const String TypeScriptOptions = "cb219fe4-0e9e-4237-8ca2-e236c9607ef8";
-    public const String PythonOptions = "93c54475-f739-4442-9441-90119a8962a9";
-    public const String PowerShellOptions = "384d4f40-2d32-44a1-b79a-b54ed6e4bab2";
-    public const String IntellisenseOptions = "14b27a1e-f8c6-4494-89be-2ef707fdbf93";
-    public const String TextObfuscationOptions = "efcb681f-08e4-423e-bbd9-20a71bfe8930";
+    public const String VSPackage = "3338742c-7926-4949-9e57-3fcbb8d0a976";
+    public const String GeneralOptions = "5da0604d-ba54-43dc-b874-526f43144ee2";
+    public const String PresentationModeOptions = "e23141d9-f9fa-4780-9f07-d7cb5b6ebb17";
+    public const String AllLanguagesOptions = "af004378-3762-4f4c-9619-1fbcfbc77078";
+    public const String CSharpOptions = "6d1cdb1a-f22f-44d3-af5f-a7880934be44";
+    public const String CppOptions = "fa1cd8f0-2e7f-455d-bafe-594315674d7e";
+    public const String JScriptOptions = "f65ed695-72d7-430e-a734-efb5690f9663";
+    public const String VBOptions = "52787c4e-2f7f-47de-b645-82779f648a04";
+    public const String FSharpOptions = "4accae10-98db-4b60-9463-26a6ba9313da";
+    public const String SqlOptions = "ea0d3217-2fed-4fa6-a47a-f88951a799fc";
+    public const String TypeScriptOptions = "a7776058-9af1-476e-884a-d2a13ab3eaea";
+    public const String PythonOptions = "e8fef725-07d8-469c-9e61-4c02a7de348e";
+    public const String PowerShellOptions = "e28716b7-aebe-4cdc-a4ea-7cf4a6964691";
+    public const String IntellisenseOptions = "8e1de6d1-62e7-4f59-92bf-2b62bfb9c64e";
+    public const String TextObfuscationOptions = "98cf4318-e4c4-46e0-81c9-d8f22d9a4bcd";
 
     // Command groups
     public const String guidVsfViewCmdSet = "14e93c73-144b-4909-9cdc-694be6125e8c";

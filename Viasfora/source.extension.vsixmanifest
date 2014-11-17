@@ -3,7 +3,7 @@
   <Identifier Id="Winterdom.Viasfora.f7a33795-2b40-4125-856c-89b0bd8cd5ab">
     <Name>Viasfora</Name>
     <Author>Tomas Restrepo</Author>
-    <Version>2.3</Version>
+    <Version>2.4</Version>
     <Description xml:space="preserve">Enrich your text editing experience with Rainbow Braces and more!</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>http://viasfora.com/</MoreInfoUrl>
@@ -11,7 +11,6 @@
     <Icon>viasfora-icon.png</Icon>
     <PreviewImage>viasfora-preview.png</PreviewImage>
     <InstalledByMsi>false</InstalledByMsi>
-    <GettingStartedGuide>http://viasfora.com/#/changelog</GettingStartedGuide>
     <SupportedProducts>
       <VisualStudio Version="10.0">
         <Edition>Ultimate</Edition>

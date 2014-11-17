@@ -46,63 +46,28 @@ namespace Winterdom.Viasfora.Commands {
       ITextView view = selection.TextView;
       SnapshotSpan? span = selection.StreamSelectionSpan.SnapshotSpan;
       if ( span.HasValue ) {
-        SnapshotSpan? beginSpan = CalculateBeginSpan(span.Value);
-        if ( beginSpan.HasValue ) {
-          AddOutlining(beginSpan.Value.Snapshot.TextBuffer, beginSpan.Value);
-        }
-        SnapshotSpan? endSpan = CalculateEndSpan(span.Value);
-        if ( endSpan.HasValue ) {
-          AddOutlining(endSpan.Value.Snapshot.TextBuffer, endSpan.Value);
-        }
+        AddOutlining(span.Value.Snapshot.TextBuffer, span.Value);
         CollapseOutlines(selection.TextView);
       }
     }
 
-    private SnapshotSpan? CalculateBeginSpan(SnapshotSpan span) {
-      var snapshot = span.Snapshot;
-      int startsOnLine = snapshot.GetLineNumberFromPosition(span.Start);
-      if ( startsOnLine > 0 ) {
-        var previousLine = snapshot.GetLineFromLineNumber(startsOnLine - 1);
-        return new SnapshotSpan(snapshot, 0, previousLine.End);
-      }
-      return null;
-    }
-
-    private SnapshotSpan? CalculateEndSpan(SnapshotSpan span) {
-      var snapshot = span.Snapshot;
-      int endsOnLine = snapshot.GetLineNumberFromPosition(span.End);
-      // it could be that the selection ends right at the start of a line
-      // in that case, start the collapse from there
-      var endingLine = snapshot.GetLineFromLineNumber(endsOnLine);
-      if ( endingLine.Start == span.End ) {
-        return new SnapshotSpan(snapshot, endingLine.Start, snapshot.Length - endingLine.Start);
-      }
-
-      if ( endsOnLine < snapshot.LineCount - 1 ) {
-        var nextLine = snapshot.GetLineFromLineNumber(endsOnLine + 1);
-        return new SnapshotSpan(snapshot, nextLine.Start, snapshot.Length - nextLine.Start);
-      }
-      return null;
-    }
-
-
     private void AddOutlining(ITextBuffer buffer, SnapshotSpan span) {
       var outlines = SelectionOutliningManager.Get(buffer);
       if ( outlines != null ) {
-        outlines.Add(span);
+        outlines.CreateRegionsAround(span);
       }
     }
     private void CollapseOutlines(ITextView textView) {
-      var controller = SelectionOutliningController.Get(textView);
+      var controller = OutliningController.Get(textView);
       if ( controller != null ) {
-        controller.CollapseRegions();
+        controller.CollapseSelectionRegions();
       }
     }
     private void ClearOutlines() {
       var view = TextEditor.GetCurrentView();
-      var controller = SelectionOutliningController.Get(view);
+      var controller = OutliningController.Get(view);
       if ( controller != null ) {
-        controller.RemoveRegions();
+        controller.RemoveSelectionRegions();
       }
     }
     private bool HasFeatureOutlines() {
