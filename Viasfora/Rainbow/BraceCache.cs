@@ -14,6 +14,7 @@ namespace Winterdom.Viasfora.Rainbow {
     public ITextSnapshot Snapshot { get; private set; }
     public int LastParsedPosition { get; private set; }
     public ILanguage Language { get; private set; }
+    public String BraceChars { get; private set; }
     private IBraceExtractor braceExtractor;
 
     public BraceCache(ITextSnapshot snapshot, ILanguage language) {
@@ -24,9 +25,9 @@ namespace Winterdom.Viasfora.Rainbow {
         this.braceExtractor = this.Language.NewBraceExtractor();
 
         this.braceList.Clear();
-        String braceChars = Language.BraceList;
-        for ( int i = 0; i < braceChars.Length; i += 2 ) {
-          this.braceList.Add(braceChars[i], braceChars[i + 1]);
+        this.BraceChars = this.braceExtractor.BraceList;
+        for ( int i = 0; i < BraceChars.Length; i += 2 ) {
+          this.braceList.Add(BraceChars[i], BraceChars[i + 1]);
         }
       }
     }

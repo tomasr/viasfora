@@ -25,9 +25,6 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] LINQ_KEYWORDS = {
          "select", "update", "insert", "delete", "merge"
       };
-    public override string BraceList {
-      get { return "()[]"; }
-    }
     protected override String[] ControlFlowDefaults {
       get { return KEYWORDS; }
     }
@@ -41,7 +38,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return Constants.Sql; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new SqlBraceExtractor(this.BraceList);
+      return new SqlBraceExtractor();
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType, ContentTypeAlt }; }

@@ -10,7 +10,6 @@ namespace Winterdom.Viasfora.Contracts {
     String[] ControlFlow { get; set; }
     String[] Linq { get; set; }
     String[] Visibility { get; set; }
-    String BraceList { get; }
     String KeyName { get; }
 
     IBraceExtractor NewBraceExtractor();

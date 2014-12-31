@@ -29,7 +29,6 @@ namespace Winterdom.Viasfora.Languages {
       set { Set("Visibility", value); }
     }
 
-    public abstract String BraceList { get; }
     public abstract IBraceExtractor NewBraceExtractor();
     public virtual IFirstLineCommentParser NewFirstLineCommentParser() {
       return new GenericCommentParser();

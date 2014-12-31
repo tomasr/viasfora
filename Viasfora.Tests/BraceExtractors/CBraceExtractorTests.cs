@@ -9,26 +9,25 @@ using Xunit;
 
 namespace Viasfora.Tests.BraceExtractors {
   public class CBraceExtractorTests {
-    const String BraceList = "[]{}()";
 
     [Fact]
     public void CanExtractParens() {
       String input = @"(x*(y+7))";
-      var extractor = new CBraceExtractor(BraceList);
+      var extractor = new CBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
     [Fact]
     public void CanExtractBrackets() {
       String input = @"x[y[0]]";
-      var extractor = new CBraceExtractor(BraceList);
+      var extractor = new CBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
     [Fact]
     public void CanExtractBraces() {
       String input = @"if ( true ) { }";
-      var extractor = new CBraceExtractor(BraceList);
+      var extractor = new CBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
@@ -38,7 +37,7 @@ namespace Viasfora.Tests.BraceExtractors {
 callF(1);
 // callCommented(2);
 ";
-      var extractor = new CBraceExtractor(BraceList);
+      var extractor = new CBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
@@ -49,28 +48,28 @@ callF(1);
 callCommented2(4);
 */
 ";
-      var extractor = new CBraceExtractor(BraceList);
+      var extractor = new CBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
     [Fact]
     public void IgnoreBracesInString() {
       String input = "callF(\"some (string)\")";
-      var extractor = new CBraceExtractor(BraceList);
+      var extractor = new CBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
     [Fact]
     public void IgnoreBracesInAtString() {
       String input = "callF(@\"some (string)\")";
-      var extractor = new CBraceExtractor(BraceList);
+      var extractor = new CBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
     [Fact]
     public void IgnoreBracesInCharLiteral() {
       String input = "callF(']')";
-      var extractor = new CBraceExtractor(BraceList);
+      var extractor = new CBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }

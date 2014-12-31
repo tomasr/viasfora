@@ -14,9 +14,6 @@ namespace Winterdom.Viasfora.Languages {
     public const String ContentType = "css";
     public const String SassContentType = "SCSS";
     public const String LessContentType = "LESS";
-    public override String BraceList {
-      get { return "()[]{}"; }
-    }
 
     public override String KeyName {
       get { return Constants.Css; }
@@ -38,7 +35,7 @@ namespace Winterdom.Viasfora.Languages {
       return new CssEscapeSequenceParser(text);
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new CssBraceExtractor(this.BraceList);
+      return new CssBraceExtractor();
     }
   }
 }

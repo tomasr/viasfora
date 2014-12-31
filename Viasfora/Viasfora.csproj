@@ -117,6 +117,7 @@
     <Compile Include="Guids.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Languages\BraceExtractors\CssBraceExtractor.cs" />
+    <Compile Include="Languages\BraceExtractors\DefaultBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\PsBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\PythonBraceExtractor.cs" />
     <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
@@ -325,8 +326,9 @@
     <Reference Include="Microsoft.VisualStudio.Text.UI.Wpf, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.Editor, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\packages\Newtonsoft.Json.5.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.7\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />

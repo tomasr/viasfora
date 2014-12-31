@@ -22,9 +22,6 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] LINQ_KEYWORDS = {
           "from", "in"
       };
-    public override string BraceList {
-      get { return "(){}[]"; }
-    }
     protected override String[] ControlFlowDefaults {
       get { return KEYWORDS; }
     }
@@ -38,7 +35,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return Constants.Python; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new PythonBraceExtractor(this.BraceList);
+      return new PythonBraceExtractor();
     }
     protected override String[] ContentTypes {
       get { return new String[] { ContentType }; }

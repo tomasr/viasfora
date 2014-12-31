@@ -21,12 +21,8 @@ namespace Winterdom.Viasfora.Languages {
       };
     static readonly String[] VIS_KEYWORDS = {
       };
-    public override string BraceList {
-      get { return "(){}[]"; }
-    }
-
     public override IBraceExtractor NewBraceExtractor() {
-      return new PsBraceExtractor(this.BraceList);
+      return new PsBraceExtractor();
     }
     public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
       return new PsEscapeSequenceParser(text);

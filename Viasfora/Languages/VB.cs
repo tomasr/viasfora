@@ -43,11 +43,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] ContentTypes {
       get { return new String[] { ContentType, VBScriptContentType }; }
     }
-    public override string BraceList {
-      get { return "()"; }
-    }
     public override IBraceExtractor NewBraceExtractor() {
-      return new VbBraceExtractor(this.BraceList);
+      return new VbBraceExtractor();
     }
   }
 }

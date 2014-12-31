@@ -9,12 +9,9 @@ using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   public abstract class CBasedLanguage : LanguageInfo {
-    public override string BraceList {
-      get { return "(){}[]"; }
-    }
 
     public override IBraceExtractor NewBraceExtractor() {
-      return new CBraceExtractor(this.BraceList);
+      return new CBraceExtractor();
     }
     public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
       return new CEscapeSequenceParser(text);
