@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 using Winterdom.Viasfora.Tags;
 
-namespace Winterdom.Viasfora.Util {
+namespace Winterdom.Viasfora.Rainbow {
   public struct BracePos {
     private int depth;
     private CharPos charPos;

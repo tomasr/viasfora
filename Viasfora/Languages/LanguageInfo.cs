@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Util;
 using Winterdom.Viasfora.Languages.CommentParsers;
+using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo : ILanguage {

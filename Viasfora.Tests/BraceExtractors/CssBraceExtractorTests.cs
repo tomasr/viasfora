@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 using Xunit;
 

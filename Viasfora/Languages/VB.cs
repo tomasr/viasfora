@@ -6,7 +6,7 @@ using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.CommentParsers;
-using Winterdom.Viasfora.Util;
+using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]

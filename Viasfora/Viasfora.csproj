@@ -252,7 +252,7 @@
     <Compile Include="Util\IEscapeSequenceParser.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
-    <Compile Include="Util\BracePos.cs" />
+    <Compile Include="Rainbow\BracePos.cs" />
     <Compile Include="Languages\CBasedLanguage.cs" />
     <Compile Include="Languages\FSharp.cs" />
     <Compile Include="Languages\LanguageInfo.cs" />
@@ -263,10 +263,10 @@
     <Compile Include="Util\SimpleTokenizer.cs" />
     <Compile Include="Languages\BraceExtractors\SqlBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\CBraceExtractor.cs" />
-    <Compile Include="Util\CharPos.cs" />
+    <Compile Include="Rainbow\CharPos.cs" />
     <Compile Include="Languages\BraceExtractors\JScriptBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\FSharpBraceExtractor.cs" />
-    <Compile Include="Util\IBraceExtractor.cs" />
+    <Compile Include="Rainbow\IBraceExtractor.cs" />
     <Compile Include="Util\ITextChars.cs" />
     <Compile Include="Util\LineChars.cs" />
     <Compile Include="Util\StringChars.cs" />
