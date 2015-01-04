@@ -84,6 +84,7 @@
     <Compile Include="CommonExtensions.cs" />
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="ContentTypes.cs" />
     <Compile Include="Contracts\ILanguage.cs" />
     <Compile Include="Contracts\ILanguageFactory.cs" />
     <Compile Include="Contracts\IToolTipWindow.cs" />
