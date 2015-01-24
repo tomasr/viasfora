@@ -107,6 +107,7 @@
     </Compile>
     <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
+    <Compile Include="Rainbow\ITextBufferBraces.cs" />
     <Compile Include="EditorFormats\ObfuscatedTextFormat.cs" />
     <Compile Include="EditorFormats\RainbowFormats.cs" />
     <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
@@ -226,7 +227,7 @@
     <Compile Include="Intellisense\PlainTextCompletionContext.cs" />
     <Compile Include="Intellisense\PlainTextCompletionSource.cs" />
     <Compile Include="Intellisense\PlainTextCompletionSourceProvider.cs" />
-    <Compile Include="Rainbow\BraceCache.cs" />
+    <Compile Include="Rainbow\TextBufferBraces.cs" />
     <Compile Include="Outlining\BufferOutlines.cs" />
     <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
     <Compile Include="Text\CurrentColumnAdornment.cs" />

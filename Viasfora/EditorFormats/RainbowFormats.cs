@@ -60,7 +60,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow5Format : ClassificationFormatDefinition {
     public Rainbow5Format() {
       this.DisplayName = Constants.RAINBOW_5;
-      this.ForegroundColor = Colors.Gray;
+      this.ForegroundColor = Colors.DimGray;
     }
   }
   [Export(typeof(EditorFormatDefinition))]

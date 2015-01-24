@@ -125,7 +125,7 @@ namespace Winterdom.Viasfora.Settings {
       set { SetValue(TEXT_COMPLETION_ENABLED, value); }
     }
     public bool TCCompleteDuringTyping {
-      get { return GetBoolean(TC_COMPLETE_DURING_TYPING, true); }
+      get { return GetBoolean(TC_COMPLETE_DURING_TYPING, false); }
       set { SetValue(TC_COMPLETE_DURING_TYPING, value); }
     }
     public bool TCHandleCompleteWord {

@@ -102,10 +102,10 @@ namespace Winterdom.Viasfora.Rainbow {
         return false;
       }
 
-      if ( !rainbow.BraceCache.BraceChars.Contains(possibleBrace.GetChar()) ) {
+      if ( !rainbow.BufferBraces.BraceChars.Contains(possibleBrace.GetChar()) ) {
         return false;
       }
-      var bracePair = rainbow.BraceCache.GetBracePair(possibleBrace);
+      var bracePair = rainbow.BufferBraces.GetBracePair(possibleBrace);
       if ( bracePair == null ) {
         return true;
       }

@@ -8,21 +8,24 @@ using Winterdom.Viasfora.Util;
 using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Rainbow {
-  public class BraceCache {
-    private List<BracePos> braces = new List<BracePos>();
-    private SortedList<char, char> braceList = new SortedList<char, char>();
-    public ITextSnapshot Snapshot { get; private set; }
-    public int LastParsedPosition { get; private set; }
-    public ILanguage Language { get; private set; }
-    public String BraceChars { get; private set; }
+  public class TextBufferBraces : ITextBufferBraces {
+    private List<BracePos> braces;
+    private SortedList<char, char> braceList;
     private IBraceExtractor braceExtractor;
+    private ILanguage language;
+    public ITextSnapshot Snapshot { get; private set; }
+    public String BraceChars { get; private set; }
+    public int LastParsedPosition { get; private set; }
 
-    public BraceCache(ITextSnapshot snapshot, ILanguage language) {
+    public TextBufferBraces(ITextSnapshot snapshot, ILanguage language) {
       this.Snapshot = snapshot;
       this.LastParsedPosition = -1;
-      this.Language = language;
-      if ( this.Language != null ) {
-        this.braceExtractor = this.Language.NewBraceExtractor();
+      this.language = language;
+      this.braceList = new SortedList<char, char>();
+      this.braces = new List<BracePos>();
+
+      if ( this.language != null ) {
+        this.braceExtractor = this.language.NewBraceExtractor();
 
         this.braceList.Clear();
         this.BraceChars = this.braceExtractor.BraceList;
@@ -33,7 +36,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public void Invalidate(SnapshotPoint startPoint) {
-      if ( this.Language == null ) return;
+      if ( this.language == null ) return;
       // the new start belongs to a different snapshot!
       var newSnapshot = startPoint.Snapshot;
       this.Snapshot = newSnapshot;
@@ -55,7 +58,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
-      if ( this.Language == null ) yield break;
+      if ( this.language == null ) yield break;
 
       for ( int i = 0; i < spans.Count; i++ ) {
         var wantedSpan = spans[i];
@@ -73,7 +76,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public IEnumerable<BracePos> BracesFromPosition(int position) {
-      if ( this.Language == null ) return new BracePos[0];
+      if ( this.language == null ) return new BracePos[0];
       SnapshotSpan span = new SnapshotSpan(Snapshot, position, Snapshot.Length - position);
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
     }
@@ -163,7 +166,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     // We don't want to parse the document in small spans
-    // as it is to expensive, so force a larger span if
+    // as it is too expensive, so force a larger span if
     // necessary. However, if we've already parsed
     // beyond the span, leave it be
     private void EnsureLinesInPreferredSpan(SnapshotSpan span) {

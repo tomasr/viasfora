@@ -100,7 +100,7 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( provider == null ) {
         return;
       }
-      var braces = provider.BraceCache.GetBracePairFromPosition(bufferPos, mode);
+      var braces = provider.BufferBraces.GetBracePairFromPosition(bufferPos, mode);
       if ( braces == null ) return;
       SnapshotPoint opening = braces.Item1.ToPoint(bufferPos.Snapshot);
       SnapshotPoint closing = braces.Item2.ToPoint(bufferPos.Snapshot);

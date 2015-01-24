@@ -37,7 +37,7 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( !provider.Settings.RainbowTagsEnabled || spans.Count == 0 ) {
         yield break;
       }
-      BraceCache braceCache = provider.BraceCache;
+      var braceCache = provider.BufferBraces;
       ITextSnapshot snapshot = spans[0].Snapshot;
       if ( braceCache == null || braceCache.Snapshot != spans[0].Snapshot ) {
         yield break;
