@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.Utilities;
 namespace Winterdom.Viasfora.Text {
 
   [Export(typeof(IWpfTextViewCreationListener))]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   internal sealed class CurrentLineAdornmentFactory : IWpfTextViewCreationListener {
     [Import]

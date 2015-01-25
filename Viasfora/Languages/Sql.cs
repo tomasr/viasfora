@@ -40,7 +40,7 @@ namespace Winterdom.Viasfora.Languages {
     public override IBraceExtractor NewBraceExtractor() {
       return new SqlBraceExtractor();
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, ContentTypeAlt }; }
     }
     protected override string TextToCompare(string text) {

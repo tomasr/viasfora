@@ -33,7 +33,7 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.JS; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, ContentTypeVS2012 }; }
     }
     public override IBraceExtractor NewBraceExtractor() {

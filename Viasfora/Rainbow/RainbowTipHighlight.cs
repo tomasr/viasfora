@@ -17,7 +17,7 @@ using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Rainbow {
   [Export(typeof(IWpfTextViewCreationListener))]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   [TextViewRole(ViewRoles.ToolTipView)]
   public class RainbowTipHighlightProvider : IWpfTextViewCreationListener {
 

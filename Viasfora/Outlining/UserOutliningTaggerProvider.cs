@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.Text.Editor;
 
 namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(ITaggerProvider))]
-  [ContentType("Text")]
+  [ContentType(ContentTypes.Text)]
   [TagType(typeof(IOutliningRegionTag))]
   [TagType(typeof(IGlyphTag))]
   [TextViewRole(PredefinedTextViewRoles.Structured)]

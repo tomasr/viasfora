@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Rainbow {
   [Name("viasfora.rainbow.key.provider")]
   [Order(After="Default")]
   [TextViewRole(PredefinedTextViewRoles.Document)]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   public class RainbowKeyProcessorProvider : IKeyProcessorProvider {
 
     [Import]

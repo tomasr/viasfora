@@ -40,7 +40,7 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.PowerShell; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }
     }
   }

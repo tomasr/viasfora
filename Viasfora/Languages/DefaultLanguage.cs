@@ -20,7 +20,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return empty; }
     }
 
-    protected override string[] ContentTypes {
+    protected override string[] SupportedContentTypes {
       get { return empty; }
     }
     public override string KeyName {

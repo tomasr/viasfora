@@ -14,22 +14,7 @@ using Winterdom.Viasfora.Contracts;
 namespace Winterdom.Viasfora.Text {
 
   [Export(typeof(IViewTaggerProvider))]
-  [ContentType(CSharp.ContentType)]
-  [ContentType(Cpp.ContentType)]
-  [ContentType(VB.ContentType)]
-  [ContentType(VB.VBScriptContentType)]
-  [ContentType(JScript.ContentType)]
-  [ContentType(JScript.ContentTypeVS2012)]
-  [ContentType(JSON.ContentType)]
-  [ContentType(FSharp.ContentType)]
-  [ContentType(Sql.ContentType)]
-  [ContentType(Sql.ContentTypeAlt)]
-  [ContentType(TypeScript.ContentType)]
-  [ContentType(Python.ContentType)]
-  [ContentType(PowerShell.ContentType)]
-  [ContentType(Css.ContentType)]
-  [ContentType(Css.SassContentType)]
-  [ContentType(Css.LessContentType)]
+  [ContentType(ContentTypes.Text)]
   [TagType(typeof(KeywordTag))]
   public class KeywordTaggerProvider : IViewTaggerProvider {
     [Import]

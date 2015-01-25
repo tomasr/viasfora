@@ -40,7 +40,7 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.VB; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, VBScriptContentType }; }
     }
     public override IBraceExtractor NewBraceExtractor() {

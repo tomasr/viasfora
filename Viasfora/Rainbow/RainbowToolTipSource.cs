@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(IQuickInfoSourceProvider))]
   [Name("viasfora.rainbow.tooltip.source")]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   public class RainbowToolTipSourceProvider : IQuickInfoSourceProvider {
     [Import]
     public IToolTipWindowProvider ToolTipProvider { get; set; }

@@ -6,8 +6,13 @@ using System.Text;
 namespace Winterdom.Viasfora {
   public static class ContentTypes {
     public const String Any = "any";
+    public const String Text = "text";
+    public const String Projection = "projection";
+    public const String Code = "code";
+
     public const String Cpp = "C/C++";
     public const String CSharp = "CSharp";
+    public const String XLang = "Fake.XLANG/s";
     public const String Css = "css";
     public const String Less = "LESS";
     public const String Sass = "SCSS";

@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.Text {
 
   [Export(typeof(IWpfTextViewCreationListener))]
   [Name("Viasfora.bold-as-italics")]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   public class BoldAsItalicsViewListener : IWpfTextViewCreationListener {
     [Import]

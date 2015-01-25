@@ -44,6 +44,7 @@ namespace Winterdom.Viasfora {
     // Languages
     public const String Cpp = "Cpp";
     public const String CSharp = "CSharp";
+    public const String XLang = "XLANG/s";
     public const String Css = "CSS";
     public const String FSharp = "FSharp";
     public const String JS = "JScript";

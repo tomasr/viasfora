@@ -19,7 +19,7 @@ namespace Winterdom.Viasfora.Intellisense {
 
   [Export(typeof(IVsTextViewCreationListener))]
   [Name("viasfora.text.completion.handler")]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
   public class PlainTextCompletionHandlerProvider : IVsTextViewCreationListener {
     [Import]

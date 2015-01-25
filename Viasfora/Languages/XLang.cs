@@ -7,26 +7,19 @@ using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
-  class Cpp : CBasedLanguage {
-    public const String ContentType = "C/C++";
-    static readonly String[] CPP_KEYWORDS = {
-         "if", "else", "while", "do", "for", "each", "switch",
-         "break", "continue", "return", "goto", "throw"
-      };
-    static readonly String[] CPP_VIS_KEYWORDS = {
-         "public", "private", "protected", "internal", "friend"
-      };
+  public class XLang : CBasedLanguage {
+    public const String ContentType = ContentTypes.XLang;
     protected override String[] ControlFlowDefaults {
-      get { return CPP_KEYWORDS; }
+      get { return EMPTY; }
     }
     protected override String[] LinqDefaults {
-      get { return new String[0]; }
+      get { return EMPTY; }
     }
     protected override String[] VisibilityDefaults {
-      get { return CPP_VIS_KEYWORDS; }
+      get { return EMPTY; }
     }
     public override String KeyName {
-      get { return Constants.Cpp; }
+      get { return Constants.XLang; }
     }
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }

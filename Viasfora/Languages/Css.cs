@@ -19,7 +19,7 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.Css; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, SassContentType, LessContentType }; }
     }
     protected override String[] ControlFlowDefaults {

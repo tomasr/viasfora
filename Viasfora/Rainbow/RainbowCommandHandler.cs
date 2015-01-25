@@ -16,7 +16,7 @@ using Microsoft.VisualStudio.Text;
 namespace Winterdom.Viasfora.Rainbow {
   [Export(typeof(IVsTextViewCreationListener))]
   [Name("viasfora.rainbow.handler")]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
   public class RainbowCommandHandlerProvider : IVsTextViewCreationListener {
     [Import]

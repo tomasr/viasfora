@@ -39,7 +39,7 @@ namespace Winterdom.Viasfora.Languages {
     }
 
     public virtual bool MatchesContentType(IContentType contentType) {
-      foreach ( String str in this.ContentTypes ) {
+      foreach ( String str in this.SupportedContentTypes ) {
         if ( contentType.IsOfType(str) ) 
           return true;
       }
@@ -60,7 +60,7 @@ namespace Winterdom.Viasfora.Languages {
       return text;
     }
 
-    protected abstract String[] ContentTypes { get; }
+    protected abstract String[] SupportedContentTypes { get; }
     protected abstract String[] ControlFlowDefaults { get; }
     protected abstract String[] LinqDefaults { get; }
     protected abstract String[] VisibilityDefaults { get; }

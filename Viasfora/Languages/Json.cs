@@ -25,7 +25,7 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.Json; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }
     }
     public override IBraceExtractor NewBraceExtractor() {

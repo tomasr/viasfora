@@ -39,7 +39,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.Settings = provider.Settings;
       this.ColorTagger = new RainbowColorTagger(this);
 
-      SetLanguage(buffer.ContentType);
+      SetLanguage(buffer.CurrentSnapshot);
 
       this.updatePendingFrom = -1;
       this.TextBuffer.ChangedLowPriority += this.BufferChanged;
@@ -170,9 +170,9 @@ namespace Winterdom.Viasfora.Rainbow {
       //}
     }
 
-    private void SetLanguage(IContentType contentType) {
+    private void SetLanguage(ITextSnapshot snapshot) {
       if ( TextBuffer != null ) {
-        var lang = LanguageFactory.TryCreateLanguage(contentType);
+        var lang = LanguageFactory.TryCreateLanguage(snapshot);
         this.BufferBraces = new TextBufferBraces(this.TextBuffer.CurrentSnapshot, lang);
       }
     }
@@ -197,7 +197,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
     private void ContentTypeChanged(object sender, ContentTypeChangedEventArgs e) {
       if ( e.BeforeContentType.TypeName != e.AfterContentType.TypeName ) {
-        this.SetLanguage(e.AfterContentType);
+        this.SetLanguage(e.After);
         this.UpdateBraceList(new SnapshotPoint(e.After, 0));
       }
     }
