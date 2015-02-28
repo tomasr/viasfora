@@ -40,6 +40,11 @@ namespace Winterdom.Viasfora.Languages {
     public override IBraceExtractor NewBraceExtractor() {
       return new SqlBraceExtractor();
     }
+
+    [ImportingConstructor]
+    public Sql(IVsfSettings settings) : base(settings) {
+    }
+
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, ContentTypeAlt }; }
     }

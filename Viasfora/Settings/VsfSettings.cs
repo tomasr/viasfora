@@ -159,24 +159,24 @@ namespace Winterdom.Viasfora.Settings {
       }
     }
 
-    private bool GetBoolean(String name, bool defval) {
+    public bool GetBoolean(String name, bool defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToBoolean(val);
     }
 
-    private int GetInt32(String name, int defval) {
+    public int GetInt32(String name, int defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToInt32(val);
     }
-    private long GetInt64(String name, long defval) {
+    public long GetInt64(String name, long defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToInt64(val);
     }
-    private double GetDouble(String name, double defval) {
+    public double GetDouble(String name, double defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToDouble(val);
     }
-    private T GetEnum<T>(String name, T defval) where T : struct {
+    public T GetEnum<T>(String name, T defval) where T : struct {
       String val = settings.Get(name);
       T actual;
       if ( Enum.TryParse<T>(val, out actual) ) {

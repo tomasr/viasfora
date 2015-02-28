@@ -40,6 +40,11 @@ namespace Winterdom.Viasfora {
 
     event EventHandler SettingsChanged;
     String GetValue(String name, String defaultValue);
+    bool GetBoolean(String name, bool defval);
+    int GetInt32(String name, int defval);
+    long GetInt64(String name, long defval);
+    double GetDouble(String name, double defval);
+    T GetEnum<T>(String name, T defval) where T : struct;
     void SetValue(String name, object value);
     void Load();
     void Save();

@@ -37,11 +37,16 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( !provider.Settings.RainbowTagsEnabled || spans.Count == 0 ) {
         yield break;
       }
+
       var braceCache = provider.BufferBraces;
       ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( braceCache == null || braceCache.Snapshot != spans[0].Snapshot ) {
+      if ( braceCache == null || !braceCache.Enabled ) {
         yield break;
       }
+      if ( braceCache.Snapshot != spans[0].Snapshot ) {
+        yield break;
+      }
+
       foreach ( var brace in braceCache.BracesInSpans(spans) ) {
         var ctype = rainbowTags[brace.Depth % this.provider.Settings.RainbowDepth];
         yield return brace.ToSpan(snapshot, ctype);

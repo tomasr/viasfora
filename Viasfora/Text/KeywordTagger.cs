@@ -50,6 +50,10 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ILanguage lang = GetKeywordsByContentType(theBuffer.ContentType);
+      if ( !lang.Enabled ) {
+        yield break;
+      }
+
       bool eshe = settings.EscapeSeqHighlightEnabled;
       bool kce = settings.KeywordClassifierEnabled;
       if ( !(kce || eshe) ) {

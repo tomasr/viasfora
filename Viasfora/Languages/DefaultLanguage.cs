@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
+using System.ComponentModel.Composition;
 
 namespace Winterdom.Viasfora.Languages {
   public class DefaultLanguage : LanguageInfo {
@@ -26,6 +27,12 @@ namespace Winterdom.Viasfora.Languages {
     public override string KeyName {
       get { return "Text"; }
     }
+
+    [ImportingConstructor]
+    public DefaultLanguage(IVsfSettings settings) : base(settings) {
+    }
+
+
     public override bool MatchesContentType(IContentType contentType) {
       return true;
     }

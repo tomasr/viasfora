@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora.Contracts {
     String[] Linq { get; set; }
     String[] Visibility { get; set; }
     String KeyName { get; }
+    bool Enabled { get; set; }
 
     IBraceExtractor NewBraceExtractor();
     IFirstLineCommentParser NewFirstLineCommentParser();

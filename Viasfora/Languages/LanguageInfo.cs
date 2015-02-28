@@ -13,9 +13,7 @@ namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo : ILanguage {
     private static StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
     protected static readonly String[] EMPTY = { };
-    // TODO: consider obtaining this through a constructor
-    [Import]
-    public IVsfSettings Settings { get; set; }
+    public IVsfSettings Settings { get; private set; }
 
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }
@@ -28,6 +26,14 @@ namespace Winterdom.Viasfora.Languages {
     public String[] Visibility {
       get { return Get("Visibility", VisibilityDefaults); }
       set { Set("Visibility", value); }
+    }
+    public bool Enabled {
+      get { return Settings.GetBoolean(KeyName + "_Enabled", true); }
+      set { Settings.SetValue(KeyName + "_Enabled", value); }
+    }
+
+    public LanguageInfo(IVsfSettings settings) {
+      this.Settings = settings;
     }
 
     public abstract IBraceExtractor NewBraceExtractor();

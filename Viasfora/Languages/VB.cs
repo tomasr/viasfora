@@ -43,6 +43,11 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, VBScriptContentType }; }
     }
+
+    [ImportingConstructor]
+    public VB(IVsfSettings settings) : base(settings) {
+    }
+
     public override IBraceExtractor NewBraceExtractor() {
       return new VbBraceExtractor();
     }

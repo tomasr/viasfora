@@ -22,12 +22,6 @@ namespace Winterdom.Viasfora.Languages {
       };
     static readonly String[] VIS_KEYWORDS = {
       };
-    public override IBraceExtractor NewBraceExtractor() {
-      return new PsBraceExtractor();
-    }
-    public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
-      return new PsEscapeSequenceParser(text);
-    }
     protected override String[] ControlFlowDefaults {
       get { return FLOW_KEYWORDS; }
     }
@@ -42,6 +36,16 @@ namespace Winterdom.Viasfora.Languages {
     }
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }
+    }
+
+    [ImportingConstructor]
+    public PowerShell(IVsfSettings settings) : base(settings) {
+    }
+    public override IBraceExtractor NewBraceExtractor() {
+      return new PsBraceExtractor();
+    }
+    public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
+      return new PsEscapeSequenceParser(text);
     }
   }
 }

@@ -32,6 +32,10 @@ namespace Winterdom.Viasfora.Languages {
       get { return EMPTY; }
     }
 
+    [ImportingConstructor]
+    public Css(IVsfSettings settings) : base(settings) {
+    }
+
     public override IEscapeSequenceParser NewEscapeSequenceParser(string text) {
       return new CssEscapeSequenceParser(text);
     }

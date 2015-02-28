@@ -9,6 +9,7 @@ namespace Winterdom.Viasfora.Rainbow {
     ITextSnapshot Snapshot { get; }
     String BraceChars { get; }
     int LastParsedPosition { get; }
+    bool Enabled { get; }
 
     void Invalidate(SnapshotPoint startPoint);
     void UpdateSnapshot(ITextSnapshot snapshot);

@@ -37,5 +37,9 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }
     }
+
+    [ImportingConstructor]
+    public CSharp(IVsfSettings settings) : base(settings) {
+    }
   }
 }
