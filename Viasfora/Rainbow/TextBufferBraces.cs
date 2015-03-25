@@ -10,6 +10,7 @@ using Winterdom.Viasfora.Contracts;
 namespace Winterdom.Viasfora.Rainbow {
   public class TextBufferBraces : ITextBufferBraces {
     private List<BracePos> braces;
+    private List<CharPos> braceErrors;
     private SortedList<char, char> braceList;
     private IBraceExtractor braceExtractor;
     private ILanguage language;
@@ -26,6 +27,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.language = language;
       this.braceList = new SortedList<char, char>();
       this.braces = new List<BracePos>();
+      this.braceErrors = new List<CharPos>();
 
       if ( this.language != null ) {
         this.braceExtractor = this.language.NewBraceExtractor();
@@ -54,6 +56,8 @@ namespace Winterdom.Viasfora.Rainbow {
         // so invalidate all
         InvalidateFromBraceAtIndex(newSnapshot, 0);
       }
+
+      this.InvalidateBraceErrorsFromPos(startPoint.Position);
     }
 
     public void UpdateSnapshot(ITextSnapshot snapshot) {
@@ -76,6 +80,23 @@ namespace Winterdom.Viasfora.Rainbow {
           yield return bp;
         }
       }
+    }
+
+    public IEnumerable<CharPos> ErrorBracesInSpans(NormalizedSnapshotSpanCollection spans) {
+      if ( this.language == null )
+        return Enumerable.Empty<CharPos>();
+
+      // we expect there to be very few brace errors,
+      // so it's not worth optimizing this too much
+      EnsureLinesInPreferredSpan(spans.Complete());
+      if ( this.braceErrors.Count == 0 )
+        return Enumerable.Empty<CharPos>();
+
+      return from e in this.braceErrors
+             from span in spans
+             where e.Position >= span.Start
+                && e.Position <= span.End
+             select e;
     }
 
     public IEnumerable<BracePos> BracesFromPosition(int position) {
@@ -246,7 +267,14 @@ namespace Winterdom.Viasfora.Rainbow {
             pairs.Pop();
             BracePos c = cp.AsBrace(p.Depth);
             Add(c);
+          } else {
+            // closing brace does not correspond
+            // to opening brace at same depth
+            this.braceErrors.Add(cp);
           }
+        } else {
+          // closing brace has no opening brace
+          this.braceErrors.Add(cp);
         }
       }
       this.LastParsedPosition = line.End;
@@ -318,6 +346,20 @@ namespace Winterdom.Viasfora.Rainbow {
         this.LastParsedPosition = braces[braces.Count - 1].Position;
       } else {
         this.LastParsedPosition = -1;
+      }
+    }
+
+    private void InvalidateBraceErrorsFromPos(int position) {
+      // invalidate brace errors
+      int lastPos = -1;
+      for ( int i = 0; i < this.braceErrors.Count; i++ ) {
+        lastPos = i;
+        CharPos ch = this.braceErrors[i];
+        if ( ch.Position >= position )
+          break;
+      }
+      if ( lastPos >= 0 && lastPos < braceErrors.Count ) {
+        braceErrors.RemoveRange(lastPos, braceErrors.Count - lastPos);
       }
     }
 

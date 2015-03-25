@@ -120,4 +120,17 @@ namespace Winterdom.Viasfora.EditorFormats {
       this.ForegroundCustomizable = false;
     }
   }
+
+  [Export(typeof(EditorFormatDefinition))]
+  [ClassificationType(ClassificationTypeNames = Constants.RAINBOW_ERROR)]
+  [Name(Constants.RAINBOW_ERROR)]
+  [UserVisible(true)]
+  [Order(After = Priority.High)]
+  public sealed class RainbowErrorFormat : ClassificationFormatDefinition {
+    public RainbowErrorFormat() {
+      this.DisplayName = Constants.RAINBOW_ERROR;
+      this.BackgroundColor = Colors.LightCoral;
+      this.ForegroundCustomizable = false;
+    }
+  }
 }

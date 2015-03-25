@@ -10,7 +10,7 @@ using Winterdom.Viasfora.Rainbow;
 using Xunit;
 
 namespace Viasfora.Tests.Rainbow {
-  public class BraceCacheTests : VsfVsTestBase {
+  public class TextBufferBracesTests : VsfVsTestBase {
     [Fact]
     public void CanParseEntireFile() {
       var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
@@ -18,6 +18,15 @@ namespace Viasfora.Tests.Rainbow {
       var cache = new TextBufferBraces(snapshot, GetLang(textBuffer));
       var span = snapshot.GetSpan();
       Assert.Equal(32, cache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)).Count());
+    }
+
+    [Fact]
+    public void CanFindExtraClosingBraces() {
+      var textBuffer = GetCSharpTextBuffer("RainbowErrors.txt");
+      var snapshot = textBuffer.CurrentSnapshot;
+      var cache = new TextBufferBraces(snapshot, GetLang(textBuffer));
+      var span = snapshot.GetSpan();
+      Assert.Equal(2, cache.ErrorBracesInSpans(new NormalizedSnapshotSpanCollection(span)).Count());
     }
 
     [Fact]

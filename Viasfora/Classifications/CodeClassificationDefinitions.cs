@@ -55,6 +55,9 @@ namespace Winterdom.Viasfora.Classifications {
     [Export, Name(Constants.RAINBOW_9)]
     internal static ClassificationTypeDefinition Rainbow9ClassificationType = null;
 
+    [Export, Name(Constants.RAINBOW_ERROR)]
+    internal static ClassificationTypeDefinition RainbowErrorClassificationType = null;
+
     [Export, Name(Constants.OBFUSCATED_TEXT)]
     internal static ClassificationTypeDefinition ObfuscatedTextType = null;
 

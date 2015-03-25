@@ -14,6 +14,7 @@ namespace Winterdom.Viasfora.Rainbow {
     void Invalidate(SnapshotPoint startPoint);
     void UpdateSnapshot(ITextSnapshot snapshot);
     IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans);
+    IEnumerable<CharPos> ErrorBracesInSpans(NormalizedSnapshotSpanCollection spans);
 
     IEnumerable<BracePos> BracesFromPosition(int position);
     Tuple<BracePos, BracePos> GetBracePair(SnapshotPoint point);

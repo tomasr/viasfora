@@ -22,6 +22,7 @@ namespace Winterdom.Viasfora {
     public const String RAINBOW_7 = RAINBOW + "7";
     public const String RAINBOW_8 = RAINBOW + "8";
     public const String RAINBOW_9 = RAINBOW + "9";
+    public const String RAINBOW_ERROR = RAINBOW + "Error";
 
     public const String RAINBOW_TIP_HIGHLIGHT = "viasfora.rainbow.tip.highlight";
 

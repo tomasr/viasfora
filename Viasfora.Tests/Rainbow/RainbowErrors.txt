@@ -1,0 +1,4 @@
+﻿// extra )
+owner.Properties.AddProperty(typeof(T), value));
+// (]
+owner.Properties.AddProperty(typeof(T], value);

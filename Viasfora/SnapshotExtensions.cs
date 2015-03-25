@@ -21,5 +21,11 @@ namespace Winterdom.Viasfora {
       return point.Position >= 0
           && point.Position < point.Snapshot.Length;
     }
+
+    public static SnapshotSpan Complete(this NormalizedSnapshotSpanCollection spans) {
+      if ( spans.Count == 0 )
+        return new SnapshotSpan();
+      return new SnapshotSpan(spans[0].Start, spans[spans.Count - 1].End);
+    }
   }
 }
