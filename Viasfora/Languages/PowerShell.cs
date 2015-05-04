@@ -12,7 +12,8 @@ using Winterdom.Viasfora.Util;
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
   public class PowerShell : LanguageInfo {
-    public const String ContentType = "PowerShell.v3";
+    public const String ContentTypeVS2013 = "PowerShell.v3";
+    public const String ContentTypePSTools = "PowerShell";
     static readonly String[] FLOW_KEYWORDS = {
           "for", "while", "foreach", "if", "else",
           "elseif", "do", "break", "continue",
@@ -35,7 +36,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return Constants.PowerShell; }
     }
     protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType }; }
+      get { return new String[] { ContentTypePSTools, ContentTypeVS2013 }; }
     }
 
     [ImportingConstructor]

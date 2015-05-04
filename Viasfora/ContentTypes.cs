@@ -20,7 +20,8 @@ namespace Winterdom.Viasfora {
     public const String JS = "JScript";
     public const String JS_VS2012 = "JavaScript";
     public const String Json = "JSON";
-    public const String PowerShell = "PowerShell.v3";
+    public const String PowerShellVS = "PowerShell.v3";
+    public const String PowerShell = "PowerShell";
     public const String Python = "Python";
     public const String Sql = "SQL";
     public const String SqlDataTools = "Sql Server Tools";
