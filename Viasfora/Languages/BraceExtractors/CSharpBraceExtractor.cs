@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.BraceExtractors {
-  public class CBraceExtractor : IBraceExtractor {
+  public class CSharpBraceExtractor : IBraceExtractor {
     const int stText = 0;
     const int stString = 1;
     const int stChar = 2;
+    const int stMultiLineString = 3;
     const int stMultiLineComment = 4;
+
     private int status = stText;
 
     public String BraceList {
       get { return "(){}[]"; }
     }
 
-    public CBraceExtractor() {
+    public CSharpBraceExtractor() {
     }
 
     public void Reset() {
@@ -30,6 +33,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           case stString: ParseString(tc); break;
           case stChar: ParseCharLiteral(tc); break;
           case stMultiLineComment: ParseMultiLineComment(tc); break;
+          case stMultiLineString: ParseMultiLineString(tc); break;
           default: 
             foreach ( var p in ParseText(tc) ) {
               yield return p;
@@ -39,6 +43,8 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       }
     }
 
+    // C# 6.0 interpolated string support:
+    // Treat them as regular strings!
     private IEnumerable<CharPos> ParseText(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         // multi-line comment
@@ -48,6 +54,18 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           this.ParseMultiLineComment(tc);
         } else if ( tc.Char() == '/' && tc.NChar() == '/' ) {
           tc.SkipRemainder();
+        } else if ( tc.Char() == '@' && tc.NChar() == '"' ) {
+          this.status = stMultiLineString;
+          tc.Skip(2);
+          this.ParseMultiLineString(tc);
+        } else if ( tc.Char() == '$' && tc.NChar() == '"' ) {
+          this.status = stString;
+          tc.Skip(2);
+          this.ParseString(tc);
+        } else if ( tc.Char() == '$' && tc.NChar() == '@' && tc.NNChar() == '"' ) {
+          this.status = stMultiLineString;
+          tc.Skip(3);
+          this.ParseMultiLineString(tc);
         } else if ( tc.Char() == '"' ) {
           this.status = stString;
           tc.Next();
@@ -95,6 +113,21 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       this.status = stText;
     }
 
+    private void ParseMultiLineString(ITextChars tc) {
+      while ( !tc.EndOfLine ) {
+        if ( tc.Char() == '"' && tc.NChar() == '"' ) {
+          // means a single embedded double quote
+          tc.Skip(2);
+        } else if ( tc.Char() == '"' ) {
+          tc.Next();
+          this.status = stText;
+          return;
+        } else {
+          tc.Next();
+        }
+      }
+    }
+
     private void ParseMultiLineComment(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         if ( tc.Char() == '*' && tc.NChar() == '/' ) {
@@ -106,5 +139,6 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
         }
       }
     }
+
   }
 }

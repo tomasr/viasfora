@@ -119,6 +119,7 @@
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="JsonExtensions.cs" />
+    <Compile Include="Languages\BraceExtractors\CSharpBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\CssBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\DefaultBraceExtractor.cs" />
     <Compile Include="Languages\BraceExtractors\PsBraceExtractor.cs" />
