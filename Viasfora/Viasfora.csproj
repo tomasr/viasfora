@@ -90,6 +90,7 @@
     <Compile Include="ContentTypes.cs" />
     <Compile Include="Contracts\ILanguage.cs" />
     <Compile Include="Contracts\ILanguageFactory.cs" />
+    <Compile Include="Contracts\IRoslynLanguage.cs" />
     <Compile Include="Contracts\IToolTipWindow.cs" />
     <Compile Include="Contracts\IToolTipWindowProvider.cs" />
     <Compile Include="DefaultNames.cs" />
@@ -110,6 +111,7 @@
     </Compile>
     <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
+    <Compile Include="Languages\Roslyn\RoslynCSharpBraceExtractor.cs" />
     <Compile Include="Languages\XLang.cs" />
     <Compile Include="Rainbow\ITextBufferBraces.cs" />
     <Compile Include="EditorFormats\ObfuscatedTextFormat.cs" />

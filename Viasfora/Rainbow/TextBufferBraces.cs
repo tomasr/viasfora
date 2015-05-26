@@ -30,7 +30,12 @@ namespace Winterdom.Viasfora.Rainbow {
       this.braceErrors = new List<CharPos>();
 
       if ( this.language != null ) {
-        this.braceExtractor = this.language.NewBraceExtractor();
+        IRoslynLanguage roslyn = this.language as IRoslynLanguage;
+        if ( roslyn == null ) {
+          this.braceExtractor = this.language.NewBraceExtractor();
+        } else {
+          this.braceExtractor = roslyn.NewBraceExtractor(snapshot.TextBuffer);
+        }
 
         this.braceList.Clear();
         this.BraceChars = this.braceExtractor.BraceList;

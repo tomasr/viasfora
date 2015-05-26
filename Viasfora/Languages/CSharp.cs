@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Text;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
@@ -9,7 +10,7 @@ using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
-  public class CSharp : CBasedLanguage {
+  public class CSharp : CBasedLanguage, IRoslynLanguage {
     public const String ContentType = "CSharp";
     static readonly String[] CS_KEYWORDS = {
          "if", "else", "while", "do", "for", "foreach", 
@@ -44,8 +45,15 @@ namespace Winterdom.Viasfora.Languages {
       return new CSharpBraceExtractor();
     }
 
+    public IBraceExtractor NewBraceExtractor(ITextBuffer buffer) {
+      return buffer.Properties.GetOrCreateSingletonProperty(
+        () => new Roslyn.RoslynCSharpBraceExtractor(buffer)
+        );
+    }
+
     [ImportingConstructor]
     public CSharp(IVsfSettings settings) : base(settings) {
     }
+
   }
 }
