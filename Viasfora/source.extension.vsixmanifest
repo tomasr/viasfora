@@ -37,7 +37,7 @@
         <Edition>IntegratedShell</Edition>
       </VisualStudio>
     </SupportedProducts>
-    <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="5.0" />
+    <SupportedFrameworkRuntimeEdition MinVersion="4.5" MaxVersion="5.0" />
   </Identifier>
   <References>
     <Reference Id="Microsoft.VisualStudio.MPF" MinVersion="10.0">
