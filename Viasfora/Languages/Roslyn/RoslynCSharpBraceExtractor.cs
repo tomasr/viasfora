@@ -24,7 +24,7 @@ namespace Winterdom.Viasfora.Languages.Roslyn {
       this.buffer = buffer;
       this.options = new CSharpParseOptions(
         documentationMode: DocumentationMode.None,
-        kind: SourceCodeKind.Interactive
+        kind: SourceCodeKind.Regular
         );
       this.buffer.Changing += OnBufferChanging;
       this.syntaxTree = null;
@@ -47,16 +47,25 @@ namespace Winterdom.Viasfora.Languages.Roslyn {
       int start = text.AbsolutePosition;
       text.SkipRemainder();
       int end = text.AbsolutePosition;
-
-      var rspan = new RSpan(start, end - start + 1);
+      if ( end == start ) {
+        yield break;
+      }
+      var rspan = new RSpan(start, end - start);
       var candidates = from token in node.DescendantTokens(rspan, descendIntoTrivia: false)
-                       where IsBrace(token)
+                       where IsTokenInSpan(token, rspan) 
+                          && IsBrace(token)
                           && !token.IsMissing
                        select token;
 
       foreach ( var c in candidates ) {
         yield return new CharPos(CharFromToken(c), c.Span.Start);
       }
+
+    }
+
+    private bool IsTokenInSpan(SyntaxToken token, RSpan rspan) {
+      return token.Span.Start >= rspan.Start &&
+             token.Span.Start <= rspan.End;
     }
 
     private char CharFromToken(SyntaxToken token) {
