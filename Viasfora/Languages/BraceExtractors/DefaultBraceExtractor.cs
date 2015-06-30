@@ -11,6 +11,10 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       get { return String.Empty; }
     }
 
+    public int ReparseWindow {
+      get { return 0; }
+    }
+
     public void Reset() {
     }
 

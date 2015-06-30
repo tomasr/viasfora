@@ -14,58 +14,72 @@ namespace Winterdom.Viasfora.Languages.Roslyn {
   public class RoslynCSharpBraceExtractor : IBraceExtractor {
     private ITextBuffer buffer;
     private CSharpParseOptions options;
-    private SyntaxTree syntaxTree;
+    private static readonly CharPos[] empty = new CharPos[0];
+    private CharList<CharPos> braces;
+    private bool needsParsing;
 
     public String BraceList {
       get { return "()[]{}"; }
     }
 
+    public int ReparseWindow {
+      get { return 1; }
+    }
+
     public RoslynCSharpBraceExtractor(ITextBuffer buffer) {
       this.buffer = buffer;
-      this.options = new CSharpParseOptions(
-        documentationMode: DocumentationMode.None,
-        kind: SourceCodeKind.Regular
-        );
       this.buffer.Changing += OnBufferChanging;
-      this.syntaxTree = null;
+      this.options = CSharpParseOptions
+                    .Default
+                    .WithDocumentationMode(DocumentationMode.None);
+      this.braces = new CharList<CharPos>();
+      this.needsParsing = true;
     }
 
     private void OnBufferChanging(object sender, TextContentChangingEventArgs e) {
+      this.needsParsing = true;
     }
 
     public void Reset() {
-      this.syntaxTree = null;
     }
 
     public IEnumerable<CharPos> Extract(Util.ITextChars text) {
-      ParseIfNeeded();
+      if ( text.EndOfLine )
+        return empty;
 
-      SyntaxNode node = null;
-      if ( !syntaxTree.TryGetRoot(out node) )
-        yield break;
+      ReparseIfNeeded();
 
       int start = text.AbsolutePosition;
       text.SkipRemainder();
       int end = text.AbsolutePosition;
-      if ( end == start ) {
-        yield break;
-      }
-      var rspan = new RSpan(start, end - start);
-      var candidates = from token in node.DescendantTokens(rspan, descendIntoTrivia: false)
-                       where IsTokenInSpan(token, rspan) 
-                          && IsBrace(token)
-                          && !token.IsMissing
-                       select token;
 
-      foreach ( var c in candidates ) {
-        yield return new CharPos(CharFromToken(c), c.Span.Start);
-      }
-
+      return this.braces.FindInRange(start, end);
     }
 
-    private bool IsTokenInSpan(SyntaxToken token, RSpan rspan) {
-      return token.Span.Start >= rspan.Start &&
-             token.Span.Start <= rspan.End;
+    private void ReparseIfNeeded() {
+      if ( !needsParsing )
+        return;
+
+      this.braces = new CharList<CharPos>();
+
+      // TODO: Get the existing parsed tree from
+      // VS2015 if we have it
+      String toParse = this.buffer.CurrentSnapshot.GetText();
+      var parsed = CSharpSyntaxTree.ParseText(toParse, this.options);
+      var rootNode = parsed.GetRoot();
+
+      //var parsed = SyntaxFactory.ParseTokens(toParse, 0, 0, options);
+      var tokens = from token in rootNode.DescendantTokens()
+                   where IsBrace(token) && !token.IsMissing
+                   select token;
+
+      foreach ( var token in tokens ) {
+        this.braces.Add(new CharPos(
+          CharFromToken(token),
+          token.Span.Start
+        ));
+      }
+      this.needsParsing = false;
     }
 
     private char CharFromToken(SyntaxToken token) {
@@ -91,14 +105,6 @@ namespace Winterdom.Viasfora.Languages.Roslyn {
           || token.IsKind(SyntaxKind.CloseBraceToken)
           || token.IsKind(SyntaxKind.OpenBracketToken)
           || token.IsKind(SyntaxKind.CloseBracketToken);
-    }
-
-    private void ParseIfNeeded() {
-      if ( syntaxTree != null )
-        return;
-      // TODO: Avoid parsing the entire thing every time!!!!
-      String text = this.buffer.CurrentSnapshot.GetText();
-      syntaxTree = CSharpSyntaxTree.ParseText(text, this.options);
     }
   }
 }

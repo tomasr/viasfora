@@ -9,7 +9,7 @@ using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Rainbow {
   public class TextBufferBraces : ITextBufferBraces {
-    private List<BracePos> braces;
+    private CharList<BracePos> braces;
     private List<CharPos> braceErrors;
     private SortedList<char, char> braceList;
     private IBraceExtractor braceExtractor;
@@ -26,7 +26,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.LastParsedPosition = -1;
       this.language = language;
       this.braceList = new SortedList<char, char>();
-      this.braces = new List<BracePos>();
+      this.braces = new CharList<BracePos>();
       this.braceErrors = new List<CharPos>();
 
       if ( this.language != null ) {
@@ -52,10 +52,10 @@ namespace Winterdom.Viasfora.Rainbow {
       this.Snapshot = newSnapshot;
 
       // remove everything cached after the startPoint
-      int index = FindIndexOfBraceBefore(startPoint.Position);
+      int index = this.braces.FindAtOrAfter(startPoint.Position);
       if ( index >= 0 ) {
         // index is before startPoint
-        InvalidateFromBraceAtIndex(newSnapshot, index+1);
+        InvalidateFromBraceAtIndex(newSnapshot, index);
       } else {
         // there are no braces found before this position
         // so invalidate all
@@ -75,7 +75,7 @@ namespace Winterdom.Viasfora.Rainbow {
       for ( int i = 0; i < spans.Count; i++ ) {
         var wantedSpan = spans[i];
         EnsureLinesInPreferredSpan(wantedSpan);
-        int startIndex = FindIndexOfBraceAtOrAfter(wantedSpan.Start);
+        int startIndex = this.braces.FindAtOrAfter(wantedSpan.Start);
         if ( startIndex < 0 ) {
           continue;
         }
@@ -115,7 +115,7 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( point.Snapshot != this.Snapshot || point.Position >= Snapshot.Length ) {
         return null;
       }
-      int index = FindIndexOfBraceAtOrAfter(point.Position);
+      int index = this.braces.FindAtOrAfter(point.Position);
       if ( index < 0 ) return null;
       BracePos one = this.braces[index];
       if ( one.Position != point.Position ) {
@@ -164,7 +164,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private BracePos? CheckForBraceAtPositionOrClosestOpeningBrace(int position, out int openIndex) {
-      openIndex = FindIndexOfBraceAtOrAfter(position);
+      openIndex = this.braces.FindAtOrAfter(position);
       if ( openIndex >= 0 ) {
         BracePos pos = this.braces[openIndex];
         if ( IsOpeningBrace(pos.Brace) && pos.Position == position ) {
@@ -175,7 +175,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private BracePos? FindClosestOpeningBrace(int position, out int openIndex) {
-      openIndex = FindIndexOfBraceBefore(position);
+      openIndex = this.braces.FindBefore(position);
       if ( openIndex < 0 ) {
         return null;
       }
@@ -234,7 +234,7 @@ namespace Winterdom.Viasfora.Rainbow {
         lastGoodBrace = i;
       }
       if ( lastGoodBrace < braces.Count - 1 ) {
-        braces.RemoveRange(lastGoodBrace+1, braces.Count - lastGoodBrace - 1);
+        braces.ClearFrom(lastGoodBrace+1);
       }
 
       ExtractBraces(pairs, startPosition, parseUntil);
@@ -290,61 +290,16 @@ namespace Winterdom.Viasfora.Rainbow {
       LastParsedPosition = brace.Position;
     }
 
-
-    // simple binary-search like for the closest 
-    // brace to this position
-    private int FindIndexOfBraceAtOrAfter(int position) {
-      int first = 0;
-      int last = this.braces.Count - 1;
-      int candidate = -1;
-      while ( first <= last ) {
-        int mid = (first + last) / 2;
-        BracePos midPos = braces[mid];
-        if ( midPos.Position < position ) {
-          // keep looking in second half
-          first = mid + 1;
-        } else if ( midPos.Position > position ) {
-          // keep looking in first half
-          candidate = mid;
-          last = mid - 1;
-        } else {
-          // we've got an exact match
-          candidate = mid;
-          break;
-        }
-      }
-      return candidate;
-    }
-    private int FindIndexOfBraceBefore(int position) {
-      int first = 0;
-      int last = this.braces.Count - 1;
-      int candidate = -1;
-      while ( first <= last ) {
-        int mid = (first + last) / 2;
-        BracePos midPos = braces[mid];
-        if ( midPos.Position < position ) {
-          // keep looking in second half
-          candidate = mid;
-          first = mid + 1;
-        } else if ( midPos.Position > position ) {
-          // keep looking in first half
-          last = mid - 1;
-        } else {
-          // we've got an exact match
-          // but we're interested on an strict
-          // order, so return the item before this one
-          candidate = mid - 1;
-          break;
-        }
-      }
-      return candidate;
-    }
-
-
     private void InvalidateFromBraceAtIndex(ITextSnapshot snapshot, int index) {
+      int window = this.braceExtractor.ReparseWindow;
+      index -= window;
+
+      if ( index < 0 ) {
+        index = 0;
+      }
       if ( index < braces.Count ) {
         // invalidate the brace list
-        braces.RemoveRange(index, braces.Count - index);
+        braces.ClearFrom(index);
       }
 
       if ( braces.Count > 0 ) {

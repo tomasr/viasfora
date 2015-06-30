@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Winterdom.Viasfora.Rainbow {
-  public struct CharPos {
+  public struct CharPos : IPosition {
     private char ch;
     private int position;
 

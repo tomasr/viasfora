@@ -18,6 +18,10 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       get { return "(){}[]"; }
     }
 
+    public int ReparseWindow {
+      get { return 0; }
+    }
+
     public JScriptBraceExtractor() {
     }
 

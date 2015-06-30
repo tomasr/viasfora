@@ -8,6 +8,7 @@ using Winterdom.Viasfora.Util;
 namespace Winterdom.Viasfora.Rainbow {
   public interface IBraceExtractor {
     String BraceList { get; }
+    int ReparseWindow { get; }
     void Reset();
     IEnumerable<CharPos> Extract(ITextChars text);
   }
