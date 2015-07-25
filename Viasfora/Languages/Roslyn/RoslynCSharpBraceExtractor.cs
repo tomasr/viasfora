@@ -69,7 +69,7 @@ namespace Winterdom.Viasfora.Languages.Roslyn {
       var rootNode = parsed.GetRoot();
 
       //var parsed = SyntaxFactory.ParseTokens(toParse, 0, 0, options);
-      var tokens = from token in rootNode.DescendantTokens()
+      var tokens = from token in rootNode.DescendantTokens(null, true)
                    where IsBrace(token) && !token.IsMissing
                    select token;
 
