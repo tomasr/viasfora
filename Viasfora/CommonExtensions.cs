@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.Utilities;
+﻿using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,10 @@ namespace Winterdom.Viasfora {
     }
     public static void Set<T>(this IPropertyOwner owner, T value) { 
       owner.Properties.AddProperty(typeof(T), value);
+    }
+
+    public static bool IsPeekTextWindow(this ITextView textView) {
+      return textView.Roles.Contains(ViewRoles.EmbeddedPeekTextView);
     }
   }
 }
