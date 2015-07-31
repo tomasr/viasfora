@@ -8,7 +8,7 @@
              xmlns:vm="clr-namespace:Winterdom.Viasfora.Margins"
              xmlns:util="clr-namespace:Winterdom.Viasfora.Util"
              mc:Ignorable="d" 
-             Height="24"
+             Height="Auto"
              d:DesignHeight="25" d:DesignWidth="600">
   <UserControl.DataContext>
     <vm:DevMarginViewModel />
@@ -60,7 +60,7 @@
       <ComboBox Name="BufferGraphCombo" 
                 ItemsSource="{Binding BufferGraph}"
                 SelectedItem="{Binding SelectedBuffer}"
-                Width="160">
+                Width="Auto">
         <ComboBox.ItemTemplate>
           <DataTemplate>
             <TextBlock>
