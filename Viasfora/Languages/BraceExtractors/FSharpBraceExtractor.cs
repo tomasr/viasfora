@@ -6,7 +6,7 @@ using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.BraceExtractors {
-  public class FSharpBraceExtractor : IBraceExtractor {
+  public class FSharpBraceExtractor : IBraceExtractor, IResumeControl {
     const int stText = 0;
     const int stString = 1;
     const int stChar = 2;
@@ -41,6 +41,12 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
             break;
         }
       }
+    }
+
+    public bool CanResume(CharPos brace) {
+      // When adding (*, we want to be able to ignore the
+      // ( and go back to the previous brace
+      return brace.Char != '(';
     }
 
     private IEnumerable<CharPos> ParseText(ITextChars tc) {

@@ -40,6 +40,10 @@ namespace Winterdom.Viasfora.Rainbow {
       return new SnapshotPoint(snapshot, Position);
     }
 
+    public CharPos ToCharPos() {
+      return this.charPos;
+    }
+
     public override string ToString() {
       return String.Format("'{0}' ({1}) {3}", Brace, Position, Depth);
     }

@@ -48,6 +48,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
       // remove everything cached after the startPoint
       int index = FindIndexOfBraceBefore(startPoint.Position);
+      index = AdjustForInvalidation(index);
       if ( index >= 0 ) {
         // index is before startPoint
         InvalidateFromBraceAtIndex(newSnapshot, index+1);
@@ -58,6 +59,22 @@ namespace Winterdom.Viasfora.Rainbow {
       }
 
       this.InvalidateBraceErrorsFromPos(startPoint.Position);
+    }
+
+    private int AdjustForInvalidation(int index) {
+      // index is the last known good brace
+      // ask the extractor if it can resume from there
+      // or skip backwards until we find one
+      // that is resumable
+      int newIndex = index;
+      IResumeControl control = this.braceExtractor as IResumeControl;
+      if ( control != null ) {
+        for ( ; newIndex > 0; newIndex-- ) {
+          if ( control.CanResume(braces[newIndex].ToCharPos()) )
+            break;
+        }
+      }
+      return newIndex;
     }
 
     public void UpdateSnapshot(ITextSnapshot snapshot) {
