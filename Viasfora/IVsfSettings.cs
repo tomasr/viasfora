@@ -26,6 +26,7 @@ namespace Winterdom.Viasfora {
     bool PresentationModeEnabled { get; set; }
     int PresentationModeDefaultZoomLevel { get; set; }
     int PresentationModeEnabledZoomLevel { get; set; }
+    bool PresentationModeIncludeEnvironmentFonts { get; set; }
 
     bool ModelinesEnabled { get; set; }
     int ModelinesNumLines { get; set; }

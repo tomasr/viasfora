@@ -22,6 +22,10 @@ namespace Winterdom.Viasfora.Options {
       get { return enabledZoom.Value; }
       set { enabledZoom.Value = value; }
     }
+    public bool IncludeEnvironmentFonts {
+      get { return includeEnvFontsCheckBox.Checked; }
+      set { includeEnvFontsCheckBox.Checked = value; }
+    }
 
     public PresentationModeDialogPage() {
       InitializeComponent();

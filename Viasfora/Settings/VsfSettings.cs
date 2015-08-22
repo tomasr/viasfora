@@ -35,6 +35,7 @@ namespace Winterdom.Viasfora.Settings {
     const String PRESENTATION_MODE_ENABLED = "PresentationModeEnabled";
     const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
     const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
+    const String PRESENTATION_MODE_INCLUDE_ENV_FONTS = "PresentationModeIncludeEnvFonts";
     const String MODELINES_ENABLED = "ModelinesEnabled";
     const String MODELINES_NUMLINES = "ModelinesNumLines";
     const String DEVMARGIN_ENABLED = "DeveloperMarginEnabled";
@@ -107,6 +108,10 @@ namespace Winterdom.Viasfora.Settings {
     public int PresentationModeEnabledZoomLevel {
       get { return GetInt32(PRESENTATION_MODE_ENABLED_ZOOM, 150); }
       set { SetValue(PRESENTATION_MODE_ENABLED_ZOOM, value); }
+    }
+    public bool PresentationModeIncludeEnvironmentFonts {
+      get { return GetBoolean(PRESENTATION_MODE_INCLUDE_ENV_FONTS, false); }
+      set { SetValue(PRESENTATION_MODE_INCLUDE_ENV_FONTS, value); }
     }
     public bool ModelinesEnabled {
       get { return GetBoolean(MODELINES_ENABLED, true); }
