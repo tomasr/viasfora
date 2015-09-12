@@ -116,6 +116,17 @@ namespace Winterdom.Viasfora {
         );
       }
     }
+    public static void LogError(String message, Exception ex) {
+      if ( Instance == null ) return;
+      var log = Instance.activityLog;
+      if ( log != null ) {
+        log.LogEntry(
+          (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR,
+          "Viasfora",
+          String.Format("{0}. Exception: {1}", message, ex)
+        );
+      }
+    }
 
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
       commands.Add(new PresentationModeCommand(this, mcs));
