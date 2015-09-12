@@ -80,6 +80,7 @@
     <Compile Include="Settings\GlobalXmlSettingsStoreTests.cs" />
     <Compile Include="Settings\OutlineSettingsTests.cs" />
     <Compile Include="Settings\SolutionUserSettingsTests.cs" />
+    <Compile Include="Settings\VsfSettingsTests.cs" />
     <Compile Include="VsfEditorHost.cs" />
     <Compile Include="VsfVsTestBase.cs" />
     <Compile Include="VsSolutionTests.cs" />

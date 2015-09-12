@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Rainbow;
@@ -179,7 +180,7 @@ namespace Winterdom.Viasfora.Settings {
     }
     public double GetDouble(String name, double defval) {
       String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : Convert.ToDouble(val);
+      return String.IsNullOrEmpty(val) ? defval : ConvertToDouble(val);
     }
     public T GetEnum<T>(String name, T defval) where T : struct {
       String val = settings.Get(name);
@@ -200,6 +201,20 @@ namespace Winterdom.Viasfora.Settings {
       } else {
         settings.Set(name, null);
       }
+    }
+
+    public static double ConvertToDouble(String val) {
+      double result;
+      var styles = NumberStyles.AllowLeadingWhite
+                 | NumberStyles.AllowTrailingWhite
+                 | NumberStyles.AllowLeadingSign
+                 | NumberStyles.AllowDecimalPoint
+                 | NumberStyles.AllowThousands
+                 | NumberStyles.AllowExponent;
+      if ( !double.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
+        return Convert.ToDouble(val, CultureInfo.CurrentCulture);
+      }
+      return result;
     }
   }
 }
