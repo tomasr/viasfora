@@ -33,5 +33,29 @@ namespace Viasfora.Tests.Settings {
         thread.CurrentCulture = originalCulture;
       }
     }
+    [Fact]
+    public void CanConvertInt32UsingInvariantCulture() {
+      var thread = Thread.CurrentThread;
+      var originalCulture = thread.CurrentCulture;
+      thread.CurrentCulture = new CultureInfo("es-co");
+      try {
+        var value = VsfSettings.ConvertToInt32("123");
+        Assert.Equal(123, value);
+      } finally {
+        thread.CurrentCulture = originalCulture;
+      }
+    }
+    [Fact]
+    public void CanConvertInt64UsingInvariantCulture() {
+      var thread = Thread.CurrentThread;
+      var originalCulture = thread.CurrentCulture;
+      thread.CurrentCulture = new CultureInfo("es-co");
+      try {
+        var value = VsfSettings.ConvertToInt64("123");
+        Assert.Equal(123, value);
+      } finally {
+        thread.CurrentCulture = originalCulture;
+      }
+    }
   }
 }

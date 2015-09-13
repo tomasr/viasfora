@@ -172,11 +172,11 @@ namespace Winterdom.Viasfora.Settings {
 
     public int GetInt32(String name, int defval) {
       String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : Convert.ToInt32(val);
+      return String.IsNullOrEmpty(val) ? defval : ConvertToInt32(val);
     }
     public long GetInt64(String name, long defval) {
       String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : Convert.ToInt64(val);
+      return String.IsNullOrEmpty(val) ? defval : ConvertToInt64(val);
     }
     public double GetDouble(String name, double defval) {
       String val = settings.Get(name);
@@ -197,7 +197,7 @@ namespace Winterdom.Viasfora.Settings {
     }
     public void SetValue(String name, object value) {
       if ( value != null ) {
-        settings.Set(name, Convert.ToString(value));
+        settings.Set(name, Convert.ToString(value, CultureInfo.InvariantCulture));
       } else {
         settings.Set(name, null);
       }
@@ -213,6 +213,22 @@ namespace Winterdom.Viasfora.Settings {
                  | NumberStyles.AllowExponent;
       if ( !double.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
         return Convert.ToDouble(val, CultureInfo.CurrentCulture);
+      }
+      return result;
+    }
+    public static int ConvertToInt32(String val) {
+      int result;
+      var styles = NumberStyles.Integer;
+      if ( !int.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
+        return Convert.ToInt32(val, CultureInfo.CurrentCulture);
+      }
+      return result;
+    }
+    public static long ConvertToInt64(String val) {
+      long result;
+      var styles = NumberStyles.Integer;
+      if ( !long.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
+        return Convert.ToInt64(val, CultureInfo.CurrentCulture);
       }
       return result;
     }
