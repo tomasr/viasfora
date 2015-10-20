@@ -39,6 +39,26 @@ namespace Viasfora.Tests.BraceExtractors {
       Assert.Equal(0, chars.Count);
     }
     [Fact]
+    public void ConsidersParensStarAsStartOfMultiLineComment() {
+      String input = @"
+(*
+let rainbowOk = ( 3 * (2 + 7 ))
+*)";
+      var extractor = new FSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(0, chars.Count);
+    }
+    [Fact]
+    public void ConsidersParensStarParensAsValidExpression() {
+      String input = @"
+let multiplyOperator_LooksLikeComment = (*)
+let rainbowBroken = multiplyOperator_LooksLikeComment 3 (2 + 7)
+";
+      var extractor = new FSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
+    [Fact]
     public void IgnoreParensInSingleQuotes() {
       String input = @"
 let munge (s : string) = s.Replace("" "", """").Replace('(', '.').Replace(')', '.')

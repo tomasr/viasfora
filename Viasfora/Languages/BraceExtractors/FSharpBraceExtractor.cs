@@ -52,7 +52,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     private IEnumerable<CharPos> ParseText(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         // multi-line comment
-        if ( tc.Char() == '(' && tc.NChar() == '*' ) {
+        if ( tc.Char() == '(' && tc.NChar() == '*' && tc.NNChar() != ')') {
           this.status = stMultiLineComment;
           tc.Skip(2);
           this.ParseMultiLineComment(tc);
