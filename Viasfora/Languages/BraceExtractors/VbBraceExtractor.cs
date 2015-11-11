@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     private int status;
 
     public String BraceList {
-      get { return "()"; }
+      get { return "(){}"; }
     }
 
     public VbBraceExtractor() {
