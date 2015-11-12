@@ -19,6 +19,7 @@ namespace Winterdom.Viasfora {
     public const String FSharp = "F#";
     public const String JS = "JScript";
     public const String JS_VS2012 = "JavaScript";
+    public const String Node_JS = "Node.js";
     public const String Json = "JSON";
     public const String PowerShellVS = "PowerShell.v3";
     public const String PowerShell = "PowerShell";

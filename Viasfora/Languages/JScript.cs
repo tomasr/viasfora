@@ -11,8 +11,8 @@ using Winterdom.Viasfora.Util;
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
   class JScript : CBasedLanguage {
-    public const String ContentType = "JScript";
-    public const String ContentTypeVS2012 = "JavaScript";
+    private readonly static String[] knownTypes =
+      new String[] { "JScript", "JavaScript", "Node.js" };
 
     static readonly String[] JS_KEYWORDS = {
          "if", "else", "while", "do", "for", "switch",
@@ -34,7 +34,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return Constants.JS; }
     }
     protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType, ContentTypeVS2012 }; }
+      get { return knownTypes; }
     }
 
     [ImportingConstructor]
