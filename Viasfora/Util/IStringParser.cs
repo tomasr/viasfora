@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Util {
-  public interface IEscapeSequenceParser {
-    Span? Next();
+  public interface IStringParser {
+    StringPart? Next();
   }
 }

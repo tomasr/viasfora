@@ -7,6 +7,7 @@ namespace Winterdom.Viasfora {
     public const String LINQ_CLASSIF_NAME = "Viasfora Query Operator";
     public const String VISIBILITY_CLASSIF_NAME = "Viasfora Visibility Keyword";
     public const String STRING_ESCAPE_CLASSIF_NAME = "Viasfora String Escape Sequence";
+    public const String FORMAT_SPECIFIER_NAME = "viasfora.format.specifier";
     public const String LINE_HIGHLIGHT = "Viasfora Current Line";
     public const String COLUMN_HIGHLIGHT = "Viasfora Current Column";
     public const String DEV_MARGIN = "viasfora.dev.margin";

@@ -40,7 +40,7 @@ namespace Winterdom.Viasfora.Languages {
     public virtual IFirstLineCommentParser NewFirstLineCommentParser() {
       return new GenericCommentParser();
     }
-    public virtual IEscapeSequenceParser NewEscapeSequenceParser(String text) {
+    public virtual IStringParser NewStringParser(String text) {
       return null;
     }
 

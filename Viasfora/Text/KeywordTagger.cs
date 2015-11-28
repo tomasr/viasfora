@@ -9,6 +9,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Tags;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -18,6 +19,7 @@ namespace Winterdom.Viasfora.Text {
     private KeywordTag linqClassification;
     private KeywordTag visClassification;
     private KeywordTag stringEscapeClassification;
+    private KeywordTag formatSpecClassification;
     private ITagAggregator<IClassificationTag> aggregator;
     private ILanguageFactory langFactory;
     private IVsfSettings settings;
@@ -40,6 +42,8 @@ namespace Winterdom.Viasfora.Text {
          new KeywordTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
       stringEscapeClassification =
          new KeywordTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
+      formatSpecClassification =
+         new KeywordTag(registry.GetClassificationType(Constants.FORMAT_SPECIFIER_NAME));
 
       this.settings = provider.Settings;
       this.settings.SettingsChanged += this.OnSettingsChanged;
@@ -122,14 +126,22 @@ namespace Winterdom.Viasfora.Text {
       if ( cs.IsEmpty ) yield break;
       String text = cs.GetText();
 
-      var parser = lang.NewEscapeSequenceParser(text);
+      var parser = lang.NewStringParser(text);
       if ( parser == null )
         yield break;
 
-      Span? span;
-      while ( (span = parser.Next()) != null ) {
-        var sspan = new SnapshotSpan(cs.Snapshot, cs.Start.Position + span.Value.Start, span.Value.Length);
-        yield return new TagSpan<KeywordTag>(sspan, stringEscapeClassification);
+      StringPart? part;
+      while ( (part = parser.Next()) != null ) {
+        var span = part.Value.Span;
+        var sspan = new SnapshotSpan(cs.Snapshot, cs.Start.Position + span.Start, span.Length);
+        switch ( part.Value.Type ) {
+          case StringPartType.EscapeSequence:
+            yield return new TagSpan<KeywordTag>(sspan, stringEscapeClassification);
+            break;
+          case StringPartType.FormatSpecifier:
+            yield return new TagSpan<KeywordTag>(sspan, formatSpecClassification);
+            break;
+        }
       }
     }
 

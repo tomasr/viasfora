@@ -6,16 +6,16 @@ using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
-  public class CssEscapeSequenceParser : IEscapeSequenceParser {
+  public class CssStringParser : IStringParser {
     private String text;
     private int start;
-    public CssEscapeSequenceParser(String text) {
+    public CssStringParser(String text) {
       this.text = text;
       // always skip the first char
       // (since quotes are included in the string)
       this.start = 1;
     }
-    public Span? Next() {
+    public StringPart? Next() {
       const int maxHexLen = 6;
       while ( start < text.Length - 2 ) {
         if ( text[start] == '\\' ) {
@@ -26,7 +26,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
 
           Span span = new Span(start, len+1);
           start += len + 1;
-          return span;
+          return new StringPart(span, StringPartType.EscapeSequence);
         }
         start++;
       }
