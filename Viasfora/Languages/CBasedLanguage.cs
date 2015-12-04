@@ -5,19 +5,19 @@ using System.Text;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Languages.Sequences;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   public abstract class CBasedLanguage : LanguageInfo {
-    public override string BraceList {
-      get { return "(){}[]"; }
-    }
 
-    public override IBraceExtractor NewBraceExtractor() {
-      return new CBraceExtractor(this.BraceList);
+    public CBasedLanguage(IVsfSettings settings) : base(settings) {
     }
-    public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
-      return new CEscapeSequenceParser(text);
+    public override IBraceExtractor NewBraceExtractor() {
+      return new CBraceExtractor();
+    }
+    public override IStringParser NewStringParser(String text) {
+      return new CStringParser(text);
     }
   }
 }

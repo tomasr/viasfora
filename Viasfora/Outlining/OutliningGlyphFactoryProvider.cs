@@ -18,7 +18,7 @@ using Microsoft.VisualStudio.Text;
 namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IGlyphFactoryProvider))]
   [Export(typeof(IGlyphMouseProcessorProvider))]
-  [ContentType("Text")]
+  [ContentType(ContentTypes.Text)]
   [TagType(typeof(OutliningGlyphTag))]
   [Name("viasfora.outlining.user.glyphs")]
   public class OutliningGlyphFactoryProvider : IGlyphFactoryProvider, IGlyphMouseProcessorProvider {

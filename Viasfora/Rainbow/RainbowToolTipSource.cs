@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(IQuickInfoSourceProvider))]
   [Name("viasfora.rainbow.tooltip.source")]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   public class RainbowToolTipSourceProvider : IQuickInfoSourceProvider {
     [Import]
     public IToolTipWindowProvider ToolTipProvider { get; set; }
@@ -102,10 +102,10 @@ namespace Winterdom.Viasfora.Rainbow {
         return false;
       }
 
-      if ( !rainbow.BraceCache.Language.BraceList.Contains(possibleBrace.GetChar()) ) {
+      if ( !rainbow.BufferBraces.BraceChars.Contains(possibleBrace.GetChar()) ) {
         return false;
       }
-      var bracePair = rainbow.BraceCache.GetBracePair(possibleBrace);
+      var bracePair = rainbow.BufferBraces.GetBracePair(possibleBrace);
       if ( bracePair == null ) {
         return true;
       }

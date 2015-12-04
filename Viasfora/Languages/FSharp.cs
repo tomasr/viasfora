@@ -7,6 +7,7 @@ using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Languages.Sequences;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
@@ -36,17 +37,19 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.FSharp; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }
     }
-    public override string BraceList {
-      get { return "(){}[]"; }
+
+    [ImportingConstructor]
+    public FSharp(IVsfSettings settings) : base(settings) {
     }
+
     public override IBraceExtractor NewBraceExtractor() {
-      return new FSharpBraceExtractor(this.BraceList);
+      return new FSharpBraceExtractor();
     }
-    public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
-      return new FSharpEscapeSequenceParser(text);
+    public override IStringParser NewStringParser(String text) {
+      return new FSharpStringParser(text);
     }
   }
 }

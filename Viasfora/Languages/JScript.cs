@@ -5,13 +5,14 @@ using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
   class JScript : CBasedLanguage {
-    public const String ContentType = "JScript";
-    public const String ContentTypeVS2012 = "JavaScript";
+    private readonly static String[] knownTypes =
+      new String[] { "JScript", "JavaScript", "Node.js" };
 
     static readonly String[] JS_KEYWORDS = {
          "if", "else", "while", "do", "for", "switch",
@@ -32,11 +33,16 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.JS; }
     }
-    protected override String[] ContentTypes {
-      get { return new String[] { ContentType, ContentTypeVS2012 }; }
+    protected override String[] SupportedContentTypes {
+      get { return knownTypes; }
     }
+
+    [ImportingConstructor]
+    public JScript(IVsfSettings settings) : base(settings) {
+    }
+
     public override IBraceExtractor NewBraceExtractor() {
-      return new JScriptBraceExtractor(this.BraceList);
+      return new JScriptBraceExtractor();
     }
   }
 }

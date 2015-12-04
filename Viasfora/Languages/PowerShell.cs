@@ -6,12 +6,14 @@ using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.Sequences;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
   public class PowerShell : LanguageInfo {
-    public const String ContentType = "PowerShell.v3";
+    public const String ContentTypeVS2013 = "PowerShell.v3";
+    public const String ContentTypePSTools = "PowerShell";
     static readonly String[] FLOW_KEYWORDS = {
           "for", "while", "foreach", "if", "else",
           "elseif", "do", "break", "continue",
@@ -21,16 +23,6 @@ namespace Winterdom.Viasfora.Languages {
       };
     static readonly String[] VIS_KEYWORDS = {
       };
-    public override string BraceList {
-      get { return "(){}[]"; }
-    }
-
-    public override IBraceExtractor NewBraceExtractor() {
-      return new PsBraceExtractor(this.BraceList);
-    }
-    public override IEscapeSequenceParser NewEscapeSequenceParser(String text) {
-      return new PsEscapeSequenceParser(text);
-    }
     protected override String[] ControlFlowDefaults {
       get { return FLOW_KEYWORDS; }
     }
@@ -43,8 +35,18 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.PowerShell; }
     }
-    protected override String[] ContentTypes {
-      get { return new String[] { ContentType }; }
+    protected override String[] SupportedContentTypes {
+      get { return new String[] { ContentTypePSTools, ContentTypeVS2013 }; }
+    }
+
+    [ImportingConstructor]
+    public PowerShell(IVsfSettings settings) : base(settings) {
+    }
+    public override IBraceExtractor NewBraceExtractor() {
+      return new PsBraceExtractor();
+    }
+    public override IStringParser NewStringParser(String text) {
+      return new PsStringParser(text);
     }
   }
 }

@@ -16,7 +16,7 @@ using Microsoft.VisualStudio.Text;
 namespace Winterdom.Viasfora.Rainbow {
   [Export(typeof(IVsTextViewCreationListener))]
   [Name("viasfora.rainbow.handler")]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   [TextViewRole(PredefinedTextViewRoles.PrimaryDocument)]
   public class RainbowCommandHandlerProvider : IVsTextViewCreationListener {
     [Import]
@@ -101,16 +101,16 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( provider == null ) {
         return false;
       }
-      var braces = provider.BraceCache.GetBracePairFromPosition(bufferPos, mode);
+      var braces = provider.BufferBraces.GetBracePairFromPosition(bufferPos, mode);
       if ( braces == null ) {
         return false;
       }
       if ( previous && braces.Item1.Position == bufferPos.Position-1 ) {
         // if we're on the opening brace, jump to the previous one
-        braces = provider.BraceCache.GetBracePairFromPosition(bufferPos-1, mode);
+        braces = provider.BufferBraces.GetBracePairFromPosition(bufferPos-1, mode);
       } else if ( !previous && braces.Item2.Position == bufferPos.Position ) {
         // if we're on the closing brace, jump to the previous one
-        braces = provider.BraceCache.GetBracePairFromPosition(bufferPos+1, mode);
+        braces = provider.BufferBraces.GetBracePairFromPosition(bufferPos+1, mode);
       }
       if ( braces == null ) {
         return false;

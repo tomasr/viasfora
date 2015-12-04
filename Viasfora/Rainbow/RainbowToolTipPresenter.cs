@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Rainbow {
   [Export(typeof(IIntellisensePresenterProvider))]
   [Name("viasfora.rainbow.tooltip.presenter")]
   [Order(Before="Default Quick Info Presenter")]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   public class RainbowToolTipPresenterProvider : IIntellisensePresenterProvider {
     [Import]
     public ITextEditorFactoryService EditorFactory { get; set; }

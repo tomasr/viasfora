@@ -14,8 +14,8 @@ namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IWpfTextViewCreationListener))]
   [TextViewRole(PredefinedTextViewRoles.Structured)]
   [Name("viasfora.outlining.controller")]
-  [ContentType("any")]
-  [ContentType("projection")]
+  [ContentType(ContentTypes.Any)]
+  [ContentType(ContentTypes.Projection)]
   public class OutliningControllerListener : IWpfTextViewCreationListener {
     [Import]
     private IVsOutliningManagerService outlining = null;

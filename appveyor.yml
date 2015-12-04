@@ -1,15 +1,26 @@
-version: 2.1.{build}
+configuration: Release
+
+platform: Any CPU
+
+install: 
+  - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
+
+before_build: 
+  # Updates the version number in the .vsixmanifest and updates the AppVeyor build number to match
+  - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
+
+build:
+  project: Viasfora.sln
+  verbosity: minimal
 
 branches:
   only:
-    - master
     - develop
-
-configuration:
-  - Release
-platform:
-  - Any CPU
 
 artifacts:
   - path: Viasfora\bin\$(configuration)\Winterdom.Viasfora.vsix
     name: Viasfora
+
+#after_test:
+  # Pushes the compiled vsix to artifacts and publishes it to vsixgallery.com
+#  - ps: Vsix-PushArtifacts | Vsix-PublishToGallery

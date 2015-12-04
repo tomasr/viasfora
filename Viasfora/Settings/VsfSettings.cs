@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Rainbow;
@@ -35,6 +36,7 @@ namespace Winterdom.Viasfora.Settings {
     const String PRESENTATION_MODE_ENABLED = "PresentationModeEnabled";
     const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
     const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
+    const String PRESENTATION_MODE_INCLUDE_ENV_FONTS = "PresentationModeIncludeEnvFonts";
     const String MODELINES_ENABLED = "ModelinesEnabled";
     const String MODELINES_NUMLINES = "ModelinesNumLines";
     const String DEVMARGIN_ENABLED = "DeveloperMarginEnabled";
@@ -108,6 +110,10 @@ namespace Winterdom.Viasfora.Settings {
       get { return GetInt32(PRESENTATION_MODE_ENABLED_ZOOM, 150); }
       set { SetValue(PRESENTATION_MODE_ENABLED_ZOOM, value); }
     }
+    public bool PresentationModeIncludeEnvironmentFonts {
+      get { return GetBoolean(PRESENTATION_MODE_INCLUDE_ENV_FONTS, false); }
+      set { SetValue(PRESENTATION_MODE_INCLUDE_ENV_FONTS, value); }
+    }
     public bool ModelinesEnabled {
       get { return GetBoolean(MODELINES_ENABLED, true); }
       set { SetValue(MODELINES_ENABLED, value); }
@@ -125,7 +131,7 @@ namespace Winterdom.Viasfora.Settings {
       set { SetValue(TEXT_COMPLETION_ENABLED, value); }
     }
     public bool TCCompleteDuringTyping {
-      get { return GetBoolean(TC_COMPLETE_DURING_TYPING, true); }
+      get { return GetBoolean(TC_COMPLETE_DURING_TYPING, false); }
       set { SetValue(TC_COMPLETE_DURING_TYPING, value); }
     }
     public bool TCHandleCompleteWord {
@@ -159,24 +165,24 @@ namespace Winterdom.Viasfora.Settings {
       }
     }
 
-    private bool GetBoolean(String name, bool defval) {
+    public bool GetBoolean(String name, bool defval) {
       String val = settings.Get(name);
       return String.IsNullOrEmpty(val) ? defval : Convert.ToBoolean(val);
     }
 
-    private int GetInt32(String name, int defval) {
+    public int GetInt32(String name, int defval) {
       String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : Convert.ToInt32(val);
+      return String.IsNullOrEmpty(val) ? defval : ConvertToInt32(val);
     }
-    private long GetInt64(String name, long defval) {
+    public long GetInt64(String name, long defval) {
       String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : Convert.ToInt64(val);
+      return String.IsNullOrEmpty(val) ? defval : ConvertToInt64(val);
     }
-    private double GetDouble(String name, double defval) {
+    public double GetDouble(String name, double defval) {
       String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : Convert.ToDouble(val);
+      return String.IsNullOrEmpty(val) ? defval : ConvertToDouble(val);
     }
-    private T GetEnum<T>(String name, T defval) where T : struct {
+    public T GetEnum<T>(String name, T defval) where T : struct {
       String val = settings.Get(name);
       T actual;
       if ( Enum.TryParse<T>(val, out actual) ) {
@@ -191,10 +197,40 @@ namespace Winterdom.Viasfora.Settings {
     }
     public void SetValue(String name, object value) {
       if ( value != null ) {
-        settings.Set(name, Convert.ToString(value));
+        settings.Set(name, Convert.ToString(value, CultureInfo.InvariantCulture));
       } else {
         settings.Set(name, null);
       }
+    }
+
+    public static double ConvertToDouble(String val) {
+      double result;
+      var styles = NumberStyles.AllowLeadingWhite
+                 | NumberStyles.AllowTrailingWhite
+                 | NumberStyles.AllowLeadingSign
+                 | NumberStyles.AllowDecimalPoint
+                 | NumberStyles.AllowThousands
+                 | NumberStyles.AllowExponent;
+      if ( !double.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
+        return Convert.ToDouble(val, CultureInfo.CurrentCulture);
+      }
+      return result;
+    }
+    public static int ConvertToInt32(String val) {
+      int result;
+      var styles = NumberStyles.Integer;
+      if ( !int.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
+        return Convert.ToInt32(val, CultureInfo.CurrentCulture);
+      }
+      return result;
+    }
+    public static long ConvertToInt64(String val) {
+      long result;
+      var styles = NumberStyles.Integer;
+      if ( !long.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
+        return Convert.ToInt64(val, CultureInfo.CurrentCulture);
+      }
+      return result;
     }
   }
 }

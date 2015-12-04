@@ -8,37 +8,47 @@ using Winterdom.Viasfora.Util;
 using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Rainbow {
-  public class BraceCache {
-    private List<BracePos> braces = new List<BracePos>();
-    private SortedList<char, char> braceList = new SortedList<char, char>();
-    public ITextSnapshot Snapshot { get; private set; }
-    public int LastParsedPosition { get; private set; }
-    public ILanguage Language { get; private set; }
+  public class TextBufferBraces : ITextBufferBraces {
+    private List<BracePos> braces;
+    private List<CharPos> braceErrors;
+    private SortedList<char, char> braceList;
     private IBraceExtractor braceExtractor;
+    private ILanguage language;
+    public ITextSnapshot Snapshot { get; private set; }
+    public String BraceChars { get; private set; }
+    public int LastParsedPosition { get; private set; }
+    public bool Enabled {
+      get { return language != null ? language.Enabled : false; }
+    }
 
-    public BraceCache(ITextSnapshot snapshot, ILanguage language) {
+    public TextBufferBraces(ITextSnapshot snapshot, ILanguage language) {
       this.Snapshot = snapshot;
       this.LastParsedPosition = -1;
-      this.Language = language;
-      if ( this.Language != null ) {
-        this.braceExtractor = this.Language.NewBraceExtractor();
+      this.language = language;
+      this.braceList = new SortedList<char, char>();
+      this.braces = new List<BracePos>();
+      this.braceErrors = new List<CharPos>();
+
+      if ( this.language != null ) {
+        this.braceExtractor = this.language.NewBraceExtractor();
 
         this.braceList.Clear();
-        String braceChars = Language.BraceList;
-        for ( int i = 0; i < braceChars.Length; i += 2 ) {
-          this.braceList.Add(braceChars[i], braceChars[i + 1]);
+        this.BraceChars = this.braceExtractor.BraceList;
+        for ( int i = 0; i < BraceChars.Length; i += 2 ) {
+          this.braceList.Add(BraceChars[i], BraceChars[i + 1]);
         }
       }
     }
 
     public void Invalidate(SnapshotPoint startPoint) {
-      if ( this.Language == null ) return;
+      if ( this.language == null ) return;
       // the new start belongs to a different snapshot!
       var newSnapshot = startPoint.Snapshot;
       this.Snapshot = newSnapshot;
 
       // remove everything cached after the startPoint
       int index = FindIndexOfBraceBefore(startPoint.Position);
+      index = AdjustForInvalidation(index);
       if ( index >= 0 ) {
         // index is before startPoint
         InvalidateFromBraceAtIndex(newSnapshot, index+1);
@@ -47,6 +57,24 @@ namespace Winterdom.Viasfora.Rainbow {
         // so invalidate all
         InvalidateFromBraceAtIndex(newSnapshot, 0);
       }
+
+      this.InvalidateBraceErrorsFromPos(startPoint.Position);
+    }
+
+    private int AdjustForInvalidation(int index) {
+      // index is the last known good brace
+      // ask the extractor if it can resume from there
+      // or skip backwards until we find one
+      // that is resumable
+      int newIndex = index;
+      IResumeControl control = this.braceExtractor as IResumeControl;
+      if ( control != null ) {
+        for ( ; newIndex > 0; newIndex-- ) {
+          if ( control.CanResume(braces[newIndex].ToCharPos()) )
+            break;
+        }
+      }
+      return newIndex;
     }
 
     public void UpdateSnapshot(ITextSnapshot snapshot) {
@@ -54,7 +82,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
-      if ( this.Language == null ) yield break;
+      if ( this.language == null ) yield break;
 
       for ( int i = 0; i < spans.Count; i++ ) {
         var wantedSpan = spans[i];
@@ -71,8 +99,25 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
+    public IEnumerable<CharPos> ErrorBracesInSpans(NormalizedSnapshotSpanCollection spans) {
+      if ( this.language == null )
+        return Enumerable.Empty<CharPos>();
+
+      // we expect there to be very few brace errors,
+      // so it's not worth optimizing this too much
+      EnsureLinesInPreferredSpan(spans.Complete());
+      if ( this.braceErrors.Count == 0 )
+        return Enumerable.Empty<CharPos>();
+
+      return from e in this.braceErrors
+             from span in spans
+             where e.Position >= span.Start
+                && e.Position <= span.End
+             select e;
+    }
+
     public IEnumerable<BracePos> BracesFromPosition(int position) {
-      if ( this.Language == null ) return new BracePos[0];
+      if ( this.language == null ) return new BracePos[0];
       SnapshotSpan span = new SnapshotSpan(Snapshot, position, Snapshot.Length - position);
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
     }
@@ -162,7 +207,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     // We don't want to parse the document in small spans
-    // as it is to expensive, so force a larger span if
+    // as it is too expensive, so force a larger span if
     // necessary. However, if we've already parsed
     // beyond the span, leave it be
     private void EnsureLinesInPreferredSpan(SnapshotSpan span) {
@@ -239,7 +284,14 @@ namespace Winterdom.Viasfora.Rainbow {
             pairs.Pop();
             BracePos c = cp.AsBrace(p.Depth);
             Add(c);
+          } else {
+            // closing brace does not correspond
+            // to opening brace at same depth
+            this.braceErrors.Add(cp);
           }
+        } else {
+          // closing brace has no opening brace
+          this.braceErrors.Add(cp);
         }
       }
       this.LastParsedPosition = line.End;
@@ -311,6 +363,20 @@ namespace Winterdom.Viasfora.Rainbow {
         this.LastParsedPosition = braces[braces.Count - 1].Position;
       } else {
         this.LastParsedPosition = -1;
+      }
+    }
+
+    private void InvalidateBraceErrorsFromPos(int position) {
+      // invalidate brace errors
+      int lastPos = -1;
+      for ( int i = 0; i < this.braceErrors.Count; i++ ) {
+        lastPos = i;
+        CharPos ch = this.braceErrors[i];
+        if ( ch.Position >= position )
+          break;
+      }
+      if ( lastPos >= 0 && lastPos < braceErrors.Count ) {
+        braceErrors.RemoveRange(lastPos, braceErrors.Count - lastPos);
       }
     }
 

@@ -6,6 +6,7 @@ using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.Sequences;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
@@ -14,14 +15,11 @@ namespace Winterdom.Viasfora.Languages {
     public const String ContentType = "css";
     public const String SassContentType = "SCSS";
     public const String LessContentType = "LESS";
-    public override String BraceList {
-      get { return "()[]{}"; }
-    }
 
     public override String KeyName {
       get { return Constants.Css; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, SassContentType, LessContentType }; }
     }
     protected override String[] ControlFlowDefaults {
@@ -34,11 +32,15 @@ namespace Winterdom.Viasfora.Languages {
       get { return EMPTY; }
     }
 
-    public override IEscapeSequenceParser NewEscapeSequenceParser(string text) {
-      return new CssEscapeSequenceParser(text);
+    [ImportingConstructor]
+    public Css(IVsfSettings settings) : base(settings) {
+    }
+
+    public override IStringParser NewStringParser(string text) {
+      return new CssStringParser(text);
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new CssBraceExtractor(this.BraceList);
+      return new CssBraceExtractor();
     }
   }
 }

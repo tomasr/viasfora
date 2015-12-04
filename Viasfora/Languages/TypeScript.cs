@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
@@ -34,11 +35,16 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.TypeScript; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }
     }
+
+    [ImportingConstructor]
+    public TypeScript(IVsfSettings settings) : base(settings) {
+    }
+
     public override IBraceExtractor NewBraceExtractor() {
-      return new JScriptBraceExtractor(this.BraceList);
+      return new JScriptBraceExtractor();
     }
   }
 }

@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 using Winterdom.Viasfora.Tags;
 
-namespace Winterdom.Viasfora.Util {
+namespace Winterdom.Viasfora.Rainbow {
   public struct BracePos {
     private int depth;
     private CharPos charPos;
@@ -38,6 +38,10 @@ namespace Winterdom.Viasfora.Util {
 
     public SnapshotPoint ToPoint(ITextSnapshot snapshot) {
       return new SnapshotPoint(snapshot, Position);
+    }
+
+    public CharPos ToCharPos() {
+      return this.charPos;
     }
 
     public override string ToString() {

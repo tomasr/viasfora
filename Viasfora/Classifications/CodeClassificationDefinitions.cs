@@ -19,6 +19,9 @@ namespace Winterdom.Viasfora.Classifications {
     [Export, Name(Constants.STRING_ESCAPE_CLASSIF_NAME)]
     internal static ClassificationTypeDefinition StringEscapeSequenceClassificationType = null;
 
+    [Export, Name(Constants.FORMAT_SPECIFIER_NAME)]
+    internal static ClassificationTypeDefinition FormatSpecifierClassificationType = null;
+
     [Export, Name(Constants.VISIBILITY_CLASSIF_NAME)]
     internal static ClassificationTypeDefinition VisibilityKeywordClassificationType = null;
 
@@ -54,6 +57,9 @@ namespace Winterdom.Viasfora.Classifications {
 
     [Export, Name(Constants.RAINBOW_9)]
     internal static ClassificationTypeDefinition Rainbow9ClassificationType = null;
+
+    [Export, Name(Constants.RAINBOW_ERROR)]
+    internal static ClassificationTypeDefinition RainbowErrorClassificationType = null;
 
     [Export, Name(Constants.OBFUSCATED_TEXT)]
     internal static ClassificationTypeDefinition ObfuscatedTextType = null;

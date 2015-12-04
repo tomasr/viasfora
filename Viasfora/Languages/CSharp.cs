@@ -4,6 +4,8 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
@@ -34,8 +36,16 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.CSharp; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }
+    }
+
+    public override IBraceExtractor NewBraceExtractor() {
+      return new CSharpBraceExtractor();
+    }
+
+    [ImportingConstructor]
+    public CSharp(IVsfSettings settings) : base(settings) {
     }
   }
 }

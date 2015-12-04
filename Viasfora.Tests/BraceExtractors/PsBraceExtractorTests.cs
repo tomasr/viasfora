@@ -4,19 +4,19 @@ using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 using Xunit;
 
 namespace Viasfora.Tests.BraceExtractors {
   public class PsBraceExtractorTests {
-    const String BraceList = "(){}[]";
     [Fact]
     public void SimpleFunction() {
       String input = @"
 function to-hex([long] $dec) {
    return '0x' + $dec.ToString('X')
 }";
-      var extractor = new PsBraceExtractor(BraceList);
+      var extractor = new PsBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(8, chars.Count);
     }
@@ -26,7 +26,7 @@ function to-hex([long] $dec) {
       String input = @"
 # some {}[]() braces here
 ";
-      var extractor = new PsBraceExtractor(BraceList);
+      var extractor = new PsBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -37,7 +37,7 @@ function to-hex([long] $dec) {
 # some {}[]() braces here
 #>
 ";
-      var extractor = new PsBraceExtractor(BraceList);
+      var extractor = new PsBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -46,7 +46,7 @@ function to-hex([long] $dec) {
       String input = @"
 'some {}[]() braces here'
 ";
-      var extractor = new PsBraceExtractor(BraceList);
+      var extractor = new PsBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
@@ -55,7 +55,7 @@ function to-hex([long] $dec) {
       String input = @"
 ""some {}[]() braces here""
 ";
-      var extractor = new PsBraceExtractor(BraceList);
+      var extractor = new PsBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }

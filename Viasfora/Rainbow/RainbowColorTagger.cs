@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora.Rainbow {
   class RainbowColorTagger : ITagger<RainbowTag> {
     private RainbowProvider provider;
     private IClassificationType[] rainbowTags;
+    private IClassificationType rainbowError;
 
 #pragma warning disable 67
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
@@ -20,7 +21,9 @@ namespace Winterdom.Viasfora.Rainbow {
     public RainbowColorTagger(RainbowProvider provider) {
       this.provider = provider;
       this.rainbowTags = GetRainbows(provider.Registry, Constants.MAX_RAINBOW_DEPTH);
+      this.rainbowError = provider.Registry.GetClassificationType(Constants.RAINBOW_ERROR);
     }
+
     public static IClassificationType[] GetRainbows(IClassificationTypeRegistryService registry, int max) {
       var result = new IClassificationType[max];
       for ( int i = 0; i < max; i++ ) {
@@ -37,14 +40,25 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( !provider.Settings.RainbowTagsEnabled || spans.Count == 0 ) {
         yield break;
       }
-      BraceCache braceCache = provider.BraceCache;
+
+      var braceCache = provider.BufferBraces;
       ITextSnapshot snapshot = spans[0].Snapshot;
-      if ( braceCache == null || braceCache.Snapshot != spans[0].Snapshot ) {
+      if ( braceCache == null || !braceCache.Enabled ) {
         yield break;
       }
+      if ( braceCache.Snapshot != spans[0].Snapshot ) {
+        yield break;
+      }
+
       foreach ( var brace in braceCache.BracesInSpans(spans) ) {
         var ctype = rainbowTags[brace.Depth % this.provider.Settings.RainbowDepth];
         yield return brace.ToSpan(snapshot, ctype);
+      }
+      foreach ( var error in braceCache.ErrorBracesInSpans(spans) ) {
+        yield return new TagSpan<RainbowTag>(
+          new SnapshotSpan(snapshot, error.Position, 1),
+          new RainbowTag(rainbowError)
+          );
       }
     }
     public void NotifyUpdateTags(SnapshotSpan span) {

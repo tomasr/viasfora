@@ -14,7 +14,7 @@ namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IWpfTextViewCreationListener))]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   [Name("Viasfora.auto-expand-regions")]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   public class AutoExpandRegionsListener : IWpfTextViewCreationListener {
     [Import]
     private IVsOutliningManagerService outlining = null;

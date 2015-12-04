@@ -14,22 +14,7 @@ using Winterdom.Viasfora.Contracts;
 namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(ITaggerProvider))]
-  [ContentType(CSharp.ContentType)]
-  [ContentType(Cpp.ContentType)]
-  [ContentType(JScript.ContentType)]
-  [ContentType(JScript.ContentTypeVS2012)]
-  [ContentType(JSON.ContentType)]
-  [ContentType(VB.ContentType)]
-  [ContentType(VB.VBScriptContentType)]
-  [ContentType(FSharp.ContentType)]
-  [ContentType(Sql.ContentType)]
-  [ContentType(Sql.ContentTypeAlt)]
-  [ContentType(TypeScript.ContentType)]
-  [ContentType(Python.ContentType)]
-  [ContentType(PowerShell.ContentType)]
-  [ContentType(Css.ContentType)]
-  [ContentType(Css.SassContentType)]
-  [ContentType(Css.LessContentType)]
+  [ContentType(ContentTypes.Text)]
   [TagType(typeof(RainbowTag))]
   public class RainbowTaggerProvider : ITaggerProvider {
     [Import]

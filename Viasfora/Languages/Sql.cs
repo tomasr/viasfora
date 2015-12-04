@@ -6,7 +6,7 @@ using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.CommentParsers;
-using Winterdom.Viasfora.Util;
+using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
@@ -25,9 +25,6 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] LINQ_KEYWORDS = {
          "select", "update", "insert", "delete", "merge"
       };
-    public override string BraceList {
-      get { return "()[]"; }
-    }
     protected override String[] ControlFlowDefaults {
       get { return KEYWORDS; }
     }
@@ -41,9 +38,14 @@ namespace Winterdom.Viasfora.Languages {
       get { return Constants.Sql; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new SqlBraceExtractor(this.BraceList);
+      return new SqlBraceExtractor();
     }
-    protected override String[] ContentTypes {
+
+    [ImportingConstructor]
+    public Sql(IVsfSettings settings) : base(settings) {
+    }
+
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, ContentTypeAlt }; }
     }
     protected override string TextToCompare(string text) {

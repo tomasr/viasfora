@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
+using System.ComponentModel.Composition;
 
 namespace Winterdom.Viasfora.Languages {
   public class DefaultLanguage : LanguageInfo {
@@ -18,30 +21,25 @@ namespace Winterdom.Viasfora.Languages {
       get { return empty; }
     }
 
-    public override string BraceList {
-      get { return ""; }
-    }
-    protected override string[] ContentTypes {
+    protected override string[] SupportedContentTypes {
       get { return empty; }
     }
     public override string KeyName {
       get { return "Text"; }
     }
+
+    [ImportingConstructor]
+    public DefaultLanguage(IVsfSettings settings) : base(settings) {
+    }
+
+
     public override bool MatchesContentType(IContentType contentType) {
       return true;
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new NoBraceExtractor();
+      return new DefaultBraceExtractor();
     }
 
-    private class NoBraceExtractor : IBraceExtractor {
-      private static CharPos[] noBraces = new CharPos[0];
-      public void Reset() {
-      }
-      public IEnumerable<CharPos> Extract(ITextChars text) {
-        return noBraces;
-      }
-    }
     private class NoFirstLineCommentParser : IFirstLineCommentParser {
       public string Parse(ITextChars tc) {
         return "";

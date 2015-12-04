@@ -7,6 +7,7 @@ namespace Winterdom.Viasfora {
     public const String LINQ_CLASSIF_NAME = "Viasfora Query Operator";
     public const String VISIBILITY_CLASSIF_NAME = "Viasfora Visibility Keyword";
     public const String STRING_ESCAPE_CLASSIF_NAME = "Viasfora String Escape Sequence";
+    public const String FORMAT_SPECIFIER_NAME = "viasfora.format.specifier";
     public const String LINE_HIGHLIGHT = "Viasfora Current Line";
     public const String COLUMN_HIGHLIGHT = "Viasfora Current Column";
     public const String DEV_MARGIN = "viasfora.dev.margin";
@@ -22,6 +23,7 @@ namespace Winterdom.Viasfora {
     public const String RAINBOW_7 = RAINBOW + "7";
     public const String RAINBOW_8 = RAINBOW + "8";
     public const String RAINBOW_9 = RAINBOW + "9";
+    public const String RAINBOW_ERROR = RAINBOW + "Error";
 
     public const String RAINBOW_TIP_HIGHLIGHT = "viasfora.rainbow.tip.highlight";
 
@@ -44,6 +46,7 @@ namespace Winterdom.Viasfora {
     // Languages
     public const String Cpp = "Cpp";
     public const String CSharp = "CSharp";
+    public const String XLang = "XLANG/s";
     public const String Css = "CSS";
     public const String FSharp = "FSharp";
     public const String JS = "JScript";

@@ -6,7 +6,7 @@ using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.CommentParsers;
-using Winterdom.Viasfora.Util;
+using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
@@ -40,14 +40,16 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.VB; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, VBScriptContentType }; }
     }
-    public override string BraceList {
-      get { return "()"; }
+
+    [ImportingConstructor]
+    public VB(IVsfSettings settings) : base(settings) {
     }
+
     public override IBraceExtractor NewBraceExtractor() {
-      return new VbBraceExtractor(this.BraceList);
+      return new VbBraceExtractor();
     }
   }
 }

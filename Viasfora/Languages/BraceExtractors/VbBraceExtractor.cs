@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.BraceExtractors {
@@ -10,10 +10,12 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     const int stText = 0;
     const int stString = 1;
     private int status;
-    private String braceList;
 
-    public VbBraceExtractor(String braces) {
-      this.braceList = braces;
+    public String BraceList {
+      get { return "(){}"; }
+    }
+
+    public VbBraceExtractor() {
       this.status = stText;
     }
 
@@ -43,7 +45,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           this.status = stString;
           tc.Next();
           this.ParseString(tc);
-        } else if ( braceList.IndexOf(tc.Char()) >= 0 ) {
+        } else if ( this.BraceList.IndexOf(tc.Char()) >= 0 ) {
           yield return new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
         } else {

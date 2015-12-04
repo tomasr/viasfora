@@ -17,13 +17,19 @@ namespace Winterdom.Viasfora.Options {
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
       language.ControlFlow = ControlFlowKeywords.ToArray();
+      language.Enabled = Enabled;
       var settings = SettingsContext.GetSettings();
       settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
       ControlFlowKeywords = language.ControlFlow.ToList();
+      Enabled = language.Enabled;
     }
+
+    [LocDisplayName("Enabled")]
+    [Description("Enabled or disables all Viasfora features for this language")]
+    public bool Enabled { get; set; }
 
     [LocDisplayName("Control Flow")]
     [Description("Control Flow keywords to highlight")]

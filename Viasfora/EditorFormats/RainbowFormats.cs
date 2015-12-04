@@ -60,7 +60,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   public sealed class Rainbow5Format : ClassificationFormatDefinition {
     public Rainbow5Format() {
       this.DisplayName = Constants.RAINBOW_5;
-      this.ForegroundColor = Colors.Gray;
+      this.ForegroundColor = Colors.DimGray;
     }
   }
   [Export(typeof(EditorFormatDefinition))]
@@ -117,6 +117,19 @@ namespace Winterdom.Viasfora.EditorFormats {
     public RainbowTipHighlightFormat() {
       this.DisplayName = "Viasfora Rainbow Tip Highlight";
       this.BackgroundColor = Colors.Turquoise;
+      this.ForegroundCustomizable = false;
+    }
+  }
+
+  [Export(typeof(EditorFormatDefinition))]
+  [ClassificationType(ClassificationTypeNames = Constants.RAINBOW_ERROR)]
+  [Name(Constants.RAINBOW_ERROR)]
+  [UserVisible(true)]
+  [Order(After = Priority.High)]
+  public sealed class RainbowErrorFormat : ClassificationFormatDefinition {
+    public RainbowErrorFormat() {
+      this.DisplayName = Constants.RAINBOW_ERROR;
+      this.BackgroundColor = Colors.LightCoral;
       this.ForegroundCustomizable = false;
     }
   }

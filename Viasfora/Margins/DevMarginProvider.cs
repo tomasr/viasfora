@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.Margins {
   [Name(Constants.DEV_MARGIN)]
   [Order(After = PredefinedMarginNames.HorizontalScrollBar)]
   [MarginContainer(PredefinedMarginNames.Bottom)]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   public class DevMarginProvider : IWpfTextViewMarginProvider {
     [Import]

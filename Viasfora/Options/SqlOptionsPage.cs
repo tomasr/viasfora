@@ -18,6 +18,7 @@ namespace Winterdom.Viasfora.Options {
       language.ControlFlow = ControlFlowKeywords.ToArray();
       language.Visibility = VisibilityKeywords.ToArray();
       language.Linq = LinqKeywords.ToArray();
+      language.Enabled = Enabled;
       var settings = SettingsContext.GetSettings();
       settings.Save();
     }
@@ -26,7 +27,12 @@ namespace Winterdom.Viasfora.Options {
       ControlFlowKeywords = language.ControlFlow.ToList();
       VisibilityKeywords = language.Visibility.ToList();
       LinqKeywords = language.Linq.ToList();
+      Enabled = language.Enabled;
     }
+
+    [LocDisplayName("Enabled")]
+    [Description("Enabled or disables all Viasfora features for this language")]
+    public bool Enabled { get; set; }
 
     [LocDisplayName("Control Flow")]
     [Description("Control Flow keywords to highlight")]

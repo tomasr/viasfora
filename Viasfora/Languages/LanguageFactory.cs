@@ -12,7 +12,12 @@ namespace Winterdom.Viasfora.Languages {
   public class LanguageFactory : ILanguageFactory {
     [ImportMany]
     public List<ILanguage> Languages { get; set; }
-    private static ILanguage defaultLang = new DefaultLanguage();
+    private ILanguage defaultLang;
+
+    [ImportingConstructor]
+    public LanguageFactory(IVsfSettings settings) {
+      this.defaultLang = new DefaultLanguage(settings);
+    }
 
     public ILanguage TryCreateLanguage(IContentType contentType) {
       foreach ( ILanguage lang in Languages ) {

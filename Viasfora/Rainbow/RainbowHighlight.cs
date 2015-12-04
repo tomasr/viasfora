@@ -13,7 +13,7 @@ using System.Windows.Shapes;
 namespace Winterdom.Viasfora.Rainbow {
 
   [Export(typeof(IWpfTextViewCreationListener))]
-  [ContentType("text")]
+  [ContentType(ContentTypes.Text)]
   [TextViewRole(PredefinedTextViewRoles.Document)]
   [TextViewRole(ViewRoles.EmbeddedPeekTextView)]
   public class RainbowHilightProvider : IWpfTextViewCreationListener {

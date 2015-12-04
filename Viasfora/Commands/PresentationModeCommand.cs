@@ -25,6 +25,11 @@ namespace Winterdom.Viasfora.Commands {
       if ( VsfPackage.PresentationModeChanged != null ) {
         VsfPackage.PresentationModeChanged(this, EventArgs.Empty);
       }
+      if ( VsfPackage.PresentationModeTurnedOn ) {
+        VsfPackage.Instance.FontChanger.TurnOn();
+      } else {
+        VsfPackage.Instance.FontChanger.TurnOff();
+      }
     }
   }
 }

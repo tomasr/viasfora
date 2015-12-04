@@ -27,6 +27,7 @@ namespace Winterdom.Viasfora.Options {
       settings.PresentationModeEnabled = dialog.PMEnabled;
       settings.PresentationModeDefaultZoomLevel = dialog.DefaultZoom;
       settings.PresentationModeEnabledZoomLevel = dialog.EnabledZoom;
+      settings.PresentationModeIncludeEnvironmentFonts = dialog.IncludeEnvironmentFonts;
       settings.Save();
     }
     public override void LoadSettingsFromStorage() {
@@ -35,6 +36,7 @@ namespace Winterdom.Viasfora.Options {
       dialog.PMEnabled = settings.PresentationModeEnabled;
       dialog.DefaultZoom = settings.PresentationModeDefaultZoomLevel;
       dialog.EnabledZoom = settings.PresentationModeEnabledZoomLevel;
+      dialog.IncludeEnvironmentFonts = settings.PresentationModeIncludeEnvironmentFonts;
     }
   }
 }

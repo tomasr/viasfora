@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora;
 
 namespace Winterdom.Viasfora.Text {
   public class PresentationMode {
@@ -48,7 +49,11 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void SetZoomLevel(IWpfTextView textView) {
-      if ( this.settings.PresentationModeEnabled ) {
+      // don't try overriding the zoom level for
+      // a peek definition window
+      if ( textView.IsPeekTextWindow() )
+        return;
+      if ( this.settings.PresentationModeEnabled  ) {
         int zoomLevel = VsfPackage.GetPresentationModeZoomLevel();
         textView.ZoomLevel = zoomLevel;
       }

@@ -6,11 +6,11 @@ using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
-  public class FSharpEscapeSequenceParser : IEscapeSequenceParser {
+  public class FSharpStringParser : IStringParser {
     private ITextChars text;
     private const String escapeChar = "\"\\'ntbrafv";
 
-    public FSharpEscapeSequenceParser(String text) {
+    public FSharpStringParser(String text) {
       this.text = new StringChars(text);
       // always skip the first char
       // (since quotes are included in the string)
@@ -25,30 +25,30 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         this.text.SkipRemainder();
       }
     }
-    public Span? Next() {
+    public StringPart? Next() {
       while ( !text.EndOfLine ) {
         if ( text.Char() == '\\' ) {
           text.Next();
           if ( escapeChar.IndexOf(text.Char()) >= 0 ) {
             text.Next();
-            return new Span(text.Position - 2, 2);
+            return new StringPart(new Span(text.Position - 2, 2));
           }
           if ( Char.IsDigit(text.Char()) && Char.IsDigit(text.NChar()) && Char.IsDigit(text.NNChar()) ) {
             // a trigraph
             text.Skip(3);
-            return new Span(text.Position-4, 4);
+            return new StringPart(new Span(text.Position-4, 4));
           }
           if ( text.Char() == '0' && !Char.IsDigit(text.NChar()) ) {
             // \0
             text.Next();
-            return new Span(text.Position-2, 2);
+            return new StringPart(new Span(text.Position-2, 2));
           }
           if ( text.Char() == 'u' ) {
             text.Next();
             text.Mark();
             Span? span = TryParseShortUnicode();
             if ( span.HasValue ) {
-              return span.Value;
+              return new StringPart(span.Value);
             }
             text.BackToMark();
           }
@@ -57,7 +57,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
             text.Mark();
             Span? span = TryParseLongUnicode();
             if ( span.HasValue ) {
-              return span.Value;
+              return new StringPart(span.Value);
             }
             text.BackToMark();
           }

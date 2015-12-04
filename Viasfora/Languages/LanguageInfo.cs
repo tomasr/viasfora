@@ -5,16 +5,15 @@ using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Util;
 using Winterdom.Viasfora.Languages.CommentParsers;
+using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo : ILanguage {
     private static StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
     protected static readonly String[] EMPTY = { };
-    // TODO: consider obtaining this through a constructor
-    [Import]
-    public IVsfSettings Settings { get; set; }
+    public IVsfSettings Settings { get; private set; }
 
     public String[] ControlFlow {
       get { return Get("ControlFlow", ControlFlowDefaults); }
@@ -28,18 +27,25 @@ namespace Winterdom.Viasfora.Languages {
       get { return Get("Visibility", VisibilityDefaults); }
       set { Set("Visibility", value); }
     }
+    public bool Enabled {
+      get { return Settings.GetBoolean(KeyName + "_Enabled", true); }
+      set { Settings.SetValue(KeyName + "_Enabled", value); }
+    }
 
-    public abstract String BraceList { get; }
+    public LanguageInfo(IVsfSettings settings) {
+      this.Settings = settings;
+    }
+
     public abstract IBraceExtractor NewBraceExtractor();
     public virtual IFirstLineCommentParser NewFirstLineCommentParser() {
       return new GenericCommentParser();
     }
-    public virtual IEscapeSequenceParser NewEscapeSequenceParser(String text) {
+    public virtual IStringParser NewStringParser(String text) {
       return null;
     }
 
     public virtual bool MatchesContentType(IContentType contentType) {
-      foreach ( String str in this.ContentTypes ) {
+      foreach ( String str in this.SupportedContentTypes ) {
         if ( contentType.IsOfType(str) ) 
           return true;
       }
@@ -60,7 +66,7 @@ namespace Winterdom.Viasfora.Languages {
       return text;
     }
 
-    protected abstract String[] ContentTypes { get; }
+    protected abstract String[] SupportedContentTypes { get; }
     protected abstract String[] ControlFlowDefaults { get; }
     protected abstract String[] LinqDefaults { get; }
     protected abstract String[] VisibilityDefaults { get; }

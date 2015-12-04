@@ -6,6 +6,7 @@ using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Languages.CommentParsers;
+using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
@@ -22,9 +23,6 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] LINQ_KEYWORDS = {
           "from", "in"
       };
-    public override string BraceList {
-      get { return "(){}[]"; }
-    }
     protected override String[] ControlFlowDefaults {
       get { return KEYWORDS; }
     }
@@ -38,10 +36,14 @@ namespace Winterdom.Viasfora.Languages {
       get { return Constants.Python; }
     }
     public override IBraceExtractor NewBraceExtractor() {
-      return new PythonBraceExtractor(this.BraceList);
+      return new PythonBraceExtractor();
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }
+    }
+
+    [ImportingConstructor]
+    public Python(IVsfSettings settings) : base(settings) {
     }
   }
 }

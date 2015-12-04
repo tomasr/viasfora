@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
   class RainbowProvider : IWeakEventListener {
     public ITextBuffer TextBuffer { get; private set; }
-    public BraceCache BraceCache { get; private set; }
+    public ITextBufferBraces BufferBraces { get; private set; }
     public IClassificationTypeRegistryService Registry { get; private set; }
     public ILanguageFactory LanguageFactory { get; private set; }
     public IVsfSettings Settings { get; private set; }
@@ -39,7 +39,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.Settings = provider.Settings;
       this.ColorTagger = new RainbowColorTagger(this);
 
-      SetLanguage(buffer.ContentType);
+      SetLanguage(buffer.CurrentSnapshot);
 
       this.updatePendingFrom = -1;
       this.TextBuffer.ChangedLowPriority += this.BufferChanged;
@@ -116,7 +116,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void UpdateBraceList(SnapshotPoint startPoint, bool notifyUpdate) {
-      this.BraceCache.Invalidate(startPoint);
+      this.BufferBraces.Invalidate(startPoint);
       SynchronousUpdate(notifyUpdate, startPoint);
     }
 
@@ -156,7 +156,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void FireTagsChanged() {
-      var snapshot = BraceCache.Snapshot;
+      var snapshot = BufferBraces.Snapshot;
       int upd;
       lock ( this.updateLock ) {
         upd = this.updatePendingFrom;
@@ -170,10 +170,10 @@ namespace Winterdom.Viasfora.Rainbow {
       //}
     }
 
-    private void SetLanguage(IContentType contentType) {
+    private void SetLanguage(ITextSnapshot snapshot) {
       if ( TextBuffer != null ) {
-        var lang = LanguageFactory.TryCreateLanguage(contentType);
-        this.BraceCache = new BraceCache(this.TextBuffer.CurrentSnapshot, lang);
+        var lang = LanguageFactory.TryCreateLanguage(snapshot);
+        this.BufferBraces = new TextBufferBraces(this.TextBuffer.CurrentSnapshot, lang);
       }
     }
 
@@ -190,14 +190,14 @@ namespace Winterdom.Viasfora.Rainbow {
           // is empty, so we just want to update the snapshot
           // so that when we're asked for the tags we respond
           // correctly to the message
-          this.BraceCache.UpdateSnapshot(e.After);
+          this.BufferBraces.UpdateSnapshot(e.After);
         }
       }
     }
 
     private void ContentTypeChanged(object sender, ContentTypeChangedEventArgs e) {
       if ( e.BeforeContentType.TypeName != e.AfterContentType.TypeName ) {
-        this.SetLanguage(e.AfterContentType);
+        this.SetLanguage(e.After);
         this.UpdateBraceList(new SnapshotPoint(e.After, 0));
       }
     }

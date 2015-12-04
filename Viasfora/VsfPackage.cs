@@ -17,6 +17,7 @@ using Microsoft.VisualStudio.Editor;
 using Winterdom.Viasfora.Commands;
 using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -47,6 +48,7 @@ namespace Winterdom.Viasfora {
     public static EventHandler PresentationModeChanged { get; set; }
     public byte[] UserOptions { get; set; }
     public Version VsVersion { get; private set; }
+    public PresentationModeFontChanger FontChanger { get; private set; } 
     private IVsActivityLog activityLog;
     private List<VsCommand> commands = new List<VsCommand>();
 
@@ -63,6 +65,7 @@ namespace Winterdom.Viasfora {
       InitializeActivityLog();
       LogInfo("Initializing VsfPackage");
       VsVersion = FindVSVersion();
+      this.FontChanger = new PresentationModeFontChanger(this);
 
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
       if ( null != mcs ) {
@@ -71,6 +74,15 @@ namespace Winterdom.Viasfora {
       }
 
       this.AddOptionKey(USER_OPTIONS_KEY);
+    }
+
+    protected override void Dispose(bool disposing) {
+
+      if ( disposing && PresentationModeTurnedOn ) {
+        FontChanger.TurnOff(notifyChanges: false);
+      }
+
+      base.Dispose(disposing);
     }
 
     protected override void OnLoadOptions(string key, Stream stream) {
@@ -101,6 +113,17 @@ namespace Winterdom.Viasfora {
           (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_INFORMATION,
           "Viasfora",
           String.Format(format, args)
+        );
+      }
+    }
+    public static void LogError(String message, Exception ex) {
+      if ( Instance == null ) return;
+      var log = Instance.activityLog;
+      if ( log != null ) {
+        log.LogEntry(
+          (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR,
+          "Viasfora",
+          String.Format("{0}. Exception: {1}", message, ex)
         );
       }
     }

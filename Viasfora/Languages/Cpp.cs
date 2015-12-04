@@ -28,8 +28,12 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.Cpp; }
     }
-    protected override String[] ContentTypes {
+    protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }
+    }
+
+    [ImportingConstructor]
+    public Cpp(IVsfSettings settings) : base(settings) {
     }
   }
 }
