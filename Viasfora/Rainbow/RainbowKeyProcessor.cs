@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Windows.Input;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Util;
 using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Rainbow {
