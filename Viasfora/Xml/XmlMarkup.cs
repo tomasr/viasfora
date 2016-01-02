@@ -11,5 +11,9 @@ namespace Winterdom.Viasfora.Xml {
     public bool IsAttribute(String tagName) {
       return tagName == "XML Attribute";
     }
+
+    public bool IsRazorTag(String tagName) {
+      return false;
+    }
   }
 }

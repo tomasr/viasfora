@@ -7,14 +7,15 @@ using Microsoft.VisualStudio.Utilities;
 namespace Winterdom.Viasfora.EditorFormats {
 
   [Export(typeof(EditorFormatDefinition))]
-  [ClassificationType(ClassificationTypeNames = Constants.XML_PREFIX)]
-  [Name(Constants.XML_PREFIX)]
+  [ClassificationType(ClassificationTypeNames = Constants.RAZOR_CLOSING)]
+  [Name(Constants.RAZOR_CLOSING)]
   [UserVisible(true)]
   [Order(Before = Priority.High, After = Priority.High)]
-  internal sealed class XmlPrefixFormat : ClassificationFormatDefinition {
-    public XmlPrefixFormat() {
-      this.DisplayName = "Viasfora XML Prefix";
-      this.ForegroundColor = Colors.ForestGreen;
+  internal sealed class RazorClosingTagFormat : ClassificationFormatDefinition {
+    public RazorClosingTagFormat() {
+      this.DisplayName = "Viasfora Razor Tag Closing Element";
+      this.ForegroundColor = Colors.DarkOrange;
+      this.IsBold = true;
     }
   }
 

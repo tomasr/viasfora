@@ -17,6 +17,7 @@ namespace Winterdom.Viasfora.Xml {
     private ClassificationTag xmlCloseTagClassification;
     private ClassificationTag xmlPrefixClassification;
     private ClassificationTag xmlDelimiterClassification;
+    private ClassificationTag razorCloseTagClassification;
     private IMarkupLanguage language;
     private ITagAggregator<IClassificationTag> aggregator;
     private static readonly List<ITagSpan<ClassificationTag>> EmptyList =
@@ -39,6 +40,8 @@ namespace Winterdom.Viasfora.Xml {
          new ClassificationTag(registry.GetClassificationType(Constants.XML_PREFIX));
       xmlDelimiterClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.DELIMITER));
+      razorCloseTagClassification =
+         new ClassificationTag(registry.GetClassificationType(Constants.RAZOR_CLOSING));
       settings.SettingsChanged += OnSettingsChanged;
       this.aggregator = aggregator;
     }
@@ -101,6 +104,7 @@ namespace Winterdom.Viasfora.Xml {
       ITextSnapshot snapshot = spans[0].Snapshot;
       bool foundClosingTag = false;
       SnapshotSpan? lastSpan = null;
+      String lastSpanTagName = null;
 
       // XAML parses stuff in really weird ways, so we need to special case it
       foreach ( var tagSpan in aggregator.GetTags(spans) ) {
@@ -117,8 +121,14 @@ namespace Winterdom.Viasfora.Xml {
             foundClosingTag = false;
           }
           lastSpan = null;
+          lastSpanTagName = null;
         } else if ( IsXmlName(tagName) || IsXmlAttribute(tagName) ) {
           lastSpan = cs;
+          lastSpanTagName = tagName;
+        } else if ( IsRazorTag(tagName) ) {
+          if ( snapshot.GetText(new Span(cs.Span.Start - 2, 2)) == "</" ) {
+            yield return new TagSpan<ClassificationTag>(cs, razorCloseTagClassification);
+          }
         }
       }
     }
@@ -157,6 +167,10 @@ namespace Winterdom.Viasfora.Xml {
 
     private bool IsXmlDelimiter(String tagName) {
       return language.IsDelimiter(tagName);
+    }
+
+    private bool IsRazorTag(String tagName) {
+      return language.IsRazorTag(tagName);
     }
   }
 }

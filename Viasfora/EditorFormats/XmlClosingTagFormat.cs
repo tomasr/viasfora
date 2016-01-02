@@ -13,8 +13,8 @@ namespace Winterdom.Viasfora.EditorFormats {
   [Order(Before = Priority.High, After = Priority.High)]
   internal sealed class XmlClosingTagFormat : ClassificationFormatDefinition {
     public XmlClosingTagFormat() {
-      this.DisplayName = "XML Closing Tag";
-      this.ForegroundColor = Colors.MediumVioletRed;
+      this.DisplayName = "Viasfora XML Closing Tag";
+      this.ForegroundColor = Colors.DarkOrange;
     }
   }
 
