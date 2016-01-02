@@ -9,7 +9,7 @@ using Winterdom.Viasfora.Util;
 using Xunit;
 
 namespace Viasfora.Tests.BraceExtractors {
-  public class CssBraceExtractorTests {
+  public class CssBraceExtractorTests : BaseExtractorTests {
     [Fact]
     public void SimpleRule() {
       String input = @"
@@ -123,12 +123,6 @@ with more stuff'
       var extractor = new CssBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2+2+8*2, chars.Count);
-    }
-
-    private IList<CharPos> Extract(IBraceExtractor extractor, string input, int start, int state) {
-      extractor.Reset();
-      ITextChars chars = new StringChars(input, start);
-      return extractor.Extract(chars).ToList();
     }
   }
 }

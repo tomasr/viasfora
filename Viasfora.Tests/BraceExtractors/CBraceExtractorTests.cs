@@ -9,7 +9,7 @@ using Winterdom.Viasfora.Util;
 using Xunit;
 
 namespace Viasfora.Tests.BraceExtractors {
-  public class CBraceExtractorTests {
+  public class CBraceExtractorTests : BaseExtractorTests {
 
     [Fact]
     public void CanExtractParens() {
@@ -66,11 +66,6 @@ callCommented2(4);
       var extractor = new CBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
-    }
-    private IList<CharPos> Extract(IBraceExtractor extractor, string input, int start, int state) {
-      extractor.Reset();
-      ITextChars chars = new StringChars(input, start);
-      return extractor.Extract(chars).ToList();
     }
   }
 }

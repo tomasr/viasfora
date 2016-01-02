@@ -19,25 +19,24 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     public SqlBraceExtractor() {
     }
 
-    public void Reset() {
+    public void Reset(int state) {
       this.status = stText;
     }
 
-    public IEnumerable<CharPos> Extract(ITextChars tc) {
+    public bool Extract(ITextChars tc, ref CharPos pos) {
+      pos = CharPos.Empty;
       while ( !tc.EndOfLine ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
           case stMultiLineComment: ParseMultiLineComment(tc); break;
-          default: 
-            foreach ( var p in ParseText(tc) ) {
-              yield return p;
-            }
-            break;
+          default:
+            return ParseText(tc, ref pos);
         }
       }
+      return false;
     }
 
-    private IEnumerable<CharPos> ParseText(ITextChars tc) {
+    private bool ParseText(ITextChars tc, ref CharPos pos) {
       while ( !tc.EndOfLine ) {
         // multi-line comment
         if ( tc.Char() == '/' && tc.NChar() == '*' ) {
@@ -51,12 +50,14 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           tc.Next();
           this.ParseString(tc);
         } else if ( this.BraceList.IndexOf(tc.Char()) >= 0 ) {
-          yield return new CharPos(tc.Char(), tc.AbsolutePosition);
+          pos = new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
+          return true;
         } else {
           tc.Next();
         }
       }
+      return false;
     }
 
     private void ParseString(ITextChars tc) {

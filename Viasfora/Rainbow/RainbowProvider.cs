@@ -110,7 +110,10 @@ namespace Winterdom.Viasfora.Rainbow {
 
     private void UpdateBraceList(SnapshotPoint startPoint, bool notifyUpdate) {
       this.BufferBraces.Invalidate(startPoint);
-      SynchronousUpdate(notifyUpdate, startPoint);
+      var restartPoint = startPoint;
+      if ( this.BufferBraces.LastParsedPosition > 0 )
+        restartPoint = new SnapshotPoint(startPoint.Snapshot, this.BufferBraces.LastParsedPosition);
+      SynchronousUpdate(notifyUpdate, restartPoint);
     }
 
     private void SynchronousUpdate(bool notify, SnapshotPoint startPoint) {
