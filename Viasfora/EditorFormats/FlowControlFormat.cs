@@ -14,7 +14,6 @@ namespace Winterdom.Viasfora.EditorFormats {
     public FlowControlFormat() {
       this.DisplayName = Constants.KEYWORD_CLASSIF_NAME;
       this.ForegroundColor = Colors.OrangeRed;
-      this.IsItalic = true;
     }
   }
 }
