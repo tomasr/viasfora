@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Languages.BraceExtractors;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 using Xunit;
 
 namespace Viasfora.Tests.BraceExtractors {
-  public class CSharpBraceExtractorTests {
+  public class CSharpBraceExtractorTests : BaseExtractorTests {
 
     [Fact]
     public void CanExtractParens() {
@@ -83,27 +81,79 @@ callCommented2(4);
       String input = "$\"some {site} other\"";
       var extractor = new CSharpBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
-      Assert.Equal(0, chars.Count);
+      Assert.Equal(2, chars.Count);
     }
     [Fact]
     public void InterpolatedStringWithDoubleBraces() {
       String input = "$\"first is not {{interpolated}} other is {interpolated}\"";
       var extractor = new CSharpBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
-      Assert.Equal(0, chars.Count);
+      Assert.Equal(2, chars.Count);
     }
     [Fact]
     public void InterpolatedStringWithDoubleBraces2() {
       String input = "$\"first is {{{interpolated}}} other is {interpolated}\"";
       var extractor = new CSharpBraceExtractor();
       var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
+    [Fact]
+    public void InterpolatedStringWithNestedString() {
+      String input = "$\"interpolated: {CallMethod(\"string\")}\"";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
+    [Fact]
+    public void InterpolatedStringWithNestedCharLiteral() {
+      String input = "$\"interpolated: {CallMethod(')')}\"";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
+    [Fact]
+    public void InterpolatedStringWithFormatSpecifier() {
+      String input = "$\"interpolated: {x : 08x}\"";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2, chars.Count);
+    }
+    [Fact]
+    public void InterpolatedStringDoesNotReturnBracesInStringPart() {
+      String input = "$\"Hello {username} on Math.Cos((r/0.122))}.\"";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2, chars.Count);
+    }
+    [Fact]
+    public void InterpolatedStringDoesNotReturnBracesInStringPart_Partial() {
+      String input = "$\"Hello {username} on ";
+      String input2 = "Math.Cos((r/0.122))}.\"";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2, chars.Count);
+      // second part should not be changed
+      chars = Extract(extractor, input2.Trim(), 0, 0, false);
       Assert.Equal(0, chars.Count);
     }
 
-    private IList<CharPos> Extract(IBraceExtractor extractor, string input, int start, int state) {
-      extractor.Reset();
-      ITextChars chars = new StringChars(input, start);
-      return extractor.Extract(chars).ToList();
+    [Fact]
+    public void InterpolatedStringNonRestartable1() {
+      String input = "$\"some {s";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(1, chars.Count);
+      Assert.NotEqual(0, chars[0].State);
+    }
+    [Fact]
+    public void InterpolatedStringNonRestartable2() {
+      String input = "$\"some {s.ToString()";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(3, chars.Count);
+      Assert.NotEqual(0, chars[0].State);
+      Assert.NotEqual(0, chars[1].State);
+      Assert.NotEqual(0, chars[2].State);
     }
   }
 }

@@ -20,26 +20,25 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     public CssBraceExtractor() {
     }
 
-    public void Reset() {
+    public void Reset(int state) {
       this.state = stText;
     }
 
-    public IEnumerable<CharPos> Extract(ITextChars tc) {
+    public bool Extract(ITextChars tc, ref CharPos pos) {
       while ( !tc.EndOfLine ) {
         switch ( this.state ) {
           case stComment: ParseComment(tc); break;
           case stSingleQuotedString: ParseString(tc); break;
           case stDoubleQuotedString: ParseDString(tc); break;
           default:
-            foreach ( var ch in ParseText(tc) ) {
-              yield return ch;
-            }
-            break;
+            return ParseText(tc, ref pos);
         }
       }
+      return false;
     }
 
-    private IEnumerable<CharPos> ParseText(ITextChars tc) {
+    private bool ParseText(ITextChars tc, ref CharPos pos) {
+      pos = CharPos.Empty;
       while ( !tc.EndOfLine ) {
         if ( tc.Char() == '/' && tc.NChar() == '*' ) {
           this.state = stComment;
@@ -59,12 +58,14 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           tc.Next();
           ParseString(tc);
         } else if ( this.BraceList.Contains(tc.Char()) ) {
-          yield return new CharPos(tc.Char(), tc.AbsolutePosition);
+          pos = new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
+          return true;
         } else {
           tc.Next();
         }
       }
+      return false;
     }
     private void ParseString(ITextChars tc) {
       ParseString(tc, '\'');

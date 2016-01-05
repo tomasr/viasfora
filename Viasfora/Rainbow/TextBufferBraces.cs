@@ -74,6 +74,10 @@ namespace Winterdom.Viasfora.Rainbow {
             break;
         }
       }
+      // Notice that we actually resume from the newIndex + 1
+      // so go back one more
+      if ( newIndex > 0 && newIndex != index )
+        newIndex--;
       return newIndex;
     }
 
@@ -232,6 +236,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private void ContinueParsing(int parseFrom, int parseUntil) {
       int startPosition = 0;
       int lastGoodBrace = 0;
+      int lastState = 0;
       // figure out where to start parsing again
       Stack<BracePos> pairs = new Stack<BracePos>();
       for ( int i=0; i < braces.Count; i++ ) {
@@ -244,16 +249,17 @@ namespace Winterdom.Viasfora.Rainbow {
         }
         startPosition = r.Position + 1;
         lastGoodBrace = i;
+        lastState = r.State;
       }
       if ( lastGoodBrace < braces.Count - 1 ) {
         braces.RemoveRange(lastGoodBrace+1, braces.Count - lastGoodBrace - 1);
       }
 
-      ExtractBraces(pairs, startPosition, parseUntil);
+      ExtractBraces(pairs, startPosition, parseUntil, lastState);
     }
 
-    private void ExtractBraces(Stack<BracePos> pairs, int startOffset, int endOffset) {
-      braceExtractor.Reset();
+    private void ExtractBraces(Stack<BracePos> pairs, int startOffset, int endOffset, int state) {
+      braceExtractor.Reset(state);
       int lineNum = Snapshot.GetLineNumberFromPosition(startOffset);
       while ( lineNum < Snapshot.LineCount  ) {
         var line = Snapshot.GetLineFromLineNumber(lineNum++);
@@ -269,8 +275,8 @@ namespace Winterdom.Viasfora.Rainbow {
 
     private void ExtractFromLine(Stack<BracePos> pairs, ITextSnapshotLine line, int lineOffset) {
       var lc = new LineChars(line, lineOffset);
-      var bracesInLine = this.braceExtractor.Extract(lc) /*.ToArray() */;
-      foreach ( var cp in bracesInLine ) {
+      CharPos cp = CharPos.Empty;
+      while ( this.braceExtractor.Extract(lc, ref cp) ) {
         if ( IsOpeningBrace(cp) ) {
           BracePos p = cp.AsBrace(pairs.Count);
           pairs.Push(p);

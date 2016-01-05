@@ -11,11 +11,11 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       get { return String.Empty; }
     }
 
-    public void Reset() {
+    public void Reset(int state) {
     }
 
-    public IEnumerable<CharPos> Extract(ITextChars text) {
-      return Enumerable.Empty<CharPos>();
+    public bool Extract(ITextChars text, ref CharPos pos) {
+      return false;
     }
   }
 }

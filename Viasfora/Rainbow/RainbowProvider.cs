@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Threading;
 using System.Windows;
 using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Tagging;
-using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
-using Winterdom.Viasfora.Tags;
 
 namespace Winterdom.Viasfora.Rainbow {
 
@@ -117,7 +110,10 @@ namespace Winterdom.Viasfora.Rainbow {
 
     private void UpdateBraceList(SnapshotPoint startPoint, bool notifyUpdate) {
       this.BufferBraces.Invalidate(startPoint);
-      SynchronousUpdate(notifyUpdate, startPoint);
+      var restartPoint = startPoint;
+      if ( this.BufferBraces.LastParsedPosition > 0 )
+        restartPoint = new SnapshotPoint(startPoint.Snapshot, this.BufferBraces.LastParsedPosition);
+      SynchronousUpdate(notifyUpdate, restartPoint);
     }
 
     private void SynchronousUpdate(bool notify, SnapshotPoint startPoint) {
