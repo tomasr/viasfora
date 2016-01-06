@@ -10,8 +10,9 @@ namespace Viasfora.Tests.BraceExtractors {
       ITextChars chars = new StringChars(input, start);
       IList<CharPos> list = new List<CharPos>();
       CharPos cp = CharPos.Empty;
-      while ( extractor.Extract(chars, ref cp) ) {
-        list.Add(cp);
+      while ( !chars.EndOfLine ) {
+        if ( extractor.Extract(chars, ref cp) )
+          list.Add(cp);
       }
       return list;
     }
@@ -25,8 +26,9 @@ namespace Viasfora.Tests.BraceExtractors {
       foreach ( String line in lines ) {
         ITextChars chars = new StringChars(line);
         CharPos cp = CharPos.Empty;
-        while ( extractor.Extract(chars, ref cp) ) {
-          result.Add(cp);
+        while ( !chars.EndOfLine ) {
+          if ( extractor.Extract(chars, ref cp) )
+            result.Add(cp);
         }
       }
       return result;

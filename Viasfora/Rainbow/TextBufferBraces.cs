@@ -276,7 +276,9 @@ namespace Winterdom.Viasfora.Rainbow {
     private void ExtractFromLine(Stack<BracePos> pairs, ITextSnapshotLine line, int lineOffset) {
       var lc = new LineChars(line, lineOffset);
       CharPos cp = CharPos.Empty;
-      while ( this.braceExtractor.Extract(lc, ref cp) ) {
+      while ( !lc.EndOfLine ) {
+        if ( !this.braceExtractor.Extract(lc, ref cp) )
+          continue;
         if ( IsOpeningBrace(cp) ) {
           BracePos p = cp.AsBrace(pairs.Count);
           pairs.Push(p);

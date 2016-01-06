@@ -136,6 +136,20 @@ callCommented2(4);
       chars = Extract(extractor, input2.Trim(), 0, 0, false);
       Assert.Equal(0, chars.Count);
     }
+    [Fact]
+    public void Bug123_InterpolatedStringInParens() {
+      String input = "CallMe($\"Hello {username}.\")";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(1+2+1, chars.Count);
+    }
+    [Fact]
+    public void Bug123_InterpolatedStringWithNestedString() {
+      String input = "CallMe($\"Hello {ViewData[\"username\"]}.\")";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(1+2+2+1, chars.Count);
+    }
 
     [Fact]
     public void InterpolatedStringNonRestartable1() {

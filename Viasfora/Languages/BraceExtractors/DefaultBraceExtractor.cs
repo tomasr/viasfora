@@ -15,6 +15,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     }
 
     public bool Extract(ITextChars text, ref CharPos pos) {
+      text.SkipRemainder();
       return false;
     }
   }

@@ -39,9 +39,13 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           case stMultiLineComment: ParseMultiLineComment(tc); break;
           case stMultiLineString: ParseMultiLineString(tc); break;
           case stIString:
-            return ParseInterpolatedString(tc, ref pos);
+            if ( ParseInterpolatedString(tc, ref pos) )
+              return true;
+            break;
           default:
-            return ParseText(tc, ref pos);
+            if ( ParseText(tc, ref pos) )
+              return true;
+            break;
         }
       }
       return false;
@@ -158,11 +162,11 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
             // opening string
             tc.Next();
             this.ParseString(tc);
-            this.status = stText;
+            this.status = stIString;
           } else if ( tc.Char() == '\'' ) {
             tc.Next();
             ParseCharLiteral(tc);
-            this.status = stText;
+            this.status = stIString;
           } else if ( tc.Char() == '}' ) {
             // reached the end
             this.parsingExpression = false;
