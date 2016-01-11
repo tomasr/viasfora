@@ -150,6 +150,14 @@ callCommented2(4);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(1+2+2+1, chars.Count);
     }
+    [Fact]
+    public void Bug128_InterpolatedStringWithNestedCurlyBraces() {
+      String input = "$\"{String.Concat(new[] {\"Hello\", \"World\"})}\"";
+      var extractor = new CSharpBraceExtractor();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(1+1+2+1+1+1+1, chars.Count);
+    }
+
 
     [Fact]
     public void InterpolatedStringNonRestartable1() {

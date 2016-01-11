@@ -10,9 +10,10 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     const int stChar = 2;
     const int stMultiLineString = 3;
     const int stMultiLineComment = 4;
-    const int stIString = 10;
+    const int stIString = 5;
 
     private int status = stText;
+    private int nestingLevel = 0;
     private bool parsingExpression = false;
 
     public String BraceList {
@@ -23,8 +24,9 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     }
 
     public void Reset(int state) {
-      this.status = state & 0xFFFF;
+      this.status = state & 0xFF;
       this.parsingExpression = (state & 0xFF000000) != 0;
+      this.nestingLevel = (state & 0xFF0000) >> 24;
     }
 
     public bool CanResume(CharPos brace) {
@@ -169,12 +171,17 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
             this.status = stIString;
           } else if ( tc.Char() == '}' ) {
             // reached the end
-            this.parsingExpression = false;
+            this.nestingLevel--;
+            if ( nestingLevel == 0 ) {
+              this.parsingExpression = false;
+            }
             pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
             tc.Next();
             return true;
           } else if ( BraceList.Contains(tc.Char()) ) {
             pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
+            if ( tc.Char() == '{' )
+              this.nestingLevel++;
             tc.Next();
             return true;
           } else {
@@ -191,6 +198,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
             tc.Skip(2);
           } else if ( tc.Char() == '{' ) {
             this.parsingExpression = true;
+            this.nestingLevel++;
             pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
             tc.Next();
             return true;
@@ -211,6 +219,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       int encoded = status;
       if ( parsingExpression )
         encoded |= 0x04000000;
+      encoded |= (nestingLevel & 0xFF) << 24;
       return encoded;
     }
   }
