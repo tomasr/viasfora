@@ -6,10 +6,10 @@ using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
-  public class PsStringParser : IStringParser {
+  public class PsStringScanner : IStringScanner {
     private String text;
     private int start;
-    public PsStringParser(String text) {
+    public PsStringScanner(String text) {
       this.text = text;
       // quotes are included, so start at 1
       this.start = 1;

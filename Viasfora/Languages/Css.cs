@@ -36,8 +36,8 @@ namespace Winterdom.Viasfora.Languages {
     public Css(IVsfSettings settings) : base(settings) {
     }
 
-    public override IStringParser NewStringParser(string text) {
-      return new CssStringParser(text);
+    public override IStringScanner NewStringParser(string text) {
+      return new CssStringScanner(text);
     }
     public override IBraceExtractor NewBraceExtractor() {
       return new CssBraceExtractor();

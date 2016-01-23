@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.Contracts {
 
     IBraceExtractor NewBraceExtractor();
     IFirstLineCommentParser NewFirstLineCommentParser();
-    IStringParser NewStringParser(String text);
+    IStringScanner NewStringParser(String text);
     bool IsControlFlowKeyword(String text);
     bool IsVisibilityKeyword(String text);
     bool IsLinqKeyword(String text);

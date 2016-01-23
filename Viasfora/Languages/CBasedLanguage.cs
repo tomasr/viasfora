@@ -16,8 +16,8 @@ namespace Winterdom.Viasfora.Languages {
     public override IBraceExtractor NewBraceExtractor() {
       return new CBraceExtractor();
     }
-    public override IStringParser NewStringParser(String text) {
-      return new CStringParser(text);
+    public override IStringScanner NewStringParser(String text) {
+      return new CStringScanner(text);
     }
   }
 }

@@ -74,10 +74,10 @@
     <Compile Include="Outlining\SelectionOutliningManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rainbow\TextBufferBracesTests.cs" />
-    <Compile Include="StringParsers\FSharpStringParserTests.cs" />
-    <Compile Include="StringParsers\CssStringParserTests.cs" />
-    <Compile Include="StringParsers\PsStringParserTests.cs" />
-    <Compile Include="StringParsers\CStringParserTests.cs" />
+    <Compile Include="StringScanners\FSharpStringScannerTests.cs" />
+    <Compile Include="StringScanners\CssStringScannerTests.cs" />
+    <Compile Include="StringScanners\PsStringScannerTests.cs" />
+    <Compile Include="StringScanners\CStringScannerTests.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStoreTests.cs" />
     <Compile Include="Settings\OutlineSettingsTests.cs" />
     <Compile Include="Settings\SolutionUserSettingsTests.cs" />

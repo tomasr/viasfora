@@ -45,8 +45,8 @@ namespace Winterdom.Viasfora.Languages {
     public override IBraceExtractor NewBraceExtractor() {
       return new PsBraceExtractor();
     }
-    public override IStringParser NewStringParser(String text) {
-      return new PsStringParser(text);
+    public override IStringScanner NewStringParser(String text) {
+      return new PsStringScanner(text);
     }
   }
 }

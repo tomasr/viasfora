@@ -5,7 +5,7 @@ using System.Text;
 using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Util {
-  public interface IStringParser {
+  public interface IStringScanner {
     StringPart? Next();
   }
 }

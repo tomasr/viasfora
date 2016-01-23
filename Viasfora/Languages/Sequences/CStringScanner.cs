@@ -6,10 +6,10 @@ using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
-  public class CStringParser : IStringParser {
+  public class CStringScanner : IStringScanner {
     private String text;
     private int start;
-    public CStringParser(String text) {
+    public CStringScanner(String text) {
       this.text = text;
       // always skip the first char
       // (since quotes are included in the string)

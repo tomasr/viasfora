@@ -135,10 +135,10 @@
     <Compile Include="Languages\DefaultLanguage.cs" />
     <Compile Include="Languages\Json.cs" />
     <Compile Include="Languages\Python.cs" />
-    <Compile Include="Languages\Sequences\CssStringParser.cs" />
-    <Compile Include="Languages\Sequences\FSharpStringParser.cs" />
-    <Compile Include="Languages\Sequences\PsStringParser.cs" />
-    <Compile Include="Languages\Sequences\CStringParser.cs" />
+    <Compile Include="Languages\Sequences\CssStringScanner.cs" />
+    <Compile Include="Languages\Sequences\FSharpStringScanner.cs" />
+    <Compile Include="Languages\Sequences\PsStringScanner.cs" />
+    <Compile Include="Languages\Sequences\CStringScanner.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />
     <Compile Include="Margins\DevMarginVisual.xaml.cs">
       <DependentUpon>DevMarginVisual.xaml</DependentUpon>
@@ -261,7 +261,7 @@
     <Compile Include="Rainbow\RainbowTaggerProvider.cs" />
     <Compile Include="Text\TextObfuscation.cs" />
     <Compile Include="Outlining\UserOutliningTaggerProvider.cs" />
-    <Compile Include="Util\IStringParser.cs" />
+    <Compile Include="Util\IStringScanner.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
     <Compile Include="Rainbow\BracePos.cs" />

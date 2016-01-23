@@ -48,8 +48,8 @@ namespace Winterdom.Viasfora.Languages {
     public override IBraceExtractor NewBraceExtractor() {
       return new FSharpBraceExtractor();
     }
-    public override IStringParser NewStringParser(String text) {
-      return new FSharpStringParser(text);
+    public override IStringScanner NewStringParser(String text) {
+      return new FSharpStringScanner(text);
     }
   }
 }

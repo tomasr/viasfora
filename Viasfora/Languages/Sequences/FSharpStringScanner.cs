@@ -6,11 +6,11 @@ using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
-  public class FSharpStringParser : IStringParser {
+  public class FSharpStringScanner : IStringScanner {
     private ITextChars text;
     private const String escapeChar = "\"\\'ntbrafv";
 
-    public FSharpStringParser(String text) {
+    public FSharpStringScanner(String text) {
       this.text = new StringChars(text);
       // always skip the first char
       // (since quotes are included in the string)
