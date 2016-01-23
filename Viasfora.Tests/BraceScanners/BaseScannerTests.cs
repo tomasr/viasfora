@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
-namespace Viasfora.Tests.BraceExtractors {
-  public class BaseExtractorTests {
-    protected IList<CharPos> Extract(IBraceExtractor extractor, string input, int start, int state, bool reset=true) {
+namespace Viasfora.Tests.BraceScanners {
+  public class BaseScannerTests {
+    protected IList<CharPos> Extract(IBraceScanner extractor, string input, int start, int state, bool reset=true) {
       if ( reset ) extractor.Reset(0);
       ITextChars chars = new StringChars(input, start);
       IList<CharPos> list = new List<CharPos>();
@@ -16,7 +16,7 @@ namespace Viasfora.Tests.BraceExtractors {
       }
       return list;
     }
-   protected IList<CharPos> ExtractWithLines(IBraceExtractor extractor, string input, int start, int state) {
+   protected IList<CharPos> ExtractWithLines(IBraceScanner extractor, string input, int start, int state) {
       extractor.Reset(0);
 
       input = input.Substring(start);

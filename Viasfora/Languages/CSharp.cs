@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Languages {
@@ -40,8 +40,8 @@ namespace Winterdom.Viasfora.Languages {
       get { return new String[] { ContentType }; }
     }
 
-    public override IBraceExtractor NewBraceExtractor() {
-      return new CSharpBraceExtractor();
+    public override IBraceScanner NewBraceScanner() {
+      return new CSharpBraceScanner();
     }
 
     [ImportingConstructor]

@@ -3,8 +3,8 @@ using System.Linq;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Languages.BraceExtractors {
-  public class CSharpBraceExtractor : IBraceExtractor, IResumeControl {
+namespace Winterdom.Viasfora.Languages.BraceScanners {
+  public class CSharpBraceScanner : IBraceScanner, IResumeControl {
     const int stText = 0;
     const int stString = 1;
     const int stChar = 2;
@@ -20,7 +20,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       get { return "(){}[]"; }
     }
 
-    public CSharpBraceExtractor() {
+    public CSharpBraceScanner() {
     }
 
     public void Reset(int state) {

@@ -64,12 +64,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BraceExtractors\BaseExtractorTests.cs" />
-    <Compile Include="BraceExtractors\CSharpBraceExtractorTests.cs" />
-    <Compile Include="BraceExtractors\CBraceExtractorTests.cs" />
-    <Compile Include="BraceExtractors\FSharpBraceExtractorTests.cs" />
-    <Compile Include="BraceExtractors\CssBraceExtractorTests.cs" />
-    <Compile Include="BraceExtractors\PsBraceExtractorTests.cs" />
+    <Compile Include="BraceScanners\BaseScannerTests.cs" />
+    <Compile Include="BraceScanners\CSharpBraceScannerTests.cs" />
+    <Compile Include="BraceScanners\CBraceScannerTests.cs" />
+    <Compile Include="BraceScanners\FSharpBraceScannerTests.cs" />
+    <Compile Include="BraceScanners\CssBraceScannerTests.cs" />
+    <Compile Include="BraceScanners\PsBraceScannerTests.cs" />
     <Compile Include="CommentParsers\GenericCommentParserTests.cs" />
     <Compile Include="Outlining\SelectionOutliningManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

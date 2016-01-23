@@ -1,32 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Winterdom.Viasfora.Languages.BraceExtractors;
-using Winterdom.Viasfora.Rainbow;
-using Winterdom.Viasfora.Util;
+using Winterdom.Viasfora.Languages.BraceScanners;
 using Xunit;
 
-namespace Viasfora.Tests.BraceExtractors {
-  public class CSharpBraceExtractorTests : BaseExtractorTests {
+namespace Viasfora.Tests.BraceScanners {
+  public class CSharpBraceScannerTests : BaseScannerTests {
 
     [Fact]
     public void CanExtractParens() {
       String input = @"(x*(y+7))";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
     [Fact]
     public void CanExtractBrackets() {
       String input = @"x[y[0]]";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
     [Fact]
     public void CanExtractBraces() {
       String input = @"if ( true ) { }";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
@@ -36,7 +32,7 @@ namespace Viasfora.Tests.BraceExtractors {
 callF(1);
 // callCommented(2);
 ";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
@@ -47,28 +43,28 @@ callF(1);
 callCommented2(4);
 */
 ";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
     [Fact]
     public void IgnoreBracesInString() {
       String input = "callF(\"some (string)\")";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
     [Fact]
     public void IgnoreBracesInAtString() {
       String input = "callF(@\"some (string)\")";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
     [Fact]
     public void IgnoreBracesInCharLiteral() {
       String input = "callF(']')";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
@@ -79,49 +75,49 @@ callCommented2(4);
     [Fact]
     public void InterpolatedString1() {
       String input = "$\"some {site} other\"";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
     [Fact]
     public void InterpolatedStringWithDoubleBraces() {
       String input = "$\"first is not {{interpolated}} other is {interpolated}\"";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
     [Fact]
     public void InterpolatedStringWithDoubleBraces2() {
       String input = "$\"first is {{{interpolated}}} other is {interpolated}\"";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
     [Fact]
     public void InterpolatedStringWithNestedString() {
       String input = "$\"interpolated: {CallMethod(\"string\")}\"";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
     [Fact]
     public void InterpolatedStringWithNestedCharLiteral() {
       String input = "$\"interpolated: {CallMethod(')')}\"";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
     [Fact]
     public void InterpolatedStringWithFormatSpecifier() {
       String input = "$\"interpolated: {x : 08x}\"";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
     [Fact]
     public void InterpolatedStringDoesNotReturnBracesInStringPart() {
       String input = "$\"Hello {username} on Math.Cos((r/0.122))}.\"";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
     }
@@ -129,7 +125,7 @@ callCommented2(4);
     public void InterpolatedStringDoesNotReturnBracesInStringPart_Partial() {
       String input = "$\"Hello {username} on ";
       String input2 = "Math.Cos((r/0.122))}.\"";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2, chars.Count);
       // second part should not be changed
@@ -139,21 +135,21 @@ callCommented2(4);
     [Fact]
     public void Bug123_InterpolatedStringInParens() {
       String input = "CallMe($\"Hello {username}.\")";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(1+2+1, chars.Count);
     }
     [Fact]
     public void Bug123_InterpolatedStringWithNestedString() {
       String input = "CallMe($\"Hello {ViewData[\"username\"]}.\")";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(1+2+2+1, chars.Count);
     }
     [Fact]
     public void Bug128_InterpolatedStringWithNestedCurlyBraces() {
       String input = "$\"{String.Concat(new[] {\"Hello\", \"World\"})}\"";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(1+1+2+1+1+1+1, chars.Count);
     }
@@ -162,7 +158,7 @@ callCommented2(4);
     [Fact]
     public void InterpolatedStringNonRestartable1() {
       String input = "$\"some {s";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(1, chars.Count);
       Assert.NotEqual(0, chars[0].State);
@@ -170,7 +166,7 @@ callCommented2(4);
     [Fact]
     public void InterpolatedStringNonRestartable2() {
       String input = "$\"some {s.ToString()";
-      var extractor = new CSharpBraceExtractor();
+      var extractor = new CSharpBraceScanner();
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(3, chars.Count);
       Assert.NotEqual(0, chars[0].State);

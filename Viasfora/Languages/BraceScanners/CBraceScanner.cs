@@ -1,25 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Languages.BraceExtractors {
-  public class PsBraceExtractor : IBraceExtractor {
+namespace Winterdom.Viasfora.Languages.BraceScanners {
+  public class CBraceScanner : IBraceScanner {
     const int stText = 0;
     const int stString = 1;
-    const int stExpandableString = 2;
-    const int stHereString = 3;
-    const int stHereExpandableString = 4;
-    const int stMultiLineComment = 5;
+    const int stChar = 2;
+    const int stMultiLineComment = 4;
     private int status = stText;
 
     public String BraceList {
       get { return "(){}[]"; }
     }
 
-    public PsBraceExtractor() {
+    public CBraceScanner() {
     }
 
     public void Reset(int state) {
@@ -30,10 +25,8 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       while ( !tc.EndOfLine ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
-          case stExpandableString: ParseExpandableString(tc); break;
+          case stChar: ParseCharLiteral(tc); break;
           case stMultiLineComment: ParseMultiLineComment(tc); break;
-          case stHereString: ParseHereString(tc); break;
-          case stHereExpandableString: ParseHereExpandableString(tc); break;
           default:
             return ParseText(tc, ref pos);
         }
@@ -44,28 +37,20 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
     private bool ParseText(ITextChars tc, ref CharPos pos) {
       while ( !tc.EndOfLine ) {
         // multi-line comment
-        if ( tc.Char() == '<' && tc.NChar() == '#' ) {
+        if ( tc.Char() == '/' && tc.NChar() == '*' ) {
           this.status = stMultiLineComment;
           tc.Skip(2);
           this.ParseMultiLineComment(tc);
-        } else if ( tc.Char() == '#' ) {
+        } else if ( tc.Char() == '/' && tc.NChar() == '/' ) {
           tc.SkipRemainder();
-        } else if ( tc.Char() == '@' && tc.NChar() == '\'' ) {
-          this.status = stHereString;
-          tc.Skip(2);
-          this.ParseHereString(tc);
-        } else if ( tc.Char() == '@' && tc.NChar() == '"' ) {
-          this.status = stHereExpandableString;
-          tc.Skip(2);
-          this.ParseHereExpandableString(tc);
         } else if ( tc.Char() == '"' ) {
           this.status = stString;
           tc.Next();
-          this.ParseExpandableString(tc);
+          this.ParseString(tc);
         } else if ( tc.Char() == '\'' ) {
           this.status = stString;
           tc.Next();
-          this.ParseString(tc);
+          this.ParseCharLiteral(tc);
         } else if ( this.BraceList.IndexOf(tc.Char()) >= 0 ) {
           pos = new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
@@ -77,9 +62,24 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       return false;
     }
 
-    private void ParseExpandableString(ITextChars tc) {
+    private void ParseCharLiteral(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '`' ) {
+        if ( tc.Char() == '\\' ) {
+          // skip over escape sequences
+          tc.Skip(2);
+        } else if ( tc.Char() == '\'' ) {
+          tc.Next();
+          break;
+        } else {
+          tc.Next();
+        }
+      }
+      this.status = stText;
+    }
+
+    private void ParseString(ITextChars tc) {
+      while ( !tc.EndOfLine ) {
+        if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
         } else if ( tc.Char() == '"' ) {
@@ -92,47 +92,9 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       this.status = stText;
     }
 
-    private void ParseString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '\'' ) {
-          tc.Next();
-          break;
-        } else {
-          tc.Next();
-        }
-      }
-      this.status = stText;
-    }
-
-    private void ParseHereExpandableString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '`' ) {
-          // skip over escape sequences
-          tc.Skip(2);
-        } else if ( tc.Char() == '"' && tc.NChar() == '@' ) {
-          tc.Skip(2);
-          break;
-        } else {
-          tc.Next();
-        }
-      }
-      this.status = stText;
-    }
-    private void ParseHereString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '\'' && tc.NChar() == '@' ) {
-          tc.Skip(2);
-          break;
-        } else {
-          tc.Next();
-        }
-      }
-      this.status = stText;
-    }
-
     private void ParseMultiLineComment(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '#' && tc.NChar() == '>' ) {
+        if ( tc.Char() == '*' && tc.NChar() == '/' ) {
           tc.Skip(2);
           this.status = stText;
           return;

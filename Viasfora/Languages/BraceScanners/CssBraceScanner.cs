@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Languages.BraceExtractors {
-  public class CssBraceExtractor : IBraceExtractor {
+namespace Winterdom.Viasfora.Languages.BraceScanners {
+  public class CssBraceScanner : IBraceScanner {
     const int stText = 0;
     const int stComment = 1;
     const int stSingleQuotedString = 2;
@@ -17,7 +15,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       get { return "(){}[]"; }
     }
 
-    public CssBraceExtractor() {
+    public CssBraceScanner() {
     }
 
     public void Reset(int state) {

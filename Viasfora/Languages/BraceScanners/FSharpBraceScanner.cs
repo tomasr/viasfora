@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Languages.BraceExtractors {
-  public class FSharpBraceExtractor : IBraceExtractor, IResumeControl {
+namespace Winterdom.Viasfora.Languages.BraceScanners {
+  public class FSharpBraceScanner : IBraceScanner, IResumeControl {
     const int stText = 0;
     const int stString = 1;
     const int stChar = 2;
@@ -19,7 +16,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       get { return "(){}[]"; }
     }
 
-    public FSharpBraceExtractor() {
+    public FSharpBraceScanner() {
     }
 
     public void Reset(int state) {

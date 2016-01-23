@@ -3,7 +3,7 @@ using Xunit;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Util;
 
-namespace Viasfora.Tests.StringParsers {
+namespace Viasfora.Tests.StringScanners {
   public class CssStringScannerTests {
     [Fact]
     public void NoEscapesReturnsNull() {

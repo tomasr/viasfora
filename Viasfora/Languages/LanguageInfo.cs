@@ -36,11 +36,11 @@ namespace Winterdom.Viasfora.Languages {
       this.Settings = settings;
     }
 
-    public abstract IBraceExtractor NewBraceExtractor();
+    public abstract IBraceScanner NewBraceScanner();
     public virtual IFirstLineCommentParser NewFirstLineCommentParser() {
       return new GenericCommentParser();
     }
-    public virtual IStringScanner NewStringParser(String text) {
+    public virtual IStringScanner NewStringScanner(String text) {
       return null;
     }
 

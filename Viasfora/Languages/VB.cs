@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Rainbow;
 
@@ -48,8 +48,8 @@ namespace Winterdom.Viasfora.Languages {
     public VB(IVsfSettings settings) : base(settings) {
     }
 
-    public override IBraceExtractor NewBraceExtractor() {
-      return new VbBraceExtractor();
+    public override IBraceScanner NewBraceScanner() {
+      return new VbBraceScanner();
     }
   }
 }

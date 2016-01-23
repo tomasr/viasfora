@@ -126,7 +126,7 @@ namespace Winterdom.Viasfora.Text {
       if ( cs.IsEmpty ) yield break;
       String text = cs.GetText();
 
-      var parser = lang.NewStringParser(text);
+      var parser = lang.NewStringScanner(text);
       if ( parser == null )
         yield break;
 

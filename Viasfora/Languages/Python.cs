@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
@@ -35,8 +35,8 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.Python; }
     }
-    public override IBraceExtractor NewBraceExtractor() {
-      return new PythonBraceExtractor();
+    public override IBraceScanner NewBraceScanner() {
+      return new PythonBraceScanner();
     }
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType }; }

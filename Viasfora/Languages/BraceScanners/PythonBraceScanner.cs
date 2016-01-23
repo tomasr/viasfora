@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Languages.BraceExtractors {
-  public class PythonBraceExtractor : IBraceExtractor {
+namespace Winterdom.Viasfora.Languages.BraceScanners {
+  public class PythonBraceScanner : IBraceScanner {
     const int stText = 0;
     const int stString = 1;
     const int stMultiLineString = 3;
@@ -17,7 +14,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       get { return "(){}[]"; }
     }
 
-    public PythonBraceExtractor() {
+    public PythonBraceScanner() {
     }
 
     public void Reset(int state) {

@@ -3,7 +3,7 @@ using Xunit;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Util;
 
-namespace Viasfora.Tests.StringParsers {
+namespace Viasfora.Tests.StringScanners {
   // SEE: http://fsharp.org/specs/language-spec/3.0/FSharpSpec-3.0-final.pdf
   public class FSharpStringScannerTests {
     [Fact]

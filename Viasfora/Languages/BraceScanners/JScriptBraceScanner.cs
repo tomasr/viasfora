@@ -1,15 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
-namespace Winterdom.Viasfora.Languages.BraceExtractors {
-  public class CBraceExtractor : IBraceExtractor {
+namespace Winterdom.Viasfora.Languages.BraceScanners {
+  public class JScriptBraceScanner : IBraceScanner {
     const int stText = 0;
     const int stString = 1;
     const int stChar = 2;
+    const int stRegex = 3;
     const int stMultiLineComment = 4;
     private int status = stText;
 
@@ -17,7 +16,7 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       get { return "(){}[]"; }
     }
 
-    public CBraceExtractor() {
+    public JScriptBraceScanner() {
     }
 
     public void Reset(int state) {
@@ -46,6 +45,11 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
           this.ParseMultiLineComment(tc);
         } else if ( tc.Char() == '/' && tc.NChar() == '/' ) {
           tc.SkipRemainder();
+        } else if ( tc.Char() == '/' && CheckPrevious(tc.PreviousToken()) ) {
+          // probably a regular expression literal
+          tc.Next();
+          this.status = stRegex;
+          this.ParseRegex(tc);
         } else if ( tc.Char() == '"' ) {
           this.status = stString;
           tc.Next();
@@ -65,12 +69,39 @@ namespace Winterdom.Viasfora.Languages.BraceExtractors {
       return false;
     }
 
+    private bool CheckPrevious(String previous) {
+      // javascript has a nasty syntax
+      // bloody hack based on 
+      // http://www-archive.mozilla.org/js/language/js20-2002-04/rationale/syntax.html#regular-expressions
+
+      if ( String.IsNullOrEmpty(previous) ) {
+        return true;
+      }
+      char last = previous[previous.Length - 1];
+      return "(,=:[!&|?{};".Contains(last);
+    }
+
     private void ParseCharLiteral(ITextChars tc) {
       while ( !tc.EndOfLine ) {
         if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
         } else if ( tc.Char() == '\'' ) {
+          tc.Next();
+          break;
+        } else {
+          tc.Next();
+        }
+      }
+      this.status = stText;
+    }
+
+    private void ParseRegex(ITextChars tc) {
+      while ( !tc.EndOfLine ) {
+        if ( tc.Char() == '\\' ) {
+          // skip over escape sequences
+          tc.Skip(2);
+        } else if ( tc.Char() == '/' ) {
           tc.Next();
           break;
         } else {
