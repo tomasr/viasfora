@@ -23,9 +23,9 @@ namespace Winterdom.Viasfora.Util {
       get { return position >= length; }
     }
 
-    public StringChars(String text, int start=0) {
+    public StringChars(String text, int start=0, int len=-1) {
       this.text = text;
-      this.length = text.Length;
+      this.length = len < 0 ? text.Length : Math.Min(text.Length, len);
       this.position = start;
       this.mark = NO_MARK;
     }

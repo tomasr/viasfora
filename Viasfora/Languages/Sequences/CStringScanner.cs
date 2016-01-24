@@ -7,75 +7,87 @@ using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
   public class CStringScanner : IStringScanner {
-    private String text;
-    private int start;
+    protected ITextChars text;
     public CStringScanner(String text) {
-      this.text = text;
-      // always skip the first char
-      // (since quotes are included in the string)
-      this.start = 1;
+      this.text = new StringChars(text, 0, text.Length - 1);
       // If this is an at-string, or a C preprocessor include
       // skip it
-      if ( text.StartsWith("@") || text.StartsWith("<") )
-        this.start = text.Length;
+      if ( this.text.Char() == '@' || this.text.Char() == '<' ) {
+        this.text.SkipRemainder();
+      } else {
+        // always skip the first char
+        // (since quotes are included in the string)
+        this.text.Next();
+      }
     }
     public StringPart? Next() {
-      while ( start < text.Length - 2 ) {
-        if ( text[start] == '\\' ) {
+      while ( !text.EndOfLine ) {
+        if ( text.Char() == '\\' ) {
           return ParseEscapeSequence();
-        } else if ( text[start] == '%' ) {
+        } else if ( text.Char() == '%' ) {
           // skip %%
-          if ( start + 1 < text.Length && text[start + 1] == '%' ) {
-            start += 2;
+          if ( text.NChar() == '%' ) {
+            text.Skip(2);
             continue;
           }
-          return ParseFormatSpecifier();
+          StringPart part = new StringPart();
+          if ( ParseFormatSpecifier(ref part) )
+            return part;
         }
-        start++;
+        text.Next();
       }
       return null;
     }
 
     private StringPart ParseEscapeSequence() {
+      // text.Char() == \
+      int start = text.Position;
       int len = 1;
+      text.Next();
+
       int maxlen = Int32.MaxValue;
-      char f = text[start + 1];
+
+      char f = text.Char();
+      text.Next();
       // not perfect, but close enough for first version
       if ( f == 'x' || f == 'X' || f == 'u' || f == 'U' ) {
-        while ( (start + len) < text.Length && text[start + len + 1].IsHexDigit() ) {
+        if ( f == 'u' ) maxlen = 5;
+        else if ( f == 'U' ) maxlen = 9;
+
+        while ( text.Char().IsHexDigit() && len < maxlen ) {
+          text.Next();
           len++;
         }
       }
-      if ( f == 'u' ) maxlen = 5;
-      if ( f == 'U' ) maxlen = 9;
-      if ( len > maxlen ) len = maxlen;
       var span = new Span(start, len + 1);
-      start += len + 1;
       return new StringPart(span, StringPartType.EscapeSequence);
     }
 
-    private StringPart ParseFormatSpecifier() {
-      // text[start] == '%'
-      int rs = start;
-      int end = start + 1;
-      for ( ; end < text.Length; end++ ) {
-        // we're lazy, so don't bother explicitly handling
-        // proper sequences
-        if ( Char.IsLetter(text[end]) )
-          break;
-        // if we reach ", the string
-        // ended and we can't parse anymore
-        if ( text[end] == '\\' || text[end] == '\"' ) {
-          end--;
+    private bool ParseFormatSpecifier(ref StringPart result) {
+      // https://en.wikipedia.org/wiki/Printf_format_string#Syntax
+      // %[parameter][flags][width][.precision][length]type
+
+      // text.Char() == '%'
+      int start = text.Position;
+      text.Next(); // skip %
+      int len = 1;
+      while ( true ) {
+        if ( text.EndOfLine || text.Char() == '\\' ) {
           break;
         }
+        len++;
+        if ( Char.IsLetter(text.Char()) ) {
+          text.Next();
+          break;
+        }
+        text.Next();
       }
-      start = end + 1;
-      return new StringPart(rs, end - rs + 1, StringPartType.FormatSpecifier);
-    }
+      // if len == 1, then we found %"
+      if ( len < 2 )
+        return false;
 
-    protected void SetStart(int newStart) {
-      this.start = newStart;
+      result = new StringPart(start, len, StringPartType.FormatSpecifier);
+      return true;
     }
   }
 }
