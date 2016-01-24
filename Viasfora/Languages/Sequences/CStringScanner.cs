@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
@@ -10,9 +7,9 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     protected ITextChars text;
     public CStringScanner(String text) {
       this.text = new StringChars(text, 0, text.Length - 1);
-      // If this is an at-string, or a C preprocessor include
+      // If it's a C preprocessor include
       // skip it
-      if ( this.text.Char() == '@' || this.text.Char() == '<' ) {
+      if ( this.text.Char() == '<' ) {
         this.text.SkipRemainder();
       } else {
         // always skip the first char
@@ -23,7 +20,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     public StringPart? Next() {
       while ( !text.EndOfLine ) {
         if ( text.Char() == '\\' ) {
-          return ParseEscapeSequence();
+          return BasicCStringScanner.ParseEscapeSequence(text);
         } else if ( text.Char() == '%' ) {
           // skip %%
           if ( text.NChar() == '%' ) {
@@ -38,31 +35,6 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       }
       return null;
     }
-
-    private StringPart ParseEscapeSequence() {
-      // text.Char() == \
-      int start = text.Position;
-      int len = 1;
-      text.Next();
-
-      int maxlen = Int32.MaxValue;
-
-      char f = text.Char();
-      text.Next();
-      // not perfect, but close enough for first version
-      if ( f == 'x' || f == 'X' || f == 'u' || f == 'U' ) {
-        if ( f == 'u' ) maxlen = 5;
-        else if ( f == 'U' ) maxlen = 9;
-
-        while ( text.Char().IsHexDigit() && len < maxlen ) {
-          text.Next();
-          len++;
-        }
-      }
-      var span = new Span(start, len + 1);
-      return new StringPart(span, StringPartType.EscapeSequence);
-    }
-
     private bool ParseFormatSpecifier(ref StringPart result) {
       // https://en.wikipedia.org/wiki/Printf_format_string#Syntax
       // %[parameter][flags][width][.precision][length]type

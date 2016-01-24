@@ -17,7 +17,7 @@ namespace Winterdom.Viasfora.Languages {
       return new CBraceScanner();
     }
     public override IStringScanner NewStringScanner(String text) {
-      return new CStringScanner(text);
+      return new BasicCStringScanner(text);
     }
   }
 }

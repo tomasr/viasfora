@@ -74,6 +74,7 @@
     <Compile Include="Outlining\SelectionOutliningManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rainbow\TextBufferBracesTests.cs" />
+    <Compile Include="StringScanners\BasicCStringScannerTests.cs" />
     <Compile Include="StringScanners\FSharpStringScannerTests.cs" />
     <Compile Include="StringScanners\CssStringScannerTests.cs" />
     <Compile Include="StringScanners\PsStringScannerTests.cs" />

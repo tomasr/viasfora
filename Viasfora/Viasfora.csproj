@@ -110,6 +110,7 @@
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
     <Compile Include="EditorFormats\FormatSpecifierFormat.cs" />
     <Compile Include="EditorFormats\RazorClosingTagFormat.cs" />
+    <Compile Include="Languages\Sequences\BasicCStringScanner.cs" />
     <Compile Include="Languages\XLang.cs" />
     <Compile Include="Rainbow\IResumeControl.cs" />
     <Compile Include="Rainbow\ITextBufferBraces.cs" />
