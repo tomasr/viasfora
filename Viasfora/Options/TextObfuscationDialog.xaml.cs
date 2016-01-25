@@ -1,25 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Options {
   public partial class TextObfuscationDialog : UserControl {
     public ObservableCollection<RegexEntry> Entries { get; private set; }
+    public RegexEntry SelectedEntry { get; private set; }
+    public ICommand AddEntryCmd { get; private set; }
+    public ICommand RemoveEntryCmd { get; private set; }
+
     public TextObfuscationDialog() {
       this.Entries = new ObservableCollection<RegexEntry>();
+      this.AddEntryCmd = new RelayCommand<RegexEntry>(AddEntry, AddEntryCmdEnabled);
+      this.RemoveEntryCmd = new RelayCommand<RegexEntry>(RemoveEntry, RemoveEntryCmdEnabled);
       InitializeComponent();
+    }
+
+    private bool AddEntryCmdEnabled(RegexEntry selected) {
+      return true;
+    }
+
+    private bool RemoveEntryCmdEnabled(RegexEntry selected) {
+      return this.SelectedEntry != null;
+    }
+
+    private void AddEntry(RegexEntry entry) {
+      Entries.Add(new RegexEntry());
+    }
+
+    private void RemoveEntry(RegexEntry entry) {
+      Entries.Remove(entry);
     }
   }
 }

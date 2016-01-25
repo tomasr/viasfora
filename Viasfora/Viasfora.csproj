@@ -208,6 +208,7 @@
     <Compile Include="Rainbow\RainbowTipHighlight.cs" />
     <Compile Include="Rainbow\RainbowToolTipContext.cs" />
     <Compile Include="Text\PresentationModeFontChanger.cs" />
+    <Compile Include="Util\RelayCommand.cs" />
     <Compile Include="Util\StringPart.cs" />
     <Compile Include="XLangSupport\FakeContentTypeDefinition.cs" />
     <Compile Include="XLangSupport\XLangTextViewCreationListener.cs" />
