@@ -55,6 +55,11 @@ namespace Winterdom.Viasfora.Text {
         return;
       if ( this.settings.PresentationModeEnabled  ) {
         int zoomLevel = VsfPackage.GetPresentationModeZoomLevel();
+        // VS2015 supports automatic sync of all text windows with the 
+        // zoom level once you zoom one
+        // so if the current zoomLevel is not 100%, just ignore it.
+        if ( textView.ZoomLevel != 100 && !VsfPackage.PresentationModeTurnedOn )
+          return;
         textView.ZoomLevel = zoomLevel;
       }
     }
