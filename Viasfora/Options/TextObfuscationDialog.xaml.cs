@@ -31,7 +31,8 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void RemoveEntry(RegexEntry entry) {
-      Entries.Remove(entry);
+      Entries.Remove(SelectedEntry);
+      SelectedEntry = null;
     }
   }
 }
