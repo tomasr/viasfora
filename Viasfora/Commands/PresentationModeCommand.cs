@@ -27,6 +27,7 @@ namespace Winterdom.Viasfora.Commands {
       }
       if ( VsfPackage.PresentationModeTurnedOn ) {
         VsfPackage.Instance.FontChanger.TurnOn();
+        Telemetry.WriteEvent("Presentation Mode");
       } else {
         VsfPackage.Instance.FontChanger.TurnOff();
       }

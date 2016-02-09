@@ -38,6 +38,7 @@ namespace Winterdom.Viasfora {
     Outlining.AutoExpandMode AutoExpandRegions { get; set; }
     bool BoldAsItalicsEnabled { get; set; }
     String TextObfuscationRegexes { get; set; }
+    bool TelemetryEnabled { get; set; }
 
     event EventHandler SettingsChanged;
     String GetValue(String name, String defaultValue);

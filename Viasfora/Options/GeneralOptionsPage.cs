@@ -34,6 +34,7 @@ namespace Winterdom.Viasfora.Options {
       settings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
       settings.XmlCloseTagHighlightEnabled = XmlCloseTagHighlightEnabled;
       settings.XmlMatchTagsEnabled = XmlMatchTagsEnabled;
+      settings.TelemetryEnabled = TelemetryEnabled;
       settings.Save();
     }
     public override void LoadSettingsFromStorage() {
@@ -56,7 +57,14 @@ namespace Winterdom.Viasfora.Options {
       XmlnsPrefixHighlightEnabled = settings.XmlnsPrefixHighlightEnabled;
       XmlCloseTagHighlightEnabled = settings.XmlCloseTagHighlightEnabled;
       XmlMatchTagsEnabled = settings.XmlMatchTagsEnabled;
+      TelemetryEnabled = settings.TelemetryEnabled;
     }
+
+    // General Settings
+    [LocDisplayName("Enable Telemetry")]
+    [Description("Enable sending telemetry about Viasfora usage. Will only take effect after a restart.")]
+    [Category("General")]
+    public bool TelemetryEnabled { get; set; }
 
     // Text Editor Extensions
     [LocDisplayName("Enable Keyword Classifier")]

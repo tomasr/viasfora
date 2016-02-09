@@ -42,6 +42,7 @@ namespace Winterdom.Viasfora.Settings {
     const String DEVMARGIN_ENABLED = "DeveloperMarginEnabled";
 
     const String TEXTOBF_REGEXES = "TextObfuscationRegexes";
+    const String TELEMETRY_ENABLED = "TelemetryEnabled";
 
     private ISettingsStore settings;
     public event EventHandler SettingsChanged;
@@ -149,6 +150,10 @@ namespace Winterdom.Viasfora.Settings {
     public String TextObfuscationRegexes {
       get { return GetValue(TEXTOBF_REGEXES, ""); }
       set { SetValue(TEXTOBF_REGEXES, value); }
+    }
+    public bool TelemetryEnabled {
+      get { return GetBoolean(TELEMETRY_ENABLED, true); }
+      set { SetValue(TELEMETRY_ENABLED, value); }
     }
 
     [ImportingConstructor]

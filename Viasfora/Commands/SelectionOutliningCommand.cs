@@ -48,6 +48,7 @@ namespace Winterdom.Viasfora.Commands {
       if ( span.HasValue ) {
         AddOutlining(span.Value.Snapshot.TextBuffer, span.Value);
         CollapseOutlines(selection.TextView);
+        Telemetry.WriteEvent("Outline Selection");
       }
     }
 

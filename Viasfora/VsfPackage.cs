@@ -1,22 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.ComponentModel.Design;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Editor;
 using Winterdom.Viasfora.Commands;
 using Winterdom.Viasfora.Settings;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora {
@@ -62,7 +53,9 @@ namespace Winterdom.Viasfora {
     protected override void Initialize() {
       base.Initialize();
       Instance = this;
+      InitializeTelemetry();
       InitializeActivityLog();
+
       LogInfo("Initializing VsfPackage");
       VsVersion = FindVSVersion();
       this.FontChanger = new PresentationModeFontChanger(this);
@@ -105,6 +98,11 @@ namespace Winterdom.Viasfora {
       this.activityLog = (IVsActivityLog)GetService(typeof(SVsActivityLog));
     }
 
+    private void InitializeTelemetry() {
+      var dte = (EnvDTE80.DTE2)GetService(typeof(SDTE));
+      Telemetry.Initialize(dte);
+    }
+
     public static void LogInfo(String format, params object[] args) {
       if ( Instance == null ) return;
       var log = Instance.activityLog;
@@ -126,6 +124,7 @@ namespace Winterdom.Viasfora {
           String.Format("{0}. Exception: {1}", message, ex)
         );
       }
+      Telemetry.WriteException(message, ex);
     }
 
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
