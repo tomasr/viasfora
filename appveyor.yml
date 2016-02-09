@@ -21,6 +21,8 @@ artifacts:
   - path: Viasfora\bin\$(configuration)\Winterdom.Viasfora.vsix
     name: Viasfora
 
-#after_test:
-  # Pushes the compiled vsix to artifacts and publishes it to vsixgallery.com
+before_build:
+  - nuget restore
+
+# Pushes the compiled vsix to artifacts and publishes it to vsixgallery.com
 #  - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
