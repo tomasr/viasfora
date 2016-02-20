@@ -4,6 +4,7 @@ using Winterdom.Viasfora.Rainbow;
 namespace Winterdom.Viasfora {
   public interface IVsfSettings {
     bool KeywordClassifierEnabled { get; set; }
+    bool FlowControlUseItalics { get; set; }
     bool EscapeSeqHighlightEnabled { get; set; }
     
     bool XmlnsPrefixHighlightEnabled { get; set; }

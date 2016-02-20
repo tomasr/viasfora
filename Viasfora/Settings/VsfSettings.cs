@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora.Settings {
   [Export(typeof(IVsfSettings))]
   public class VsfSettings : IVsfSettings {
     const String KEYWORD_CLASSIFIER_ENABLED = "KeywordClassifierEnabled";
+    const String FLOW_CONTROL_ITALICS = "FlowControlUseItalics";
     const String ESCAPE_SEQ_ENABLED = "EscapeSequencesEnabled";
     const String CURRENT_LINE_ENABLED = "CurrentLineHighlightEnabled";
     const String CURRENT_COLUMN_ENABLED = "CurrentColumnHighlightEnabled";
@@ -50,6 +51,10 @@ namespace Winterdom.Viasfora.Settings {
     public bool KeywordClassifierEnabled {
       get { return GetBoolean(KEYWORD_CLASSIFIER_ENABLED, true); }
       set { SetValue(KEYWORD_CLASSIFIER_ENABLED, value); }
+    }
+    public bool FlowControlUseItalics {
+      get { return GetBoolean(FLOW_CONTROL_ITALICS, false); }
+      set { SetValue(FLOW_CONTROL_ITALICS, value); }
     }
     public bool EscapeSeqHighlightEnabled {
       get { return GetBoolean(ESCAPE_SEQ_ENABLED, true); }
