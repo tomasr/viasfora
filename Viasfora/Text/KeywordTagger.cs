@@ -33,17 +33,11 @@ namespace Winterdom.Viasfora.Text {
       this.aggregator = provider.Aggregator.CreateTagAggregator<IClassificationTag>(buffer);
       this.langFactory = provider.LanguageFactory;
 
-      var registry = provider.ClassificationRegistry;
-      keywordClassification =
-         new KeywordTag(registry.GetClassificationType(Constants.KEYWORD_CLASSIF_NAME));
-      linqClassification =
-         new KeywordTag(registry.GetClassificationType(Constants.LINQ_CLASSIF_NAME));
-      visClassification =
-         new KeywordTag(registry.GetClassificationType(Constants.VISIBILITY_CLASSIF_NAME));
-      stringEscapeClassification =
-         new KeywordTag(registry.GetClassificationType(Constants.STRING_ESCAPE_CLASSIF_NAME));
-      formatSpecClassification =
-         new KeywordTag(registry.GetClassificationType(Constants.FORMAT_SPECIFIER_NAME));
+      keywordClassification = provider.GetTag(Constants.KEYWORD_CLASSIF_NAME);
+      linqClassification = provider.GetTag(Constants.LINQ_CLASSIF_NAME);
+      visClassification = provider.GetTag(Constants.VISIBILITY_CLASSIF_NAME);
+      stringEscapeClassification = provider.GetTag(Constants.STRING_ESCAPE_CLASSIF_NAME);
+      formatSpecClassification = provider.GetTag(Constants.FORMAT_SPECIFIER_NAME);
 
       this.settings = provider.Settings;
       this.settings.SettingsChanged += this.OnSettingsChanged;

@@ -29,6 +29,11 @@ namespace Winterdom.Viasfora.Text {
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       return new KeywordTagger(buffer, this) as ITagger<T>;
     }
+
+    public KeywordTag GetTag(String name) {
+      var type = ClassificationRegistry.GetClassificationType(name);
+      return new KeywordTag(type);
+    }
   }
 
 }
