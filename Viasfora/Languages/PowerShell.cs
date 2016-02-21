@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
@@ -42,11 +42,11 @@ namespace Winterdom.Viasfora.Languages {
     [ImportingConstructor]
     public PowerShell(IVsfSettings settings) : base(settings) {
     }
-    public override IBraceExtractor NewBraceExtractor() {
-      return new PsBraceExtractor();
+    public override IBraceScanner NewBraceScanner() {
+      return new PsBraceScanner();
     }
-    public override IStringParser NewStringParser(String text) {
-      return new PsStringParser(text);
+    public override IStringScanner NewStringScanner(String text) {
+      return new PsStringScanner(text);
     }
   }
 }

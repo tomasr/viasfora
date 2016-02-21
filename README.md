@@ -1,22 +1,75 @@
 # Viasfora
 
-Viasfora is an extension for Visual Studio 2010, 2012 and 2013 that replaces
-my old extensions (BetterXml, KeywordClassifier and Line Addornments).
-It adds a bunch of new features as well as full customization through the
-Visual Studio Tools -> Options dialog.
+A Visual Studio 2010 - 2015 extension that enhances the
+text editing experience!
 
-## Official Site
+__Official Site__: http://viasfora.com/
 
-Visit http://viasfora.com/ for more information about this extension and
-installation instructions.
+__Build Status__: [![Build Status](https://ci.appveyor.com/api/projects/status/u1mpx5mqkd0k39ao)](https://ci.appveyor.com/project/tomasr/viasfora/)
 
-## Building
+## Rainbow Braces
+Colorize ()/[]/{} based on depth!<br/>
+![Rainbow Braces](http://viasfora.com/images/feat/rainbow.png)
 
-For building Viasfora, you will need Visual Studio 2010 SP1 as well as
-the Visual Studio 2010 SP1 SDK.
+## Keyword classification
+* Colorize flow-control keywords<br/>
+![Flow Control Keywords](http://viasfora.com/images/feat/text-flow-control.png)
+* Colorize LINQ keywords<br/>
+![LINQ Keywords](http://viasfora.com/images/feat/text-linq.png)
+* Colorize visibility keywords<br/>
+![Visibility keywords](http://viasfora.com/images/feat/text-visibility.png)
 
-1. Clone this repo.
-2. Launch a PowerShell console and execute .\prepare.ps1 to copy all necessary assemblies to the .\refs folder.
-3. Open the viasfora.sln solution in Visual Studio
-4. Build it!
+## String colorization
+* Highlighting escape sequences in strings<br/>
+![Escape Sequences](http://viasfora.com/images/feat/text-escape.png)
+* Highlighting C/C++ format specifiers in strings<br/>
+![C format specifiers](http://viasfora.com/images/feat/text-cspecs.png)
+
+## Outlining
+* User-defined Outlining regions<br/>
+![User outlining](http://viasfora.com/images/feat/add-outlining.png)
+* Creating new outlining sections based on selected text<br/>
+![Outline selection](http://viasfora.com/images/feat/outline-selection.gif)
+
+## Text obfuscation
+Provides an easy way to hide text in the editor during presentations,
+based on regular expressions.
+
+__Configuration__
+![Obfuscation configuration](http://viasfora.com/images/feat/text-obfuscation-config.png)
+
+__Runtime__
+Enable with the View -> Obfuscate Text command:
+![Text obfuscation](http://viasfora.com/images/feat/text-obfuscation.png)
+
+## XML editor extensions
+* Colorizing namespace prefixes<br/>
+![XML Namespaces](http://viasfora.com/images/feat/xml-prefix.png)
+* Coloring closing element tags<br/>
+![XML closing tags](http://viasfora.com/images/feat/xml-close.png)
+* Matching element tags<br/>
+![Matching elements](http://viasfora.com/images/feat/xml-match.png)
+* Resolving namespace prefixes<br/>
+![XML Prefixes](http://viasfora.com/images/feat/xml-ns-tooltip.png)
+
+## Other features
+* Presentation Mode
+* Simple modelines support
+* Plain text completion
+* Editor margin for extension developers
+* All options configurable from the Visual Studio Options dialog
+
+# Supported Languages
+Most features include support for the following languages
+* C/C++
+* C#
+* VB, VBScript
+* F#
+* JavaScript
+* SQL
+* TypeScript
+* Python
+* PowerShell
+* CSS, SASS, LESS
+
 

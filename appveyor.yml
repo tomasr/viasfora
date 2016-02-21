@@ -6,6 +6,7 @@ install:
   - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
 
 before_build: 
+  - nuget restore
   # Updates the version number in the .vsixmanifest and updates the AppVeyor build number to match
   - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
 
@@ -17,10 +18,5 @@ branches:
   only:
     - develop
 
-artifacts:
-  - path: Viasfora\bin\$(configuration)\Winterdom.Viasfora.vsix
-    name: Viasfora
-
-#after_test:
-  # Pushes the compiled vsix to artifacts and publishes it to vsixgallery.com
-#  - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
+after_test:
+  - ps: Vsix-PushArtifacts

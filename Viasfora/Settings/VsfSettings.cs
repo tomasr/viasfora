@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora.Settings {
   [Export(typeof(IVsfSettings))]
   public class VsfSettings : IVsfSettings {
     const String KEYWORD_CLASSIFIER_ENABLED = "KeywordClassifierEnabled";
+    const String FLOW_CONTROL_ITALICS = "FlowControlUseItalics";
     const String ESCAPE_SEQ_ENABLED = "EscapeSequencesEnabled";
     const String CURRENT_LINE_ENABLED = "CurrentLineHighlightEnabled";
     const String CURRENT_COLUMN_ENABLED = "CurrentColumnHighlightEnabled";
@@ -42,6 +43,7 @@ namespace Winterdom.Viasfora.Settings {
     const String DEVMARGIN_ENABLED = "DeveloperMarginEnabled";
 
     const String TEXTOBF_REGEXES = "TextObfuscationRegexes";
+    const String TELEMETRY_ENABLED = "TelemetryEnabled";
 
     private ISettingsStore settings;
     public event EventHandler SettingsChanged;
@@ -49,6 +51,10 @@ namespace Winterdom.Viasfora.Settings {
     public bool KeywordClassifierEnabled {
       get { return GetBoolean(KEYWORD_CLASSIFIER_ENABLED, true); }
       set { SetValue(KEYWORD_CLASSIFIER_ENABLED, value); }
+    }
+    public bool FlowControlUseItalics {
+      get { return GetBoolean(FLOW_CONTROL_ITALICS, false); }
+      set { SetValue(FLOW_CONTROL_ITALICS, value); }
     }
     public bool EscapeSeqHighlightEnabled {
       get { return GetBoolean(ESCAPE_SEQ_ENABLED, true); }
@@ -149,6 +155,10 @@ namespace Winterdom.Viasfora.Settings {
     public String TextObfuscationRegexes {
       get { return GetValue(TEXTOBF_REGEXES, ""); }
       set { SetValue(TEXTOBF_REGEXES, value); }
+    }
+    public bool TelemetryEnabled {
+      get { return GetBoolean(TELEMETRY_ENABLED, true); }
+      set { SetValue(TELEMETRY_ENABLED, value); }
     }
 
     [ImportingConstructor]

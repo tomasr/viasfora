@@ -21,6 +21,7 @@ namespace Winterdom.Viasfora.Options {
       settings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
       settings.HighlightLineWidth = this.HighlightLineWidth;
       settings.KeywordClassifierEnabled = KeywordClassifierEnabled;
+      settings.FlowControlUseItalics = FlowControlUseItalics;
       settings.EscapeSeqHighlightEnabled = EscapeSeqHighlightEnabled;
       settings.RainbowDepth = RainbowDepth;
       settings.RainbowTagsEnabled = RainbowTagsEnabled;
@@ -34,6 +35,7 @@ namespace Winterdom.Viasfora.Options {
       settings.XmlnsPrefixHighlightEnabled = XmlnsPrefixHighlightEnabled;
       settings.XmlCloseTagHighlightEnabled = XmlCloseTagHighlightEnabled;
       settings.XmlMatchTagsEnabled = XmlMatchTagsEnabled;
+      settings.TelemetryEnabled = TelemetryEnabled;
       settings.Save();
     }
     public override void LoadSettingsFromStorage() {
@@ -43,6 +45,7 @@ namespace Winterdom.Viasfora.Options {
       CurrentColumnHighlightEnabled = settings.CurrentColumnHighlightEnabled;
       highlightLineWidth = settings.HighlightLineWidth;
       KeywordClassifierEnabled = settings.KeywordClassifierEnabled;
+      FlowControlUseItalics = settings.FlowControlUseItalics;
       EscapeSeqHighlightEnabled = settings.EscapeSeqHighlightEnabled;
       RainbowDepth = settings.RainbowDepth;
       RainbowTagsEnabled = settings.RainbowTagsEnabled;
@@ -56,13 +59,25 @@ namespace Winterdom.Viasfora.Options {
       XmlnsPrefixHighlightEnabled = settings.XmlnsPrefixHighlightEnabled;
       XmlCloseTagHighlightEnabled = settings.XmlCloseTagHighlightEnabled;
       XmlMatchTagsEnabled = settings.XmlMatchTagsEnabled;
+      TelemetryEnabled = settings.TelemetryEnabled;
     }
+
+    // General Settings
+    [LocDisplayName("Enable Telemetry")]
+    [Description("Enable sending telemetry about Viasfora usage. Will only take effect after a restart.")]
+    [Category("General")]
+    public bool TelemetryEnabled { get; set; }
 
     // Text Editor Extensions
     [LocDisplayName("Enable Keyword Classifier")]
     [Description("Enable custom keyword highlighting for C#, CPP and JS")]
     [Category("Text Editor")]
     public bool KeywordClassifierEnabled { get; set; }
+    [LocDisplayName("Use italics on Flow Control Keywords")]
+    [Description("Use italics on text highlighted by the Keyword Classifier")]
+    [Category("Text Editor")]
+    public bool FlowControlUseItalics { get; set; }
+
 
     [LocDisplayName("Highlight Escape Sequences")]
     [Description("Enable highlighting of escape sequences in strings")]

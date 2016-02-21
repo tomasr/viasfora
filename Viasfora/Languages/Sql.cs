@@ -4,7 +4,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Rainbow;
 
@@ -37,8 +37,8 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.Sql; }
     }
-    public override IBraceExtractor NewBraceExtractor() {
-      return new SqlBraceExtractor();
+    public override IBraceScanner NewBraceScanner() {
+      return new SqlBraceScanner();
     }
 
     [ImportingConstructor]

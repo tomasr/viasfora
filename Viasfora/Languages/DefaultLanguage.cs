@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Languages.BraceExtractors;
+using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 using System.ComponentModel.Composition;
@@ -36,8 +36,8 @@ namespace Winterdom.Viasfora.Languages {
     public override bool MatchesContentType(IContentType contentType) {
       return true;
     }
-    public override IBraceExtractor NewBraceExtractor() {
-      return new DefaultBraceExtractor();
+    public override IBraceScanner NewBraceScanner() {
+      return new DefaultBraceScanner();
     }
 
     private class NoFirstLineCommentParser : IFirstLineCommentParser {

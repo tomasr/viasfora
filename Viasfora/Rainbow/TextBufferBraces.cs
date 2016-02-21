@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private List<BracePos> braces;
     private List<CharPos> braceErrors;
     private SortedList<char, char> braceList;
-    private IBraceExtractor braceExtractor;
+    private IBraceScanner braceScanner;
     private ILanguage language;
     public ITextSnapshot Snapshot { get; private set; }
     public String BraceChars { get; private set; }
@@ -30,10 +30,10 @@ namespace Winterdom.Viasfora.Rainbow {
       this.braceErrors = new List<CharPos>();
 
       if ( this.language != null ) {
-        this.braceExtractor = this.language.NewBraceExtractor();
+        this.braceScanner = this.language.NewBraceScanner();
 
         this.braceList.Clear();
-        this.BraceChars = this.braceExtractor.BraceList;
+        this.BraceChars = this.braceScanner.BraceList;
         for ( int i = 0; i < BraceChars.Length; i += 2 ) {
           this.braceList.Add(BraceChars[i], BraceChars[i + 1]);
         }
@@ -67,7 +67,7 @@ namespace Winterdom.Viasfora.Rainbow {
       // or skip backwards until we find one
       // that is resumable
       int newIndex = index;
-      IResumeControl control = this.braceExtractor as IResumeControl;
+      IResumeControl control = this.braceScanner as IResumeControl;
       if ( control != null ) {
         for ( ; newIndex > 0; newIndex-- ) {
           if ( control.CanResume(braces[newIndex].ToCharPos()) )
@@ -259,7 +259,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void ExtractBraces(Stack<BracePos> pairs, int startOffset, int endOffset, int state) {
-      braceExtractor.Reset(state);
+      braceScanner.Reset(state);
       int lineNum = Snapshot.GetLineNumberFromPosition(startOffset);
       while ( lineNum < Snapshot.LineCount  ) {
         var line = Snapshot.GetLineFromLineNumber(lineNum++);
@@ -276,7 +276,9 @@ namespace Winterdom.Viasfora.Rainbow {
     private void ExtractFromLine(Stack<BracePos> pairs, ITextSnapshotLine line, int lineOffset) {
       var lc = new LineChars(line, lineOffset);
       CharPos cp = CharPos.Empty;
-      while ( this.braceExtractor.Extract(lc, ref cp) ) {
+      while ( !lc.EndOfLine ) {
+        if ( !this.braceScanner.Extract(lc, ref cp) )
+          continue;
         if ( IsOpeningBrace(cp) ) {
           BracePos p = cp.AsBrace(pairs.Count);
           pairs.Push(p);

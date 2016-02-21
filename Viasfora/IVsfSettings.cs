@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora {
   public interface IVsfSettings {
     bool KeywordClassifierEnabled { get; set; }
+    bool FlowControlUseItalics { get; set; }
     bool EscapeSeqHighlightEnabled { get; set; }
     
     bool XmlnsPrefixHighlightEnabled { get; set; }
@@ -38,6 +36,7 @@ namespace Winterdom.Viasfora {
     Outlining.AutoExpandMode AutoExpandRegions { get; set; }
     bool BoldAsItalicsEnabled { get; set; }
     String TextObfuscationRegexes { get; set; }
+    bool TelemetryEnabled { get; set; }
 
     event EventHandler SettingsChanged;
     String GetValue(String name, String defaultValue);

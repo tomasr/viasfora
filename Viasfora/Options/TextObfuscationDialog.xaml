@@ -26,25 +26,45 @@
     </ObjectDataProvider>
   </UserControl.Resources>
   <Grid>
-    <GroupBox Header="Obfuscation Expressions">
-      <DataGrid x:Name="expressionsGridView"
-                ItemsSource="{Binding ElementName=userControl, Path=Entries}"
-                AutoGenerateColumns="false"
-                CanUserAddRows="true"
-                CanUserDeleteRows="true">
-        <DataGrid.Columns>
-          <DataGridTextColumn Header="Name"
-                              Binding="{Binding Name, Mode=TwoWay}"
-                              Width="100"/>
-          <DataGridComboBoxColumn Header="Options"
-                                  ItemsSource="{Binding Source={StaticResource ExpressionOptionsValues}}"
-                                  SelectedItemBinding="{Binding Options, Mode=TwoWay}"
-                                  Width="100"/>
-          <DataGridTextColumn Header="Expression"
-                              Binding="{Binding RegularExpression, Mode=TwoWay}"
-                              Width="350" />
-        </DataGrid.Columns>
-      </DataGrid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="40"/>
+    </Grid.ColumnDefinitions>
+    <GroupBox Header="Obfuscation Expressions" Grid.Column="0">
+        <DataGrid x:Name="expressionsGridView"
+                  ItemsSource="{Binding ElementName=userControl, Path=Entries}"
+                  SelectedItem="{Binding ElementName=userControl, Path=SelectedEntry, Mode=TwoWay}"
+                  AutoGenerateColumns="false"
+                  CanUserAddRows="false"
+                  CanUserDeleteRows="false"
+                  >
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Name"
+                                Binding="{Binding Name, Mode=TwoWay}"
+                                Width="100"/>
+            <DataGridComboBoxColumn Header="Options"
+                                    ItemsSource="{Binding Source={StaticResource ExpressionOptionsValues}}"
+                                    SelectedItemBinding="{Binding Options, Mode=TwoWay}"
+                                    Width="100"/>
+            <DataGridTextColumn Header="Expression"
+                                Binding="{Binding RegularExpression, Mode=TwoWay}"
+                                Width="350" />
+          </DataGrid.Columns>
+        </DataGrid>
+
     </GroupBox>
+    <StackPanel DockPanel.Dock="Right" Orientation="Vertical"
+                Width="30" Grid.Column="1" Margin="0, 40, 0, 0">
+      <Button Margin="5,5,5,5" Command="{Binding ElementName=userControl, Path=AddEntryCmd}"
+              CommandParameter="{Binding ElementName=userControl, Path=SelectedEntry}">
+        <Path Margin="2" Stroke="Green" Data="M0,5 H10 M5,0 V10"
+              StrokeThickness="2" Height="10" Width="10"  />
+      </Button>
+      <Button Margin="5,5,5,5" Command="{Binding ElementName=userControl, Path=RemoveEntryCmd}"
+              CommandParameter="{Binding ElementName=userControl, Path=SelectedEntry}">
+        <Path Margin="2" Stroke="Red" Data="M0,5 H10"
+              StrokeThickness="2" Height="10" Width="10" /> 
+      </Button>
+    </StackPanel>
   </Grid>
 </UserControl>
