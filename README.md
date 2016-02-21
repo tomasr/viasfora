@@ -5,7 +5,7 @@ text editing experience!
 
 __Official Site__: http://viasfora.com/
 
-__Build Status__: ![Build Status](https://ci.appveyor.com/api/projects/status/u1mpx5mqkd0k39ao) - [CI builds](https://ci.appveyor.com/project/tomasr/viasfora/)
+__Build Status__: [![Build Status](https://ci.appveyor.com/api/projects/status/u1mpx5mqkd0k39ao)](https://ci.appveyor.com/project/tomasr/viasfora/)
 
 ## Rainbow Braces
 Colorize ()/[]/{} based on depth!<br/>
