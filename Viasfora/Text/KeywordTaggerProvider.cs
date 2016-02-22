@@ -31,10 +31,9 @@ namespace Winterdom.Viasfora.Text {
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       var map = formatService.GetClassificationFormatMap(textView);
       var italicsFixer = textView.Properties.GetOrCreateSingletonProperty(
-          () => new ItalicsFormatter(map, Settings)
+          () => new ItalicsFormatter(textView, map, Settings)
         );
       italicsFixer.AddClassification(Constants.KEYWORD_CLASSIF_NAME);
-      italicsFixer.FixIt();
       return new KeywordTagger(buffer, this) as ITagger<T>;
     }
 
@@ -45,18 +44,28 @@ namespace Winterdom.Viasfora.Text {
   }
 
   public class ItalicsFormatter {
+    private ITextView textView;
     private IClassificationFormatMap formatMap;
     private IVsfSettings settings;
     private IList<String> classificationTypes;
     private bool working;
 
-    public ItalicsFormatter(IClassificationFormatMap map, IVsfSettings settings) {
+    public ItalicsFormatter(ITextView textView, IClassificationFormatMap map, IVsfSettings settings) {
+      this.textView = textView;
       this.formatMap = map;
       this.settings = settings;
       this.working = false;
       this.classificationTypes = new List<String>();
       this.settings.SettingsChanged += OnSettingsChanged;
       this.formatMap.ClassificationFormatMappingChanged += OnMappingChanged;
+      // Delay activating until after the textView
+      // gets focus. Otherwise, VS may crash/hang
+      this.textView.GotAggregateFocus += OnTextViewFocus;
+    }
+
+    private void OnTextViewFocus(object sender, EventArgs e) {
+      this.textView.GotAggregateFocus -= OnTextViewFocus;
+      FixIt();
     }
 
     public void AddClassification(String name) {
