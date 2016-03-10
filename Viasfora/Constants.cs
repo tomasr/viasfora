@@ -54,6 +54,7 @@ namespace Winterdom.Viasfora {
     public const String Json = "JSON";
     public const String PowerShell = "PowerShell";
     public const String Python = "Python";
+    public const String R = "R";
     public const String Sql = "Sql";
     public const String TypeScript = "TypeScript";
     public const String VB = "VB";

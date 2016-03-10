@@ -21,6 +21,7 @@ namespace Winterdom.Viasfora {
     public const String PowerShellVS = "PowerShell.v3";
     public const String PowerShell = "PowerShell";
     public const String Python = "Python";
+    public const String R = "R";
     public const String Sql = "SQL";
     public const String SqlDataTools = "Sql Server Tools";
     public const String TypeScript = "TypeScript";
