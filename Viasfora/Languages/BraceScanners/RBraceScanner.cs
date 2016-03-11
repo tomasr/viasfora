@@ -68,12 +68,12 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           tc.Skip(2);
         } else if ( tc.Char() == quote ) {
           tc.Next();
+          this.status = stText;
           break;
         } else {
           tc.Next();
         }
       }
-      this.status = stText;
     }
   }
 }

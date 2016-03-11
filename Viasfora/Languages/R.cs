@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.Sequences;
@@ -14,10 +11,10 @@ namespace Winterdom.Viasfora.Languages {
   public class R : LanguageInfo {
     static readonly String[] KEYWORDS = {
          "if", "else", "for", "while", "repeat", "switch",
-         "return"
+         "return", "next", "break"
       };
     static readonly String[] LINQ_KEYWORDS = {
-         "apply"
+         "apply", "in"
       };
     public override string KeyName {
       get { return Constants.R; }
