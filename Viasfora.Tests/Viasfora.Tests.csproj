@@ -95,6 +95,7 @@
     <Compile Include="BraceScanners\FSharpBraceScannerTests.cs" />
     <Compile Include="BraceScanners\CssBraceScannerTests.cs" />
     <Compile Include="BraceScanners\PsBraceScannerTests.cs" />
+    <Compile Include="BraceScanners\RBraceScannerTests.cs" />
     <Compile Include="CommentParsers\GenericCommentParserTests.cs" />
     <Compile Include="Outlining\SelectionOutliningManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Settings\OutlineSettingsTests.cs" />
     <Compile Include="Settings\SolutionUserSettingsTests.cs" />
     <Compile Include="Settings\VsfSettingsTests.cs" />
+    <Compile Include="StringScanners\RStringScannerTests.cs" />
     <Compile Include="VsfEditorHost.cs" />
     <Compile Include="VsfVsTestBase.cs" />
     <Compile Include="VsSolutionTests.cs" />

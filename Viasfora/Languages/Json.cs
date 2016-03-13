@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
-using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]

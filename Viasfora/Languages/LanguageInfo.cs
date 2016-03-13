@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.CommentParsers;

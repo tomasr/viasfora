@@ -18,6 +18,7 @@ namespace Winterdom.Viasfora {
     public const String SqlOptions = "ea0d3217-2fed-4fa6-a47a-f88951a799fc";
     public const String TypeScriptOptions = "a7776058-9af1-476e-884a-d2a13ab3eaea";
     public const String PythonOptions = "e8fef725-07d8-469c-9e61-4c02a7de348e";
+    public const String ROptions = "07df20ff-c086-47c0-8a4a-f3db50d7d8d6";
     public const String PowerShellOptions = "e28716b7-aebe-4cdc-a4ea-7cf4a6964691";
     public const String IntellisenseOptions = "8e1de6d1-62e7-4f59-92bf-2b62bfb9c64e";
     public const String TextObfuscationOptions = "98cf4318-e4c4-46e0-81c9-d8f22d9a4bcd";

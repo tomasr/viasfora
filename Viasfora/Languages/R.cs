@@ -2,22 +2,26 @@
 using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
+using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
-  class Python : LanguageInfo {
-    public const String ContentType = "Python";
-
+  public class R : LanguageInfo {
     static readonly String[] KEYWORDS = {
-          "break", "continue", "if", "elif", "else",
-          "for", "raise", "return", "while", "yield"
-      };
-    static readonly String[] VIS_KEYWORDS = {
+         "if", "else", "for", "while", "repeat", "switch",
+         "return", "next", "break"
       };
     static readonly String[] LINQ_KEYWORDS = {
-          "from", "in"
+         "apply", "in"
       };
+    public override string KeyName {
+      get { return Constants.R; }
+    }
+    protected override String[] SupportedContentTypes {
+      get { return new String[] { ContentTypes.R }; }
+    }
     protected override String[] ControlFlowDefaults {
       get { return KEYWORDS; }
     }
@@ -25,20 +29,19 @@ namespace Winterdom.Viasfora.Languages {
       get { return LINQ_KEYWORDS; }
     }
     protected override String[] VisibilityDefaults {
-      get { return VIS_KEYWORDS; }
-    }
-    public override String KeyName {
-      get { return Constants.Python; }
-    }
-    public override IBraceScanner NewBraceScanner() {
-      return new PythonBraceScanner();
-    }
-    protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType }; }
+      get { return EMPTY; }
     }
 
+
     [ImportingConstructor]
-    public Python(IVsfSettings settings) : base(settings) {
+    public R(IVsfSettings settings) : base(settings) {
+    }
+
+    public override IBraceScanner NewBraceScanner() {
+      return new RBraceScanner();
+    }
+    public override IStringScanner NewStringScanner(String text) {
+      return new RStringScanner(text);
     }
   }
 }

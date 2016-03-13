@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Languages.BraceScanners;
-using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
