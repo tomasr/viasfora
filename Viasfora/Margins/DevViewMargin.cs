@@ -41,7 +41,7 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     public bool Enabled {
-      get { return settings != null ? settings.DevMarginEnabled : false;  }
+      get { return settings != null ? settings.DeveloperMarginEnabled : false;  }
     }
 
     public ITextViewMargin GetTextViewMargin(string marginName) {

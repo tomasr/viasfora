@@ -1,164 +1,127 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Rainbow;
-using Winterdom.Viasfora.Settings;
-using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Settings {
 
   [Export(typeof(IVsfSettings))]
   public class VsfSettings : IVsfSettings {
-    const String KEYWORD_CLASSIFIER_ENABLED = "KeywordClassifierEnabled";
-    const String FLOW_CONTROL_ITALICS = "FlowControlUseItalics";
-    const String ESCAPE_SEQ_ENABLED = "EscapeSequencesEnabled";
-    const String CURRENT_LINE_ENABLED = "CurrentLineHighlightEnabled";
-    const String CURRENT_COLUMN_ENABLED = "CurrentColumnHighlightEnabled";
-    const String HIGHLIGHT_LINE_WIDTH = "HighlightLineWidth";
-    const String AUTO_EXPAND_REGIONS = "AutoExpandRegions";
-    const String BOLD_AS_ITALICS_ENABLED = "BoldAsItalicsEnabled";
-
-    const String TEXT_COMPLETION_ENABLED = "TextCompletionEnabled";
-    const String TC_COMPLETE_DURING_TYPING = "TCCompleteDuringTyping";
-    const String TC_HANDLE_COMPLETE_WORD = "TCHandleCompleteWord";
-
-    const String XMLNS_PREFIX_ENABLED = "XmlnsPrefixEnabled";
-    const String XML_CLOSE_TAG_ENABLED = "XmlCloseTagEnabled";
-    const String XML_MATCH_TAGS_ENABLED = "XmlMatchTagsEnabled";
-
-    const String RAINBOW_TAGS_ENABLED = "RainbowTagsEnabled";
-    const String RAINBOW_CTRL_TIMER = "RainbowCtrlTimer";
-    const String RAINBOW_HIGHLIGHT_MODE = "RainbowHighlightMode";
-    const String RAINBOW_TOOLTIPS_ENABLED = "RainbowToolTipsEnabled";
-
-    const String PRESENTATION_MODE_ENABLED = "PresentationModeEnabled";
-    const String PRESENTATION_MODE_DEFAULT_ZOOM = "PresentationModeDefaultZoom";
-    const String PRESENTATION_MODE_ENABLED_ZOOM = "PresentationModeEnabledZoom";
-    const String PRESENTATION_MODE_INCLUDE_ENV_FONTS = "PresentationModeIncludeEnvFonts";
-    const String MODELINES_ENABLED = "ModelinesEnabled";
-    const String MODELINES_NUMLINES = "ModelinesNumLines";
-    const String DEVMARGIN_ENABLED = "DeveloperMarginEnabled";
-
-    const String TEXTOBF_REGEXES = "TextObfuscationRegexes";
-    const String TELEMETRY_ENABLED = "TelemetryEnabled";
 
     private ISettingsStore settings;
     public event EventHandler SettingsChanged;
     
     public bool KeywordClassifierEnabled {
-      get { return GetBoolean(KEYWORD_CLASSIFIER_ENABLED, true); }
-      set { SetValue(KEYWORD_CLASSIFIER_ENABLED, value); }
+      get { return GetBoolean(nameof(KeywordClassifierEnabled), true); }
+      set { SetValue(nameof(KeywordClassifierEnabled), value); }
     }
     public bool FlowControlUseItalics {
-      get { return GetBoolean(FLOW_CONTROL_ITALICS, false); }
-      set { SetValue(FLOW_CONTROL_ITALICS, value); }
+      get { return GetBoolean(nameof(FlowControlUseItalics), false); }
+      set { SetValue(nameof(FlowControlUseItalics), value); }
     }
-    public bool EscapeSeqHighlightEnabled {
-      get { return GetBoolean(ESCAPE_SEQ_ENABLED, true); }
-      set { SetValue(ESCAPE_SEQ_ENABLED, value); }
+    public bool EscapeSequencesEnabled {
+      get { return GetBoolean(nameof(EscapeSequencesEnabled), true); }
+      set { SetValue(nameof(EscapeSequencesEnabled), value); }
     }
-    public bool XmlnsPrefixHighlightEnabled {
-      get { return GetBoolean(XMLNS_PREFIX_ENABLED, true); }
-      set { SetValue(XMLNS_PREFIX_ENABLED, value); }
+    public bool XmlnsPrefixEnabled {
+      get { return GetBoolean(nameof(XmlnsPrefixEnabled), true); }
+      set { SetValue(nameof(XmlnsPrefixEnabled), value); }
     }
-    public bool XmlCloseTagHighlightEnabled {
-      get { return GetBoolean(XML_CLOSE_TAG_ENABLED, true); }
-      set { SetValue(XML_CLOSE_TAG_ENABLED, value); }
+    public bool XmlCloseTagEnabled {
+      get { return GetBoolean(nameof(XmlCloseTagEnabled), true); }
+      set { SetValue(nameof(XmlCloseTagEnabled), value); }
     }
     public bool XmlMatchTagsEnabled {
-      get { return GetBoolean(XML_MATCH_TAGS_ENABLED, true); }
-      set { SetValue(XML_MATCH_TAGS_ENABLED, value); }
+      get { return GetBoolean(nameof(XmlMatchTagsEnabled), true); }
+      set { SetValue(nameof(XmlMatchTagsEnabled), value); }
     }
     public bool CurrentLineHighlightEnabled {
-      get { return GetBoolean(CURRENT_LINE_ENABLED, false); }
-      set { SetValue(CURRENT_LINE_ENABLED, value); }
+      get { return GetBoolean(nameof(CurrentLineHighlightEnabled), false); }
+      set { SetValue(nameof(CurrentLineHighlightEnabled), value); }
     }
     public bool CurrentColumnHighlightEnabled {
-      get { return GetBoolean(CURRENT_COLUMN_ENABLED, false); }
-      set { SetValue(CURRENT_COLUMN_ENABLED, value); }
+      get { return GetBoolean(nameof(CurrentColumnHighlightEnabled), false); }
+      set { SetValue(nameof(CurrentColumnHighlightEnabled), value); }
     }
     public double HighlightLineWidth {
-      get { return GetDouble(HIGHLIGHT_LINE_WIDTH, 1.4); }
-      set { SetValue(HIGHLIGHT_LINE_WIDTH, value); }
+      get { return GetDouble(nameof(HighlightLineWidth), 1.4); }
+      set { SetValue(nameof(HighlightLineWidth), value); }
     }
     public int RainbowDepth {
-      get { return GetInt32("RainbowDepth", 4); }
-      set { SetValue("RainbowDepth", value); }
+      get { return GetInt32(nameof(RainbowDepth), 4); }
+      set { SetValue(nameof(RainbowDepth), value); }
     }
     public bool RainbowTagsEnabled {
-      get { return GetBoolean(RAINBOW_TAGS_ENABLED, true); }
-      set { SetValue(RAINBOW_TAGS_ENABLED, value); }
+      get { return GetBoolean(nameof(RainbowTagsEnabled), true); }
+      set { SetValue(nameof(RainbowTagsEnabled), value); }
     }
     public long RainbowCtrlTimer {
-      get { return GetInt64(RAINBOW_CTRL_TIMER, 300); }
-      set { SetValue(RAINBOW_CTRL_TIMER, value); }
+      get { return GetInt64(nameof(RainbowCtrlTimer), 300); }
+      set { SetValue(nameof(RainbowCtrlTimer), value); }
     }
     public RainbowHighlightMode RainbowHighlightMode {
-      get { return GetEnum(RAINBOW_HIGHLIGHT_MODE, RainbowHighlightMode.TrackNextScope); }
-      set { SetValue(RAINBOW_HIGHLIGHT_MODE, value); }
+      get { return GetEnum(nameof(RainbowHighlightMode), RainbowHighlightMode.TrackNextScope); }
+      set { SetValue(nameof(RainbowHighlightMode), value); }
     }
     public bool RainbowToolTipsEnabled {
-      get { return GetBoolean(RAINBOW_TOOLTIPS_ENABLED, true); }
-      set { SetValue(RAINBOW_TOOLTIPS_ENABLED, value); }
+      get { return GetBoolean(nameof(RainbowToolTipsEnabled), true); }
+      set { SetValue(nameof(RainbowToolTipsEnabled), value); }
     }
     public bool PresentationModeEnabled {
-      get { return GetBoolean(PRESENTATION_MODE_ENABLED, true); }
-      set { SetValue(PRESENTATION_MODE_ENABLED, value); }
+      get { return GetBoolean(nameof(PresentationModeEnabled), true); }
+      set { SetValue(nameof(PresentationModeEnabled), value); }
     }
-    public int PresentationModeDefaultZoomLevel {
-      get { return GetInt32(PRESENTATION_MODE_DEFAULT_ZOOM, 100); }
-      set { SetValue(PRESENTATION_MODE_DEFAULT_ZOOM, value); }
+    public int PresentationModeDefaultZoom {
+      get { return GetInt32(nameof(PresentationModeDefaultZoom), 100); }
+      set { SetValue(nameof(PresentationModeDefaultZoom), value); }
     }
-    public int PresentationModeEnabledZoomLevel {
-      get { return GetInt32(PRESENTATION_MODE_ENABLED_ZOOM, 150); }
-      set { SetValue(PRESENTATION_MODE_ENABLED_ZOOM, value); }
+    public int PresentationModeEnabledZoom {
+      get { return GetInt32(nameof(PresentationModeEnabledZoom), 150); }
+      set { SetValue(nameof(PresentationModeEnabledZoom), value); }
     }
-    public bool PresentationModeIncludeEnvironmentFonts {
-      get { return GetBoolean(PRESENTATION_MODE_INCLUDE_ENV_FONTS, false); }
-      set { SetValue(PRESENTATION_MODE_INCLUDE_ENV_FONTS, value); }
+    public bool PresentationModeIncludeEnvFonts {
+      get { return GetBoolean(nameof(PresentationModeIncludeEnvFonts), false); }
+      set { SetValue(nameof(PresentationModeIncludeEnvFonts), value); }
     }
     public bool ModelinesEnabled {
-      get { return GetBoolean(MODELINES_ENABLED, true); }
-      set { SetValue(MODELINES_ENABLED, value); }
+      get { return GetBoolean(nameof(ModelinesEnabled), true); }
+      set { SetValue(nameof(ModelinesEnabled), value); }
     }
     public int ModelinesNumLines {
-      get { return GetInt32(MODELINES_NUMLINES, 5); }
-      set { SetValue(MODELINES_NUMLINES, value); }
+      get { return GetInt32(nameof(ModelinesNumLines), 5); }
+      set { SetValue(nameof(ModelinesNumLines), value); }
     }
-    public bool DevMarginEnabled {
-      get { return GetBoolean(DEVMARGIN_ENABLED, true); }
-      set { SetValue(DEVMARGIN_ENABLED, value); }
+    public bool DeveloperMarginEnabled {
+      get { return GetBoolean(nameof(DeveloperMarginEnabled), true); }
+      set { SetValue(nameof(DeveloperMarginEnabled), value); }
     }
     public bool TextCompletionEnabled {
-      get { return GetBoolean(TEXT_COMPLETION_ENABLED, true); }
-      set { SetValue(TEXT_COMPLETION_ENABLED, value); }
+      get { return GetBoolean(nameof(TextCompletionEnabled), true); }
+      set { SetValue(nameof(TextCompletionEnabled), value); }
     }
     public bool TCCompleteDuringTyping {
-      get { return GetBoolean(TC_COMPLETE_DURING_TYPING, false); }
-      set { SetValue(TC_COMPLETE_DURING_TYPING, value); }
+      get { return GetBoolean(nameof(TCCompleteDuringTyping), false); }
+      set { SetValue(nameof(TCCompleteDuringTyping), value); }
     }
     public bool TCHandleCompleteWord {
-      get { return GetBoolean(TC_HANDLE_COMPLETE_WORD, false); }
-      set { SetValue(TC_HANDLE_COMPLETE_WORD, value); }
+      get { return GetBoolean(nameof(TCHandleCompleteWord), false); }
+      set { SetValue(nameof(TCHandleCompleteWord), value); }
     }
     public Outlining.AutoExpandMode AutoExpandRegions {
-      get { return GetEnum(AUTO_EXPAND_REGIONS, Outlining.AutoExpandMode.No); }
-      set { SetValue(AUTO_EXPAND_REGIONS, value); }
+      get { return GetEnum(nameof(AutoExpandRegions), Outlining.AutoExpandMode.No); }
+      set { SetValue(nameof(AutoExpandRegions), value); }
     }
     public bool BoldAsItalicsEnabled {
-      get { return GetBoolean(BOLD_AS_ITALICS_ENABLED, false); }
-      set { SetValue(BOLD_AS_ITALICS_ENABLED, value); }
+      get { return GetBoolean(nameof(BoldAsItalicsEnabled), false); }
+      set { SetValue(nameof(BoldAsItalicsEnabled), value); }
     }
     public String TextObfuscationRegexes {
-      get { return GetValue(TEXTOBF_REGEXES, ""); }
-      set { SetValue(TEXTOBF_REGEXES, value); }
+      get { return GetValue(nameof(TextObfuscationRegexes), ""); }
+      set { SetValue(nameof(TextObfuscationRegexes), value); }
     }
     public bool TelemetryEnabled {
-      get { return GetBoolean(TELEMETRY_ENABLED, true); }
-      set { SetValue(TELEMETRY_ENABLED, value); }
+      get { return GetBoolean(nameof(TelemetryEnabled), true); }
+      set { SetValue(nameof(TelemetryEnabled), value); }
     }
 
     [ImportingConstructor]

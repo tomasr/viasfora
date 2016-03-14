@@ -25,18 +25,18 @@ namespace Winterdom.Viasfora.Options {
       base.SaveSettingsToStorage();
       var settings = SettingsContext.GetSettings();
       settings.PresentationModeEnabled = dialog.PMEnabled;
-      settings.PresentationModeDefaultZoomLevel = dialog.DefaultZoom;
-      settings.PresentationModeEnabledZoomLevel = dialog.EnabledZoom;
-      settings.PresentationModeIncludeEnvironmentFonts = dialog.IncludeEnvironmentFonts;
+      settings.PresentationModeDefaultZoom = dialog.DefaultZoom;
+      settings.PresentationModeEnabledZoom = dialog.EnabledZoom;
+      settings.PresentationModeIncludeEnvFonts = dialog.IncludeEnvironmentFonts;
       settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
       var settings = SettingsContext.GetSettings();
       dialog.PMEnabled = settings.PresentationModeEnabled;
-      dialog.DefaultZoom = settings.PresentationModeDefaultZoomLevel;
-      dialog.EnabledZoom = settings.PresentationModeEnabledZoomLevel;
-      dialog.IncludeEnvironmentFonts = settings.PresentationModeIncludeEnvironmentFonts;
+      dialog.DefaultZoom = settings.PresentationModeDefaultZoom;
+      dialog.EnabledZoom = settings.PresentationModeEnabledZoom;
+      dialog.IncludeEnvironmentFonts = settings.PresentationModeIncludeEnvFonts;
     }
   }
 }

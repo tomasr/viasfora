@@ -52,7 +52,7 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
 
-      bool eshe = settings.EscapeSeqHighlightEnabled;
+      bool eshe = settings.EscapeSequencesEnabled;
       bool kce = settings.KeywordClassifierEnabled;
       if ( !(kce || eshe) ) {
         yield break;

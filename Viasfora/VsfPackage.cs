@@ -47,8 +47,8 @@ namespace Winterdom.Viasfora {
     public static int GetPresentationModeZoomLevel() {
       var settings = SettingsContext.GetSettings();
       return PresentationModeTurnedOn
-        ? settings.PresentationModeEnabledZoomLevel
-        : settings.PresentationModeDefaultZoomLevel;
+        ? settings.PresentationModeEnabledZoom
+        : settings.PresentationModeDefaultZoom;
     }
 
     protected override void Initialize() {

@@ -40,7 +40,7 @@ namespace Winterdom.Viasfora.Margins {
       e.Handled = true;
     }
     private void OnCloseButtonClick(object sender, RoutedEventArgs e) {
-      settings.DevMarginEnabled = false;
+      settings.DeveloperMarginEnabled = false;
       settings.Save();
       e.Handled = true;
     }

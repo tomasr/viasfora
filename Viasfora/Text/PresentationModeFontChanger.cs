@@ -23,7 +23,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void TurnOn() {
-      if ( !settings.PresentationModeIncludeEnvironmentFonts )
+      if ( !settings.PresentationModeIncludeEnvFonts )
         return;
 
       double zoomLevel = VsfPackage.GetPresentationModeZoomLevel();

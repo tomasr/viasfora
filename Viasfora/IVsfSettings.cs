@@ -5,10 +5,10 @@ namespace Winterdom.Viasfora {
   public interface IVsfSettings {
     bool KeywordClassifierEnabled { get; set; }
     bool FlowControlUseItalics { get; set; }
-    bool EscapeSeqHighlightEnabled { get; set; }
+    bool EscapeSequencesEnabled { get; set; }
     
-    bool XmlnsPrefixHighlightEnabled { get; set; }
-    bool XmlCloseTagHighlightEnabled { get; set; }
+    bool XmlnsPrefixEnabled { get; set; }
+    bool XmlCloseTagEnabled { get; set; }
     bool XmlMatchTagsEnabled { get; set; }
 
     bool CurrentLineHighlightEnabled { get; set; }
@@ -22,14 +22,14 @@ namespace Winterdom.Viasfora {
     bool RainbowToolTipsEnabled { get; set; }
 
     bool PresentationModeEnabled { get; set; }
-    int PresentationModeDefaultZoomLevel { get; set; }
-    int PresentationModeEnabledZoomLevel { get; set; }
-    bool PresentationModeIncludeEnvironmentFonts { get; set; }
+    int PresentationModeDefaultZoom { get; set; }
+    int PresentationModeEnabledZoom { get; set; }
+    bool PresentationModeIncludeEnvFonts { get; set; }
 
     bool ModelinesEnabled { get; set; }
     int ModelinesNumLines { get; set; }
 
-    bool DevMarginEnabled { get; set; }
+    bool DeveloperMarginEnabled { get; set; }
     bool TextCompletionEnabled { get; set; }
     bool TCCompleteDuringTyping { get; set; }
     bool TCHandleCompleteWord { get; set; }
