@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora", "Viasfora\Viasfora.csproj", "{ED05E9A0-B822-4925-81A5-721CBE04DA37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora", "src\Viasfora\Viasfora.csproj", "{ED05E9A0-B822-4925-81A5-721CBE04DA37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Tests", "Viasfora.Tests\Viasfora.Tests.csproj", "{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Tests", "tests\Viasfora.Tests\Viasfora.Tests.csproj", "{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1038A55E-607B-4449-924E-1861530C2C56}"
 	ProjectSection(SolutionItems) = preProject
