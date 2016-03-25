@@ -74,6 +74,9 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\AssemblyInfo.Common.cs">
+      <Link>Properties\AssemblyInfo.Common.cs</Link>
+    </Compile>
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
     <Compile Include="Commands\SelectionOutliningCommand.cs" />
