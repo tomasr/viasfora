@@ -11,6 +11,7 @@ using System.Text;
 using System.Windows;
 using Winterdom.Viasfora;
 using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 
 namespace Viasfora.Tests {
   public class VsfVsTestBase {
@@ -60,6 +61,7 @@ namespace Viasfora.Tests {
       if ( cachedEditorHost == null ) {
         var editorHostFactory = new EditorHostFactory();
         editorHostFactory.Add(new AssemblyCatalog(typeof(IVsfSettings).Assembly));
+        editorHostFactory.Add(new AssemblyCatalog(typeof(LanguageFactory).Assembly));
         var compositionContainer = editorHostFactory.CreateCompositionContainer();
         cachedEditorHost = new VsfEditorHost(compositionContainer);
       }

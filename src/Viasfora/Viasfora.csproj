@@ -113,11 +113,6 @@
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
     <Compile Include="EditorFormats\FormatSpecifierFormat.cs" />
     <Compile Include="EditorFormats\RazorClosingTagFormat.cs" />
-    <Compile Include="Languages\BraceScanners\RBraceScanner.cs" />
-    <Compile Include="Languages\R.cs" />
-    <Compile Include="Languages\Sequences\BasicCStringScanner.cs" />
-    <Compile Include="Languages\Sequences\RStringScanner.cs" />
-    <Compile Include="Languages\XLang.cs" />
     <Compile Include="Options\ROptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -133,22 +128,6 @@
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="JsonExtensions.cs" />
-    <Compile Include="Languages\BraceScanners\CSharpBraceScanner.cs" />
-    <Compile Include="Languages\BraceScanners\CssBraceScanner.cs" />
-    <Compile Include="Languages\BraceScanners\DefaultBraceScanner.cs" />
-    <Compile Include="Languages\BraceScanners\PsBraceScanner.cs" />
-    <Compile Include="Languages\BraceScanners\PythonBraceScanner.cs" />
-    <Compile Include="Languages\CommentParsers\GenericCommentParser.cs" />
-    <Compile Include="Languages\Css.cs" />
-    <Compile Include="Languages\LanguageFactory.cs" />
-    <Compile Include="Languages\PowerShell.cs" />
-    <Compile Include="Languages\DefaultLanguage.cs" />
-    <Compile Include="Languages\Json.cs" />
-    <Compile Include="Languages\Python.cs" />
-    <Compile Include="Languages\Sequences\CssStringScanner.cs" />
-    <Compile Include="Languages\Sequences\FSharpStringScanner.cs" />
-    <Compile Include="Languages\Sequences\PsStringScanner.cs" />
-    <Compile Include="Languages\Sequences\CStringScanner.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />
     <Compile Include="Margins\DevMarginVisual.xaml.cs">
       <DependentUpon>DevMarginVisual.xaml</DependentUpon>
@@ -260,8 +239,6 @@
     <Compile Include="Outlining\BaseOutliningManager.cs" />
     <Compile Include="Text\PresentationMode.cs" />
     <Compile Include="Text\PresentationModeFactory.cs" />
-    <Compile Include="Languages\TypeScript.cs" />
-    <Compile Include="Languages\Sql.cs" />
     <Compile Include="Rainbow\RainbowCommandHandler.cs" />
     <Compile Include="Rainbow\RainbowHighlight.cs" />
     <Compile Include="Rainbow\RainbowColorTagger.cs" />
@@ -277,24 +254,15 @@
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
     <Compile Include="Rainbow\BracePos.cs" />
-    <Compile Include="Languages\CBasedLanguage.cs" />
-    <Compile Include="Languages\FSharp.cs" />
-    <Compile Include="Languages\LanguageInfo.cs" />
-    <Compile Include="Languages\VB.cs" />
     <Compile Include="Util\IFirstLineCommentParser.cs" />
     <Compile Include="Util\IModeLineParser.cs" />
     <Compile Include="Util\RegexEntry.cs" />
     <Compile Include="Util\SimpleTokenizer.cs" />
-    <Compile Include="Languages\BraceScanners\SqlBraceScanner.cs" />
-    <Compile Include="Languages\BraceScanners\CBraceScanner.cs" />
     <Compile Include="Rainbow\CharPos.cs" />
-    <Compile Include="Languages\BraceScanners\JScriptBraceScanner.cs" />
-    <Compile Include="Languages\BraceScanners\FSharpBraceScanner.cs" />
     <Compile Include="Rainbow\IBraceScanner.cs" />
     <Compile Include="Util\ITextChars.cs" />
     <Compile Include="Util\LineChars.cs" />
     <Compile Include="Util\StringChars.cs" />
-    <Compile Include="Languages\BraceScanners\VbBraceScanner.cs" />
     <Compile Include="Util\ToolTipWindow.cs" />
     <Compile Include="Util\ViewTipProperty.cs" />
     <Compile Include="Util\VsColors.cs" />
@@ -304,9 +272,6 @@
     <Compile Include="Text\CurrentLineAdornment.cs" />
     <Compile Include="Text\CurrentLineAdornmentFactory.cs" />
     <Compile Include="Text\KeywordTagger.cs" />
-    <Compile Include="Languages\JScript.cs" />
-    <Compile Include="Languages\Cpp.cs" />
-    <Compile Include="Languages\CSharp.cs" />
     <Compile Include="Text\KeywordTaggerProvider.cs" />
     <Compile Include="VsfPackage.cs" />
     <Compile Include="VsSolution.cs" />

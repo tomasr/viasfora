@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Contracts;
-using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.PowerShellOptions)]

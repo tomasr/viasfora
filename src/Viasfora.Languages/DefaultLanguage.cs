@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Languages {
   public class DefaultLanguage : LanguageInfo {

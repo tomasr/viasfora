@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Winterdom.Viasfora {
 
-  static class StringExtensions {
+  public static class StringExtensions {
     public static String[] AsList(this String str) {
       if ( String.IsNullOrEmpty(str) ) return null;
       String[] values = str.Split(new Char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
