@@ -8,6 +8,7 @@ namespace Winterdom.Viasfora {
   public static class Guids {
     public const String VSPackage = "3338742c-7926-4949-9e57-3fcbb8d0a976";
     public const String GeneralOptions = "5da0604d-ba54-43dc-b874-526f43144ee2";
+    public const String RainbowOptions = "89406e01-38f0-4db2-9f73-70da7c5a6f72";
     public const String PresentationModeOptions = "e23141d9-f9fa-4780-9f07-d7cb5b6ebb17";
     public const String AllLanguagesOptions = "af004378-3762-4f4c-9619-1fbcfbc77078";
     public const String CSharpOptions = "6d1cdb1a-f22f-44d3-af5f-a7880934be44";

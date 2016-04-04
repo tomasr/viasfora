@@ -40,5 +40,9 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
     public RainbowSettings(IVsfSettings settings) {
       this.settings = settings;
     }
+
+    public void Save() {
+      this.settings.Save();
+    }
   }
 }

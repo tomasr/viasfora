@@ -1,5 +1,4 @@
 ﻿using System;
-using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora {
   public interface IVsfSettings : IUpdatableSettings {

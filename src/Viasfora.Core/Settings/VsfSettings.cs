@@ -1,7 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Globalization;
-using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Settings {
 

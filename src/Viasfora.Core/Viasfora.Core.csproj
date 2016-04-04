@@ -141,7 +141,6 @@
     <Compile Include="Contracts\IToolTipWindow.cs" />
     <Compile Include="Contracts\IToolTipWindowProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rainbow\RainbowHighlightMode.cs" />
     <Compile Include="ReSharper.cs" />
     <Compile Include="SettingsContext.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />

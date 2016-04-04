@@ -91,6 +91,7 @@
     <Compile Include="RainbowColorTagger.cs" />
     <Compile Include="RainbowCommandHandler.cs" />
     <Compile Include="RainbowHighlight.cs" />
+    <Compile Include="RainbowHighlightMode.cs" />
     <Compile Include="RainbowKeyProcessor.cs" />
     <Compile Include="RainbowProvider.cs" />
     <Compile Include="RainbowTaggerProvider.cs" />
