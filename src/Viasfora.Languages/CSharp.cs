@@ -37,7 +37,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return new String[] { ContentType }; }
     }
 
-    public override IBraceScanner NewBraceScanner() {
+    protected override IBraceScanner NewBraceScanner() {
       return new CSharpBraceScanner();
     }
 

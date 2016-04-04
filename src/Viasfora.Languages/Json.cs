@@ -29,7 +29,7 @@ namespace Winterdom.Viasfora.Languages {
     public JSON(IVsfSettings settings) : base(settings) {
     }
 
-    public override IBraceScanner NewBraceScanner() {
+    protected override IBraceScanner NewBraceScanner() {
       return new JScriptBraceScanner();
     }
   }

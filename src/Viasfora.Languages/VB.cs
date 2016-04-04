@@ -44,7 +44,7 @@ namespace Winterdom.Viasfora.Languages {
     public VB(IVsfSettings settings) : base(settings) {
     }
 
-    public override IBraceScanner NewBraceScanner() {
+    protected override IBraceScanner NewBraceScanner() {
       return new VbBraceScanner();
     }
   }

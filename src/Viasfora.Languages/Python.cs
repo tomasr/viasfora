@@ -30,7 +30,7 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.Python; }
     }
-    public override IBraceScanner NewBraceScanner() {
+    protected override IBraceScanner NewBraceScanner() {
       return new PythonBraceScanner();
     }
     protected override String[] SupportedContentTypes {

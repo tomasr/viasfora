@@ -34,7 +34,8 @@ namespace Winterdom.Viasfora.Text {
       var firstLine = snapshot.GetLineFromLineNumber(numLine);
 
       ITextChars tc = new LineChars(firstLine);
-      String commentText = language.NewFirstLineCommentParser().Parse(tc);
+      var svc = language.GetService<IFirstLineCommentParser>();
+      String commentText = svc.Parse(tc);
       if ( String.IsNullOrEmpty(commentText) ) {
         return;
       }

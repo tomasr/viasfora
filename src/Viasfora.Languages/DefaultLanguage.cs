@@ -33,7 +33,7 @@ namespace Winterdom.Viasfora.Languages {
     public override bool MatchesContentType(IContentType contentType) {
       return true;
     }
-    public override IBraceScanner NewBraceScanner() {
+    protected override IBraceScanner NewBraceScanner() {
       return new DefaultBraceScanner();
     }
 

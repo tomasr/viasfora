@@ -116,6 +116,10 @@
       <Project>{419c99ad-185a-4d31-a7ff-e1754c7b806d}</Project>
       <Name>Viasfora.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Viasfora.Rainbow\Viasfora.Rainbow.csproj">
+      <Project>{944758a5-90a4-4de7-8ef6-4fb2e7f4efb3}</Project>
+      <Name>Viasfora.Rainbow</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

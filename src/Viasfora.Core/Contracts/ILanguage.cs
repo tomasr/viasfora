@@ -14,8 +14,7 @@ namespace Winterdom.Viasfora.Contracts {
     String KeyName { get; }
     bool Enabled { get; set; }
 
-    IBraceScanner NewBraceScanner();
-    IFirstLineCommentParser NewFirstLineCommentParser();
+    T GetService<T>();
     IStringScanner NewStringScanner(String text);
     bool IsControlFlowKeyword(String text);
     bool IsVisibilityKeyword(String text);

@@ -39,7 +39,7 @@ namespace Winterdom.Viasfora.Languages {
     [ImportingConstructor]
     public PowerShell(IVsfSettings settings) : base(settings) {
     }
-    public override IBraceScanner NewBraceScanner() {
+    protected override IBraceScanner NewBraceScanner() {
       return new PsBraceScanner();
     }
     public override IStringScanner NewStringScanner(String text) {

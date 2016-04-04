@@ -30,7 +30,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.braceErrors = new List<CharPos>();
 
       if ( this.language != null ) {
-        this.braceScanner = this.language.NewBraceScanner();
+        this.braceScanner = this.language.GetService<IBraceScanner>();
 
         this.braceList.Clear();
         this.BraceChars = this.braceScanner.BraceList;

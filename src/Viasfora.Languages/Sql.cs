@@ -33,7 +33,7 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName {
       get { return Constants.Sql; }
     }
-    public override IBraceScanner NewBraceScanner() {
+    protected override IBraceScanner NewBraceScanner() {
       return new SqlBraceScanner();
     }
 

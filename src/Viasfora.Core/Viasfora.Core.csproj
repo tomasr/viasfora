@@ -135,16 +135,11 @@
     <Compile Include="Outlining\UserOutliningTaggerProvider.cs" />
     <Compile Include="PkgSource.cs" />
     <Compile Include="PkgCmdIdList.cs" />
-    <Compile Include="Rainbow\BracePos.cs" />
-    <Compile Include="Rainbow\CharPos.cs" />
-    <Compile Include="Rainbow\IBraceScanner.cs" />
     <Compile Include="Contracts\ILanguage.cs" />
     <Compile Include="Contracts\ILanguageFactory.cs" />
-    <Compile Include="Rainbow\IResumeControl.cs" />
     <Compile Include="Contracts\IToolTipWindow.cs" />
     <Compile Include="Contracts\IToolTipWindowProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Rainbow\ITextBufferBraces.cs" />
     <Compile Include="Rainbow\RainbowHighlightMode.cs" />
     <Compile Include="ReSharper.cs" />
     <Compile Include="SettingsContext.cs" />

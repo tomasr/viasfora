@@ -9,7 +9,7 @@ namespace Winterdom.Viasfora.Languages {
 
     public CBasedLanguage(IVsfSettings settings) : base(settings) {
     }
-    public override IBraceScanner NewBraceScanner() {
+    protected override IBraceScanner NewBraceScanner() {
       return new CBraceScanner();
     }
     public override IStringScanner NewStringScanner(String text) {

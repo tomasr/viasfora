@@ -77,11 +77,16 @@
     <Compile Include="..\AssemblyInfo.Common.cs">
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
+    <Compile Include="BracePos.cs" />
+    <Compile Include="CharPos.cs" />
     <Compile Include="Classifications\RainbowClassifications.cs" />
     <Compile Include="Design\QuickInfoPresenter.xaml.cs">
       <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorFormats\RainbowFormats.cs" />
+    <Compile Include="IBraceScanner.cs" />
+    <Compile Include="IResumeControl.cs" />
+    <Compile Include="ITextBufferBraces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RainbowColorTagger.cs" />
     <Compile Include="RainbowCommandHandler.cs" />

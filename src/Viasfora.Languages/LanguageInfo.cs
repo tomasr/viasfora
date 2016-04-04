@@ -34,8 +34,17 @@ namespace Winterdom.Viasfora.Languages {
       this.Settings = settings;
     }
 
-    public abstract IBraceScanner NewBraceScanner();
-    public virtual IFirstLineCommentParser NewFirstLineCommentParser() {
+    public T GetService<T>() {
+      if ( typeof(T)  == typeof(IBraceScanner) ) {
+        return (T)NewBraceScanner();
+      } else if ( typeof(T) == typeof(IFirstLineCommentParser) ) {
+        return (T)NewFirstLineCommentParser();
+      }
+      return default(T);
+    }
+
+    protected abstract IBraceScanner NewBraceScanner();
+    protected virtual IFirstLineCommentParser NewFirstLineCommentParser() {
       return new GenericCommentParser();
     }
     public virtual IStringScanner NewStringScanner(String text) {
