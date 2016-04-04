@@ -60,8 +60,11 @@ namespace Viasfora.Tests {
     private VsfEditorHost GetOrCreateEditorHost() {
       if ( cachedEditorHost == null ) {
         var editorHostFactory = new EditorHostFactory();
-        editorHostFactory.Add(new AssemblyCatalog(typeof(IVsfSettings).Assembly));
-        editorHostFactory.Add(new AssemblyCatalog(typeof(LanguageFactory).Assembly));
+        var catalog = new AggregateCatalog(
+          new AssemblyCatalog(typeof(LanguageFactory).Assembly),
+          new AssemblyCatalog(typeof(PkgSource).Assembly)
+          );
+        editorHostFactory.Add(catalog);
         var compositionContainer = editorHostFactory.CreateCompositionContainer();
         cachedEditorHost = new VsfEditorHost(compositionContainer);
       }
