@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora.Rainbow {
     [Import]
     public ILanguageFactory LanguageFactory { get; set; }
     [Import]
-    public IVsfSettings Settings { get; set; }
+    public IRainbowSettings Settings { get; set; }
 
     public ITagger<T> CreateTagger<T>(ITextBuffer buffer) where T : ITag {
       RainbowProvider prov = buffer.Properties.GetOrCreateSingletonProperty(

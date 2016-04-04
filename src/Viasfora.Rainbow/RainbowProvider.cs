@@ -14,7 +14,7 @@ namespace Winterdom.Viasfora.Rainbow {
     public ITextBufferBraces BufferBraces { get; private set; }
     public IClassificationTypeRegistryService Registry { get; private set; }
     public ILanguageFactory LanguageFactory { get; private set; }
-    public IVsfSettings Settings { get; private set; }
+    public IRainbowSettings Settings { get; private set; }
     public RainbowTaggerProvider Provider { get; private set; }
     public Dispatcher Dispatcher { get; private set; }
     public RainbowColorTagger ColorTagger { get; private set; }

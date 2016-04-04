@@ -17,16 +17,18 @@ namespace Winterdom.Viasfora.Options {
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
       var settings = SettingsContext.GetSettings();
+      var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
+
       settings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
       settings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
       settings.HighlightLineWidth = this.HighlightLineWidth;
       settings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       settings.FlowControlUseItalics = FlowControlUseItalics;
       settings.EscapeSequencesEnabled = EscapeSeqHighlightEnabled;
-      settings.RainbowDepth = RainbowDepth;
-      settings.RainbowTagsEnabled = RainbowTagsEnabled;
-      settings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
-      settings.RainbowHighlightMode = RainbowHighlightMode;
+      rainbowSettings.RainbowDepth = RainbowDepth;
+      rainbowSettings.RainbowTagsEnabled = RainbowTagsEnabled;
+      rainbowSettings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
+      rainbowSettings.RainbowHighlightMode = RainbowHighlightMode;
       settings.DeveloperMarginEnabled = DevMarginEnabled;
       settings.AutoExpandRegions = AutoExpandRegions;
       settings.BoldAsItalicsEnabled = BoldAsItalicsEnabled;
@@ -41,16 +43,18 @@ namespace Winterdom.Viasfora.Options {
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
       var settings = SettingsContext.GetSettings();
+      var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
+
       CurrentLineHighlightEnabled = settings.CurrentLineHighlightEnabled;
       CurrentColumnHighlightEnabled = settings.CurrentColumnHighlightEnabled;
       highlightLineWidth = settings.HighlightLineWidth;
       KeywordClassifierEnabled = settings.KeywordClassifierEnabled;
       FlowControlUseItalics = settings.FlowControlUseItalics;
       EscapeSeqHighlightEnabled = settings.EscapeSequencesEnabled;
-      RainbowDepth = settings.RainbowDepth;
-      RainbowTagsEnabled = settings.RainbowTagsEnabled;
-      RainbowHighlightMode = settings.RainbowHighlightMode;
-      RainbowToolTipsEnabled = settings.RainbowToolTipsEnabled;
+      RainbowDepth = rainbowSettings.RainbowDepth;
+      RainbowTagsEnabled = rainbowSettings.RainbowTagsEnabled;
+      RainbowHighlightMode = rainbowSettings.RainbowHighlightMode;
+      RainbowToolTipsEnabled = rainbowSettings.RainbowToolTipsEnabled;
       DevMarginEnabled = settings.DeveloperMarginEnabled;
       AutoExpandRegions = settings.AutoExpandRegions;
       BoldAsItalicsEnabled = settings.BoldAsItalicsEnabled;

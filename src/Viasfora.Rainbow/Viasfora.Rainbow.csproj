@@ -98,6 +98,8 @@
     <Compile Include="RainbowToolTipContext.cs" />
     <Compile Include="RainbowToolTipPresenter.cs" />
     <Compile Include="RainbowToolTipSource.cs" />
+    <Compile Include="IRainbowSettings.cs" />
+    <Compile Include="Settings\RainbowSettings.cs" />
     <Compile Include="TextBufferBraces.cs" />
     <Compile Include="Util\ToolTipWindow.cs" />
     <Compile Include="Util\ViewTipProperty.cs" />

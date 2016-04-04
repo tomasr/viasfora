@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.Rainbow {
   public class RainbowKeyProcessorProvider : IKeyProcessorProvider {
 
     [Import]
-    public IVsfSettings Settings { get; set; }
+    public IRainbowSettings Settings { get; set; }
 
     public KeyProcessor GetAssociatedProcessor(IWpfTextView wpfTextView) {
       return new RainbowKeyProcessor(wpfTextView, Settings);
@@ -25,11 +25,11 @@ namespace Winterdom.Viasfora.Rainbow {
 
   public class RainbowKeyProcessor : KeyProcessor {
     private readonly ITextView theView;
-    private readonly IVsfSettings settings;
+    private readonly IRainbowSettings settings;
     private Stopwatch timer = new Stopwatch();
     private bool startedEffect = false;
     private TimeSpan pressTime;
-    public RainbowKeyProcessor(ITextView textView, IVsfSettings settings) {
+    public RainbowKeyProcessor(ITextView textView, IRainbowSettings settings) {
       this.theView = textView;
       this.theView.LostAggregateFocus += OnLostFocus;
       this.theView.Closed += OnViewClosed;

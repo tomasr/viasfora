@@ -2,7 +2,7 @@
 using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora {
-  public interface IVsfSettings {
+  public interface IVsfSettings : IUpdatableSettings {
     bool KeywordClassifierEnabled { get; set; }
     bool FlowControlUseItalics { get; set; }
     bool EscapeSequencesEnabled { get; set; }
@@ -14,12 +14,6 @@ namespace Winterdom.Viasfora {
     bool CurrentLineHighlightEnabled { get; set; }
     bool CurrentColumnHighlightEnabled { get; set; }
     double HighlightLineWidth { get; set; }
-
-    int RainbowDepth { get; set; }
-    bool RainbowTagsEnabled { get; set; }
-    long RainbowCtrlTimer { get; set; }
-    RainbowHighlightMode RainbowHighlightMode { get; set; }
-    bool RainbowToolTipsEnabled { get; set; }
 
     bool PresentationModeEnabled { get; set; }
     int PresentationModeDefaultZoom { get; set; }
@@ -38,7 +32,6 @@ namespace Winterdom.Viasfora {
     String TextObfuscationRegexes { get; set; }
     bool TelemetryEnabled { get; set; }
 
-    event EventHandler SettingsChanged;
     String GetValue(String name, String defaultValue);
     bool GetBoolean(String name, bool defval);
     int GetInt32(String name, int defval);

@@ -21,7 +21,7 @@ namespace Winterdom.Viasfora.Rainbow {
     [Import]
     public IToolTipWindowProvider ToolTipProvider { get; set; }
     [Import]
-    public IVsfSettings Settings { get; set; }
+    public IRainbowSettings Settings { get; set; }
 
     public IQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer) {
       return new RainbowToolTipSource(textBuffer, this);

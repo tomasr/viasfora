@@ -47,26 +47,6 @@ namespace Winterdom.Viasfora.Settings {
       get { return GetDouble(nameof(HighlightLineWidth), 1.4); }
       set { SetValue(nameof(HighlightLineWidth), value); }
     }
-    public int RainbowDepth {
-      get { return GetInt32(nameof(RainbowDepth), 4); }
-      set { SetValue(nameof(RainbowDepth), value); }
-    }
-    public bool RainbowTagsEnabled {
-      get { return GetBoolean(nameof(RainbowTagsEnabled), true); }
-      set { SetValue(nameof(RainbowTagsEnabled), value); }
-    }
-    public long RainbowCtrlTimer {
-      get { return GetInt64(nameof(RainbowCtrlTimer), 300); }
-      set { SetValue(nameof(RainbowCtrlTimer), value); }
-    }
-    public RainbowHighlightMode RainbowHighlightMode {
-      get { return GetEnum(nameof(RainbowHighlightMode), RainbowHighlightMode.TrackNextScope); }
-      set { SetValue(nameof(RainbowHighlightMode), value); }
-    }
-    public bool RainbowToolTipsEnabled {
-      get { return GetBoolean(nameof(RainbowToolTipsEnabled), true); }
-      set { SetValue(nameof(RainbowToolTipsEnabled), value); }
-    }
     public bool PresentationModeEnabled {
       get { return GetBoolean(nameof(PresentationModeEnabled), true); }
       set { SetValue(nameof(PresentationModeEnabled), value); }

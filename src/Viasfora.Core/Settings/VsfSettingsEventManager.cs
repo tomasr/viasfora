@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows;
 
 namespace Winterdom.Viasfora.Settings {
   public class VsfSettingsEventManager : WeakEventManager {
-    public static void AddListener(IVsfSettings source,
+    public static void AddListener(IUpdatableSettings source,
                                    IWeakEventListener handler) {
       if ( source == null )
         throw new ArgumentNullException("source");
@@ -16,7 +13,7 @@ namespace Winterdom.Viasfora.Settings {
       CurrentManager.ProtectedAddListener(source, handler);
     }
 
-    public static void RemoveListener(IVsfSettings source,
+    public static void RemoveListener(IUpdatableSettings source,
                                       IWeakEventListener handler) {
       if ( source == null )
         throw new ArgumentNullException("source");
@@ -43,12 +40,12 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     protected override void StartListening(object source) {
-      IVsfSettings typedSource = (IVsfSettings)source;
+      var typedSource = (IUpdatableSettings)source;
       typedSource.SettingsChanged += DeliverEvent;
     }
 
     protected override void StopListening(object source) {
-      IVsfSettings typedSource = (IVsfSettings)source;
+      var typedSource = (IUpdatableSettings)source;
       typedSource.SettingsChanged -= DeliverEvent;
     }
 

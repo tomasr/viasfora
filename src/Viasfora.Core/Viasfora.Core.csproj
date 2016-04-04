@@ -112,6 +112,7 @@
     <Compile Include="Intellisense\PlainTextCompletionContext.cs" />
     <Compile Include="Intellisense\PlainTextCompletionSource.cs" />
     <Compile Include="Intellisense\PlainTextCompletionSourceProvider.cs" />
+    <Compile Include="IUpdatableSettings.cs" />
     <Compile Include="IVsfSettings.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />

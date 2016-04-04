@@ -12,6 +12,10 @@ namespace Winterdom.Viasfora {
       var model = new SComponentModel();
       return model.GetService<IVsfSettings>();
     }
+    public static T GetSpecificSettings<T>() {
+      var model = new SComponentModel();
+      return model.GetService<T>();
+    }
     public static ILanguage GetLanguage(String key) {
       var model = new SComponentModel();
       var factory = model.GetService<ILanguageFactory>();
