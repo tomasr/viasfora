@@ -94,7 +94,6 @@
     <Compile Include="Design\QuickInfoPresenter.xaml.cs">
       <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Design\StringListConverter.cs" />
     <Compile Include="Design\UIElementDialogPage.cs" />
     <Compile Include="Design\XamlExtensions.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">

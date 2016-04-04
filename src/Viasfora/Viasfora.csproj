@@ -66,6 +66,7 @@
     <Compile Include="Commands\AddOutliningCommand.cs" />
     <Compile Include="Commands\PresentationModeCommand.cs" />
     <Compile Include="Commands\VsCommand.cs" />
+    <Compile Include="Design\StringListConverter.cs" />
     <Compile Include="Options\ROptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
