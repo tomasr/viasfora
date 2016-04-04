@@ -31,5 +31,7 @@ namespace Winterdom.Viasfora.Classifications {
     [Export, Name(Constants.COLUMN_HIGHLIGHT)]
     internal static ClassificationTypeDefinition CurrentColumnClassificationType = null;
 
+    [Export, Name(Constants.OBFUSCATED_TEXT)]
+    internal static ClassificationTypeDefinition ObfuscatedTextType = null;
   } 
 }

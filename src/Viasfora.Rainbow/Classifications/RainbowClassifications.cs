@@ -5,38 +5,35 @@ using System.ComponentModel.Composition;
 
 namespace Winterdom.Viasfora.Rainbow.Classifications {
   public static class RainbowClassifications {
-    [Export, Name(Constants.RAINBOW_1)]
+    [Export, Name(Rainbows.Rainbow1)]
     internal static ClassificationTypeDefinition Rainbow1ClassificationType = null;
 
-    [Export, Name(Constants.RAINBOW_2)]
+    [Export, Name(Rainbows.Rainbow2)]
     internal static ClassificationTypeDefinition Rainbow2ClassificationType = null;
 
-    [Export, Name(Constants.RAINBOW_3)]
+    [Export, Name(Rainbows.Rainbow3)]
     internal static ClassificationTypeDefinition Rainbow3ClassificationType = null;
 
-    [Export, Name(Constants.RAINBOW_4)]
+    [Export, Name(Rainbows.Rainbow4)]
     internal static ClassificationTypeDefinition Rainbow4ClassificationType = null;
 
-    [Export, Name(Constants.RAINBOW_5)]
+    [Export, Name(Rainbows.Rainbow5)]
     internal static ClassificationTypeDefinition Rainbow5ClassificationType = null;
 
-    [Export, Name(Constants.RAINBOW_6)]
+    [Export, Name(Rainbows.Rainbow6)]
     internal static ClassificationTypeDefinition Rainbow6ClassificationType = null;
 
-    [Export, Name(Constants.RAINBOW_7)]
+    [Export, Name(Rainbows.Rainbow7)]
     internal static ClassificationTypeDefinition Rainbow7ClassificationType = null;
 
-    [Export, Name(Constants.RAINBOW_8)]
+    [Export, Name(Rainbows.Rainbow8)]
     internal static ClassificationTypeDefinition Rainbow8ClassificationType = null;
 
-    [Export, Name(Constants.RAINBOW_9)]
+    [Export, Name(Rainbows.Rainbow9)]
     internal static ClassificationTypeDefinition Rainbow9ClassificationType = null;
 
-    [Export, Name(Constants.RAINBOW_ERROR)]
+    [Export, Name(Rainbows.RainbowError)]
     internal static ClassificationTypeDefinition RainbowErrorClassificationType = null;
-
-    [Export, Name(Constants.OBFUSCATED_TEXT)]
-    internal static ClassificationTypeDefinition ObfuscatedTextType = null;
 
   }
 }

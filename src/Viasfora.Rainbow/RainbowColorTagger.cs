@@ -20,14 +20,14 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public RainbowColorTagger(RainbowProvider provider) {
       this.provider = provider;
-      this.rainbowTags = GetRainbows(provider.Registry, Constants.MAX_RAINBOW_DEPTH);
-      this.rainbowError = provider.Registry.GetClassificationType(Constants.RAINBOW_ERROR);
+      this.rainbowTags = GetRainbows(provider.Registry, Rainbows.MaxDepth);
+      this.rainbowError = provider.Registry.GetClassificationType(Rainbows.RainbowError);
     }
 
     public static IClassificationType[] GetRainbows(IClassificationTypeRegistryService registry, int max) {
       var result = new IClassificationType[max];
       for ( int i = 0; i < max; i++ ) {
-        result[i] = registry.GetClassificationType(Constants.RAINBOW + (i + 1));
+        result[i] = registry.GetClassificationType(Rainbows.Rainbow + (i + 1));
       }
       return result;
     }

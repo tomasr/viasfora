@@ -30,7 +30,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public void TextViewCreated(IWpfTextView textView) {
       var rainbowTags = RainbowColorTagger.GetRainbows(
-        registryService, Constants.MAX_RAINBOW_DEPTH
+        registryService, Rainbows.MaxDepth
         );
       var formatMap = formatMapService.GetClassificationFormatMap(textView);
       textView.Set(new RainbowHighlight(textView, formatMap, rainbowTags));

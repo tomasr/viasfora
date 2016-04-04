@@ -12,21 +12,6 @@ namespace Winterdom.Viasfora {
     public const String COLUMN_HIGHLIGHT = "Viasfora Current Column";
     public const String DEV_MARGIN = "viasfora.dev.margin";
 
-    public const int MAX_RAINBOW_DEPTH = 9;
-    public const String RAINBOW = "Viasfora Rainbow Brace ";
-    public const String RAINBOW_1 = RAINBOW + "1";
-    public const String RAINBOW_2 = RAINBOW + "2";
-    public const String RAINBOW_3 = RAINBOW + "3";
-    public const String RAINBOW_4 = RAINBOW + "4";
-    public const String RAINBOW_5 = RAINBOW + "5";
-    public const String RAINBOW_6 = RAINBOW + "6";
-    public const String RAINBOW_7 = RAINBOW + "7";
-    public const String RAINBOW_8 = RAINBOW + "8";
-    public const String RAINBOW_9 = RAINBOW + "9";
-    public const String RAINBOW_ERROR = RAINBOW + "Error";
-
-    public const String RAINBOW_TIP_HIGHLIGHT = "viasfora.rainbow.tip.highlight";
-
     public const String OBFUSCATED_TEXT = "viasfora.text.obfuscated";
 
     public const String CT_XML = "XML";

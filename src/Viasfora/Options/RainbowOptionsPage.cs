@@ -39,7 +39,7 @@ namespace Winterdom.Viasfora.Options {
     public int RainbowDepth {
       get { return this.rainbowDepth; }
       set {
-        if ( value <= 0 || value > Constants.MAX_RAINBOW_DEPTH ) {
+        if ( value <= 0 || value > Rainbows.MaxDepth ) {
           throw new ArgumentOutOfRangeException("Value must be between 0 and 9");
         }
         this.rainbowDepth = value;

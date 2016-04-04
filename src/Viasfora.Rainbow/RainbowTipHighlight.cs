@@ -94,7 +94,7 @@ namespace Winterdom.Viasfora.Rainbow {
          new Point(Math.Max(textView.ViewportRight, line.TextRight), line.TextBottom)
       );
 
-      var properties = this.formatMap.GetProperties(Constants.RAINBOW_TIP_HIGHLIGHT);
+      var properties = this.formatMap.GetProperties(Rainbows.TipHilight);
       rc = CreateVisual(line.Extent, rc, properties);
     }
 
