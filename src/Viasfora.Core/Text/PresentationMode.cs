@@ -1,19 +1,18 @@
 ﻿using Microsoft.VisualStudio.Text.Editor;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Winterdom.Viasfora;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Text {
   public class PresentationMode {
     private IWpfTextView theView;
     private IVsfSettings settings;
-    public PresentationMode(IWpfTextView textView, IVsfSettings settings) {
+    private IPresentationModeState state;
+    public PresentationMode(IWpfTextView textView, IPresentationModeState state, IVsfSettings settings) {
       this.theView = textView;
       this.settings = settings;
+      this.state = state;
 
-      VsfPackage.PresentationModeChanged += OnPresentationModeChanged;
+      state.PresentationModeChanged += OnPresentationModeChanged;
 
       settings.SettingsChanged += OnSettingsChanged;
       textView.Closed += OnTextViewClosed;
@@ -41,7 +40,7 @@ namespace Winterdom.Viasfora.Text {
         this.settings = null;
       }
       if ( theView != null ) {
-        VsfPackage.PresentationModeChanged -= OnPresentationModeChanged;
+        state.PresentationModeChanged -= OnPresentationModeChanged;
         theView.Closed -= OnTextViewClosed;
         theView.ViewportWidthChanged -= OnViewportWidthChanged;
         theView = null;
@@ -54,11 +53,11 @@ namespace Winterdom.Viasfora.Text {
       if ( textView.IsPeekTextWindow() )
         return;
       if ( this.settings.PresentationModeEnabled  ) {
-        int zoomLevel = VsfPackage.GetPresentationModeZoomLevel();
+        int zoomLevel = state.GetPresentationModeZoomLevel();
         // VS2015 supports automatic sync of all text windows with the 
         // zoom level once you zoom one
         // so if the current zoomLevel is not 100%, just ignore it.
-        if ( textView.ZoomLevel != 100 && !VsfPackage.PresentationModeTurnedOn )
+        if ( textView.ZoomLevel != 100 && state.PresentationModeTurnedOn )
           return;
         textView.ZoomLevel = zoomLevel;
       }

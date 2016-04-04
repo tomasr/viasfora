@@ -47,5 +47,7 @@
   <Content>
     <VsPackage>|%CurrentProject%;PkgdefProjectOutputGroup|</VsPackage>
     <MefComponent>|%CurrentProject%|</MefComponent>
+    <MefComponent>|Viasfora.Core|</MefComponent>
+    <MefComponent>|Viasfora.Languages|</MefComponent>
   </Content>
 </Vsix>

@@ -112,9 +112,9 @@
     <Compile Include="XLang.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Viasfora\Viasfora.csproj">
-      <Project>{ed05e9a0-b822-4925-81a5-721cbe04da37}</Project>
-      <Name>Viasfora</Name>
+    <ProjectReference Include="..\Viasfora.Core\Viasfora.Core.csproj">
+      <Project>{419c99ad-185a-4d31-a7ff-e1754c7b806d}</Project>
+      <Name>Viasfora.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

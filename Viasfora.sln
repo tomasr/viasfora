@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6271BFBC
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Languages", "src\Viasfora.Languages\Viasfora.Languages.csproj", "{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Core", "src\Viasfora.Core\Viasfora.Core.csproj", "{419C99AD-185A-4D31-A7FF-E1754C7B806D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,5 +54,6 @@ Global
 		{ED05E9A0-B822-4925-81A5-721CBE04DA37} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
 		{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98} = {6271BFBC-846E-48A5-86BD-0729B65DA933}
 		{14B957DB-0ED2-4DEA-85C9-B670F6653C1B} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\Global.props" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{419C99AD-185A-4D31-A7FF-E1754C7B806D}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Winterdom.Viasfora</RootNamespace>
+    <AssemblyName>Viasfora.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
+    <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VsSdkTargets>$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\VSSDK\Microsoft.VsSDK.targets</VsSdkTargets>
+    <VsSdkTargets Condition=" '$(VisualStudioVersion)' == '' ">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\VSSDK\Microsoft.VsSDK.targets</VsSdkTargets>
+  </PropertyGroup>
+  <!-- This is needed to prevent forced migrations when opening the project in Vs2012 -->
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '11.0' ">
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <!-- This is needed to prevent forced migrations when opening the project in Vs2013 -->
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '12.0' ">
+    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '14.0' ">
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Language.Intellisense, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Language.StandardClassification, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.9.0, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+    <Reference Include="Microsoft.VisualStudio.Text.Data, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.Logic, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.UI, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Text.UI.Wpf, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.Editor, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfo.Common.cs">
+      <Link>Properties\AssemblyInfo.Common.cs</Link>
+    </Compile>
+    <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
+    <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
+    <Compile Include="CommonExtensions.cs" />
+    <Compile Include="Compatibility\SComponentModel.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="ContentTypes.cs" />
+    <Compile Include="Contracts\ILogger.cs" />
+    <Compile Include="Contracts\IPackageUserOptions.cs" />
+    <Compile Include="Contracts\IPresentationModeState.cs" />
+    <Compile Include="DefaultNames.cs" />
+    <Compile Include="Design\NativeMethods.cs" />
+    <Compile Include="Design\QuickInfoPresenter.xaml.cs">
+      <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Design\StringListConverter.cs" />
+    <Compile Include="Design\UIElementDialogPage.cs" />
+    <Compile Include="Design\XamlExtensions.cs" />
+    <Compile Include="Design\ZoomTrackBar.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\ZoomTrackBar.Designer.cs">
+      <DependentUpon>ZoomTrackBar.cs</DependentUpon>
+    </Compile>
+    <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
+    <Compile Include="EditorFormats\CurrentLineFormat.cs" />
+    <Compile Include="EditorFormats\FlowControlFormat.cs" />
+    <Compile Include="EditorFormats\FormatSpecifierFormat.cs" />
+    <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
+    <Compile Include="EditorFormats\ObfuscatedTextFormat.cs" />
+    <Compile Include="EditorFormats\RainbowFormats.cs" />
+    <Compile Include="EditorFormats\RazorClosingTagFormat.cs" />
+    <Compile Include="EditorFormats\StringEscapeSequenceFormat.cs" />
+    <Compile Include="EditorFormats\VisibilityKeywordFormat.cs" />
+    <Compile Include="EditorFormats\XmlClosingTagFormat.cs" />
+    <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
+    <Compile Include="Guids.cs" />
+    <Compile Include="Intellisense\PlainTextCompletionCommandHandler.cs" />
+    <Compile Include="Intellisense\PlainTextCompletionContext.cs" />
+    <Compile Include="Intellisense\PlainTextCompletionSource.cs" />
+    <Compile Include="Intellisense\PlainTextCompletionSourceProvider.cs" />
+    <Compile Include="IVsfSettings.cs" />
+    <Compile Include="JsonExtensions.cs" />
+    <Compile Include="Margins\DevMarginProvider.cs" />
+    <Compile Include="Margins\DevMarginViewModel.cs" />
+    <Compile Include="Margins\DevMarginVisual.xaml.cs">
+      <DependentUpon>DevMarginVisual.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Margins\DevViewMargin.cs" />
+    <Compile Include="Outlining\AutoExpandMode.cs" />
+    <Compile Include="Outlining\AutoExpandRegions.cs" />
+    <Compile Include="Outlining\BaseOutliningManager.cs" />
+    <Compile Include="Outlining\BufferOutlines.cs" />
+    <Compile Include="Outlining\IOutliningController.cs" />
+    <Compile Include="Outlining\ISelectionOutlining.cs" />
+    <Compile Include="Outlining\IUserOutlining.cs" />
+    <Compile Include="Outlining\OutliningController.cs" />
+    <Compile Include="Outlining\OutliningGlyphFactoryProvider.cs" />
+    <Compile Include="Outlining\SelectionOutliningManager.cs" />
+    <Compile Include="Outlining\SelectionOutliningTaggerProvider.cs" />
+    <Compile Include="Outlining\UserOutliningManager.cs" />
+    <Compile Include="Outlining\UserOutliningTaggerProvider.cs" />
+    <Compile Include="PkgSource.cs" />
+    <Compile Include="PkgCmdIdList.cs" />
+    <Compile Include="Rainbow\BracePos.cs" />
+    <Compile Include="Rainbow\CharPos.cs" />
+    <Compile Include="Rainbow\IBraceScanner.cs" />
+    <Compile Include="Contracts\ILanguage.cs" />
+    <Compile Include="Contracts\ILanguageFactory.cs" />
+    <Compile Include="Rainbow\IResumeControl.cs" />
+    <Compile Include="Contracts\IToolTipWindow.cs" />
+    <Compile Include="Contracts\IToolTipWindowProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rainbow\ITextBufferBraces.cs" />
+    <Compile Include="Rainbow\RainbowColorTagger.cs" />
+    <Compile Include="Rainbow\RainbowCommandHandler.cs" />
+    <Compile Include="Rainbow\RainbowHighlight.cs" />
+    <Compile Include="Rainbow\RainbowHighlightMode.cs" />
+    <Compile Include="Rainbow\RainbowKeyProcessor.cs" />
+    <Compile Include="Rainbow\RainbowProvider.cs" />
+    <Compile Include="Rainbow\RainbowTaggerProvider.cs" />
+    <Compile Include="Rainbow\RainbowTipHighlight.cs" />
+    <Compile Include="Rainbow\RainbowToolTipContext.cs" />
+    <Compile Include="Rainbow\RainbowToolTipPresenter.cs" />
+    <Compile Include="Rainbow\RainbowToolTipSource.cs" />
+    <Compile Include="Rainbow\TextBufferBraces.cs" />
+    <Compile Include="ReSharper.cs" />
+    <Compile Include="SettingsContext.cs" />
+    <Compile Include="Settings\FilePersistUserSettings.cs" />
+    <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
+    <Compile Include="Settings\IPersistSettings.cs" />
+    <Compile Include="Settings\ISettingsObject.cs" />
+    <Compile Include="Settings\ISettingsStore.cs" />
+    <Compile Include="Settings\ISolutionUserSettings.cs" />
+    <Compile Include="Settings\OutlineSettings.cs" />
+    <Compile Include="Settings\SolutionUserSettings.cs" />
+    <Compile Include="Settings\SuoPersistUserSettings.cs" />
+    <Compile Include="Settings\VsfSettings.cs" />
+    <Compile Include="Settings\VsfSettingsEventManager.cs" />
+    <Compile Include="Sgml\SgmlParser.cs" />
+    <Compile Include="Sgml\SgmlReader.cs" />
+    <Compile Include="SnapshotExtensions.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Tags\KeywordTag.cs" />
+    <Compile Include="Tags\ObfuscatedTextTag.cs" />
+    <Compile Include="Tags\OutliningGlyphTag.cs" />
+    <Compile Include="Tags\RainbowTag.cs" />
+    <Compile Include="TextEditor.cs" />
+    <Compile Include="Text\BoldAsItalics.cs" />
+    <Compile Include="Text\CurrentColumnAdornment.cs" />
+    <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
+    <Compile Include="Text\CurrentLineAdornment.cs" />
+    <Compile Include="Text\CurrentLineAdornmentFactory.cs" />
+    <Compile Include="Text\KeywordTagger.cs" />
+    <Compile Include="Text\KeywordTaggerProvider.cs" />
+    <Compile Include="Text\ModelineFactory.cs" />
+    <Compile Include="Text\ModeLineProvider.cs" />
+    <Compile Include="Text\PresentationMode.cs" />
+    <Compile Include="Text\PresentationModeFactory.cs" />
+    <Compile Include="Text\PresentationModeFontChanger.cs" />
+    <Compile Include="Text\TextObfuscation.cs" />
+    <Compile Include="Util\IFirstLineCommentParser.cs" />
+    <Compile Include="Util\IModeLineParser.cs" />
+    <Compile Include="Util\IStringScanner.cs" />
+    <Compile Include="Util\ITextChars.cs" />
+    <Compile Include="Util\ITokenizer.cs" />
+    <Compile Include="Util\LineChars.cs" />
+    <Compile Include="Util\ModeLineParser.cs" />
+    <Compile Include="Util\RegexEntry.cs" />
+    <Compile Include="Util\RelayCommand.cs" />
+    <Compile Include="Util\SimpleTokenizer.cs" />
+    <Compile Include="Util\StringChars.cs" />
+    <Compile Include="Util\StringPart.cs" />
+    <Compile Include="Util\ToolTipWindow.cs" />
+    <Compile Include="Util\ViewTipProperty.cs" />
+    <Compile Include="Util\VsColors.cs" />
+    <Compile Include="VsSolution.cs" />
+    <Compile Include="XLangSupport\FakeContentTypeDefinition.cs" />
+    <Compile Include="XLangSupport\XLangTextViewCreationListener.cs" />
+    <Compile Include="Xml\HtmlMarkup.cs" />
+    <Compile Include="Xml\IMarkupLanguage.cs" />
+    <Compile Include="Xml\XamlMarkup.cs" />
+    <Compile Include="Xml\XmlMarkup.cs" />
+    <Compile Include="Xml\XmlQuickInfoController.cs" />
+    <Compile Include="Xml\XmlQuickInfoControllerProvider.cs" />
+    <Compile Include="Xml\XmlQuickInfoSource.cs" />
+    <Compile Include="Xml\XmlQuickInfoSourceProvider.cs" />
+    <Compile Include="Xml\XmlTagger.cs" />
+    <Compile Include="Xml\XmlTaggerProvider.cs" />
+    <Compile Include="Xml\XmlTagMatchingTagger.cs" />
+    <Compile Include="Xml\XmlTagMatchingTaggerProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Design\QuickInfoPresenter.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Margins\DevMarginVisual.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ComboBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ListBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\TreeViewItem.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Design\ZoomTrackBar.resx">
+      <DependentUpon>ZoomTrackBar.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\OpenBuffer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\PlainTextCompletion.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ShowCT.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ShowTVR.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

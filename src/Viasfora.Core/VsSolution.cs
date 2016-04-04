@@ -1,10 +1,7 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {
@@ -55,13 +52,13 @@ namespace Winterdom.Viasfora {
       }
       IPersistSettings persist = new FilePersistUserSettings(solutionPath);
       */
-      IPersistSettings persist = new SuoPersistUserSettings(VsfPackage.Instance);
+      IPersistSettings persist = new SuoPersistUserSettings(PkgSource.PackageUserOptions);
       return new SolutionUserSettings(persist);
     }
 
     private static void CheckError(int hr, String operation) {
       if ( hr != Constants.S_OK ) {
-        VsfPackage.LogInfo("{0} returned 0x{1:x8}", operation, hr);
+        PkgSource.LogInfo("{0} returned 0x{1:x8}", operation, hr);
         throw new InvalidOperationException(String.Format("{0} returned 0x{1:x8}", operation, hr));
       }
     }

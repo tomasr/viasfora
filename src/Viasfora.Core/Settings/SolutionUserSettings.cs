@@ -96,7 +96,7 @@ namespace Winterdom.Viasfora.Settings {
         // avoid generating a VS error if 
         // the JSON stored is invalid.
         // See https://github.com/tomasr/viasfora/issues/112
-        VsfPackage.LogError("Error loading solution user settings", ex);
+        PkgSource.LogError("Error loading solution user settings", ex);
       }
       return null;
     }

@@ -41,7 +41,7 @@ namespace Winterdom.Viasfora.Settings {
             settings[element.Name.LocalName] = element.Value;
           }
         } catch ( XmlException ex ) {
-          VsfPackage.LogInfo("Error loading '{0}': {1}", filePath, ex);
+          PkgSource.LogInfo("Error loading '{0}': {1}", filePath, ex);
         }
       }
     }

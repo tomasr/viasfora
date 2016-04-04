@@ -4,29 +4,29 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Text {
   public class PresentationModeFontChanger {
-    private VsfPackage package;
+    private IPresentationModeState packageState;
     private IVsfSettings settings;
     private FontCategory[] categories;
     private IVsFontAndColorStorage fontsAndColors;
     private bool enabled;
 
-    public PresentationModeFontChanger(VsfPackage package) {
-      this.package = package;
+    public PresentationModeFontChanger(IPresentationModeState state) {
+      this.packageState = state;
       this.enabled = false;
       this.settings = SettingsContext.GetSettings();
       this.categories = GetCategories();
-      this.fontsAndColors = (IVsFontAndColorStorage)
-        VsfPackage.GetGlobalService(typeof(IVsFontAndColorStorage));
+      this.fontsAndColors = state.GetService<IVsFontAndColorStorage>();
     }
 
     public void TurnOn() {
       if ( !settings.PresentationModeIncludeEnvFonts )
         return;
 
-      double zoomLevel = VsfPackage.GetPresentationModeZoomLevel();
+      double zoomLevel = this.packageState.GetPresentationModeZoomLevel();
       enabled = true;
       foreach ( var category in this.categories ) {
         TurnOnCategory(category, zoomLevel);

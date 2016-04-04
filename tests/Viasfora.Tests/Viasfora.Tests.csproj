@@ -119,6 +119,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Viasfora.Core\Viasfora.Core.csproj">
+      <Project>{419c99ad-185a-4d31-a7ff-e1754c7b806d}</Project>
+      <Name>Viasfora.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Viasfora.Languages\Viasfora.Languages.csproj">
       <Project>{14b957db-0ed2-4dea-85c9-b670f6653c1b}</Project>
       <Name>Viasfora.Languages</Name>

@@ -1,10 +1,8 @@
 ﻿using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Text {
   [Export(typeof(IWpfTextViewCreationListener))]
@@ -15,8 +13,9 @@ namespace Winterdom.Viasfora.Text {
     internal IVsfSettings Settings { get; set; }
 
     public void TextViewCreated(IWpfTextView textView) {
+      IPresentationModeState state = PkgSource.PresentationMode;
       textView.Properties.GetOrCreateSingletonProperty(
-        () => new PresentationMode(textView, Settings)
+        () => new PresentationMode(textView, state, Settings)
       );
     }
   }

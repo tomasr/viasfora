@@ -9,6 +9,7 @@ using Microsoft.VisualStudio;
 using Winterdom.Viasfora.Commands;
 using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Text;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -31,34 +32,27 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.ROptionsPage), "Viasfora\\Languages", "R", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.PowerShellOptionsPage), "Viasfora\\Languages", "PowerShell", 0, 0, true)]
   [ProvideMenuResource(1000, 1)]
-  public sealed class VsfPackage : Package {
+  public sealed class VsfPackage
+    : Package,
+      IPackageUserOptions,
+      IPresentationModeState,
+      ILogger
+    {
     public const String USER_OPTIONS_KEY = "VsfUserOptions";
 
-    public static VsfPackage Instance { get; private set; }
-
-    public static bool PresentationModeTurnedOn { get; set; }
-    public static EventHandler PresentationModeChanged { get; set; }
-    public byte[] UserOptions { get; set; }
-    public Version VsVersion { get; private set; }
     public PresentationModeFontChanger FontChanger { get; private set; } 
     private IVsActivityLog activityLog;
     private List<VsCommand> commands = new List<VsCommand>();
-
-    public static int GetPresentationModeZoomLevel() {
-      var settings = SettingsContext.GetSettings();
-      return PresentationModeTurnedOn
-        ? settings.PresentationModeEnabledZoom
-        : settings.PresentationModeDefaultZoom;
-    }
+    private byte[] userOptions;
 
     protected override void Initialize() {
       base.Initialize();
-      Instance = this;
+      LogInfo("Initializing VsfPackage");
+      PkgSource.Initialize(this);
+      PkgSource.VsVersion = FindVSVersion();
       InitializeTelemetry();
       InitializeActivityLog();
 
-      LogInfo("Initializing VsfPackage");
-      VsVersion = FindVSVersion();
       this.FontChanger = new PresentationModeFontChanger(this);
 
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
@@ -84,14 +78,14 @@ namespace Winterdom.Viasfora {
       if ( key == USER_OPTIONS_KEY ) {
         byte[] data = new byte[stream.Length];
         stream.Read(data, 0, data.Length);
-        this.UserOptions = data;
+        this.userOptions = data;
       }
     }
 
     protected override void OnSaveOptions(string key, Stream stream) {
       base.OnSaveOptions(key, stream);
-      if ( key == USER_OPTIONS_KEY && UserOptions != null ) {
-        stream.Write(UserOptions, 0, UserOptions.Length);
+      if ( key == USER_OPTIONS_KEY && userOptions != null ) {
+        stream.Write(userOptions, 0, userOptions.Length);
       }
     }
 
@@ -104,9 +98,8 @@ namespace Winterdom.Viasfora {
       Telemetry.Initialize(dte);
     }
 
-    public static void LogInfo(String format, params object[] args) {
-      if ( Instance == null ) return;
-      var log = Instance.activityLog;
+    public void LogInfo(String format, params object[] args) {
+      var log = this.activityLog;
       if ( log != null ) {
         log.LogEntry(
           (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_INFORMATION,
@@ -115,9 +108,8 @@ namespace Winterdom.Viasfora {
         );
       }
     }
-    public static void LogError(String message, Exception ex) {
-      if ( Instance == null ) return;
-      var log = Instance.activityLog;
+    public void LogError(String message, Exception ex) {
+      var log = this.activityLog;
       if ( log != null ) {
         log.LogEntry(
           (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR,
@@ -140,19 +132,49 @@ namespace Winterdom.Viasfora {
       commands.Add(new CompleteWordCommand(this, mcs));
     }
 
-    private static Version FindVSVersion() {
-      String key = Instance.UserRegistryRoot.Name;
-      String last = Path.GetFileName(key);
-      last = last.Substring(0, last.IndexOf('.'));
-      int version;
-      if ( Int32.TryParse(last, out version) ) {
-        return new Version(version, 0, 0, 0);
-      }
-      return new Version(10, 0, 0, 0);
+    private Version FindVSVersion() {
+      var dte = (EnvDTE80.DTE2)GetService(typeof(SDTE));
+      return Version.Parse(dte.Version);
     }
 
     internal static ISettingsStore GetGlobalSettingsStore() {
       return new GlobalXmlSettingsStore(null);
     }
+
+    void IPackageUserOptions.Write(byte[] options) {
+      this.userOptions = options;
+    }
+    byte[] IPackageUserOptions.Read() {
+      return this.userOptions;
+    }
+
+    //
+    // Presentation mode Support
+    //
+    public event EventHandler PresentationModeChanged;
+    public bool PresentationModeTurnedOn { get; private set; }
+    public int GetPresentationModeZoomLevel() {
+      var settings = SettingsContext.GetSettings();
+      return PresentationModeTurnedOn
+        ? settings.PresentationModeEnabledZoom
+        : settings.PresentationModeDefaultZoom;
+    }
+    public void TogglePresentationMode() {
+      PresentationModeTurnedOn = !PresentationModeTurnedOn;
+      if ( PresentationModeChanged != null ) {
+        PresentationModeChanged(this, EventArgs.Empty);
+      }
+      if ( PresentationModeTurnedOn ) {
+        FontChanger.TurnOn();
+        Telemetry.WriteEvent("Presentation Mode");
+      } else {
+        FontChanger.TurnOff();
+      }
+    }
+    
+    public T GetService<T>() {
+      return (T)GetService(typeof(T));
+    }
+
   }
 }
