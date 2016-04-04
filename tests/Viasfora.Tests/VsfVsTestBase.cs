@@ -12,6 +12,7 @@ using System.Windows;
 using Winterdom.Viasfora;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
+using Winterdom.Viasfora.Rainbow;
 
 namespace Viasfora.Tests {
   public class VsfVsTestBase {
@@ -62,7 +63,8 @@ namespace Viasfora.Tests {
         var editorHostFactory = new EditorHostFactory();
         var catalog = new AggregateCatalog(
           new AssemblyCatalog(typeof(LanguageFactory).Assembly),
-          new AssemblyCatalog(typeof(PkgSource).Assembly)
+          new AssemblyCatalog(typeof(PkgSource).Assembly),
+          new AssemblyCatalog(typeof(TextBufferBraces).Assembly)
           );
         editorHostFactory.Add(catalog);
         var compositionContainer = editorHostFactory.CreateCompositionContainer();

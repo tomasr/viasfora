@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:util="clr-namespace:Winterdom.Viasfora.Util"
+             xmlns:util="clr-namespace:Winterdom.Viasfora.Util;assembly=Viasfora.Core"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
   <UserControl.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="../Resources/ListBox.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/Viasfora.Core;component/Resources/ListBox.xaml" />
       </ResourceDictionary.MergedDictionaries>
       <Style TargetType="Border" x:Key="OuterBorder">
         <Setter Property="BorderThickness" Value="3" />
