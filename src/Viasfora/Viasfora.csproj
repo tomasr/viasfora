@@ -257,6 +257,10 @@
       <Project>{14b957db-0ed2-4dea-85c9-b670f6653c1b}</Project>
       <Name>Viasfora.Languages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Viasfora.Xml\Viasfora.Xml.csproj">
+      <Project>{3274163b-e647-40e2-8d9f-6df7e7c50411}</Project>
+      <Name>Viasfora.Xml</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Condition="Exists($(VsSdkTargets))" Project="$(VsSdkTargets)" />

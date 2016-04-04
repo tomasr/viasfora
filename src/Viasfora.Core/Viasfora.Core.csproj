@@ -82,7 +82,6 @@
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
-    <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
     <Compile Include="CommonExtensions.cs" />
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
@@ -111,11 +110,8 @@
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
     <Compile Include="EditorFormats\ObfuscatedTextFormat.cs" />
     <Compile Include="EditorFormats\RainbowFormats.cs" />
-    <Compile Include="EditorFormats\RazorClosingTagFormat.cs" />
     <Compile Include="EditorFormats\StringEscapeSequenceFormat.cs" />
     <Compile Include="EditorFormats\VisibilityKeywordFormat.cs" />
-    <Compile Include="EditorFormats\XmlClosingTagFormat.cs" />
-    <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Intellisense\PlainTextCompletionCommandHandler.cs" />
     <Compile Include="Intellisense\PlainTextCompletionContext.cs" />
@@ -219,18 +215,6 @@
     <Compile Include="VsSolution.cs" />
     <Compile Include="XLangSupport\FakeContentTypeDefinition.cs" />
     <Compile Include="XLangSupport\XLangTextViewCreationListener.cs" />
-    <Compile Include="Xml\HtmlMarkup.cs" />
-    <Compile Include="Xml\IMarkupLanguage.cs" />
-    <Compile Include="Xml\XamlMarkup.cs" />
-    <Compile Include="Xml\XmlMarkup.cs" />
-    <Compile Include="Xml\XmlQuickInfoController.cs" />
-    <Compile Include="Xml\XmlQuickInfoControllerProvider.cs" />
-    <Compile Include="Xml\XmlQuickInfoSource.cs" />
-    <Compile Include="Xml\XmlQuickInfoSourceProvider.cs" />
-    <Compile Include="Xml\XmlTagger.cs" />
-    <Compile Include="Xml\XmlTaggerProvider.cs" />
-    <Compile Include="Xml\XmlTagMatchingTagger.cs" />
-    <Compile Include="Xml\XmlTagMatchingTaggerProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Design\QuickInfoPresenter.xaml">

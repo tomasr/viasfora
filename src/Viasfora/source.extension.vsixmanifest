@@ -49,5 +49,6 @@
     <MefComponent>|%CurrentProject%|</MefComponent>
     <MefComponent>|Viasfora.Core|</MefComponent>
     <MefComponent>|Viasfora.Languages|</MefComponent>
+    <MefComponent>|Viasfora.Xml|</MefComponent>
   </Content>
 </Vsix>
