@@ -2,6 +2,8 @@
 using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.ApplicationInsights.Extensibility;
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using Winterdom.Viasfora.Settings;
@@ -20,6 +22,7 @@ namespace Winterdom.Viasfora {
       client.Context.User.Id = GetUserId();
       client.Context.Session.Id = Guid.NewGuid().ToString();
       client.Context.Properties.Add("VsVersion", dte.Version);
+      client.Context.Properties.Add("VsFullVersion", GetFullVsVersion());
       client.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
 
       dte.Events.DTEEvents.OnBeginShutdown += OnBeginShutdown;
@@ -31,21 +34,37 @@ namespace Winterdom.Viasfora {
     }
 
     public static void WriteEvent(String eventName) {
+#if !DEBUG
       if ( client != null && Enabled ) {
         client.TrackEvent(new EventTelemetry(eventName));
       }
+#endif
     }
 
     public static void WriteException(String msg, Exception ex) {
+#if !DEBUG
       if ( client != null && Enabled ) {
         ExceptionTelemetry telemetry = new ExceptionTelemetry(ex);
         telemetry.Properties.Add("Message", msg);
         client.TrackException(telemetry);
       }
+#endif
     }
 
     private static void OnBeginShutdown() {
       client.Flush();
+    }
+
+    private static String GetFullVsVersion() {
+      try {
+        String baseDir = AppDomain.CurrentDomain.BaseDirectory;
+        String devenv = Path.Combine(baseDir, "devenv.exe");
+        var version = FileVersionInfo.GetVersionInfo(devenv);
+        return version.ProductVersion;
+      } catch {
+        // Ignore if we cannot get
+      }
+      return "";
     }
 
     private static String GetUserId() {
