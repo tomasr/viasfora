@@ -4,7 +4,7 @@
     <Name>Viasfora</Name>
     <Author>Tomas Restrepo</Author>
     <Version>2.9</Version>
-    <Description xml:space="preserve">Enrich your text editing experience with Rainbow Braces and more!</Description>
+    <Description xml:space="preserve">Add color to your Visual Studio Text Editor!</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>http://viasfora.com/</MoreInfoUrl>
     <License>license.txt</License>
