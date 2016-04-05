@@ -15,6 +15,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1038A5
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{63E4723B-5D98-476B-861C-073CCD13FA11}"
+	ProjectSection(SolutionItems) = preProject
+		src\AssemblyInfo.Common.cs = src\AssemblyInfo.Common.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{567EF174-A312-43D2-9955-2396CEA9E6DA}"
 EndProject

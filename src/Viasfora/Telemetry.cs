@@ -23,6 +23,8 @@ namespace Winterdom.Viasfora {
       client.Context.Session.Id = Guid.NewGuid().ToString();
       client.Context.Properties.Add("VsVersion", dte.Version);
       client.Context.Properties.Add("VsFullVersion", GetFullVsVersion());
+      client.Context.Component.Version = GetViasforaVersion();
+      client.Context.Properties.Add("AppVersion", GetFullVsVersion());
       client.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
 
       dte.Events.DTEEvents.OnBeginShutdown += OnBeginShutdown;
@@ -65,6 +67,11 @@ namespace Winterdom.Viasfora {
         // Ignore if we cannot get
       }
       return "";
+    }
+
+    private static String GetViasforaVersion() {
+      var version = typeof(Telemetry).Assembly.GetName().Version;
+      return String.Format("{0}.{1}", version.Major, version.Minor);
     }
 
     private static String GetUserId() {
