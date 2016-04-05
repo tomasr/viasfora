@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora", "Viasfora\Viasfora.csproj", "{ED05E9A0-B822-4925-81A5-721CBE04DA37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora", "src\Viasfora\Viasfora.csproj", "{ED05E9A0-B822-4925-81A5-721CBE04DA37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Tests", "Viasfora.Tests\Viasfora.Tests.csproj", "{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Tests", "tests\Viasfora.Tests\Viasfora.Tests.csproj", "{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1038A55E-607B-4449-924E-1861530C2C56}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,6 +15,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1038A5
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{63E4723B-5D98-476B-861C-073CCD13FA11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{567EF174-A312-43D2-9955-2396CEA9E6DA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6271BFBC-846E-48A5-86BD-0729B65DA933}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Languages", "src\Viasfora.Languages\Viasfora.Languages.csproj", "{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Core", "src\Viasfora.Core\Viasfora.Core.csproj", "{419C99AD-185A-4D31-A7FF-E1754C7B806D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Xml", "src\Viasfora.Xml\Viasfora.Xml.csproj", "{3274163B-E647-40E2-8D9F-6DF7E7C50411}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Rainbow", "src\Viasfora.Rainbow\Viasfora.Rainbow.csproj", "{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,8 +42,32 @@ Global
 		{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3274163B-E647-40E2-8D9F-6DF7E7C50411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3274163B-E647-40E2-8D9F-6DF7E7C50411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3274163B-E647-40E2-8D9F-6DF7E7C50411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3274163B-E647-40E2-8D9F-6DF7E7C50411}.Release|Any CPU.Build.0 = Release|Any CPU
+		{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ED05E9A0-B822-4925-81A5-721CBE04DA37} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
+		{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98} = {6271BFBC-846E-48A5-86BD-0729B65DA933}
+		{14B957DB-0ED2-4DEA-85C9-B670F6653C1B} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
+		{419C99AD-185A-4D31-A7FF-E1754C7B806D} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
+		{3274163B-E647-40E2-8D9F-6DF7E7C50411} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
+		{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
 	EndGlobalSection
 EndGlobal
