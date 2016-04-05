@@ -17,7 +17,7 @@ namespace Winterdom.Viasfora.Xml {
     [Import]
     internal IBufferTagAggregatorFactoryService Aggregator = null;
     [Import]
-    internal IVsfSettings Settings = null;
+    internal IXmlSettings Settings = null;
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       if ( textView == null ) return null;

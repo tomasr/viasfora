@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Winterdom.Viasfora {
 
@@ -23,6 +20,7 @@ namespace Winterdom.Viasfora {
     public const String PowerShellOptions = "e28716b7-aebe-4cdc-a4ea-7cf4a6964691";
     public const String IntellisenseOptions = "8e1de6d1-62e7-4f59-92bf-2b62bfb9c64e";
     public const String TextObfuscationOptions = "98cf4318-e4c4-46e0-81c9-d8f22d9a4bcd";
+    public const String XmlOptions = "8358872a-6e06-4935-912b-0fc0d93b60a8";
 
     // Command groups
     public const String guidVsfViewCmdSet = "14e93c73-144b-4909-9cdc-694be6125e8c";

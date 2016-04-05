@@ -6,10 +6,6 @@ namespace Winterdom.Viasfora {
     bool FlowControlUseItalics { get; set; }
     bool EscapeSequencesEnabled { get; set; }
     
-    bool XmlnsPrefixEnabled { get; set; }
-    bool XmlCloseTagEnabled { get; set; }
-    bool XmlMatchTagsEnabled { get; set; }
-
     bool CurrentLineHighlightEnabled { get; set; }
     bool CurrentColumnHighlightEnabled { get; set; }
     double HighlightLineWidth { get; set; }

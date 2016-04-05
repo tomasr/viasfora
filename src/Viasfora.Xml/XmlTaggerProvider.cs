@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Xml {
     [Import]
     internal IBufferTagAggregatorFactoryService Aggregator { get; set; }
     [Import]
-    internal IVsfSettings Settings { get; set; }
+    internal IXmlSettings Settings { get; set; }
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
       return new XmlTagger(

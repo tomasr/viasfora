@@ -18,6 +18,7 @@ namespace Winterdom.Viasfora {
   [Guid(Guids.VSPackage)]
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.RainbowOptionsPage), "Viasfora", "Rainbow Braces", 0, 0, true)]
+  [ProvideOptionPage(typeof(Options.XmlOptionsPage), "Viasfora", "XML Editor", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.PresentationModeOptionsPage), "Viasfora", "Presentation Mode", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.IntellisenseOptions), "Viasfora", "Intellisense", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.TextObfuscationOptionsPage), "Viasfora", "Text Hiding", 0, 0, true)]

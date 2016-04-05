@@ -80,7 +80,9 @@
     <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
     <Compile Include="HtmlMarkup.cs" />
     <Compile Include="IMarkupLanguage.cs" />
+    <Compile Include="IXmlSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\XmlSettings.cs" />
     <Compile Include="XamlMarkup.cs" />
     <Compile Include="XmlMarkup.cs" />
     <Compile Include="XmlQuickInfoController.cs" />

@@ -22,18 +22,6 @@ namespace Winterdom.Viasfora.Settings {
       get { return GetBoolean(nameof(EscapeSequencesEnabled), true); }
       set { SetValue(nameof(EscapeSequencesEnabled), value); }
     }
-    public bool XmlnsPrefixEnabled {
-      get { return GetBoolean(nameof(XmlnsPrefixEnabled), true); }
-      set { SetValue(nameof(XmlnsPrefixEnabled), value); }
-    }
-    public bool XmlCloseTagEnabled {
-      get { return GetBoolean(nameof(XmlCloseTagEnabled), true); }
-      set { SetValue(nameof(XmlCloseTagEnabled), value); }
-    }
-    public bool XmlMatchTagsEnabled {
-      get { return GetBoolean(nameof(XmlMatchTagsEnabled), true); }
-      set { SetValue(nameof(XmlMatchTagsEnabled), value); }
-    }
     public bool CurrentLineHighlightEnabled {
       get { return GetBoolean(nameof(CurrentLineHighlightEnabled), false); }
       set { SetValue(nameof(CurrentLineHighlightEnabled), value); }

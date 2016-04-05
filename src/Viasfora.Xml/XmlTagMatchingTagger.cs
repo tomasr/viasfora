@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora.Xml {
   public class XmlTagMatchingTagger : ITagger<TextMarkerTag>, IDisposable {
     private ITextView theView;
     private ITextBuffer theBuffer;
-    private IVsfSettings settings;
+    private IXmlSettings settings;
     private SnapshotSpan? currentSpan;
     private ITagAggregator<IClassificationTag> aggregator;
     private IMarkupLanguage language;
@@ -28,7 +28,7 @@ namespace Winterdom.Viasfora.Xml {
     public XmlTagMatchingTagger(
             ITextView textView, ITextBuffer buffer, 
             ITagAggregator<IClassificationTag> aggregator,
-            IVsfSettings settings) {
+            IXmlSettings settings) {
       this.theView = textView;
       this.theBuffer = buffer;
       this.aggregator = aggregator;

@@ -24,9 +24,6 @@ namespace Winterdom.Viasfora.Options {
       settings.BoldAsItalicsEnabled = BoldAsItalicsEnabled;
       settings.ModelinesEnabled = ModelinesEnabled;
       settings.ModelinesNumLines = (int)ModelinesNumLines;
-      settings.XmlnsPrefixEnabled = XmlnsPrefixHighlightEnabled;
-      settings.XmlCloseTagEnabled = XmlCloseTagHighlightEnabled;
-      settings.XmlMatchTagsEnabled = XmlMatchTagsEnabled;
       settings.TelemetryEnabled = TelemetryEnabled;
       settings.Save();
     }
@@ -45,9 +42,6 @@ namespace Winterdom.Viasfora.Options {
       BoldAsItalicsEnabled = settings.BoldAsItalicsEnabled;
       ModelinesEnabled = settings.ModelinesEnabled;
       ModelinesNumLines = (uint)settings.ModelinesNumLines;
-      XmlnsPrefixHighlightEnabled = settings.XmlnsPrefixEnabled;
-      XmlCloseTagHighlightEnabled = settings.XmlCloseTagEnabled;
-      XmlMatchTagsEnabled = settings.XmlMatchTagsEnabled;
       TelemetryEnabled = settings.TelemetryEnabled;
     }
 
@@ -125,23 +119,5 @@ namespace Winterdom.Viasfora.Options {
     [Description("Number of lines to check for modeline commands")]
     [Category("Modelines")]
     public uint ModelinesNumLines {get; set; }
-
-
-    // XML Editor Extensions
-    [LocDisplayName("Highlight XML Namespace Prefix")]
-    [Description("Enables highlighting XML Namespace prefixes")]
-    [Category("XML Editor")]
-    public bool XmlnsPrefixHighlightEnabled { get; set; }
-
-    [LocDisplayName("Highlight XML Closing Tags")]
-    [Description("Enables highlighting XML closing element tags")]
-    [Category("XML Editor")]
-    public bool XmlCloseTagHighlightEnabled { get; set; }
-
-    [LocDisplayName("Match Element Tags")]
-    [Description("Enables highlighting XML element opening/closing tags")]
-    [Category("XML Editor")]
-    public bool XmlMatchTagsEnabled { get; set; }
-
   }
 }

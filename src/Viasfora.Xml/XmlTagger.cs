@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Xml {
 
   class XmlTagger : ITagger<ClassificationTag>, IDisposable {
     private ITextBuffer theBuffer;
-    private IVsfSettings settings;
+    private IXmlSettings settings;
     private ClassificationTag xmlCloseTagClassification;
     private ClassificationTag xmlPrefixClassification;
     private ClassificationTag xmlDelimiterClassification;
@@ -31,7 +31,7 @@ namespace Winterdom.Viasfora.Xml {
         ITextBuffer buffer,
         IClassificationTypeRegistryService registry,
         ITagAggregator<IClassificationTag> aggregator,
-        IVsfSettings settings) {
+        IXmlSettings settings) {
       this.theBuffer = buffer;
       this.settings = settings;
       xmlCloseTagClassification =
