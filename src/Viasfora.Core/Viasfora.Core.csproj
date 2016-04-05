@@ -154,8 +154,6 @@
     <Compile Include="Settings\SuoPersistUserSettings.cs" />
     <Compile Include="Settings\VsfSettings.cs" />
     <Compile Include="Settings\VsfSettingsEventManager.cs" />
-    <Compile Include="Sgml\SgmlParser.cs" />
-    <Compile Include="Sgml\SgmlReader.cs" />
     <Compile Include="SnapshotExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Tags\KeywordTag.cs" />
