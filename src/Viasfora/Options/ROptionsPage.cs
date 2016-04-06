@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Drawing.Design;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Options {

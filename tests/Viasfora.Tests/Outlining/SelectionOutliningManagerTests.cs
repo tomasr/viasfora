@@ -1,9 +1,6 @@
 ﻿using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Tagging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Winterdom.Viasfora;
 using Winterdom.Viasfora.Outlining;
 using Xunit;

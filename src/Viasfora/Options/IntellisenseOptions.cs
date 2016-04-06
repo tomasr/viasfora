@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using Microsoft.VisualStudio.Shell;
-using Winterdom.Viasfora.Design;
-using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.IntellisenseOptions)]

@@ -1,11 +1,7 @@
 ﻿using Microsoft.VisualStudio.Text;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Winterdom.Viasfora;
-using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Rainbow;
 using Xunit;
 

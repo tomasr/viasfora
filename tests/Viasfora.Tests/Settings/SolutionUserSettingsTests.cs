@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using Winterdom.Viasfora.Settings;
 using Newtonsoft.Json;
 using Xunit;

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Text;
 
