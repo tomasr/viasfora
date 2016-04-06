@@ -80,6 +80,8 @@
     <Compile Include="BracePos.cs" />
     <Compile Include="CharPos.cs" />
     <Compile Include="Classifications\RainbowClassifications.cs" />
+    <Compile Include="IToolTipWindow.cs" />
+    <Compile Include="IToolTipWindowProvider.cs" />
     <Compile Include="Rainbows.cs" />
     <Compile Include="Design\QuickInfoPresenter.xaml.cs">
       <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>

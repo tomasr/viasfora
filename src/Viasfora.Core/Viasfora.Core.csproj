@@ -138,8 +138,6 @@
     <Compile Include="PkgCmdIdList.cs" />
     <Compile Include="Contracts\ILanguage.cs" />
     <Compile Include="Contracts\ILanguageFactory.cs" />
-    <Compile Include="Contracts\IToolTipWindow.cs" />
-    <Compile Include="Contracts\IToolTipWindowProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReSharper.cs" />
     <Compile Include="SettingsContext.cs" />
