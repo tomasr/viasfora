@@ -9,48 +9,48 @@ __Build Status__: [![Build Status](https://ci.appveyor.com/api/projects/status/u
 
 ## Rainbow Braces
 Colorize ()/[]/{} based on depth!<br/>
-![Rainbow Braces](http://viasfora.com/images/feat/rainbow.png)
+![Rainbow Braces](http://viasfora.com/img/wiki/rainbow.png)
 
 ## Keyword classification
 * Colorize flow-control keywords<br/>
-![Flow Control Keywords](http://viasfora.com/images/feat/text-flow-control.png)
+![Flow Control Keywords](http://viasfora.com/img/wiki/text-flow-control.png)
 * Colorize LINQ keywords<br/>
-![LINQ Keywords](http://viasfora.com/images/feat/text-linq.png)
+![LINQ Keywords](http://viasfora.com/img/wiki/text-linq.png)
 * Colorize visibility keywords<br/>
-![Visibility keywords](http://viasfora.com/images/feat/text-visibility.png)
+![Visibility keywords](http://viasfora.com/img/wiki/text-visibility.png)
 
 ## String colorization
 * Highlighting escape sequences in strings<br/>
-![Escape Sequences](http://viasfora.com/images/feat/text-escape.png)
+![Escape Sequences](http://viasfora.com/img/wiki/text-escape.png)
 * Highlighting C/C++ format specifiers in strings<br/>
-![C format specifiers](http://viasfora.com/images/feat/text-cspecs.png)
+![C format specifiers](http://viasfora.com/img/wiki/text-cspecs.png)
 
 ## Outlining
 * User-defined Outlining regions<br/>
-![User outlining](http://viasfora.com/images/feat/add-outlining.png)
+![User outlining](http://viasfora.com/img/wiki/add-outlining.png)
 * Creating new outlining sections based on selected text<br/>
-![Outline selection](http://viasfora.com/images/feat/outline-selection.gif)
+![Outline selection](http://viasfora.com/img/wiki/outline-selection.gif)
 
 ## Text obfuscation
 Provides an easy way to hide text in the editor during presentations,
 based on regular expressions.
 
 __Configuration__
-![Obfuscation configuration](http://viasfora.com/images/feat/text-obfuscation-config.png)
+![Obfuscation configuration](http://viasfora.com/img/wiki/text-obfuscation-config.png)
 
 __Runtime__
 Enable with the View -> Obfuscate Text command:
-![Text obfuscation](http://viasfora.com/images/feat/text-obfuscation.png)
+![Text obfuscation](http://viasfora.com/img/wiki/text-obfuscation.png)
 
 ## XML editor extensions
 * Colorizing namespace prefixes<br/>
-![XML Namespaces](http://viasfora.com/images/feat/xml-prefix.png)
+![XML Namespaces](http://viasfora.com/img/wiki/xml-prefix.png)
 * Coloring closing element tags<br/>
-![XML closing tags](http://viasfora.com/images/feat/xml-close.png)
+![XML closing tags](http://viasfora.com/img/wiki/xml-close.png)
 * Matching element tags<br/>
-![Matching elements](http://viasfora.com/images/feat/xml-match.png)
+![Matching elements](http://viasfora.com/img/wiki/xml-match.png)
 * Resolving namespace prefixes<br/>
-![XML Prefixes](http://viasfora.com/images/feat/xml-ns-tooltip.png)
+![XML Prefixes](http://viasfora.com/img/wiki/xml-ns-tooltip.png)
 
 ## Other features
 * Presentation Mode
