@@ -9,6 +9,8 @@ before_build:
   - nuget restore
   # Updates the version number in the .vsixmanifest and updates the AppVeyor build number to match
   - ps: Vsix-IncrementVsixVersion | Vsix-UpdateBuildVersion
+  - ps: Vsix-TokenReplacement src\AssemblyInfo.Common.cs '\[assembly: AssemblyFileVersion\("([0-9\\.]+)"\)\]' '[assembly: AssemblyFileVersion("{version}")]'
+
 
 build:
   project: Viasfora.sln

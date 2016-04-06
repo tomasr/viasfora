@@ -35,17 +35,21 @@ namespace Winterdom.Viasfora {
     }
 
     public static void WriteEvent(String eventName) {
+#if !DEBUG
       if ( client != null && Enabled ) {
         client.TrackEvent(new EventTelemetry(eventName));
       }
+#endif
     }
 
     public static void WriteException(String msg, Exception ex) {
+#if !DEBUG
       if ( client != null && Enabled ) {
         ExceptionTelemetry telemetry = new ExceptionTelemetry(ex);
         telemetry.Properties.Add("Message", msg);
         client.TrackException(telemetry);
       }
+#endif
     }
 
     private static void OnBeginShutdown() {
