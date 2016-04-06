@@ -6,12 +6,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {
   static class Telemetry {
     private static TelemetryClient client;
-    public static bool Enabled { get; set; }
+    public static bool Enabled { get; private set; }
 
     public static void Initialize(EnvDTE80.DTE2 dte) {
       TelemetryConfiguration config = TelemetryConfiguration.CreateDefault();
@@ -36,21 +35,17 @@ namespace Winterdom.Viasfora {
     }
 
     public static void WriteEvent(String eventName) {
-#if !DEBUG
       if ( client != null && Enabled ) {
         client.TrackEvent(new EventTelemetry(eventName));
       }
-#endif
     }
 
     public static void WriteException(String msg, Exception ex) {
-#if !DEBUG
       if ( client != null && Enabled ) {
         ExceptionTelemetry telemetry = new ExceptionTelemetry(ex);
         telemetry.Properties.Add("Message", msg);
         client.TrackException(telemetry);
       }
-#endif
     }
 
     private static void OnBeginShutdown() {
@@ -60,7 +55,7 @@ namespace Winterdom.Viasfora {
     private static String GetFullVsVersion() {
       try {
         String baseDir = AppDomain.CurrentDomain.BaseDirectory;
-        String devenv = Path.Combine(baseDir, "devenv.exe");
+        String devenv = Path.Combine(baseDir, "msenv.dll");
         var version = FileVersionInfo.GetVersionInfo(devenv);
         return version.ProductVersion;
       } catch {
