@@ -45,7 +45,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public override string ToString() {
-      return String.Format("'{0}' ({1}) {3}", Brace, Position, Depth);
+      return String.Format("'{0}' ({1}) {2}", Brace, Position, Depth);
     }
   }
 }

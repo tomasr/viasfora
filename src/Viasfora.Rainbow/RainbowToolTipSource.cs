@@ -28,7 +28,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
   }
 
-  public class RainbowToolTipSource : IQuickInfoSource {
+  public sealed class RainbowToolTipSource : IQuickInfoSource {
     private ITextBuffer textBuffer;
     private RainbowToolTipSourceProvider provider;
     private IToolTipWindow toolTipWindow;

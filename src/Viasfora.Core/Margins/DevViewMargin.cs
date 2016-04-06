@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Projection;
@@ -9,7 +7,7 @@ using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Margins {
-  public class DevViewMargin : IWpfTextViewMargin {
+  public sealed class DevViewMargin : IWpfTextViewMargin {
     private IFileExtensionRegistryService extensionRegistry;
     private IWpfTextViewHost wpfTextViewHost;
     private IWpfTextView textView;

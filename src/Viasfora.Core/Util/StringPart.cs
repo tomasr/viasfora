@@ -38,6 +38,13 @@ namespace Winterdom.Viasfora.Util {
     public override int GetHashCode() {
       return Span.GetHashCode() ^ Type.GetHashCode();
     }
+    public static bool operator ==(StringPart left, StringPart right) {
+      return left.Equals(right);
+    }
+    public static bool operator !=(StringPart left, StringPart right) {
+      return !left.Equals(right);
+    }
+
 
     private char GetTypeChar() {
       switch ( Type ) {

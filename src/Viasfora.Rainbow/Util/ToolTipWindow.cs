@@ -25,7 +25,7 @@ namespace Winterdom.Viasfora.Util {
     }
   }
 
-  public class ToolTipWindow : IToolTipWindow {
+  public sealed class ToolTipWindow : IToolTipWindow {
     private ITextView sourceTextView;
     private ToolTipWindowProvider provider;
     private IWpfTextView tipView;
