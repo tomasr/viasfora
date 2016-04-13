@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {

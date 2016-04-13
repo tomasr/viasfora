@@ -7,15 +7,9 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     protected ITextChars text;
     public BasicCStringScanner(String text) {
       this.text = new StringChars(text, 0, text.Length - 1);
-      // If this is an at-string, or a C preprocessor include
-      // skip it
-      if ( this.text.Char() == '@' ) {
-        this.text.SkipRemainder();
-      } else {
-        // always skip the first char
-        // (since quotes are included in the string)
-        this.text.Next();
-      }
+      // always skip the first char
+      // (since quotes are included in the string)
+      this.text.Next();
     }
     public StringPart? Next() {
       while ( !text.EndOfLine ) {

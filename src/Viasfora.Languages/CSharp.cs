@@ -2,7 +2,9 @@
 using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
+using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
@@ -39,6 +41,9 @@ namespace Winterdom.Viasfora.Languages {
 
     protected override IBraceScanner NewBraceScanner() {
       return new CSharpBraceScanner();
+    }
+    public override IStringScanner NewStringScanner(string text) {
+      return new CSharpStringScanner(text);
     }
 
     [ImportingConstructor]
