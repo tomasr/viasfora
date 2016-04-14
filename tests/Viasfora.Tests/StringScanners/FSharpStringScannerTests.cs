@@ -8,7 +8,8 @@ namespace Viasfora.Tests.StringScanners {
   public class FSharpStringScannerTests {
     [Fact]
     public void SimpleEscapeSequences() {
-      // regexp escape-char = '\' ["\'ntbrafv]       String input = "\"\\\"|" +
+      // regexp escape-char = '\' ["\'ntbrafv] 
+      String input = "\"\\\"|" +
           @"\\|\'|\n|\t|\b|\r|\a|\f|\v"
           + "\"";
       var parser = new FSharpStringScanner(input);
@@ -26,7 +27,8 @@ namespace Viasfora.Tests.StringScanners {
     }
     [Fact]
     public void NonEscapeSequenceIsNotHighlighted() {
-      // regexp non-escape-chars = '\' [^"\'ntbrafv]       String input = "\"" +
+      // regexp non-escape-chars = '\' [^"\'ntbrafv] 
+      String input = "\"" +
           @"\h\l"
           + "\"";
       var parser = new FSharpStringScanner(input);
@@ -34,7 +36,8 @@ namespace Viasfora.Tests.StringScanners {
     }
     [Fact]
     public void TrigraphReturnedAsEscapeSequence() {
-      // regexp trigraph = '\' digit-char digit-char digit-char       String input = "\"" +
+      // regexp trigraph = '\' digit-char digit-char digit-char 
+      String input = "\"" +
           @"\023\124"
           + "\"";
       var parser = new FSharpStringScanner(input);
@@ -90,6 +93,57 @@ namespace Viasfora.Tests.StringScanners {
     [Fact]
     public void TripleQuoteMeansIgnoreSequences() {
       String input = "\"\"\"some string\\escape\"\"\"";
+      var parser = new FSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
+
+    //
+    // Format Specifiers
+    //
+    [Fact]
+    public void SimpleFormatSpecIsExtracted() {
+      String input = "\"" + @"some %d value" + "\"";
+      var parser = new FSharpStringScanner(input);
+      Assert.Equal(new StringPart(6, 2, StringPartType.FormatSpecifier), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void FormatSpecWithFlagsIsExtracted() {
+      String input = "\"" + @"some %+d value" + "\"";
+      var parser = new FSharpStringScanner(input);
+      Assert.Equal(new StringPart(6, 3, StringPartType.FormatSpecifier), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void FormatSpecWithFlagsAndWidthIsExtracted() {
+      String input = "\"" + @"some %08x value" + "\"";
+      var parser = new FSharpStringScanner(input);
+      Assert.Equal(new StringPart(6, 4, StringPartType.FormatSpecifier), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void FormatSpecWithFlagsWidthAndPrecisionIsExtracted() {
+      String input = "\"" + @"some %-8.2f value" + "\"";
+      var parser = new FSharpStringScanner(input);
+      Assert.Equal(new StringPart(6, 6, StringPartType.FormatSpecifier), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void FormatSpecWithSpaceFlagsIsExtracted() {
+      String input = "\"" + @"some % 8x value" + "\"";
+      var parser = new FSharpStringScanner(input);
+      Assert.Equal(new StringPart(6, 4, StringPartType.FormatSpecifier), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void DoublePercentIsIgnored() {
+      String input = "\"" + @"some %% value" + "\"";
+      var parser = new FSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void PercentAtEndOfStringIsIgnored() {
+      String input = "\"" + @"some %" + "\"";
       var parser = new FSharpStringScanner(input);
       Assert.Equal(null, parser.Next());
     }

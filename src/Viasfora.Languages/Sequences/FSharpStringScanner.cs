@@ -15,11 +15,6 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       // always skip the first char
       // (since quotes are included in the string)
       this.text.Next();
-      // If this is an at-string, or a C preprocessor include
-      // skip it
-      if ( text.StartsWith("@") || text.StartsWith("<") ) {
-        this.text.SkipRemainder();
-      }
 
       if ( text.StartsWith("\"\"\"") ) {
         this.text.SkipRemainder();
@@ -28,44 +23,60 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     public StringPart? Next() {
       while ( !text.EndOfLine ) {
         if ( text.Char() == '\\' ) {
-          text.Next();
-          if ( escapeChar.IndexOf(text.Char()) >= 0 ) {
-            text.Next();
-            return new StringPart(new Span(text.Position - 2, 2));
-          }
-          if ( Char.IsDigit(text.Char()) && Char.IsDigit(text.NChar()) && Char.IsDigit(text.NNChar()) ) {
-            // a trigraph
-            text.Skip(3);
-            return new StringPart(new Span(text.Position-4, 4));
-          }
-          if ( text.Char() == '0' && !Char.IsDigit(text.NChar()) ) {
-            // \0
-            text.Next();
-            return new StringPart(new Span(text.Position-2, 2));
-          }
-          if ( text.Char() == 'u' ) {
-            text.Next();
-            text.Mark();
-            Span? span = TryParseShortUnicode();
-            if ( span.HasValue ) {
-              return new StringPart(span.Value);
-            }
-            text.BackToMark();
-          }
-          if ( text.Char() == 'U' ) {
-            text.Next();
-            text.Mark();
-            Span? span = TryParseLongUnicode();
-            if ( span.HasValue ) {
-              return new StringPart(span.Value);
-            }
-            text.BackToMark();
-          }
+          StringPart part = new StringPart();
+          if ( TryParseEscapeSequence(ref part) )
+            return part;
+        } else if ( text.Char() == '%' ) {
+          StringPart part = new StringPart();
+          if ( TryParseFormatSpecifier(ref part) )
+            return part;
         } else {
           text.Next();
         }
       }
       return null;
+    }
+
+    private bool TryParseEscapeSequence(ref StringPart part) {
+      text.Next();
+      if ( escapeChar.IndexOf(text.Char()) >= 0 ) {
+        text.Next();
+        part = new StringPart(new Span(text.Position - 2, 2));
+        return true;
+      }
+      if ( Char.IsDigit(text.Char()) && Char.IsDigit(text.NChar()) && Char.IsDigit(text.NNChar()) ) {
+        // a trigraph
+        text.Skip(3);
+        part = new StringPart(new Span(text.Position - 4, 4));
+        return true;
+      }
+      if ( text.Char() == '0' && !Char.IsDigit(text.NChar()) ) {
+        // \0
+        text.Next();
+        part = new StringPart(new Span(text.Position - 2, 2));
+        return true;
+      }
+      if ( text.Char() == 'u' ) {
+        text.Next();
+        text.Mark();
+        Span? span = TryParseShortUnicode();
+        if ( span.HasValue ) {
+          part = new StringPart(span.Value);
+          return true;
+        }
+        text.BackToMark();
+      }
+      if ( text.Char() == 'U' ) {
+        text.Next();
+        text.Mark();
+        Span? span = TryParseLongUnicode();
+        if ( span.HasValue ) {
+          part = new StringPart(span.Value);
+          return true;
+        }
+        text.BackToMark();
+      }
+      return false;
     }
 
     private Span? TryParseShortUnicode() {
@@ -87,6 +98,33 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         text.Next();
       }
       return new Span(text.Position - 10, 10);
+    }
+
+    private bool TryParseFormatSpecifier(ref StringPart result) {
+      // https://msdn.microsoft.com/en-us/library/ee370560.aspx
+      // %[flags][width][.precision]type
+      int start = text.Position;
+      text.Next(); // skip '%'
+      // ignore %%
+      if ( text.Char() == '%' ) {
+        text.Next();
+        return false;
+      }
+      // ignore EOF
+      if ( text.EndOfLine || text.Char() == '\"' )
+        return false;
+
+      int len = 1;
+      while ( !text.EndOfLine ) {
+        len++;
+        if ( Char.IsLetter(text.Char()) ) {
+          text.Next();
+          break;
+        }
+        text.Next();
+      }
+      result = new StringPart(start, len, StringPartType.FormatSpecifier);
+      return true;
     }
   }
 }
