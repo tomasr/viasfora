@@ -32,6 +32,7 @@ namespace Winterdom.Viasfora.Text {
       view.LayoutChanged += OnViewLayoutChanged;
       view.TextViewModel.EditBuffer.PostChanged += OnBufferPostChanged;
       view.Closed += OnViewClosed;
+      view.Options.OptionChanged += OnSettingsChanged;
 
       this.settings.SettingsChanged += OnSettingsChanged;
       formatMap.ClassificationFormatMappingChanged +=
@@ -106,7 +107,7 @@ namespace Winterdom.Viasfora.Text {
       // user in Fonts and Colors (or the default in out
       // classification type).
       TextFormattingRunProperties format =
-         formatMap.GetTextProperties(formatType);
+         formatMap.GetExplicitTextProperties(formatType);
 
       this.columnRect.StrokeThickness = settings.HighlightLineWidth;
       this.columnRect.Stroke = format.ForegroundBrush;

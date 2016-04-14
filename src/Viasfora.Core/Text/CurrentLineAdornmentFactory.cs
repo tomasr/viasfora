@@ -27,7 +27,8 @@ namespace Winterdom.Viasfora.Text {
       IClassificationType classification =
          ClassificationRegistry.GetClassificationType(Constants.LINE_HIGHLIGHT);
       IClassificationFormatMap map =
-         FormatMapService.GetClassificationFormatMap(FontsAndColorsCategories.TextEditorCategory);
+         //FormatMapService.GetClassificationFormatMap(FontsAndColorsCategories.TextEditorCategory);
+         FormatMapService.GetClassificationFormatMap(textView);
       textView.Properties.GetOrCreateSingletonProperty(
         () => {
           return new CurrentLineAdornment(textView, map, classification, Settings);
