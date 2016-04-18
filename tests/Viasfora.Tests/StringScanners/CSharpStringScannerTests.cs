@@ -59,6 +59,12 @@ namespace Viasfora.Tests.StringScanners {
       Assert.Equal(null, parser.Next());
     }
     [Fact]
+    public void NoSequencesInInterpolatedAtStringAreExtracted() {
+      String input = "$@\"" + @"some\rother\nstring" + "\"";
+      var parser = new CSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
     public void X1EscapeSequenceIsExtracted() {
       String input = "\"" + @"some\x1string" + "\"";
       var parser = new CSharpStringScanner(input);
@@ -133,6 +139,12 @@ namespace Viasfora.Tests.StringScanners {
     [Fact]
     public void FormatSpecsInInterpolatedStringsAreIgnored() {
       String input = "$\"" + @"Value: {0}" + "\"";
+      var parser = new CSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void FormatSpecsInInterpolatedAtStringsAreIgnored() {
+      String input = "$@\"" + @"Value: {0}" + "\"";
       var parser = new CSharpStringScanner(input);
       Assert.Equal(null, parser.Next());
     }

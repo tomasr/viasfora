@@ -12,8 +12,12 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       if ( this.text.Char() == '@' ) {
         this.text.SkipRemainder();
       } else if ( this.text.Char() == '$' ) {
-        this.isInterpolated = true;
-        this.text.Skip(2);
+        if ( this.text.NChar() == '@' ) {
+          this.text.SkipRemainder();
+        } else {
+          this.isInterpolated = true;
+          this.text.Skip(2);
+        }
       } else {
         // always skip the first char
         // (since quotes are included in the string)
