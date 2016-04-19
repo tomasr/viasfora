@@ -170,6 +170,13 @@ callCommented2(4);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
+    [Fact]
+    public void InterpolatedAtStringWithBackslash() {
+      String input = "$@\"some {site}\\{another} other\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
 
     [Fact]
     public void InterpolatedStringNonRestartable1() {

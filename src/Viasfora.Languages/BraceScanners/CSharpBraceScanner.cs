@@ -200,8 +200,9 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
         } else {
           //
           // parsing the string part
+          // if it's an at-string, don't look for escape sequences
           //
-          if ( tc.Char() == '\\' ) {
+          if ( tc.Char() == '\\' && !this.multiLine ) {
             // skip over escape sequences
             tc.Skip(2);
           } else if ( tc.Char() == '{' && tc.NChar() == '{' ) {
