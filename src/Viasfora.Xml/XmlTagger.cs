@@ -114,7 +114,10 @@ namespace Winterdom.Viasfora.Xml {
           if ( text.EndsWith("</") ) {
             foundClosingTag = true;
           } else if ( text == ":" && lastSpan.HasValue && settings.XmlnsPrefixEnabled ) {
-            yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlPrefixClassification);
+            var prefixCT = foundClosingTag && settings.XmlCloseTagEnabled
+                         ? xmlClosingPrefixClassification
+                         : xmlPrefixClassification;
+            yield return new TagSpan<ClassificationTag>(lastSpan.Value, prefixCT);
           } else if ( text.IndexOf('>') >= 0 && lastSpan.HasValue && foundClosingTag && settings.XmlCloseTagEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlCloseTagClassification);
             foundClosingTag = false;
