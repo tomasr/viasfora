@@ -23,7 +23,10 @@ namespace Winterdom.Viasfora.Intellisense {
       this.theBuffer = buffer;
       this.navigator = structureNavigator;
       this.settings = settings;
-      glyphIcon = new BitmapImage(new Uri("pack://application:,,,/Winterdom.Viasfora;component/Resources/PlainTextCompletion.ico"));
+      String assemblyName = this.GetType().Assembly.GetName().Name;
+      glyphIcon = new BitmapImage(new Uri(String.Format(
+        "pack://application:,,,/{0};component/Resources/PlainTextCompletion.ico",
+        assemblyName)));
     }
     public void Dispose() {
     }

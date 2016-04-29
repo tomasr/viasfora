@@ -77,6 +77,7 @@
     <Compile Include="Classifications\XmlClassificationDefinitions.cs" />
     <Compile Include="EditorFormats\RazorClosingTagFormat.cs" />
     <Compile Include="EditorFormats\XmlClosingTagFormat.cs" />
+    <Compile Include="EditorFormats\XmlClosingPrefixFormat.cs" />
     <Compile Include="EditorFormats\XmlPrefixFormat.cs" />
     <Compile Include="HtmlMarkup.cs" />
     <Compile Include="IMarkupLanguage.cs" />

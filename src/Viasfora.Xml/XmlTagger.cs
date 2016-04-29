@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora.Xml {
     private IXmlSettings settings;
     private ClassificationTag xmlCloseTagClassification;
     private ClassificationTag xmlPrefixClassification;
+    private ClassificationTag xmlClosingPrefixClassification;
     private ClassificationTag xmlDelimiterClassification;
     private ClassificationTag razorCloseTagClassification;
     private IMarkupLanguage language;
@@ -34,6 +35,8 @@ namespace Winterdom.Viasfora.Xml {
          new ClassificationTag(registry.GetClassificationType(Constants.XML_CLOSING));
       xmlPrefixClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.XML_PREFIX));
+      xmlClosingPrefixClassification =
+         new ClassificationTag(registry.GetClassificationType(Constants.XML_CLOSING_PREFIX));
       xmlDelimiterClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.DELIMITER));
       razorCloseTagClassification =
@@ -111,7 +114,10 @@ namespace Winterdom.Viasfora.Xml {
           if ( text.EndsWith("</") ) {
             foundClosingTag = true;
           } else if ( text == ":" && lastSpan.HasValue && settings.XmlnsPrefixEnabled ) {
-            yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlPrefixClassification);
+            var prefixCT = foundClosingTag && settings.XmlCloseTagEnabled
+                         ? xmlClosingPrefixClassification
+                         : xmlPrefixClassification;
+            yield return new TagSpan<ClassificationTag>(lastSpan.Value, prefixCT);
           } else if ( text.IndexOf('>') >= 0 && lastSpan.HasValue && foundClosingTag && settings.XmlCloseTagEnabled ) {
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlCloseTagClassification);
             foundClosingTag = false;
@@ -138,8 +144,12 @@ namespace Winterdom.Viasfora.Xml {
         string prefix = text.Substring(0, colon);
         string name = text.Substring(colon + 1);
 
+        var prefixCT = isClosing && settings.XmlCloseTagEnabled
+                     ? xmlClosingPrefixClassification
+                     : xmlPrefixClassification;
         yield return new TagSpan<ClassificationTag>(
-          new SnapshotSpan(cs.Start, prefix.Length), xmlPrefixClassification);
+          new SnapshotSpan(cs.Start, prefix.Length), prefixCT);
+
         yield return new TagSpan<ClassificationTag>(new SnapshotSpan(
           cs.Start.Add(prefix.Length), 1), xmlDelimiterClassification);
 

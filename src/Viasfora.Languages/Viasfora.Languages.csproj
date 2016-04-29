@@ -77,6 +77,7 @@
     <Compile Include="Python.cs" />
     <Compile Include="R.cs" />
     <Compile Include="Sequences\BasicCStringScanner.cs" />
+    <Compile Include="Sequences\CSharpStringScanner.cs" />
     <Compile Include="Sequences\CssStringScanner.cs" />
     <Compile Include="Sequences\CStringScanner.cs" />
     <Compile Include="Sequences\FSharpStringScanner.cs" />

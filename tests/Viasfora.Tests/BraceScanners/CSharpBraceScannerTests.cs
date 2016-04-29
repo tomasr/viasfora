@@ -156,6 +156,29 @@ callCommented2(4);
 
 
     [Fact]
+    public void InterpolatedAtString1() {
+      String input = "$@\"some {site} other\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2, chars.Count);
+    }
+    [Fact]
+    public void InterpolatedAtString2() {
+      String input = "$@\"some {site} other\r\n"
+                   + "some {super} line\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
+    [Fact]
+    public void InterpolatedAtStringWithBackslash() {
+      String input = "$@\"some {site}\\{another} other\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
+
+    [Fact]
     public void InterpolatedStringNonRestartable1() {
       String input = "$\"some {s";
       var extractor = new CSharpBraceScanner();

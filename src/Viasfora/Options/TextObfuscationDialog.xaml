@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib" 
-             xmlns:util="clr-namespace:Winterdom.Viasfora.Util"
+             xmlns:util="clr-namespace:Winterdom.Viasfora.Util;assembly=Viasfora.Core"
              mc:Ignorable="d" 
              x:Name="userControl"
              d:DesignHeight="300" d:DesignWidth="600">

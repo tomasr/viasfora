@@ -23,16 +23,25 @@ namespace Winterdom.Viasfora.Rainbow {
     public AdornmentLayerDefinition HighlightLayer = null;
 
     [Import]
-    private IClassificationFormatMapService formatMapService = null;
+    public IClassificationFormatMapService FormatMapService { get; set; }
     [Import]
-    private IClassificationTypeRegistryService registryService = null;
+    public IClassificationTypeRegistryService RegistryService { get; set; }
+    [Import]
+    public IRainbowSettings Settings { get; set; }
 
     public void TextViewCreated(IWpfTextView textView) {
-      var rainbowTags = RainbowColorTagger.GetRainbows(
-        registryService, Rainbows.MaxDepth
+      textView.Set(new RainbowHighlight(textView, this));
+    }
+    public IClassificationType[] GetRainbowTags() {
+      return RainbowColorTagger.GetRainbows(
+        RegistryService, Rainbows.MaxDepth
         );
-      var formatMap = formatMapService.GetClassificationFormatMap(textView);
-      textView.Set(new RainbowHighlight(textView, formatMap, rainbowTags));
+    }
+    public IClassificationFormatMap GetFormatMap(ITextView textView) {
+      return FormatMapService.GetClassificationFormatMap(textView);
+    }
+    public int GetRainbowDepth() {
+      return this.Settings.RainbowDepth;
     }
   }
   
@@ -43,14 +52,16 @@ namespace Winterdom.Viasfora.Rainbow {
     private readonly IWpfTextView view;
     private readonly IClassificationFormatMap formatMap;
     private readonly IClassificationType[] rainbowTags;
+    private readonly RainbowHilightProvider provider;
 
     public RainbowHighlight(
         IWpfTextView textView, 
-        IClassificationFormatMap map, 
-        IClassificationType[] rainbowTags) {
+        RainbowHilightProvider provider
+        ) {
       this.view = textView;
-      this.formatMap = map;
-      this.rainbowTags = rainbowTags;
+      this.provider = provider;
+      this.formatMap = provider.GetFormatMap(textView);
+      this.rainbowTags = provider.GetRainbowTags();
       layer = view.GetAdornmentLayer(LAYER);
     }
 
@@ -132,7 +143,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private Brush GetRainbowBrush(int depth) {
-      var rainbow = rainbowTags[depth % rainbowTags.Length];
+      var rainbow = rainbowTags[depth % provider.GetRainbowDepth()];
       var properties = formatMap.GetTextProperties(rainbow);
       return properties.ForegroundBrush;
     }

@@ -12,6 +12,9 @@ namespace Winterdom.Viasfora.Classifications {
     [Export, Name(Constants.XML_PREFIX)]
     internal static ClassificationTypeDefinition XmlPrefixType = null;
 
+    [Export, Name(Constants.XML_CLOSING_PREFIX)]
+    internal static ClassificationTypeDefinition XmlClosingPrefixType = null;
+
     [Export, Name(Constants.RAZOR_CLOSING)]
     internal static ClassificationTypeDefinition RazorClosingType = null;
   }

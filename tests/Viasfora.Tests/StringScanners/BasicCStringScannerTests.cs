@@ -49,12 +49,6 @@ namespace Viasfora.Tests.StringScanners {
       Assert.Equal(null, parser.Next());
     }
     [Fact]
-    public void NoSequencesInAtStringAreExtracted() {
-      String input = "@\"" + @"some\rother\nstring" + "\"";
-      var parser = new BasicCStringScanner(input);
-      Assert.Equal(null, parser.Next());
-    }
-    [Fact]
     public void X1EscapeSequenceIsExtracted() {
       String input = "\"" + @"some\x1string" + "\"";
       var parser = new BasicCStringScanner(input);
