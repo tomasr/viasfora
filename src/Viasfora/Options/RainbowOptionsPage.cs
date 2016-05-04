@@ -55,7 +55,9 @@ namespace Winterdom.Viasfora.Options {
           Rainbows.Rainbow6,
           Rainbows.Rainbow7,
           Rainbows.Rainbow8,
-          Rainbows.Rainbow9
+          Rainbows.Rainbow9,
+          Rainbows.RainbowError,
+          Rainbows.TipHilight
           );
       } finally {
         storage.Storage.CloseCategory();
@@ -179,6 +181,19 @@ namespace Winterdom.Viasfora.Options {
     public Color Level9 {
       get { return colors.Get(Rainbows.Rainbow9, true); }
       set { colors.Set(Rainbows.Rainbow9, true, value); }
+    }
+    [Description("Colors to use to highlight brace errors")]
+    [Category("Rainbow Colors")]
+    public Color Errors {
+      get { return colors.Get(Rainbows.RainbowError, false); }
+      set { colors.Set(Rainbows.RainbowError, false, value); }
+    }
+    [LocDisplayName("Tip Highlight")]
+    [Description("Colors to use to highlight rainbow tips")]
+    [Category("Rainbow Colors")]
+    public Color TipHighlight {
+      get { return colors.Get(Rainbows.TipHilight, false); }
+      set { colors.Set(Rainbows.TipHilight, false, value); }
     }
   }
 }
