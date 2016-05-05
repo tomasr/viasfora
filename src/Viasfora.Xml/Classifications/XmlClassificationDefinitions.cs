@@ -6,16 +6,16 @@ using Microsoft.VisualStudio.Utilities;
 namespace Winterdom.Viasfora.Classifications {
 
   internal static class XmlClassificationDefinitions {
-    [Export, Name(Constants.XML_CLOSING)]
+    [Export, Name(XmlConstants.XML_CLOSING)]
     internal static ClassificationTypeDefinition XmlClosingType = null;
 
-    [Export, Name(Constants.XML_PREFIX)]
+    [Export, Name(XmlConstants.XML_PREFIX)]
     internal static ClassificationTypeDefinition XmlPrefixType = null;
 
-    [Export, Name(Constants.XML_CLOSING_PREFIX)]
+    [Export, Name(XmlConstants.XML_CLOSING_PREFIX)]
     internal static ClassificationTypeDefinition XmlClosingPrefixType = null;
 
-    [Export, Name(Constants.RAZOR_CLOSING)]
+    [Export, Name(XmlConstants.RAZOR_CLOSING)]
     internal static ClassificationTypeDefinition RazorClosingType = null;
   }
 }

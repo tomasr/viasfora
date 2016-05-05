@@ -32,15 +32,15 @@ namespace Winterdom.Viasfora.Xml {
       this.theBuffer = buffer;
       this.settings = settings;
       xmlCloseTagClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.XML_CLOSING));
+         new ClassificationTag(registry.GetClassificationType(XmlConstants.XML_CLOSING));
       xmlPrefixClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.XML_PREFIX));
+         new ClassificationTag(registry.GetClassificationType(XmlConstants.XML_PREFIX));
       xmlClosingPrefixClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.XML_CLOSING_PREFIX));
+         new ClassificationTag(registry.GetClassificationType(XmlConstants.XML_CLOSING_PREFIX));
       xmlDelimiterClassification =
          new ClassificationTag(registry.GetClassificationType(Constants.DELIMITER));
       razorCloseTagClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.RAZOR_CLOSING));
+         new ClassificationTag(registry.GetClassificationType(XmlConstants.RAZOR_CLOSING));
       settings.SettingsChanged += OnSettingsChanged;
       this.aggregator = aggregator;
     }
@@ -49,14 +49,14 @@ namespace Winterdom.Viasfora.Xml {
       if ( spans.Count > 0 ) {
         ITextSnapshot snapshot = spans[0].Snapshot;
         IContentType fileType = snapshot.TextBuffer.ContentType;
-        if ( fileType.IsOfType(Constants.CT_XML) ) {
+        if ( fileType.IsOfType(XmlConstants.CT_XML) ) {
           if ( language == null ) language = new XmlMarkup();
           return DoXML(spans);
-        } else if ( fileType.IsOfType(Constants.CT_XAML) ) {
+        } else if ( fileType.IsOfType(XmlConstants.CT_XAML) ) {
           if ( language == null ) language = new XamlMarkup();
           return DoXAMLorHTML(spans);
-        } else if ( fileType.IsOfType(Constants.CT_HTML) 
-                 || fileType.IsOfType(Constants.CT_HTMLX) ) {
+        } else if ( fileType.IsOfType(XmlConstants.CT_HTML) 
+                 || fileType.IsOfType(XmlConstants.CT_HTMLX) ) {
           if ( language == null ) language = new HtmlMarkup();
           return DoXAMLorHTML(spans);
         }

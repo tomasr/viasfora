@@ -10,8 +10,8 @@ namespace Winterdom.Viasfora.Xml {
   [Export(typeof(IQuickInfoSourceProvider))]
   [Name("Viasfora Xml QuickInfo Provider")]
   [Order(Before = "Default Quick Info Presenter")]
-  [ContentType(Constants.CT_XML)]
-  [ContentType(Constants.CT_XAML)]
+  [ContentType(XmlConstants.CT_XML)]
+  [ContentType(XmlConstants.CT_XAML)]
   internal class XmlQuickInfoSourceProvider : IQuickInfoSourceProvider {
     [Import]
     internal ITextStructureNavigatorSelectorService NavigatorService { get; set; }

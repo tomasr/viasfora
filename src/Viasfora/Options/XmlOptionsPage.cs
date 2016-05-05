@@ -27,9 +27,10 @@ namespace Winterdom.Viasfora.Options {
 
       colors = new ClassificationList(new ColorStorage(this.Site));
       colors.Load(
-        Constants.XML_PREFIX,
-        Constants.XML_CLOSING,
-        Constants.XML_CLOSING_PREFIX
+        XmlConstants.XML_PREFIX,
+        XmlConstants.XML_CLOSING,
+        XmlConstants.XML_CLOSING_PREFIX,
+        XmlConstants.RAZOR_CLOSING
         );
     }
 
@@ -51,26 +52,34 @@ namespace Winterdom.Viasfora.Options {
 
     [LocDisplayName("XML Namespace Prefix Color")]
     [Description("Foreground color used to highlight XML namespace prefixes")]
-    [Category("XML Editors Colors")]
+    [Category("XML Editor Colors")]
     public Color XmlnsPrefixForegroundColor {
-      get { return colors.Get(Constants.XML_PREFIX, true); }
-      set { colors.Set(Constants.XML_PREFIX, true, value); }
+      get { return colors.Get(XmlConstants.XML_PREFIX, true); }
+      set { colors.Set(XmlConstants.XML_PREFIX, true, value); }
     }
 
     [LocDisplayName("XML Closing Tag Color")]
     [Description("Foreground color used to highlight XML closing element tags")]
     [Category("XML Editor Colors")]
     public Color XmlClosingTagForegroundColor {
-      get { return colors.Get(Constants.XML_CLOSING, true); }
-      set { colors.Set(Constants.XML_CLOSING, true, value); }
+      get { return colors.Get(XmlConstants.XML_CLOSING, true); }
+      set { colors.Set(XmlConstants.XML_CLOSING, true, value); }
     }
 
     [LocDisplayName("XML Closing Prefix Color")]
     [Description("Foreground color used to highlight XML namespace prefixes in closing tags")]
     [Category("XML Editor Colors")]
     public Color XmlClosingPrefixForegroundColor {
-      get { return colors.Get(Constants.XML_CLOSING_PREFIX, true); }
-      set { colors.Set(Constants.XML_CLOSING_PREFIX, true, value); }
+      get { return colors.Get(XmlConstants.XML_CLOSING_PREFIX, true); }
+      set { colors.Set(XmlConstants.XML_CLOSING_PREFIX, true, value); }
+    }
+
+    [LocDisplayName("Razor Closing Tag Color")]
+    [Description("Foreground color used to highlight Razor closing tags")]
+    [Category("XML Editor Colors")]
+    public Color RazorClosingTagForegroundColor {
+      get { return colors.Get(XmlConstants.RAZOR_CLOSING, true); }
+      set { colors.Set(XmlConstants.RAZOR_CLOSING, true, value); }
     }
   }
 }
