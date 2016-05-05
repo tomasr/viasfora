@@ -2,11 +2,7 @@
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Design;
-using System.Globalization;
 
 namespace Winterdom.Viasfora.Options {
   public class ClassificationColors {
@@ -113,36 +109,4 @@ namespace Winterdom.Viasfora.Options {
   }
 
 
-  public class ClassificationList {
-    public IDictionary<String, ClassificationColors> classifications;
-
-    public ClassificationList() {
-      classifications = new Dictionary<String, ClassificationColors>();
-    }
-
-    public void Load(ColorStorage storage, params String[] classificationNames) {
-      classifications.Clear();
-      foreach ( var classification in classificationNames ) {
-        var colors = new ClassificationColors(classification);
-        colors.Load(storage);
-        classifications.Add(classification, colors);
-      }
-    }
-    public void Save(ColorStorage storage) {
-      foreach ( var colors in classifications.Values ) {
-        colors.Save(storage);
-      }
-    }
-    public Color Get(String classificationName, bool foreground) {
-      ClassificationColors entry;
-      if ( classifications.TryGetValue(classificationName, out entry) ) {
-        return entry.Get(foreground);
-      }
-      return default(Color);
-    }
-    public void Set(String classificationName, bool foreground, Color color) {
-      var obj = classifications[classificationName];
-      obj.Set(color, foreground);
-    }
-  }
 }

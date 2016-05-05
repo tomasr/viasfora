@@ -1,17 +1,14 @@
-﻿using Microsoft.VisualStudio;
-using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
+﻿using Microsoft.VisualStudio.Shell;
 using System;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.RainbowOptions)]
   public class RainbowOptionsPage : DialogPage {
-    private ClassificationList colors = new ClassificationList();
+    private ClassificationList colors;
 
     public override void SaveSettingsToStorage() {
       var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
@@ -22,9 +19,10 @@ namespace Winterdom.Viasfora.Options {
       rainbowSettings.RainbowHighlightMode = RainbowHighlightMode;
       rainbowSettings.Save();
 
-      SaveColors();
+      colors.Save();
     }
     public override void LoadSettingsFromStorage() {
+      this.colors = new ClassificationList(new ColorStorage(this.Site));
       var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
 
       RainbowDepth = rainbowSettings.RainbowDepth;
@@ -32,62 +30,20 @@ namespace Winterdom.Viasfora.Options {
       RainbowHighlightMode = rainbowSettings.RainbowHighlightMode;
       RainbowToolTipsEnabled = rainbowSettings.RainbowToolTipsEnabled;
 
-      LoadColors();
+      colors.Load(
+        Rainbows.Rainbow1,
+        Rainbows.Rainbow2,
+        Rainbows.Rainbow3,
+        Rainbows.Rainbow4,
+        Rainbows.Rainbow5,
+        Rainbows.Rainbow6,
+        Rainbows.Rainbow7,
+        Rainbows.Rainbow8,
+        Rainbows.Rainbow9,
+        Rainbows.RainbowError,
+        Rainbows.TipHilight
+        );
     }
-
-    private void LoadColors() {
-      ColorStorage storage = GetStorage();
-
-      Guid category = new Guid(FontsAndColorsCategories.TextEditorCategory);
-      uint flags = (uint)(__FCSTORAGEFLAGS.FCSF_LOADDEFAULTS
-                        | __FCSTORAGEFLAGS.FCSF_NOAUTOCOLORS
-                        | __FCSTORAGEFLAGS.FCSF_READONLY);
-      var hr = storage.Storage.OpenCategory(ref category, flags);
-      ErrorHandler.ThrowOnFailure(hr);
-
-      try {
-        colors.Load(storage,
-          Rainbows.Rainbow1,
-          Rainbows.Rainbow2,
-          Rainbows.Rainbow3,
-          Rainbows.Rainbow4,
-          Rainbows.Rainbow5,
-          Rainbows.Rainbow6,
-          Rainbows.Rainbow7,
-          Rainbows.Rainbow8,
-          Rainbows.Rainbow9,
-          Rainbows.RainbowError,
-          Rainbows.TipHilight
-          );
-      } finally {
-        storage.Storage.CloseCategory();
-      }
-    }
-
-    private void SaveColors() {
-      ColorStorage storage = GetStorage();
-
-      Guid category = new Guid(FontsAndColorsCategories.TextEditorCategory);
-      uint flags = (uint)(__FCSTORAGEFLAGS.FCSF_LOADDEFAULTS
-                        | __FCSTORAGEFLAGS.FCSF_PROPAGATECHANGES);
-      var hr = storage.Storage.OpenCategory(ref category, flags);
-      ErrorHandler.ThrowOnFailure(hr);
-
-      try {
-        colors.Save(storage);
-      } finally {
-        storage.Storage.CloseCategory();
-      }
-    }
-
-    private ColorStorage GetStorage() {
-      ColorStorage storage = new ColorStorage();
-      storage.Shell = (IVsUIShell2)GetService(typeof(SVsUIShell));
-      storage.Storage = (IVsFontAndColorStorage)GetService(typeof(SVsFontAndColorStorage));
-      storage.Utilities = (IVsFontAndColorUtilities)storage.Storage;
-      return storage;
-    }
-
 
     [LocDisplayName("Enable Rainbow Braces")]
     [Description("Highlight matching braces using colors based on nesting")]
