@@ -3,13 +3,14 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Rainbow;
+using System.Drawing;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.GeneralOptions)]
   public class GeneralOptionsPage : DialogPage {
+    private ClassificationList colors;
 
     public override void SaveSettingsToStorage() {
-      base.SaveSettingsToStorage();
       var settings = SettingsContext.GetSettings();
       var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
 
@@ -26,9 +27,10 @@ namespace Winterdom.Viasfora.Options {
       settings.ModelinesNumLines = (int)ModelinesNumLines;
       settings.TelemetryEnabled = TelemetryEnabled;
       settings.Save();
+
+      colors.Save();
     }
     public override void LoadSettingsFromStorage() {
-      base.LoadSettingsFromStorage();
       var settings = SettingsContext.GetSettings();
 
       CurrentLineHighlightEnabled = settings.CurrentLineHighlightEnabled;
@@ -43,6 +45,17 @@ namespace Winterdom.Viasfora.Options {
       ModelinesEnabled = settings.ModelinesEnabled;
       ModelinesNumLines = (uint)settings.ModelinesNumLines;
       TelemetryEnabled = settings.TelemetryEnabled;
+
+      this.colors = new ClassificationList(new ColorStorage(this.Site));
+      colors.Load(
+        Constants.COLUMN_HIGHLIGHT,
+        Constants.LINE_HIGHLIGHT,
+        Constants.KEYWORD_CLASSIF_NAME,
+        Constants.LINQ_CLASSIF_NAME,
+        Constants.VISIBILITY_CLASSIF_NAME,
+        Constants.STRING_ESCAPE_CLASSIF_NAME,
+        Constants.FORMAT_SPECIFIER_NAME
+        );
     }
 
     // General Settings
@@ -51,36 +64,81 @@ namespace Winterdom.Viasfora.Options {
     [Category("General")]
     public bool TelemetryEnabled { get; set; }
 
+    [LocDisplayName("Enable Developer Margin")]
+    [Description("Enables the VS text editor extension developer margin")]
+    [Category("General")]
+    public bool DevMarginEnabled { get; set; }
+
+    [LocDisplayName("Expand Regions on Open")]
+    [Description("Automatically expand collapsible regions when a new text view is opened")]
+    [Category("General")]
+    public Outlining.AutoExpandMode AutoExpandRegions { get; set; }
+
+
     // Text Editor Extensions
     [LocDisplayName("Enable Keyword Classifier")]
     [Description("Enable custom keyword highlighting for C#, CPP and JS")]
-    [Category("Text Editor")]
+    [Category("Keyword Highlight")]
     public bool KeywordClassifierEnabled { get; set; }
+
     [LocDisplayName("Use italics on Flow Control Keywords")]
     [Description("Use italics on text highlighted by the Keyword Classifier")]
     [Category("Text Editor")]
     public bool FlowControlUseItalics { get; set; }
 
 
+    [LocDisplayName("Enable 'Bold As Italics'")]
+    [Description("Render bold fonts using italics instead")]
+    [Category("Text Editor")]
+    public bool BoldAsItalicsEnabled { get; set; }
+
     [LocDisplayName("Highlight Escape Sequences")]
     [Description("Enable highlighting of escape sequences in strings")]
     [Category("Text Editor")]
     public bool EscapeSeqHighlightEnabled { get; set; }
 
-    [LocDisplayName("Highlight Current Line")]
-    [Description("Enables highlighting the current line in the text editor")]
+    [LocDisplayName("Flow Control Keywords")]
+    [Description("Foreground color used to highlight flow control keywords")]
     [Category("Text Editor")]
-    public bool CurrentLineHighlightEnabled { get; set; }
+    public Color FlowControlForegroundColor {
+      get { return colors.Get(Constants.KEYWORD_CLASSIF_NAME, true); }
+      set { colors.Set(Constants.KEYWORD_CLASSIF_NAME, true, value); }
+    }
+    [LocDisplayName("Query Keywords")]
+    [Description("Foreground color used to highlight LINQ/Query keywords")]
+    [Category("Text Editor")]
+    public Color LinqForegroundColor {
+      get { return colors.Get(Constants.LINQ_CLASSIF_NAME, true); }
+      set { colors.Set(Constants.LINQ_CLASSIF_NAME, true, value); }
+    }
+    [LocDisplayName("Visibility Keywords")]
+    [Description("Foreground color used to highlight visibility keywords")]
+    [Category("Text Editor")]
+    public Color VisibilityForegroundColor {
+      get { return colors.Get(Constants.VISIBILITY_CLASSIF_NAME, true); }
+      set { colors.Set(Constants.VISIBILITY_CLASSIF_NAME, true, value); }
+    }
+    [LocDisplayName("String Escape Sequences")]
+    [Description("Foreground color used to highlight escape sequences in strings")]
+    [Category("Text Editor")]
+    public Color StringEscapeSeqColor {
+      get { return colors.Get(Constants.STRING_ESCAPE_CLASSIF_NAME, true); }
+      set { colors.Set(Constants.STRING_ESCAPE_CLASSIF_NAME, true, value); }
+    }
+    [LocDisplayName("String Format Specifiers")]
+    [Description("Foreground color used to highlight format specifiers in strings")]
+    [Category("Text Editor")]
+    public Color StringFormatSpecsColor {
+      get { return colors.Get(Constants.FORMAT_SPECIFIER_NAME, true); }
+      set { colors.Set(Constants.FORMAT_SPECIFIER_NAME, true, value); }
+    }
 
-    [LocDisplayName("Highlight Current Column")]
-    [Description("Enables highlighting the current column in the text editor")]
-    [Category("Text Editor")]
-    public bool CurrentColumnHighlightEnabled { get; set; }
+
 
     private double highlightLineWidth;
     [LocDisplayName("Highlight Line Width")]
     [Description("Defines the thickness of the current line/column highlight")]
-    [Category("Text Editor")]
+    [Category("Location Tracking")]
     public double HighlightLineWidth {
       get { return this.highlightLineWidth; }
       set {
@@ -91,22 +149,52 @@ namespace Winterdom.Viasfora.Options {
       }
     }
 
+    // current line highlight
+    [LocDisplayName("Line Highlight")]
+    [Description("Enables highlighting the current line in the text editor")]
+    [Category("Location Tracking")]
+    public bool CurrentLineHighlightEnabled { get; set; }
 
-    [LocDisplayName("Enable Developer Margin")]
-    [Description("Enables the VS text editor extension developer margin")]
-    [Category("Text Editor")]
-    public bool DevMarginEnabled { get; set; }
+    [LocDisplayName("Line Highlight Foreground")]
+    [Description("Foreground color used to highlight the current line")]
+    [Category("Location Tracking")]
+    public Color LineHighlightForeground {
+      get { return colors.Get(Constants.LINE_HIGHLIGHT, true); }
+      set { colors.Set(Constants.LINE_HIGHLIGHT, true, value); }
+    }
+
+    [LocDisplayName("Line Highlight Background")]
+    [Description("Background color used to highlight the current line")]
+    [Category("Location Tracking")]
+    public Color LineHighlightBackground {
+      get { return colors.Get(Constants.LINE_HIGHLIGHT, false); }
+      set { colors.Set(Constants.LINE_HIGHLIGHT, false, value); }
+    }
 
 
-    [LocDisplayName("Expand Regions on Open")]
-    [Description("Automatically expand collapsible regions when a new text view is opened")]
-    [Category("Text Editor")]
-    public Outlining.AutoExpandMode AutoExpandRegions { get; set; }
+    // current column highlight
+    [LocDisplayName("Column Highlight")]
+    [Description("Enables highlighting the current column in the text editor")]
+    [Category("Location Tracking")]
+    public bool CurrentColumnHighlightEnabled { get; set; }
 
-    [LocDisplayName("Enable 'Bold As Italics'")]
-    [Description("Render bold fonts using italics instead")]
-    [Category("Text Editor")]
-    public bool BoldAsItalicsEnabled { get; set; }
+    [LocDisplayName("Column Highlight Foreground")]
+    [Description("Foreground color used to highlight the current column")]
+    [Category("Location Tracking")]
+    public Color ColumnHighlightForeground {
+      get { return colors.Get(Constants.COLUMN_HIGHLIGHT, true); }
+      set { colors.Set(Constants.COLUMN_HIGHLIGHT, true, value); }
+    }
+
+    [LocDisplayName("Column Highlight Background")]
+    [Description("Background color used to highlight the current column")]
+    [Category("Location Tracking")]
+    public Color ColumnHighlightBackground {
+      get { return colors.Get(Constants.COLUMN_HIGHLIGHT, false); }
+      set { colors.Set(Constants.COLUMN_HIGHLIGHT, false, value); }
+    }
+
+
 
 
     // Modelines Configuration
@@ -119,5 +207,7 @@ namespace Winterdom.Viasfora.Options {
     [Description("Number of lines to check for modeline commands")]
     [Category("Modelines")]
     public uint ModelinesNumLines {get; set; }
+
+
   }
 }

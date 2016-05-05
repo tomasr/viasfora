@@ -22,7 +22,6 @@ namespace Winterdom.Viasfora.Options {
       colors.Save();
     }
     public override void LoadSettingsFromStorage() {
-      this.colors = new ClassificationList(new ColorStorage(this.Site));
       var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
 
       RainbowDepth = rainbowSettings.RainbowDepth;
@@ -30,6 +29,7 @@ namespace Winterdom.Viasfora.Options {
       RainbowHighlightMode = rainbowSettings.RainbowHighlightMode;
       RainbowToolTipsEnabled = rainbowSettings.RainbowToolTipsEnabled;
 
+      this.colors = new ClassificationList(new ColorStorage(this.Site));
       colors.Load(
         Rainbows.Rainbow1,
         Rainbows.Rainbow2,
