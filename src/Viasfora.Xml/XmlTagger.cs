@@ -38,7 +38,7 @@ namespace Winterdom.Viasfora.Xml {
       xmlClosingPrefixClassification =
          new ClassificationTag(registry.GetClassificationType(XmlConstants.XML_CLOSING_PREFIX));
       xmlDelimiterClassification =
-         new ClassificationTag(registry.GetClassificationType(Constants.DELIMITER));
+         new ClassificationTag(registry.GetClassificationType(XmlConstants.DELIMITER));
       razorCloseTagClassification =
          new ClassificationTag(registry.GetClassificationType(XmlConstants.RAZOR_CLOSING));
       settings.SettingsChanged += OnSettingsChanged;
