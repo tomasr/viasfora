@@ -132,7 +132,7 @@ namespace Winterdom.Viasfora.Xml {
       }
       var firstMatch = from tagSpan in tagAggregator.GetTags(span)
                        let tagName = tagSpan.Tag.ClassificationType.Classification
-                       where tagName == Constants.XML_PREFIX
+                       where tagName == XmlConstants.XML_PREFIX
                        select tagSpan;
       return firstMatch.FirstOrDefault() != null;
     }

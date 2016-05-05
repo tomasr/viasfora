@@ -87,6 +87,7 @@
     <Compile Include="Sgml\SgmlParser.cs" />
     <Compile Include="Sgml\SgmlReader.cs" />
     <Compile Include="XamlMarkup.cs" />
+    <Compile Include="XmlConstants.cs" />
     <Compile Include="XmlMarkup.cs" />
     <Compile Include="XmlQuickInfoController.cs" />
     <Compile Include="XmlQuickInfoControllerProvider.cs" />

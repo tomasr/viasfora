@@ -7,8 +7,8 @@ using Microsoft.VisualStudio.Utilities;
 namespace Winterdom.Viasfora.EditorFormats {
 
   [Export(typeof(EditorFormatDefinition))]
-  [ClassificationType(ClassificationTypeNames = Constants.XML_CLOSING)]
-  [Name(Constants.XML_CLOSING)]
+  [ClassificationType(ClassificationTypeNames = XmlConstants.XML_CLOSING)]
+  [Name(XmlConstants.XML_CLOSING)]
   [UserVisible(true)]
   [Order(Before = Priority.High, After = Priority.High)]
   internal sealed class XmlClosingTagFormat : ClassificationFormatDefinition {

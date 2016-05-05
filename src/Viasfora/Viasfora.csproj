@@ -67,6 +67,9 @@
     <Compile Include="Commands\PresentationModeCommand.cs" />
     <Compile Include="Commands\VsCommand.cs" />
     <Compile Include="Design\StringListConverter.cs" />
+    <Compile Include="Options\ClassificationColors.cs" />
+    <Compile Include="Options\ClassificationList.cs" />
+    <Compile Include="Options\ColorStorage.cs" />
     <Compile Include="Options\RainbowOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>

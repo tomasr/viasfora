@@ -14,19 +14,6 @@ namespace Winterdom.Viasfora {
 
     public const String OBFUSCATED_TEXT = "viasfora.text.obfuscated";
 
-    public const String CT_XML = "XML";
-    public const String CT_XAML = "XAML";
-    public const String CT_HTML = "HTML";
-    // VS213 HTML Editor
-    public const String CT_HTMLX = "htmlx";
-    public const String XML_CLOSING = "XMLCloseTag";
-    public const String XML_PREFIX = "XMLPrefix";
-    public const String XML_CLOSING_PREFIX = "viasfora.xml.closing.prefix";
-    public const String RAZOR_CLOSING = "viasfora.razor.closing.element";
-    // I'd prefer "XML Delimiter" here, but no way to
-    // use it effectively.
-    public const String DELIMITER = PredefinedClassificationTypeNames.Operator;
-
     public const String STRING_COLLECTION_EDITOR = "System.Windows.Forms.Design.StringCollectionEditor, System.Design, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
     public static int S_OK = 0;
 

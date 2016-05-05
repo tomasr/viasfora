@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Xml {
   [Export(typeof(IViewTaggerProvider))]
-  [ContentType(Constants.CT_XML)]
+  [ContentType(XmlConstants.CT_XML)]
   [TagType(typeof(TextMarkerTag))]
   public class XmlTagMatchingTaggerProvider : IViewTaggerProvider {
     [Import]
