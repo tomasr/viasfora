@@ -213,6 +213,9 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
             pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
             tc.Next();
             return true;
+          } else if ( this.multiLine && tc.Char() == '"' && tc.NChar() == '"' ) {
+            // single embedded double quote
+            tc.Skip(2);
           } else if ( tc.Char() == '"' ) {
             // done parsing the interpolated string
             this.status = stText;
