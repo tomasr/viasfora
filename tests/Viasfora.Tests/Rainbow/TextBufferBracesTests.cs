@@ -106,5 +106,14 @@ namespace Viasfora.Tests.Rainbow {
       Assert.True(openingBrace.Position > matchingBraces.Item1.Position);
     }
 
+    [Fact]
+    public void ParsingPlainTextFileDoesntScanDocument() {
+      var textBuffer = GetPlainTextBuffer("Rainbow1.txt");
+      var snapshot = textBuffer.CurrentSnapshot;
+      var cache = new TextBufferBraces(snapshot, GetLang(textBuffer));
+      var span = snapshot.GetSpan();
+      Assert.Equal(0, cache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)).Count());
+      Assert.True(cache.LastParsedPosition <= 0);
+    }
   }
 }

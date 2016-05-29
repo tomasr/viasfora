@@ -39,7 +39,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public void Invalidate(SnapshotPoint startPoint) {
-      if ( this.language == null ) return;
+      if ( ScanIsUnnecessary() ) return;
       // the new start belongs to a different snapshot!
       var newSnapshot = startPoint.Snapshot;
       this.Snapshot = newSnapshot;
@@ -84,7 +84,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
-      if ( this.language == null ) yield break;
+      if ( ScanIsUnnecessary() ) yield break;
 
       for ( int i = 0; i < spans.Count; i++ ) {
         var wantedSpan = spans[i];
@@ -102,7 +102,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public IEnumerable<CharPos> ErrorBracesInSpans(NormalizedSnapshotSpanCollection spans) {
-      if ( this.language == null )
+      if ( ScanIsUnnecessary() )
         return Enumerable.Empty<CharPos>();
 
       // we expect there to be very few brace errors,
@@ -119,7 +119,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public IEnumerable<BracePos> BracesFromPosition(int position) {
-      if ( this.language == null ) return new BracePos[0];
+      if ( ScanIsUnnecessary() ) return new BracePos[0];
       SnapshotSpan span = new SnapshotSpan(Snapshot, position, Snapshot.Length - position);
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
     }
@@ -393,6 +393,11 @@ namespace Winterdom.Viasfora.Rainbow {
         if ( keys[i] == ch ) return true;
       }
       return false;
+    }
+
+    private bool ScanIsUnnecessary() {
+      return this.language == null
+          || String.IsNullOrEmpty(this.BraceChars);
     }
   }
 }
