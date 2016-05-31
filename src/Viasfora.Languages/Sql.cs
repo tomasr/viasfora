@@ -21,29 +21,22 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] LINQ_KEYWORDS = {
          "select", "update", "insert", "delete", "merge"
       };
-    protected override String[] ControlFlowDefaults {
-      get { return KEYWORDS; }
+
+    protected override String[] ControlFlowDefaults => KEYWORDS;
+    protected override String[] LinqDefaults => LINQ_KEYWORDS;
+    protected override String[] VisibilityDefaults => VIS_KEYWORDS;
+    public override String KeyName => Constants.Sql;
+    protected override String[] SupportedContentTypes {
+      get { return new String[] { ContentType, ContentTypeAlt }; }
     }
-    protected override String[] LinqDefaults {
-      get { return LINQ_KEYWORDS; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return VIS_KEYWORDS; }
-    }
-    public override String KeyName {
-      get { return Constants.Sql; }
-    }
-    protected override IBraceScanner NewBraceScanner() {
-      return new SqlBraceScanner();
-    }
+
+    protected override IBraceScanner NewBraceScanner()
+      => new SqlBraceScanner();
 
     [ImportingConstructor]
     public Sql(IVsfSettings settings) : base(settings) {
     }
 
-    protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType, ContentTypeAlt }; }
-    }
     protected override string TextToCompare(string text) {
       // the SQL classifier will return text spans that include
       // trailing spaces (such as "IF ")

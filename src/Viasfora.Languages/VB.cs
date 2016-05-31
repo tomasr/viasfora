@@ -24,18 +24,11 @@ namespace Winterdom.Viasfora.Languages {
          "group", "join", "let", "order", "by",
          "skip", "take", "where"
       };
-    protected override String[] ControlFlowDefaults {
-      get { return VB_KEYWORDS; }
-    }
-    protected override String[] LinqDefaults {
-      get { return VB_LINQ_KEYWORDS; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return VB_VIS_KEYWORDS; }
-    }
-    public override String KeyName {
-      get { return Constants.VB; }
-    }
+    protected override String[] ControlFlowDefaults => VB_KEYWORDS;
+    protected override String[] LinqDefaults => VB_LINQ_KEYWORDS;
+    protected override String[] VisibilityDefaults => VB_VIS_KEYWORDS;
+    public override String KeyName => Constants.VB;
+
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, VBScriptContentType }; }
     }
@@ -44,8 +37,7 @@ namespace Winterdom.Viasfora.Languages {
     public VB(IVsfSettings settings) : base(settings) {
     }
 
-    protected override IBraceScanner NewBraceScanner() {
-      return new VbBraceScanner();
-    }
+    protected override IBraceScanner NewBraceScanner()
+      => new VbBraceScanner();
   }
 }
