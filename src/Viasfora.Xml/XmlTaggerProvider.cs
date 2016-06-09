@@ -8,10 +8,10 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Xml {
   [Export(typeof(IViewTaggerProvider))]
-  [ContentType(Constants.CT_XML)]
-  [ContentType(Constants.CT_XAML)]
-  [ContentType(Constants.CT_HTML)]
-  [ContentType(Constants.CT_HTMLX)]
+  [ContentType(XmlConstants.CT_XML)]
+  [ContentType(XmlConstants.CT_XAML)]
+  [ContentType(XmlConstants.CT_HTML)]
+  [ContentType(XmlConstants.CT_HTMLX)]
   [TagType(typeof(ClassificationTag))]
   public class XmlTaggerProvider : IViewTaggerProvider {
     [Import]

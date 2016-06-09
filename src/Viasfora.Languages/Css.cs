@@ -13,31 +13,22 @@ namespace Winterdom.Viasfora.Languages {
     public const String SassContentType = "SCSS";
     public const String LessContentType = "LESS";
 
-    public override String KeyName {
-      get { return Constants.Css; }
-    }
+    public override String KeyName => Constants.Css;
+
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, SassContentType, LessContentType }; }
     }
-    protected override String[] ControlFlowDefaults {
-      get { return EMPTY; }
-    }
-    protected override String[] LinqDefaults {
-      get { return EMPTY; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return EMPTY; }
-    }
+    protected override String[] ControlFlowDefaults => EMPTY;
+    protected override String[] LinqDefaults => EMPTY;
+    protected override String[] VisibilityDefaults => EMPTY;
 
     [ImportingConstructor]
     public Css(IVsfSettings settings) : base(settings) {
     }
 
-    public override IStringScanner NewStringScanner(string text) {
-      return new CssStringScanner(text);
-    }
-    protected override IBraceScanner NewBraceScanner() {
-      return new CssBraceScanner();
-    }
+    public override IStringScanner NewStringScanner(string text)
+      => new CssStringScanner(text);
+    protected override IBraceScanner NewBraceScanner()
+      => new CssBraceScanner();
   }
 }

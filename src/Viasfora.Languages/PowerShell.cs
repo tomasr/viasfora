@@ -16,22 +16,12 @@ namespace Winterdom.Viasfora.Languages {
           "elseif", "do", "break", "continue",
           "exit", "return", "until", "switch"
       };
-    static readonly String[] QUERY_KEYWORDS = {
-      };
-    static readonly String[] VIS_KEYWORDS = {
-      };
-    protected override String[] ControlFlowDefaults {
-      get { return FLOW_KEYWORDS; }
-    }
-    protected override String[] LinqDefaults {
-      get { return QUERY_KEYWORDS; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return VIS_KEYWORDS; }
-    }
-    public override String KeyName {
-      get { return Constants.PowerShell; }
-    }
+    protected override String[] ControlFlowDefaults => FLOW_KEYWORDS;
+    protected override String[] LinqDefaults => EMPTY;
+    protected override String[] VisibilityDefaults => EMPTY;
+
+    public override String KeyName => Constants.PowerShell; 
+
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentTypePSTools, ContentTypeVS2013 }; }
     }
@@ -39,11 +29,9 @@ namespace Winterdom.Viasfora.Languages {
     [ImportingConstructor]
     public PowerShell(IVsfSettings settings) : base(settings) {
     }
-    protected override IBraceScanner NewBraceScanner() {
-      return new PsBraceScanner();
-    }
-    public override IStringScanner NewStringScanner(String text) {
-      return new PsStringScanner(text);
-    }
+    protected override IBraceScanner NewBraceScanner()
+      => new PsBraceScanner();
+    public override IStringScanner NewStringScanner(String text)
+      => new PsStringScanner(text);
   }
 }

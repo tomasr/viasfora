@@ -13,29 +13,19 @@ namespace Winterdom.Viasfora.Languages {
           "break", "continue", "if", "elif", "else",
           "for", "raise", "return", "while", "yield"
       };
-    static readonly String[] VIS_KEYWORDS = {
-      };
     static readonly String[] LINQ_KEYWORDS = {
           "from", "in"
       };
-    protected override String[] ControlFlowDefaults {
-      get { return KEYWORDS; }
-    }
-    protected override String[] LinqDefaults {
-      get { return LINQ_KEYWORDS; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return VIS_KEYWORDS; }
-    }
-    public override String KeyName {
-      get { return Constants.Python; }
-    }
-    protected override IBraceScanner NewBraceScanner() {
-      return new PythonBraceScanner();
-    }
-    protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType }; }
-    }
+    protected override String[] ControlFlowDefaults => KEYWORDS;
+    protected override String[] LinqDefaults => LINQ_KEYWORDS;
+    protected override String[] VisibilityDefaults => EMPTY;
+
+    public override String KeyName => Constants.Python;
+    protected override String[] SupportedContentTypes
+      => new String[] { ContentType };
+
+    protected override IBraceScanner NewBraceScanner() 
+      => new PythonBraceScanner();
 
     [ImportingConstructor]
     public Python(IVsfSettings settings) : base(settings) {

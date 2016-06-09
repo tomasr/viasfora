@@ -15,28 +15,19 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] CPP_VIS_KEYWORDS = {
          "public", "private", "protected", "internal", "friend"
       };
-    protected override String[] ControlFlowDefaults {
-      get { return CPP_KEYWORDS; }
-    }
-    protected override String[] LinqDefaults {
-      get { return new String[0]; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return CPP_VIS_KEYWORDS; }
-    }
-    public override String KeyName {
-      get { return Constants.Cpp; }
-    }
-    protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType }; }
-    }
+    protected override String[] ControlFlowDefaults => CPP_KEYWORDS;
+    protected override String[] LinqDefaults => EMPTY;
+    protected override String[] VisibilityDefaults => CPP_VIS_KEYWORDS;
+    public override String KeyName => Constants.Cpp;
+
+    protected override String[] SupportedContentTypes
+      => new String[] { ContentType };
 
     [ImportingConstructor]
     public Cpp(IVsfSettings settings) : base(settings) {
     }
 
-    public override IStringScanner NewStringScanner(string text) {
-      return new CStringScanner(text);
-    }
+    public override IStringScanner NewStringScanner(string text)
+      => new CStringScanner(text);
   }
 }

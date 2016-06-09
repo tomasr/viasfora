@@ -7,40 +7,21 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Languages {
   public class DefaultLanguage : LanguageInfo {
-    static readonly String[] empty = new String[0];
-    protected override String[] ControlFlowDefaults {
-      get { return empty; }
-    }
-    protected override String[] LinqDefaults {
-      get { return empty; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return empty; }
-    }
+    protected override String[] ControlFlowDefaults => EMPTY;
+    protected override String[] LinqDefaults => EMPTY;
+    protected override String[] VisibilityDefaults => EMPTY;
 
-    protected override string[] SupportedContentTypes {
-      get { return empty; }
-    }
-    public override string KeyName {
-      get { return "Text"; }
-    }
+    protected override string[] SupportedContentTypes => EMPTY;
+    public override string KeyName => "Text";
 
     [ImportingConstructor]
     public DefaultLanguage(IVsfSettings settings) : base(settings) {
     }
 
-
     public override bool MatchesContentType(IContentType contentType) {
       return true;
     }
-    protected override IBraceScanner NewBraceScanner() {
-      return new DefaultBraceScanner();
-    }
-
-    private class NoFirstLineCommentParser : IFirstLineCommentParser {
-      public string Parse(ITextChars tc) {
-        return "";
-      }
-    }
+    protected override IBraceScanner NewBraceScanner()
+      => new DefaultBraceScanner();
   }
 }

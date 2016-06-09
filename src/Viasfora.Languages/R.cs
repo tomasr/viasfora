@@ -16,32 +16,23 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] LINQ_KEYWORDS = {
          "apply", "in"
       };
-    public override string KeyName {
-      get { return Constants.R; }
-    }
-    protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentTypes.R }; }
-    }
-    protected override String[] ControlFlowDefaults {
-      get { return KEYWORDS; }
-    }
-    protected override String[] LinqDefaults {
-      get { return LINQ_KEYWORDS; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return EMPTY; }
-    }
+
+    public override string KeyName => Constants.R;
+    protected override String[] SupportedContentTypes
+      => new String[] { ContentTypes.R };
+    protected override String[] ControlFlowDefaults => KEYWORDS;
+    protected override String[] LinqDefaults => LINQ_KEYWORDS;
+    protected override String[] VisibilityDefaults => EMPTY;
 
 
     [ImportingConstructor]
     public R(IVsfSettings settings) : base(settings) {
     }
 
-    protected override IBraceScanner NewBraceScanner() {
-      return new RBraceScanner();
-    }
-    public override IStringScanner NewStringScanner(String text) {
-      return new RStringScanner(text);
-    }
+    protected override IBraceScanner NewBraceScanner()
+      => new RBraceScanner();
+
+    public override IStringScanner NewStringScanner(String text)
+      => new RStringScanner(text);
   }
 }

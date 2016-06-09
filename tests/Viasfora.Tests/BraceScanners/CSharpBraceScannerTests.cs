@@ -177,6 +177,13 @@ callCommented2(4);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(4, chars.Count);
     }
+    [Fact]
+    public void InterpolatedAtStringWithDoubleQuotes() {
+      String input = "$@\"class MyClass {{ Console.WriteLine(\"\"test\"\");\r\n}}\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = ExtractWithLines(extractor, input.Trim(), 0, 0);
+      Assert.Equal(0, chars.Count);
+    }
 
     [Fact]
     public void InterpolatedStringNonRestartable1() {

@@ -21,31 +21,20 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] VIS_KEYWORDS = {
          "public", "private", "internal"
       };
-    protected override String[] ControlFlowDefaults {
-      get { return KEYWORDS; }
-    }
-    protected override String[] LinqDefaults {
-      get { return LINQ_KEYWORDS; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return VIS_KEYWORDS; }
-    }
-    public override String KeyName {
-      get { return Constants.FSharp; }
-    }
-    protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType }; }
-    }
+    protected override String[] ControlFlowDefaults => KEYWORDS;
+    protected override String[] LinqDefaults => LINQ_KEYWORDS;
+    protected override String[] VisibilityDefaults => VIS_KEYWORDS;
+    public override String KeyName => Constants.FSharp;
+    protected override String[] SupportedContentTypes
+      => new String[] { ContentType };
 
     [ImportingConstructor]
     public FSharp(IVsfSettings settings) : base(settings) {
     }
 
-    protected override IBraceScanner NewBraceScanner() {
-      return new FSharpBraceScanner();
-    }
-    public override IStringScanner NewStringScanner(String text) {
-      return new FSharpStringScanner(text);
-    }
+    protected override IBraceScanner NewBraceScanner()
+      => new FSharpBraceScanner();
+    public override IStringScanner NewStringScanner(String text)
+      => new FSharpStringScanner(text);
   }
 }

@@ -17,28 +17,17 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] JS_LINQ_KEYWORDS = {
          "in", "with"
       };
-    protected override String[] ControlFlowDefaults {
-      get { return JS_KEYWORDS; }
-    }
-    protected override String[] LinqDefaults {
-      get { return JS_LINQ_KEYWORDS; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return new String[0]; }
-    }
-    public override String KeyName {
-      get { return Constants.JS; }
-    }
-    protected override String[] SupportedContentTypes {
-      get { return knownTypes; }
-    }
+    protected override String[] ControlFlowDefaults => JS_KEYWORDS;
+    protected override String[] LinqDefaults => JS_LINQ_KEYWORDS;
+    protected override String[] VisibilityDefaults => EMPTY;
+    public override String KeyName => Constants.JS;
+    protected override String[] SupportedContentTypes => knownTypes;
 
     [ImportingConstructor]
     public JScript(IVsfSettings settings) : base(settings) {
     }
 
-    protected override IBraceScanner NewBraceScanner() {
-      return new JScriptBraceScanner();
-    }
+    protected override IBraceScanner NewBraceScanner()
+      => new JScriptBraceScanner();
   }
 }

@@ -9,11 +9,9 @@ namespace Winterdom.Viasfora.Languages {
 
     public CBasedLanguage(IVsfSettings settings) : base(settings) {
     }
-    protected override IBraceScanner NewBraceScanner() {
-      return new CBraceScanner();
-    }
-    public override IStringScanner NewStringScanner(String text) {
-      return new BasicCStringScanner(text);
-    }
+    protected override IBraceScanner NewBraceScanner()
+      => new CBraceScanner();
+    public override IStringScanner NewStringScanner(String text)
+      => new BasicCStringScanner(text);
   }
 }

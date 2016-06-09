@@ -9,28 +9,19 @@ namespace Winterdom.Viasfora.Languages {
   class JSON : CBasedLanguage {
     public const String ContentType = "JSON";
 
-    protected override String[] ControlFlowDefaults {
-      get { return EMPTY; }
-    }
-    protected override String[] LinqDefaults {
-      get { return EMPTY; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return EMPTY; }
-    }
-    public override String KeyName {
-      get { return Constants.Json; }
-    }
-    protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType }; }
-    }
+    protected override String[] ControlFlowDefaults => EMPTY;
+    protected override String[] LinqDefaults => EMPTY;
+    protected override String[] VisibilityDefaults => EMPTY;
+
+    public override String KeyName => Constants.Json;
+    protected override String[] SupportedContentTypes
+      => new String[] { ContentType };
 
     [ImportingConstructor]
     public JSON(IVsfSettings settings) : base(settings) {
     }
 
-    protected override IBraceScanner NewBraceScanner() {
-      return new JScriptBraceScanner();
-    }
+    protected override IBraceScanner NewBraceScanner()
+      => new JScriptBraceScanner();
   }
 }

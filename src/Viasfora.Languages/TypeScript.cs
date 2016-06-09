@@ -19,28 +19,18 @@ namespace Winterdom.Viasfora.Languages {
     static readonly String[] LINQ_KEYWORDS = {
          "in", "with"
       };
-    protected override String[] ControlFlowDefaults {
-      get { return KEYWORDS; }
-    }
-    protected override String[] LinqDefaults {
-      get { return LINQ_KEYWORDS; }
-    }
-    protected override String[] VisibilityDefaults {
-      get { return VISIBILITY; }
-    }
-    public override String KeyName {
-      get { return Constants.TypeScript; }
-    }
-    protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType }; }
-    }
+    protected override String[] ControlFlowDefaults => KEYWORDS;
+    protected override String[] LinqDefaults => LINQ_KEYWORDS;
+    protected override String[] VisibilityDefaults => VISIBILITY;
+    public override String KeyName => Constants.TypeScript;
+    protected override String[] SupportedContentTypes
+      => new String[] { ContentType };
 
     [ImportingConstructor]
     public TypeScript(IVsfSettings settings) : base(settings) {
     }
 
-    protected override IBraceScanner NewBraceScanner() {
-      return new JScriptBraceScanner();
-    }
+    protected override IBraceScanner NewBraceScanner()
+      => new JScriptBraceScanner();
   }
 }

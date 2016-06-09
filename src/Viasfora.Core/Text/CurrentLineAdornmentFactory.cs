@@ -8,7 +8,7 @@ namespace Winterdom.Viasfora.Text {
 
   [Export(typeof(IWpfTextViewCreationListener))]
   [ContentType(ContentTypes.Text)]
-  [TextViewRole(PredefinedTextViewRoles.Interactive)]
+  [TextViewRole(PredefinedTextViewRoles.Editable)]
   internal sealed class CurrentLineAdornmentFactory : IWpfTextViewCreationListener {
     [Import]
     public IClassificationTypeRegistryService ClassificationRegistry = null;
