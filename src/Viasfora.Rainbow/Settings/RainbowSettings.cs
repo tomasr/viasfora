@@ -32,6 +32,10 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
       get { return settings.GetBoolean(nameof(RainbowToolTipsEnabled), true); }
       set { settings.SetValue(nameof(RainbowToolTipsEnabled), value); }
     }
+    public RainbowColoringMode RainbowColoringMode {
+      get { return settings.GetEnum(nameof(RainbowColoringMode), RainbowColoringMode.Unified); }
+      set { settings.SetValue(nameof(RainbowColoringMode), value); }
+    }
 
     [ImportingConstructor]
     public RainbowSettings(IVsfSettings settings) {

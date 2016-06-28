@@ -13,8 +13,14 @@ namespace Winterdom.Viasfora.Rainbow {
       return pairs.Pop();
     }
 
-    public void Push(CharPos brace) {
-      pairs.Push(brace.AsBrace(pairs.Count));
+    public BracePos Peek(char brace) {
+      return pairs.Peek();
+    }
+
+    public BracePos Push(CharPos brace) {
+      var bp = brace.AsBrace(pairs.Count);
+      pairs.Push(bp);
+      return bp;
     }
   }
 }

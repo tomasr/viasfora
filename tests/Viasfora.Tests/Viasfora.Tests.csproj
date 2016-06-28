@@ -99,6 +99,7 @@
     <Compile Include="CommentParsers\GenericCommentParserTests.cs" />
     <Compile Include="Outlining\SelectionOutliningManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rainbow\PerBraceStackerTests.cs" />
     <Compile Include="Rainbow\UnifiedBraceStackerTests.cs" />
     <Compile Include="Rainbow\TextBufferBracesTests.cs" />
     <Compile Include="StringScanners\BasicCStringScannerTests.cs" />

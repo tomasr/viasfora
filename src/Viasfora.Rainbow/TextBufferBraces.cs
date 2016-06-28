@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private SortedList<char, char> braceList;
     private IBraceScanner braceScanner;
     private ILanguage language;
+    private RainbowColoringMode coloringMode;
     public ITextSnapshot Snapshot { get; private set; }
     public String BraceChars { get; private set; }
     public int LastParsedPosition { get; private set; }
@@ -19,10 +20,11 @@ namespace Winterdom.Viasfora.Rainbow {
       get { return language != null ? language.Enabled : false; }
     }
 
-    public TextBufferBraces(ITextSnapshot snapshot, ILanguage language) {
+    public TextBufferBraces(ITextSnapshot snapshot, ILanguage language, RainbowColoringMode coloringMode) {
       this.Snapshot = snapshot;
       this.LastParsedPosition = -1;
       this.language = language;
+      this.coloringMode = coloringMode;
       this.braceList = new SortedList<char, char>();
       this.braces = new List<BracePos>();
       this.braceErrors = new List<CharPos>();
@@ -236,14 +238,14 @@ namespace Winterdom.Viasfora.Rainbow {
       int lastGoodBrace = 0;
       int lastState = 0;
       // figure out where to start parsing again
-      Stack<BracePos> pairs = new Stack<BracePos>();
+      var pairs = GetStacker(this.coloringMode);
       for ( int i=0; i < braces.Count; i++ ) {
         BracePos r = braces[i];
         if ( r.Position > parseFrom ) break;
         if ( IsOpeningBrace(r.Brace) ) {
-          pairs.Push(r);
-        } else if ( pairs.Count > 0 ) {
-          pairs.Pop();
+          pairs.Push(r.ToCharPos());
+        } else if ( pairs.Count(r.Brace) > 0 ) {
+          pairs.Pop(r.Brace);
         }
         startPosition = r.Position + 1;
         lastGoodBrace = i;
@@ -256,7 +258,7 @@ namespace Winterdom.Viasfora.Rainbow {
       ExtractBraces(pairs, startPosition, parseUntil, lastState);
     }
 
-    private void ExtractBraces(Stack<BracePos> pairs, int startOffset, int endOffset, int state) {
+    private void ExtractBraces(IBraceStacker pairs, int startOffset, int endOffset, int state) {
       braceScanner.Reset(state);
       int lineNum = Snapshot.GetLineNumberFromPosition(startOffset);
       while ( lineNum < Snapshot.LineCount  ) {
@@ -271,23 +273,21 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
-    private void ExtractFromLine(Stack<BracePos> pairs, ITextSnapshotLine line, int lineOffset) {
+    private void ExtractFromLine(IBraceStacker pairs, ITextSnapshotLine line, int lineOffset) {
       var lc = new LineChars(line, lineOffset);
       CharPos cp = CharPos.Empty;
       while ( !lc.EndOfLine ) {
         if ( !this.braceScanner.Extract(lc, ref cp) )
           continue;
         if ( IsOpeningBrace(cp) ) {
-          BracePos p = cp.AsBrace(pairs.Count);
-          pairs.Push(p);
-          Add(p);
+          Add(pairs.Push(cp));
           // we don't need to check if it's a closing brace
           // because the extractor won't return anything else
-        } else if ( pairs.Count > 0 ) {
-          BracePos p = pairs.Peek();
+        } else if ( pairs.Count(cp.Char) > 0 ) {
+          BracePos p = pairs.Peek(cp.Char);
           if ( braceList[p.Brace] == cp.Char ) {
             // yield closing brace
-            pairs.Pop();
+            pairs.Pop(cp.Char);
             BracePos c = cp.AsBrace(p.Depth);
             Add(c);
           } else {
@@ -308,6 +308,16 @@ namespace Winterdom.Viasfora.Rainbow {
       LastParsedPosition = brace.Position;
     }
 
+    private IBraceStacker GetStacker(RainbowColoringMode mode) {
+      switch ( mode ) {
+        case RainbowColoringMode.Unified:
+          return new UnifiedBraceStacker();
+        case RainbowColoringMode.PerBrace:
+          return new PerBraceStacker(this.BraceChars);
+        default:
+          throw new InvalidOperationException("Invalid rainbow coloring mode");
+      }
+    }
 
     // simple binary-search like for the closest 
     // brace to this position

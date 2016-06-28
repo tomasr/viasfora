@@ -169,7 +169,8 @@ namespace Winterdom.Viasfora.Rainbow {
     private void SetLanguage(ITextSnapshot snapshot) {
       if ( TextBuffer != null ) {
         var lang = LanguageFactory.TryCreateLanguage(snapshot);
-        this.BufferBraces = new TextBufferBraces(this.TextBuffer.CurrentSnapshot, lang);
+        var mode = Settings.RainbowColoringMode;
+        this.BufferBraces = new TextBufferBraces(this.TextBuffer.CurrentSnapshot, lang, mode);
       }
     }
 
