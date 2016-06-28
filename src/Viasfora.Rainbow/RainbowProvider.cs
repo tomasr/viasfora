@@ -75,6 +75,8 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void SettingsChanged() {
+      // force recreating the TextBufferBraces instance
+      SetLanguage(this.TextBuffer.CurrentSnapshot);
       this.UpdateBraceList(new SnapshotPoint(this.TextBuffer.CurrentSnapshot, 0));
     }
 
