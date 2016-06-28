@@ -17,6 +17,7 @@ namespace Winterdom.Viasfora.Options {
       rainbowSettings.RainbowTagsEnabled = RainbowTagsEnabled;
       rainbowSettings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
       rainbowSettings.RainbowHighlightMode = RainbowHighlightMode;
+      rainbowSettings.RainbowColoringMode = RainbowColoringMode;
       rainbowSettings.Save();
 
       colors.Save();
@@ -28,6 +29,7 @@ namespace Winterdom.Viasfora.Options {
       RainbowTagsEnabled = rainbowSettings.RainbowTagsEnabled;
       RainbowHighlightMode = rainbowSettings.RainbowHighlightMode;
       RainbowToolTipsEnabled = rainbowSettings.RainbowToolTipsEnabled;
+      RainbowColoringMode = rainbowSettings.RainbowColoringMode;
 
       this.colors = new ClassificationList(new ColorStorage(this.Site));
       colors.Load(
@@ -73,6 +75,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Show a tooltip highlighting matching braces when you hover the mouse over a rainbow brace")]
     [Category("Rainbow Braces")]
     public bool RainbowToolTipsEnabled { get; set; }
+
+    [LocDisplayName("Rainbow Coloring Mode")]
+    [Description("Controls if brace coloring is based on global or per-brace depth")] 
+    [Category("Rainbow Braces")]
+    public RainbowColoringMode RainbowColoringMode { get; set; }
 
 
     [LocDisplayName("Level 1")]
