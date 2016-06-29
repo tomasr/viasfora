@@ -279,28 +279,30 @@ namespace Winterdom.Viasfora.Rainbow {
       while ( !lc.EndOfLine ) {
         if ( !this.braceScanner.Extract(lc, ref cp) )
           continue;
-        if ( IsOpeningBrace(cp) ) {
-          Add(pairs.Push(cp));
-          // we don't need to check if it's a closing brace
-          // because the extractor won't return anything else
-        } else if ( pairs.Count(cp.Char) > 0 ) {
-          BracePos p = pairs.Peek(cp.Char);
-          if ( braceList[p.Brace] == cp.Char ) {
-            // yield closing brace
-            pairs.Pop(cp.Char);
-            BracePos c = cp.AsBrace(p.Depth);
-            Add(c);
-          } else {
-            // closing brace does not correspond
-            // to opening brace at same depth
-            this.braceErrors.Add(cp);
-          }
-        } else {
-          // closing brace has no opening brace
-          this.braceErrors.Add(cp);
-        }
+        MatchBrace(pairs, cp);
       }
       this.LastParsedPosition = line.End;
+    }
+
+    private void MatchBrace(IBraceStacker pairs, CharPos cp) {
+      if ( IsOpeningBrace(cp) ) {
+        Add(pairs.Push(cp));
+      } else if ( pairs.Count(cp.Char) > 0 ) {
+        // check if this is a closing brace matching
+        // the opening on the stack
+        BracePos p = pairs.Peek(cp.Char);
+        if ( braceList[p.Brace] == cp.Char ) {
+          // it does, add it
+          pairs.Pop(cp.Char);
+          Add(cp.AsBrace(p.Depth));
+        } else {
+          // it doesn't; it's an error
+          this.braceErrors.Add(cp);
+        }
+      } else {
+        // closing brace has no opening brace
+        this.braceErrors.Add(cp);
+      }
     }
 
     private void Add(BracePos brace) {
