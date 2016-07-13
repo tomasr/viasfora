@@ -29,6 +29,7 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.VBOptionsPage), "Viasfora\\Languages", "Basic", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.FSharpOptionsPage), "Viasfora\\Languages", "F#", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.SqlOptionsPage), "Viasfora\\Languages", "SQL", 0, 0, true)]
+  [ProvideOptionPage(typeof(Options.USqlOptionsPage), "Viasfora\\Languages", "U-SQL", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.TypeScriptOptionsPage), "Viasfora\\Languages", "TypeScript", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.PythonOptionsPage), "Viasfora\\Languages", "Python", 0, 0, true)]
   [ProvideOptionPage(typeof(Options.ROptionsPage), "Viasfora\\Languages", "R", 0, 0, true)]

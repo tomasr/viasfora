@@ -79,6 +79,9 @@
     <Compile Include="Options\AllLanguagesOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Options\USqlOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Options\TextObfuscationDialog.xaml.cs">
       <DependentUpon>TextObfuscationDialog.xaml</DependentUpon>
     </Compile>
