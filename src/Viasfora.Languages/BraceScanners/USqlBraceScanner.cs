@@ -3,26 +3,25 @@ using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.BraceScanners {
-  public class SqlBraceScanner : IBraceScanner {
+  public class USqlBraceScanner : IBraceScanner {
     const int stText = 0;
     const int stString = 1;
     const int stMultiLineComment = 4;
     private int status = stText;
 
-    public String BraceList {
-      get { return "()[]"; }
+    public string BraceList {
+      get { return "()[]{}"; }
     }
 
     public void Reset(int state) {
-      this.status = stText;
+      status = stText;
     }
-
     public bool Extract(ITextChars tc, ref CharPos pos) {
       pos = CharPos.Empty;
       while ( !tc.EndOfLine ) {
-        switch ( this.status ) {
+        switch ( status ) {
           case stString: ParseString(tc); break;
-          case stMultiLineComment: ParseMultiLineComment(tc); break;
+          case stMultiLineComment: ParseMultilineComment(tc); break;
           default:
             return ParseText(tc, ref pos);
         }
@@ -32,17 +31,20 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
 
     private bool ParseText(ITextChars tc, ref CharPos pos) {
       while ( !tc.EndOfLine ) {
-        // multi-line comment
         if ( tc.Char() == '/' && tc.NChar() == '*' ) {
-          this.status = stMultiLineComment;
           tc.Skip(2);
-          this.ParseMultiLineComment(tc);
-        } else if ( tc.Char() == '-' && tc.NChar() == '-' ) {
+          status = stMultiLineComment;
+          ParseMultilineComment(tc);
+        } else if ( tc.Char() == '/' && tc.NChar() == '/' ) {
           tc.SkipRemainder();
         } else if ( tc.Char() == '\'' ) {
-          this.status = stString;
+          status = stString;
           tc.Next();
-          this.ParseString(tc);
+          ParseCharLiteral(tc);
+        } else if ( tc.Char() == '"' ) {
+          status = stString;
+          tc.Next();
+          ParseString(tc);
         } else if ( this.BraceList.IndexOf(tc.Char()) >= 0 ) {
           pos = new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
@@ -54,13 +56,26 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       return false;
     }
 
-    private void ParseString(ITextChars tc) {
+    private void ParseCharLiteral(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '\'' && tc.NChar() == '\'' ) {
+        if ( tc.Char() == '\\' ) {
+          // skip over escape sequences
           tc.Skip(2);
         } else if ( tc.Char() == '\'' ) {
           tc.Next();
-          this.status = stText;
+          break;
+        } else {
+          tc.Next();
+        }
+      }
+      this.status = stText;
+    }
+
+    private void ParseMultilineComment(ITextChars tc) {
+      while ( !tc.EndOfLine ) {
+        if ( tc.Char() == '*' && tc.Char() == '/' ) {
+          tc.Skip(2);
+          status = stText;
           break;
         } else {
           tc.Next();
@@ -68,13 +83,12 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       }
     }
 
-
-    private void ParseMultiLineComment(ITextChars tc) {
+    private void ParseString(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '*' && tc.NChar() == '/' ) {
-          tc.Skip(2);
+        if ( tc.Char() == '\"' ) {
+          tc.Next();
           this.status = stText;
-          return;
+          break;
         } else {
           tc.Next();
         }
