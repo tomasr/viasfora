@@ -75,6 +75,8 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void SettingsChanged() {
+      // force recreating the TextBufferBraces instance
+      SetLanguage(this.TextBuffer.CurrentSnapshot);
       this.UpdateBraceList(new SnapshotPoint(this.TextBuffer.CurrentSnapshot, 0));
     }
 
@@ -169,7 +171,8 @@ namespace Winterdom.Viasfora.Rainbow {
     private void SetLanguage(ITextSnapshot snapshot) {
       if ( TextBuffer != null ) {
         var lang = LanguageFactory.TryCreateLanguage(snapshot);
-        this.BufferBraces = new TextBufferBraces(this.TextBuffer.CurrentSnapshot, lang);
+        var mode = Settings.RainbowColoringMode;
+        this.BufferBraces = new TextBufferBraces(this.TextBuffer.CurrentSnapshot, lang, mode);
       }
     }
 

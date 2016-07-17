@@ -7,10 +7,7 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
 
     private IVsfSettings settings;
 
-    public event EventHandler SettingsChanged {
-      add { settings.SettingsChanged += value; }
-      remove { settings.SettingsChanged -= value; }
-    }
+    public event EventHandler SettingsChanged;
 
     public int RainbowDepth {
       get { return settings.GetInt32(nameof(RainbowDepth), 4); }
@@ -32,14 +29,23 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
       get { return settings.GetBoolean(nameof(RainbowToolTipsEnabled), true); }
       set { settings.SetValue(nameof(RainbowToolTipsEnabled), value); }
     }
+    public RainbowColoringMode RainbowColoringMode {
+      get { return settings.GetEnum(nameof(RainbowColoringMode), RainbowColoringMode.Unified); }
+      set { settings.SetValue(nameof(RainbowColoringMode), value); }
+    }
 
     [ImportingConstructor]
     public RainbowSettings(IVsfSettings settings) {
       this.settings = settings;
+      this.settings.SettingsChanged += OnSettingsChanged;
     }
 
     public void Save() {
       this.settings.Save();
+    }
+
+    private void OnSettingsChanged(object sender, EventArgs e) {
+      SettingsChanged?.Invoke(this, e);
     }
   }
 }

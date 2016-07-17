@@ -96,9 +96,12 @@
     <Compile Include="BraceScanners\CssBraceScannerTests.cs" />
     <Compile Include="BraceScanners\PsBraceScannerTests.cs" />
     <Compile Include="BraceScanners\RBraceScannerTests.cs" />
+    <Compile Include="BraceScanners\USqlBraceScannerTests.cs" />
     <Compile Include="CommentParsers\GenericCommentParserTests.cs" />
     <Compile Include="Outlining\SelectionOutliningManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rainbow\PerBraceStackerTests.cs" />
+    <Compile Include="Rainbow\UnifiedBraceStackerTests.cs" />
     <Compile Include="Rainbow\TextBufferBracesTests.cs" />
     <Compile Include="StringScanners\BasicCStringScannerTests.cs" />
     <Compile Include="StringScanners\CSharpStringScannerTests.cs" />

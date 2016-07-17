@@ -6,10 +6,7 @@ namespace Winterdom.Viasfora.Xml.Settings {
   public class XmlSettings : IXmlSettings {
     private IVsfSettings settings;
 
-    public event EventHandler SettingsChanged {
-      add { settings.SettingsChanged += value; }
-      remove { settings.SettingsChanged -= value; }
-    }
+    public event EventHandler SettingsChanged;
 
     public bool XmlnsPrefixEnabled {
       get { return settings.GetBoolean(nameof(XmlnsPrefixEnabled), true); }
@@ -27,10 +24,16 @@ namespace Winterdom.Viasfora.Xml.Settings {
     [ImportingConstructor]
     public XmlSettings(IVsfSettings settings) {
       this.settings = settings;
+      this.settings.SettingsChanged += OnSettingsChanged;
     }
 
     public void Save() {
       this.settings.Save();
     }
+
+    private void OnSettingsChanged(object sender, EventArgs e) {
+      SettingsChanged?.Invoke(this, e);
+    }
+
   }
 }

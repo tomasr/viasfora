@@ -60,6 +60,7 @@
     <Compile Include="BraceScanners\PythonBraceScanner.cs" />
     <Compile Include="BraceScanners\RBraceScanner.cs" />
     <Compile Include="BraceScanners\SqlBraceScanner.cs" />
+    <Compile Include="BraceScanners\USqlBraceScanner.cs" />
     <Compile Include="BraceScanners\VbBraceScanner.cs" />
     <Compile Include="CBasedLanguage.cs" />
     <Compile Include="CommentParsers\GenericCommentParser.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Sequences\RStringScanner.cs" />
     <Compile Include="Sql.cs" />
     <Compile Include="TypeScript.cs" />
+    <Compile Include="USql.cs" />
     <Compile Include="VB.cs" />
     <Compile Include="XLang.cs" />
   </ItemGroup>

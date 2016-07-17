@@ -78,8 +78,12 @@
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
     <Compile Include="BracePos.cs" />
+    <Compile Include="RainbowColoringMode.cs" />
+    <Compile Include="PerBraceStacker.cs" />
+    <Compile Include="UnifiedBraceStacker.cs" />
     <Compile Include="CharPos.cs" />
     <Compile Include="Classifications\RainbowClassifications.cs" />
+    <Compile Include="IBraceStacker.cs" />
     <Compile Include="IToolTipWindow.cs" />
     <Compile Include="IToolTipWindowProvider.cs" />
     <Compile Include="Rainbows.cs" />
