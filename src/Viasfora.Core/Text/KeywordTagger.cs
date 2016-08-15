@@ -43,7 +43,7 @@ namespace Winterdom.Viasfora.Text {
       if ( spans.Count == 0 ) {
         yield break;
       }
-      ILanguage lang = GetKeywordsByContentType(theBuffer.ContentType);
+      ILanguage lang = GetLanguageByContentType(theBuffer.ContentType);
       if ( !lang.Enabled ) {
         yield break;
       }
@@ -135,7 +135,7 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
-    private ILanguage GetKeywordsByContentType(IContentType contentType) {
+    private ILanguage GetLanguageByContentType(IContentType contentType) {
       return this.langFactory.TryCreateLanguage(contentType);
     }
   }
