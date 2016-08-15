@@ -6,6 +6,7 @@ using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
+using Microsoft.VisualStudio.Text.Classification;
 
 namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo : ILanguage {
@@ -68,6 +69,9 @@ namespace Winterdom.Viasfora.Languages {
     public bool IsLinqKeyword(String text) {
       return Linq.Contains(TextToCompare(text), comparer);
     }
+    public virtual bool IsKeywordClassification(IClassificationType classificationType) {
+      return CompareClassification(classificationType, "Keyword");
+    }
 
     protected virtual String TextToCompare(String text) {
       return text;
@@ -88,5 +92,9 @@ namespace Winterdom.Viasfora.Languages {
     protected void Set(String name, IEnumerable<String> values) {
       Settings.SetValue(this.KeyName + "_" + name, values.FromList());
     }
+    protected bool CompareClassification(IClassificationType classificationType, String name) {
+      return classificationType.Classification.Equals(name, StringComparison.OrdinalIgnoreCase);
+    }
+
   }
 }

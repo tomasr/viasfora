@@ -58,7 +58,8 @@ namespace Winterdom.Viasfora.Text {
       foreach ( var tagSpan in aggregator.GetTags(spans) ) {
         if ( tagSpan.Tag.ClassificationType is RainbowTag )
           continue;
-        String name = tagSpan.Tag.ClassificationType.Classification.ToLower();
+        var classificationType = tagSpan.Tag.ClassificationType;
+        String name = classificationType.Classification.ToLower();
         if ( eshe && name.Contains("string") ) {
           var span = tagSpan.GetSpan(snapshot);
           foreach ( var escapeTag in ProcessEscapeSequences(lang, span) ) {
@@ -66,7 +67,7 @@ namespace Winterdom.Viasfora.Text {
           }
         }
 
-        if ( kce && name.Contains("keyword") ) {
+        if ( kce && lang.IsKeywordClassification(classificationType) ) {
           var span = tagSpan.GetSpan(snapshot);
           // Is this one of the keywords we care about?
           var result = IsInterestingKeyword(lang, span);
