@@ -4,6 +4,8 @@ using Microsoft.ApplicationInsights.Extensibility;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -69,8 +71,12 @@ namespace Winterdom.Viasfora {
     }
 
     private static String GetViasforaVersion() {
-      var version = typeof(Telemetry).Assembly.GetName().Version;
-      return String.Format("{0}.{1}", version.Major, version.Minor);
+      var assembly = typeof(Telemetry).Assembly;
+      var fileVersion = assembly
+                       .GetCustomAttributes(typeof(AssemblyFileVersionAttribute), false)
+                       .Cast<AssemblyFileVersionAttribute>()
+                       .First().Version;
+      return fileVersion;
     }
 
     private static String GetUserId() {
