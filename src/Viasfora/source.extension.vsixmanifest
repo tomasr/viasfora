@@ -42,6 +42,9 @@
         <Edition>Pro</Edition>
         <Edition>IntegratedShell</Edition>
       </VisualStudio>
+      <!--
+      <IsolatedShell Version="13.0">ssms</IsolatedShell>
+      -->
     </SupportedProducts>
     <SupportedFrameworkRuntimeEdition MinVersion="4.0" MaxVersion="5.0" />
   </Identifier>
