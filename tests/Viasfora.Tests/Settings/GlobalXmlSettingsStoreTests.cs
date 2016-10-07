@@ -20,6 +20,23 @@ namespace Viasfora.Tests.Settings {
       Assert.Equal(2, doc.Root.Elements().Count());
     }
     [Fact]
+    public void CanWriteSettingsUsingEnvironmentVariable() {
+      String path = Path.GetTempFileName();
+      Environment.SetEnvironmentVariable("VIASFORA_SETTINGS", path);
+      try {
+        ISettingsStore store = new GlobalXmlSettingsStore(/*null*/);
+        store.Set("test1", "Value 1");
+        store.Save();
+
+        Assert.True(File.Exists(path));
+        Assert.True(new FileInfo(path).Length > 0, "File exists but it is 0 bytes");
+        XDocument doc = XDocument.Load(path);
+        Assert.Equal(1, doc.Root.Elements().Count());
+      } finally {
+        Environment.SetEnvironmentVariable("VIASFORA_SETTINGS", "");
+      }
+    }
+    [Fact]
     public void CanWriteAndReadBackSettings() {
       String path = Path.GetTempFileName();
       ISettingsStore store = new GlobalXmlSettingsStore(path);
