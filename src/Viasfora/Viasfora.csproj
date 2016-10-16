@@ -228,6 +228,7 @@
     <Resource Include="Resources\cmdImages.bmp" />
     <Content Include="license.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="viasfora-icon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -237,7 +238,10 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="viasfora.ico" />
+    <Content Include="viasfora.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <IncludeInVSIX>true</IncludeInVSIX>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="VsfCommands.vsct">
@@ -265,18 +269,26 @@
     <ProjectReference Include="..\Viasfora.Core\Viasfora.Core.csproj">
       <Project>{419c99ad-185a-4d31-a7ff-e1754c7b806d}</Project>
       <Name>Viasfora.Core</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
     <ProjectReference Include="..\Viasfora.Languages\Viasfora.Languages.csproj">
       <Project>{14b957db-0ed2-4dea-85c9-b670f6653c1b}</Project>
       <Name>Viasfora.Languages</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
     <ProjectReference Include="..\Viasfora.Rainbow\Viasfora.Rainbow.csproj">
       <Project>{944758a5-90a4-4de7-8ef6-4fb2e7f4efb3}</Project>
       <Name>Viasfora.Rainbow</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
     <ProjectReference Include="..\Viasfora.Xml\Viasfora.Xml.csproj">
       <Project>{3274163b-e647-40e2-8d9f-6df7e7c50411}</Project>
       <Name>Viasfora.Xml</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
