@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.Language.StandardClassification;
 
 namespace Winterdom.Viasfora {
   public static class Constants {

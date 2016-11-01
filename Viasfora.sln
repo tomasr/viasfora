@@ -1,12 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.25824.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora", "src\Viasfora\Viasfora.csproj", "{ED05E9A0-B822-4925-81A5-721CBE04DA37}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Tests", "tests\Viasfora.Tests\Viasfora.Tests.csproj", "{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1038A55E-607B-4449-924E-1861530C2C56}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -25,6 +21,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{567EF174-A312-43D2-9955-2396CEA9E6DA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{6271BFBC-846E-48A5-86BD-0729B65DA933}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora", "src\Viasfora\Viasfora.csproj", "{ED05E9A0-B822-4925-81A5-721CBE04DA37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Tests", "tests\Viasfora.Tests\Viasfora.Tests.csproj", "{DD25FEEB-2CFD-4DCB-82A2-764DC563CF98}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Languages", "src\Viasfora.Languages\Viasfora.Languages.csproj", "{14B957DB-0ED2-4DEA-85C9-B670F6653C1B}"
 EndProject
