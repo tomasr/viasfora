@@ -26,11 +26,26 @@
     </ObjectDataProvider>
   </UserControl.Resources>
   <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="150"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
       <ColumnDefinition Width="40"/>
     </Grid.ColumnDefinitions>
-    <GroupBox Header="Obfuscation Expressions" Grid.Column="0">
+    <GroupBox Header="Obfuscation Expressions" Grid.Column="0" Grid.Row="0">
+        <ListBox x:Name="expressionsList"
+                  ItemsSource="{Binding ElementName=userControl, Path=Entries}"
+                  SelectedItem="{Binding ElementName=userControl, Path=SelectedEntry, Mode=TwoWay}"
+                 >
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Text="{Binding Name}" />
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+        </ListBox>
+      <!--
         <DataGrid x:Name="expressionsGridView"
                   ItemsSource="{Binding ElementName=userControl, Path=Entries}"
                   SelectedItem="{Binding ElementName=userControl, Path=SelectedEntry, Mode=TwoWay}"
@@ -51,10 +66,10 @@
                                 Width="350" />
           </DataGrid.Columns>
         </DataGrid>
-
+      -->
     </GroupBox>
     <StackPanel DockPanel.Dock="Right" Orientation="Vertical"
-                Width="30" Grid.Column="1" Margin="0, 40, 0, 0">
+                Width="30" Grid.Column="1" Grid.Row="0" Margin="0, 40, 0, 0">
       <Button Margin="5,5,5,5" Command="{Binding ElementName=userControl, Path=AddEntryCmd}"
               CommandParameter="{Binding ElementName=userControl, Path=SelectedEntry}">
         <Path Margin="2" Stroke="Green" Data="M0,5 H10 M5,0 V10"
@@ -66,5 +81,26 @@
               StrokeThickness="2" Height="10" Width="10" /> 
       </Button>
     </StackPanel>
+    <Grid Grid.Column="0" Grid.Row="1" DataContext="{Binding ElementName=userControl, Path=SelectedEntry}" IsEnabled="{Binding ElementName=userControl, Path=IsEntrySelected}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="30"/>
+        <RowDefinition Height="30" />
+        <RowDefinition Height="30" />
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="90" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+
+      <TextBlock Grid.Column="0" Grid.Row="0" Text="Name:"  Margin="2,2,2,2" VerticalAlignment="Center"/>
+      <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding Name, Mode=TwoWay}" Margin="2,2,2,2" />
+      <TextBlock Grid.Column="0" Grid.Row="1" Text="Options:"  Margin="2,2,2,2" VerticalAlignment="Center"/>
+      <ComboBox Grid.Column="1" Grid.Row="1"  Margin="2,2,2,2"
+                ItemsSource="{Binding Source={StaticResource ExpressionOptionsValues}}"
+                SelectedItem="{Binding Options, Mode=TwoWay}"
+                />
+      <TextBlock Grid.Column="0" Grid.Row="2" Text="Expression:"  Margin="2,2,2,2" VerticalAlignment="Center"/>
+      <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding RegularExpression, Mode=TwoWay}"  Margin="2,2,2,2"/>
+    </Grid>
   </Grid>
 </UserControl>

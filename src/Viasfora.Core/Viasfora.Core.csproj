@@ -207,7 +207,6 @@
     <Compile Include="Contracts\IPresentationModeState.cs" />
     <Compile Include="DefaultNames.cs" />
     <Compile Include="Design\NativeMethods.cs" />
-    <Compile Include="Design\UIElementDialogPage.cs" />
     <Compile Include="Design\XamlExtensions.cs" />
     <Compile Include="Design\ZoomTrackBar.cs">
       <SubType>UserControl</SubType>

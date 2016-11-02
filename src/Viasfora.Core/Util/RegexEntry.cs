@@ -1,33 +1,38 @@
 ﻿using Microsoft.VisualStudio.Text;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 
 namespace Winterdom.Viasfora.Util {
-  public class RegexEntry {
+  public class RegexEntry : INotifyPropertyChanged {
     private String name;
     private String regex;
     private ExpressionKind kind;
     private ExpressionOptions options;
     private Regex compiledExpression;
 
+    public event PropertyChangedEventHandler PropertyChanged;
+
     public String Name {
       get { return this.name; }
-      set { this.name = value; }
+      set { this.name = value; RaiseChanged(nameof(Name)); }
     }
     public String RegularExpression {
       get { return this.regex; }
-      set {
-        this.regex = value;
-      }
+      set { this.regex = value; RaiseChanged(nameof(RegularExpression)); }
     }
     public ExpressionKind Kind {
       get { return this.kind; }
-      set { this.kind = value; }
+      set { this.kind = value; RaiseChanged(nameof(Kind)); }
     }
     public ExpressionOptions Options {
       get { return this.options; }
-      set { this.options = value; }
+      set { this.options = value; RaiseChanged(nameof(Options)); }
+    }
+
+    private void RaiseChanged(String property) {
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
     }
 
     public Regex GetRegex() {
