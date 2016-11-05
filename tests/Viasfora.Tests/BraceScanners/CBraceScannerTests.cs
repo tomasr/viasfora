@@ -27,6 +27,20 @@ namespace Viasfora.Tests.BraceScanners {
       Assert.Equal(4, chars.Count);
     }
     [Fact]
+    public void CanExtractBracesFollowingCpp14QuoteInIntLiteral() {
+      String input = @"if ( x == 80'000 ) { }";
+      var extractor = new CBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
+    [Fact]
+    public void CanExtractBracesFollowingCpp14QuoteInIntLiteralHex() {
+      String input = @"if ( x == 0x80'00 ) { }";
+      var extractor = new CBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(4, chars.Count);
+    }
+    [Fact]
     public void IgnoreBracesInSingleLineComment() {
       String input = @"
 callF(1);

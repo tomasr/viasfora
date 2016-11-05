@@ -47,6 +47,9 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           this.status = stString;
           tc.Next();
           this.ParseString(tc);
+        } else if ( Char.IsDigit(tc.Char()) && tc.NChar() == '\'' ) {
+          // this is a C++ 14 digit separator, such as 1'000'000
+          tc.Skip(2);
         } else if ( tc.Char() == '\'' ) {
           this.status = stString;
           tc.Next();
