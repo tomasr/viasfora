@@ -209,7 +209,9 @@ namespace Winterdom.Viasfora.Xml {
 
     private SnapshotSpan CompleteTag(SnapshotSpan current) {
       var snapshot = current.Snapshot;
-      int end = current.End + 1;
+      int end = current.End < snapshot.Length
+              ? current.End + 1
+              : current.End;
       int start = BacktrackToLessThan(snapshot, current.Start);
 
       return new SnapshotSpan(snapshot, start, end - start);
@@ -269,7 +271,7 @@ namespace Winterdom.Viasfora.Xml {
 
     private SnapshotSpan? GetTagAtPoint(SnapshotPoint point) {
       int pos = point.Position >= 1 ? point.Position - 1 : 0;
-      SnapshotSpan testSpan = new SnapshotSpan(point.Snapshot, new Span(pos, 1));
+      SnapshotSpan testSpan = new SnapshotSpan(point.Snapshot, new Span(pos, 0));
 
       foreach ( var tagSpan in aggregator.GetTags(testSpan) ) {
         String tagName = tagSpan.Tag.ClassificationType.Classification;
