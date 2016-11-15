@@ -4,6 +4,7 @@ using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Util;
 
 namespace Viasfora.Tests.StringScanners {
+  [Collection("DependsOnVS")]
   public class BasicCStringScannerTests {
     [Fact]
     public void NoEscapesReturnsNull() {

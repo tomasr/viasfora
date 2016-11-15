@@ -11,8 +11,10 @@ using Winterdom.Viasfora;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Rainbow;
+using Xunit;
 
 namespace Viasfora.Tests {
+  [Collection("DependsOnVS")]
   public class VsfVsTestBase {
     private readonly VsfEditorHost editorHost;
     private static VsfEditorHost cachedEditorHost;

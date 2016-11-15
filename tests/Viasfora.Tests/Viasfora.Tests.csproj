@@ -70,6 +70,11 @@
       <Private>True</Private>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.Setup.Configuration.Interop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.VisualStudio.Setup.Configuration.Interop.1.2.304-preview5\lib\net35\Microsoft.VisualStudio.Setup.Configuration.Interop.dll</HintPath>
+      <Private>True</Private>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.11.0, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\VSSDK.Shell.11.11.0.4\lib\net45\Microsoft.VisualStudio.Shell.11.0.dll</HintPath>
       <Private>True</Private>
@@ -215,6 +220,7 @@
     <Compile Include="Settings\SolutionUserSettingsTests.cs" />
     <Compile Include="Settings\VsfSettingsTests.cs" />
     <Compile Include="StringScanners\RStringScannerTests.cs" />
+    <Compile Include="VS15AssemblyResolver.cs" />
     <Compile Include="VsfEditorHost.cs" />
     <Compile Include="VsfVsTestBase.cs" />
     <Compile Include="VsSolutionTests.cs" />
