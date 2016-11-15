@@ -12,13 +12,15 @@ namespace Viasfora.Tests {
     static readonly String[] assemblyLocations;
     static VS15AssemblyResolverFixture() {
       vsInstallDir = TryFindVS15InstallDir();
-      assemblyLocations = new String[] {
+      if ( !String.IsNullOrEmpty(vsInstallDir) ) {
+        assemblyLocations = new String[] {
                 Path.Combine(vsInstallDir, @"Common7\IDE"),
                 Path.Combine(vsInstallDir, @"Common7\IDE\PrivateAssemblies"),
                 Path.Combine(vsInstallDir, @"Common7\IDE\PublicAsemblies"),
                 Path.Combine(vsInstallDir, @"Common7\IDE\CommonExtensions\Microsoft\Editor"),
             };
-      AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+        AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
+      }
     }
 
     private static String TryFindVS15InstallDir() {
@@ -32,7 +34,7 @@ namespace Viasfora.Tests {
           return idata[0].GetInstallationPath();
         }
       }
-      throw new InvalidOperationException("Visual Studio installation directory not found.");
+      return null;
     }
 
     private static ISetupConfiguration GetVsConfig() {
@@ -41,9 +43,13 @@ namespace Viasfora.Tests {
         return new SetupConfiguration();
       } catch (COMException ex) when (ex.HResult == REGDB_E_CLASSNOTREG) {
         // Try to get the class object using app-local call.
-        ISetupConfiguration setupConfig;
-        var result = GetSetupConfiguration(out setupConfig, IntPtr.Zero);
-        return result < 0 ? null : setupConfig;
+        try {
+          ISetupConfiguration setupConfig;
+          var result = GetSetupConfiguration(out setupConfig, IntPtr.Zero);
+          return result < 0 ? null : setupConfig;
+        } catch ( DllNotFoundException ) {
+          return null;
+        }
       }
     }
 
