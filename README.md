@@ -1,6 +1,6 @@
 # Viasfora
 
-A Visual Studio 2010 - 2015 extension that enhances the
+A Visual Studio 2012 - 2015 extension that enhances the
 text editing experience!
 
 __Official Site__: http://viasfora.com/
@@ -66,10 +66,11 @@ Most features include support for the following languages
 * VB, VBScript
 * F#
 * JavaScript
-* SQL
+* SQL, U-SQL
 * TypeScript
 * Python
 * PowerShell
 * CSS, SASS, LESS
+* R
 
 
