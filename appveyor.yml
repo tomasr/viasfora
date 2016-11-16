@@ -21,4 +21,5 @@ branches:
     - develop
 
 after_test:
-  - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
+  # - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
+  - ps: Vsix-PushArtifacts
