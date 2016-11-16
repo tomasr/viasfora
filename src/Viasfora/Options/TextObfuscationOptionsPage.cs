@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
+using Winterdom.Viasfora.Design;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Options {
@@ -36,11 +37,5 @@ namespace Winterdom.Viasfora.Options {
         this.dialog.Entries.Add(entry);
       }
     }
-    protected void MoveFocusToNext() {
-      if ( this.Child != null ) {
-        this.Child.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-      }
-    }
-
   }
 }
