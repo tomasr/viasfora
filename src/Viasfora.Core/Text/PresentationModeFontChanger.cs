@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.Text {
       this.enabled = false;
       this.settings = SettingsContext.GetSettings();
       this.categories = GetCategories();
-      this.fontsAndColors = state.GetService<IVsFontAndColorStorage>();
+      this.fontsAndColors = null;
     }
 
     public void TurnOn() {
@@ -37,7 +37,14 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
+    private void EnsureFontsAndColors() {
+      if (this.fontsAndColors == null) {
+        this.fontsAndColors = this.packageState.GetService<IVsFontAndColorStorage>();
+      }
+    }
+
     private void TurnOnCategory(FontCategory category, double zoomLevel) {
+      EnsureFontsAndColors();
       Guid categoryId = category.Id;
 
       int hr = fontsAndColors.OpenCategory(
@@ -66,6 +73,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void TurnOffCategory(FontCategory category, bool notifyChanges) {
+      EnsureFontsAndColors();
       Guid categoryId = category.Id;
       var flags = __FCSTORAGEFLAGS.FCSF_LOADDEFAULTS;
       if ( notifyChanges ) {
