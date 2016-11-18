@@ -7,7 +7,7 @@ using Winterdom.Viasfora.Util;
 using Xunit;
 
 namespace Viasfora.Tests.StringScanners {
-
+  [Collection("DependsOnVS")]
   public class CSharpStringScannerTests {
     [Fact]
     public void NoEscapesReturnsNull() {
@@ -92,7 +92,13 @@ namespace Viasfora.Tests.StringScanners {
       Assert.Equal(new StringPart(5,10), parser.Next());
       Assert.Equal(null, parser.Next());
     }
-
+    [Fact]
+    public void EscapeSequenceAfterInterpolatedBlockIsExtracted() {
+      String input = "$\"some{value}\\a\"";
+      var parser = new CSharpStringScanner(input);
+      Assert.Equal(new StringPart(13,2), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
     //
     // Format Specifier Tests
     //

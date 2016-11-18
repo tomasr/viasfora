@@ -64,12 +64,12 @@ namespace Winterdom.Viasfora.Design {
     [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     protected override IWin32Window Window {
       get {
-        if ( m_elementHost == null ) {
+        if (m_elementHost == null) {
           m_elementHost = new DialogPageElementHost();
           m_elementHost.Dock = Forms.DockStyle.Fill;
 
           UIElement child = Child;
-          if ( child != null ) {
+          if (child != null) {
             // The child is the root of a visual tree, so it has no parent from whom to 
             // inherit its TextFormattingMode; set it appropriately.
             // NOTE: We're setting this value on an element we didn't create; we should consider
@@ -108,10 +108,10 @@ namespace Winterdom.Viasfora.Design {
     void OnSourceChanged(object sender, SourceChangedEventArgs e) {
       HwndSource oldSource = e.OldSource as HwndSource;
       HwndSource newSource = e.NewSource as HwndSource;
-      if ( oldSource != null ) {
+      if (oldSource != null) {
         oldSource.RemoveHook(SourceHook);
       }
-      if ( newSource != null ) {
+      if (newSource != null) {
         newSource.AddHook(SourceHook);
       }
     }
@@ -120,7 +120,7 @@ namespace Winterdom.Viasfora.Design {
       // Handle WM_GETDLGCODE in order to allow for arrow and tab navigation inside the dialog page.
       // By returning this code, Windows will pass arrow and tab keys to our HWND instead of handling
       // them for its own default tab and directional navigation.
-      switch ( msg ) {
+      switch (msg) {
         case NativeMethods.WM_GETDLGCODE:
           int dlgCode = NativeMethods.DLGC_WANTARROWS | NativeMethods.DLGC_WANTTAB | NativeMethods.DLGC_WANTCHARS;
 
@@ -129,11 +129,11 @@ namespace Winterdom.Viasfora.Design {
           // this message, then we'll add DLGC_WANTALLKEYS to request that this pending message
           // be delivered to our content instead of the default dialog procedure.
           IInputElement currentElement = Keyboard.FocusedElement;
-          if ( currentElement != null ) {
+          if (currentElement != null) {
             DialogKeyEventArgs args = new DialogKeyEventArgs(DialogKeyPendingEvent, KeyInterop.KeyFromVirtualKey(wParam.ToInt32()));
             currentElement.RaiseEvent(args);
 
-            if ( args.Handled ) {
+            if (args.Handled) {
               dlgCode |= NativeMethods.DLGC_WANTALLKEYS;
             }
           }
@@ -150,7 +150,7 @@ namespace Winterdom.Viasfora.Design {
       // cancel or commit the selection change rather than allowing the default button
       // or cancel button to be invoked.
       ComboBox comboBox = (ComboBox)sender;
-      if ( (e.Key == Key.Enter || e.Key == Key.Escape) && comboBox.IsDropDownOpen ) {
+      if ((e.Key == Key.Enter || e.Key == Key.Escape) && comboBox.IsDropDownOpen) {
         e.Handled = true;
       }
     }
@@ -160,13 +160,13 @@ namespace Winterdom.Viasfora.Design {
       // cancel or commit the selection change rather than allowing the default button
       // or cancel button to be invoked.
       DatePicker datePicker = (DatePicker)sender;
-      if ( (e.Key == Key.Enter || e.Key == Key.Escape) && datePicker.IsDropDownOpen ) {
+      if ((e.Key == Key.Enter || e.Key == Key.Escape) && datePicker.IsDropDownOpen) {
         e.Handled = true;
       }
     }
 
     protected void MoveFocusToNext() {
-      if ( this.Child != null ) {
+      if (this.Child != null) {
         this.Child.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
       }
     }
@@ -178,26 +178,26 @@ namespace Winterdom.Viasfora.Design {
       protected override void WndProc(ref Forms.Message m) {
         base.WndProc(ref m);
 
-        if ( m.Msg == NativeMethods.WM_SETFOCUS ) {
+        if (m.Msg == NativeMethods.WM_SETFOCUS) {
           IntPtr oldHandle = m.WParam;
 
           // Get the handle to the child WPF element that we are hosting
           // After that get the next and previous items that would fall before 
           // and after the WPF control in the tools->options page tabbing order
           HwndSource source = PresentationSource.FromVisual(Child) as HwndSource;
-          if ( source != null && oldHandle != IntPtr.Zero ) {
+          if (source != null && oldHandle != IntPtr.Zero) {
             IntPtr nextTabElement = GetNextFocusElement(source.Handle, forward: true);
             IntPtr previousTabElement = GetNextFocusElement(source.Handle, forward: false);
 
             UIElement rootElement = source.RootVisual as UIElement;
 
             // If we tabbed back from the next element then set focus to the last item
-            if ( rootElement != null && nextTabElement == oldHandle ) {
+            if (rootElement != null && nextTabElement == oldHandle) {
               rootElement.MoveFocus(new TraversalRequest(FocusNavigationDirection.Last));
             }
 
             // If we tabbed in from the previous element then set focus to the first item
-            else if ( rootElement != null && previousTabElement == oldHandle ) {
+            else if (rootElement != null && previousTabElement == oldHandle) {
               rootElement.MoveFocus(new TraversalRequest(FocusNavigationDirection.First));
             }
           }
@@ -212,7 +212,7 @@ namespace Winterdom.Viasfora.Design {
         // NOTE: This should be done after calling base.OnHandleCreated, which is where
         // ElementHost sets up its own IKeyboardInputSite.
         HwndSource source = PresentationSource.FromVisual(Child) as HwndSource;
-        if ( source != null ) {
+        if (source != null) {
           ((IKeyboardInputSink)source).KeyboardInputSite = new DialogKeyboardInputSite(source);
         }
       }
@@ -220,7 +220,7 @@ namespace Winterdom.Viasfora.Design {
       // From a given handle get the next focus element either forward or backward
       internal static IntPtr GetNextFocusElement(IntPtr handle, bool forward) {
         IntPtr hDlg = NativeMethods.GetAncestor(handle, NativeMethods.GA_ROOT);
-        if ( hDlg != IntPtr.Zero ) {
+        if (hDlg != IntPtr.Zero) {
           // Find the next dialog item in the parent dialog (searching in the correct direction)
           // This can return IntPtr.Zero if there are no more items in that direction
           return NativeMethods.GetNextDlgTabItem(hDlg, handle, !forward);
@@ -260,8 +260,8 @@ namespace Winterdom.Viasfora.Design {
         // First, determine if we are tabbing forward or backwards
         // outside of our content.
         bool forward = true;
-        if ( request != null ) {
-          switch ( request.FocusNavigationDirection ) {
+        if (request != null) {
+          switch (request.FocusNavigationDirection) {
             case FocusNavigationDirection.Next:
             case FocusNavigationDirection.Right:
             case FocusNavigationDirection.Down:
@@ -278,7 +278,7 @@ namespace Winterdom.Viasfora.Design {
 
         // Based on the direction, tab forward or backwards in our parent dialog.
         IntPtr nextHandle = DialogPageElementHost.GetNextFocusElement(_source.Handle, forward);
-        if ( nextHandle != IntPtr.Zero ) {
+        if (nextHandle != IntPtr.Zero) {
           // If we were able to find another control, send focus to it and inform
           // WPF that we moved focus outside the HwndSource.
           NativeMethods.SetFocus(nextHandle);

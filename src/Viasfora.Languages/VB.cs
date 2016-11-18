@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Text.Classification;
+using System;
 using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
@@ -39,5 +40,10 @@ namespace Winterdom.Viasfora.Languages {
 
     protected override IBraceScanner NewBraceScanner()
       => new VbBraceScanner();
+
+    public override bool IsKeywordClassification(IClassificationType classificationType) {
+      return CompareClassification(classificationType, "Keyword")
+          || CompareClassification(classificationType, "VBScript Keyword");
+    }
   }
 }

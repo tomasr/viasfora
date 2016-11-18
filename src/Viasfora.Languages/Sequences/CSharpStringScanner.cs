@@ -9,16 +9,17 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     public CSharpStringScanner(String text) {
       this.text = new StringChars(text, 0, text.Length - 1);
       // If this is an at-string, skip it
-      if ( this.text.Char() == '@' ) {
+      char first = this.text.Char();
+      if ( first == '@' ) {
         this.text.SkipRemainder();
-      } else if ( this.text.Char() == '$' ) {
+      } else if ( first == '$' ) {
         if ( this.text.NChar() == '@' ) {
           this.text.SkipRemainder();
         } else {
           this.isInterpolated = true;
           this.text.Skip(2);
         }
-      } else {
+      } else if ( first == '"' || first == '\'' ) {
         // always skip the first char
         // (since quotes are included in the string)
         this.text.Next();

@@ -59,20 +59,27 @@ namespace Winterdom.Viasfora.Settings {
 
     private void ConfigurePath(string filePath) {
       String folder = null;
-      String fileName = FILE_NAME;
       if ( String.IsNullOrEmpty(filePath) ) {
-        folder = Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-            "Viasfora"
-          );
-      } else {
-        folder = Path.GetDirectoryName(filePath);
-        fileName = Path.GetFileName(filePath);
+        filePath = GetDefaultFilePath();
       }
+
+      folder = Path.GetDirectoryName(filePath);
       if ( !Directory.Exists(folder) ) {
         Directory.CreateDirectory(folder);
       }
-      this.filePath = Path.Combine(folder, fileName);
+      this.filePath = filePath;
+    }
+
+    private static String GetDefaultFilePath() {
+      var envValue = Environment.GetEnvironmentVariable("VIASFORA_SETTINGS");
+      if ( !String.IsNullOrEmpty(envValue) ) {
+        return envValue;
+      } else {
+        return Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
+            "Viasfora", FILE_NAME
+          );
+      }
     }
   }
 }

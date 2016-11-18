@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.Utilities;
+using Microsoft.VisualStudio.Text.Classification;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Contracts {
@@ -16,5 +17,6 @@ namespace Winterdom.Viasfora.Contracts {
     bool IsVisibilityKeyword(String text);
     bool IsLinqKeyword(String text);
     bool MatchesContentType(IContentType contentType);
+    bool IsKeywordClassification(IClassificationType classificationType);
   }
 }

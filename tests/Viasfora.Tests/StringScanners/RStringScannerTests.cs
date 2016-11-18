@@ -4,6 +4,7 @@ using Winterdom.Viasfora.Util;
 using Xunit;
 
 namespace Viasfora.Tests.StringScanners {
+  [Collection("DependsOnVS")]
   public class RStringScannerTests {
     [Fact]
     public void NoEscapesReturnsNull() {

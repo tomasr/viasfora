@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Shell;
+using System;
 using System.Runtime.InteropServices;
+using System.Windows.Input;
 using Winterdom.Viasfora.Design;
 using Winterdom.Viasfora.Util;
 
