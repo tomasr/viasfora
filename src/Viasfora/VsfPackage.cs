@@ -13,8 +13,7 @@ using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
-  [ProvideAutoLoad(VSConstants.UICONTEXT.NoSolution_string)]
-  [ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
+  [ProvideAutoLoad(VSConstants.VsEditorFactoryGuid.TextEditor_string)]
   [Guid(Guids.VSPackage)]
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 200, 310, true)]
   [ProvideOptionPage(typeof(Options.RainbowOptionsPage), "Viasfora", "Rainbow Braces", 200, 320, true)]
@@ -50,7 +49,6 @@ namespace Winterdom.Viasfora {
 
     protected override void Initialize() {
       base.Initialize();
-      LogInfo("Initializing VsfPackage");
       PkgSource.Initialize(this);
       PkgSource.VsVersion = FindVSVersion();
       InitializeTelemetry();
