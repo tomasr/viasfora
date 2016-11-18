@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Compatibility;
 
 namespace Winterdom.Viasfora.Commands {
   public class PresentationModeCommand : VsCommand {
@@ -8,7 +9,8 @@ namespace Winterdom.Viasfora.Commands {
     private IPresentationModeState state;
     public PresentationModeCommand(VsfPackage package, OleMenuCommandService omcs) 
       : base(package, omcs) {
-      this.state = package;
+      var model = new SComponentModel();
+      this.state = model.GetService<IPresentationModeState>();
       Initialize(new Guid(Guids.guidVsfViewCmdSet), PkgCmdIdList.cmdidPresentationMode);
     }
 

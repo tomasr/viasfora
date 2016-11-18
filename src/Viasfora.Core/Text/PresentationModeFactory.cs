@@ -11,11 +11,12 @@ namespace Winterdom.Viasfora.Text {
   public class PresentationModeFactory : IWpfTextViewCreationListener {
     [Import]
     internal IVsfSettings Settings { get; set; }
+    [Import]
+    internal IPresentationModeState State { get; set; }
 
     public void TextViewCreated(IWpfTextView textView) {
-      IPresentationModeState state = PkgSource.PresentationMode;
       textView.Properties.GetOrCreateSingletonProperty(
-        () => new PresentationMode(textView, state, Settings)
+        () => new PresentationMode(textView, State, Settings)
       );
     }
   }

@@ -13,9 +13,6 @@ namespace Winterdom.Viasfora {
     public static ILogger Logger {
       get { return Instance as ILogger; }
     }
-    public static IPresentationModeState PresentationMode {
-      get { return Instance as IPresentationModeState; }
-    }
     public static void Initialize(object obj) {
       Instance = obj;
     }

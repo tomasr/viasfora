@@ -10,6 +10,7 @@ using Winterdom.Viasfora.Commands;
 using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Text;
 using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Compatibility;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
@@ -37,7 +38,6 @@ namespace Winterdom.Viasfora {
   public sealed class VsfPackage
     : Package,
       IPackageUserOptions,
-      IPresentationModeState,
       ILogger
     {
     public const String USER_OPTIONS_KEY = "VsfUserOptions";
@@ -54,8 +54,6 @@ namespace Winterdom.Viasfora {
       InitializeTelemetry();
       InitializeActivityLog();
 
-      this.FontChanger = new PresentationModeFontChanger(this);
-
       OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
       if ( null != mcs ) {
         InitializeViewMenuCommands(mcs);
@@ -66,9 +64,10 @@ namespace Winterdom.Viasfora {
     }
 
     protected override void Dispose(bool disposing) {
-
-      if ( disposing && PresentationModeTurnedOn ) {
-        FontChanger.TurnOff(notifyChanges: false);
+      var model = new SComponentModel();
+      var ps = model.GetService<IPresentationModeState>();
+      if ( disposing && ps.PresentationModeTurnedOn ) {
+        ps.TurnOff(notifyChanges: false);
       }
 
       base.Dispose(disposing);
@@ -149,30 +148,6 @@ namespace Winterdom.Viasfora {
       return this.userOptions;
     }
 
-    //
-    // Presentation mode Support
-    //
-    public event EventHandler PresentationModeChanged;
-    public bool PresentationModeTurnedOn { get; private set; }
-    public int GetPresentationModeZoomLevel() {
-      var settings = SettingsContext.GetSettings();
-      return PresentationModeTurnedOn
-        ? settings.PresentationModeEnabledZoom
-        : settings.PresentationModeDefaultZoom;
-    }
-    public void TogglePresentationMode() {
-      PresentationModeTurnedOn = !PresentationModeTurnedOn;
-      if ( PresentationModeChanged != null ) {
-        PresentationModeChanged(this, EventArgs.Empty);
-      }
-      if ( PresentationModeTurnedOn ) {
-        FontChanger.TurnOn();
-        Telemetry.WriteEvent("Presentation Mode");
-      } else {
-        FontChanger.TurnOff();
-      }
-    }
-    
     public T GetService<T>() {
       return (T)GetService(typeof(T));
     }

@@ -239,6 +239,7 @@
     <Compile Include="Text\PresentationMode.cs" />
     <Compile Include="Text\PresentationModeFactory.cs" />
     <Compile Include="Text\PresentationModeFontChanger.cs" />
+    <Compile Include="Text\PresentationModeState.cs" />
     <Compile Include="Text\TextObfuscation.cs" />
     <Compile Include="Util\IFirstLineCommentParser.cs" />
     <Compile Include="Util\IModeLineParser.cs" />
