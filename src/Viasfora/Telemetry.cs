@@ -55,6 +55,14 @@ namespace Winterdom.Viasfora {
 #endif
     }
 
+    public static void WriteTrace(String message) {
+#if !DEBUG
+      if ( client != null && Enabled ) {
+        client.TrackTrace(message);
+      }
+#endif
+    }
+
     private static void OnBeginShutdown() {
       client.Flush();
     }

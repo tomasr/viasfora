@@ -16,11 +16,6 @@ namespace Winterdom.Viasfora {
     public static void Initialize(object obj) {
       Instance = obj;
     }
-    public static void LogInfo(String format, params object[] args) {
-      if ( Logger != null ) {
-        Logger.LogInfo(format, args);
-      }
-    }
     public static void LogError(String message, Exception ex) {
       if ( Logger != null ) {
         Logger.LogError(message, ex);

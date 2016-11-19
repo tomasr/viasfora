@@ -104,7 +104,6 @@ namespace Winterdom.Viasfora {
           (x) => !x.ContentType.IsOfType("projection")
         );
       if ( buffers.Count <= 0 ) {
-        PkgSource.LogInfo("Could not find a primary buffer on view: {0}", view);
         return view.BufferGraph.TopBuffer;
       }
       return buffers[0];
@@ -210,8 +209,9 @@ namespace Winterdom.Viasfora {
 
     private static void CheckError(int hr, String operation) {
       if ( hr != Constants.S_OK ) {
-        PkgSource.LogInfo("{0} returned 0x{1:x8}", operation, hr);
-        throw new InvalidOperationException(String.Format("{0} returned 0x{1:x8}", operation, hr));
+        var ex = new InvalidOperationException(String.Format("{0} returned 0x{1:x8}", operation, hr));
+        PkgSource.LogError(operation, ex);
+        throw ex;
       }
     }
 

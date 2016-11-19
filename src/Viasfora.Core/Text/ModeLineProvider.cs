@@ -37,7 +37,6 @@ namespace Winterdom.Viasfora.Text {
       if ( String.IsNullOrEmpty(commentText) ) {
         return;
       }
-      PkgSource.LogInfo("Found possible modeline: {0}", commentText);
 
       var modelineParser = new ModeLineParser();
       var options = modelineParser.Parse(commentText);
@@ -51,7 +50,6 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void ApplyModeLine(String key, String value) {
-      PkgSource.LogInfo("Modeline: {0}={1}", key, value);
       if ( String.IsNullOrEmpty(value) ) {
         // assume this is a boolean option
         value = key.StartsWith("no") ? "false" : "true";

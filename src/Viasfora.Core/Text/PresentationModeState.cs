@@ -9,13 +9,15 @@ namespace Winterdom.Viasfora.Text {
     public bool PresentationModeTurnedOn { get; private set; }
     private PresentationModeFontChanger fontChanger;
     private IVsfSettings settings;
+    private IVsfTelemetry telemetry;
 
     public event EventHandler PresentationModeChanged;
 
     [ImportingConstructor]
-    public PresentationModeState(IVsfSettings settingsManager) {
+    public PresentationModeState(IVsfSettings settingsManager, IVsfTelemetry telemetry) {
       this.fontChanger = new PresentationModeFontChanger(this);
       this.settings = settingsManager;
+      this.telemetry = telemetry;
     }
 
     public int GetPresentationModeZoomLevel() {
@@ -31,7 +33,7 @@ namespace Winterdom.Viasfora.Text {
       }
       if (PresentationModeTurnedOn) {
         fontChanger.TurnOn();
-        //Telemetry.WriteEvent("Presentation Mode");
+        telemetry.WriteEvent("Presentation Mode");
       } else {
         fontChanger.TurnOff();
       }

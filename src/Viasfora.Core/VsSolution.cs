@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
+using Winterdom.Viasfora.Compatibility;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {
@@ -58,8 +60,9 @@ namespace Winterdom.Viasfora {
 
     private static void CheckError(int hr, String operation) {
       if ( hr != Constants.S_OK ) {
-        PkgSource.LogInfo("{0} returned 0x{1:x8}", operation, hr);
-        throw new InvalidOperationException(String.Format("{0} returned 0x{1:x8}", operation, hr));
+        var ex = new InvalidOperationException(String.Format("{0} returned 0x{1:x8}", operation, hr));
+        PkgSource.LogError(operation, ex);
+        throw ex;
       }
     }
   }

@@ -157,6 +157,7 @@
     <Compile Include="Contracts\ILogger.cs" />
     <Compile Include="Contracts\IPackageUserOptions.cs" />
     <Compile Include="Contracts\IPresentationModeState.cs" />
+    <Compile Include="Contracts\IVsfTelemetry.cs" />
     <Compile Include="DefaultNames.cs" />
     <Compile Include="Design\NativeMethods.cs" />
     <Compile Include="Design\UIElementDialogPage.cs" />
