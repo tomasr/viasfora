@@ -50,6 +50,28 @@ namespace Viasfora.Tests.StringScanners {
       Assert.Equal(null, parser.Next());
     }
     [Fact]
+    public void EscapeInSingleQuotesAtStartIsExtracted() {
+      String input = @"'\rstring'";
+      var parser = new BasicCStringScanner(input);
+      Assert.Equal(new StringPart(1, 2), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void EscapeAtStartWithNoQuotesIsExtracted() {
+      String input = @"\rstring";
+      var parser = new BasicCStringScanner(input);
+      Assert.Equal(new StringPart(0, 2), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void EscapeAtEndWithNoQuotesIsExtracted() {
+      String input = @"\r\'";
+      var parser = new BasicCStringScanner(input);
+      Assert.Equal(new StringPart(0, 2), parser.Next());
+      Assert.Equal(new StringPart(2, 2), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
     public void X1EscapeSequenceIsExtracted() {
       String input = "\"" + @"some\x1string" + "\"";
       var parser = new BasicCStringScanner(input);
