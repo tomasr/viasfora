@@ -93,10 +93,17 @@ namespace Viasfora.Tests.StringScanners {
     }
     [Fact]
     public void TripleQuoteMeansIgnoreSequences() {
-      String input = "\"\"\"some string\\escape\"\"\"";
+      String input = "\"\"\"some string\\nescape\"\"\"";
       var parser = new FSharpStringScanner(input);
       Assert.Equal(null, parser.Next());
     }
+    [Fact]
+    public void VerbatimMeansIgnoreSequences() {
+      String input = "@\"some string\\nescape\"";
+      var parser = new FSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
+
 
     //
     // Format Specifiers

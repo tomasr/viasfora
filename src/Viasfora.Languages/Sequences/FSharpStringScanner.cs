@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
@@ -10,15 +7,15 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     private ITextChars text;
     private const String escapeChar = "\"\\'ntbrafv";
 
-    public FSharpStringScanner(String text) {
-      this.text = new StringChars(text);
+    public FSharpStringScanner(String theText) {
+      this.text = new StringChars(theText);
+
+      if ( theText.StartsWith("\"\"\"") || theText.StartsWith("@") ) {
+        this.text.SkipRemainder();
+      }
       // always skip the first char
       // (since quotes are included in the string)
       this.text.Next();
-
-      if ( text.StartsWith("\"\"\"") ) {
-        this.text.SkipRemainder();
-      }
     }
     public StringPart? Next() {
       while ( !text.EndOfLine ) {
