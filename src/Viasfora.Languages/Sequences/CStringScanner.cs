@@ -10,6 +10,8 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       // skip it
       if ( this.text.Char() == '<' ) {
         this.text.SkipRemainder();
+      } else if ( this.text.Char() == 'R' ) {
+        this.text.SkipRemainder();
       } else {
         // always skip the first char
         // (since quotes are included in the string)

@@ -13,6 +13,13 @@ namespace Viasfora.Tests.StringScanners {
       Assert.Equal(null, parser.Next());
     }
     [Fact]
+    public void Cpp11RawStringYieldsNoSequences() {
+      String input = "R\"" + @"some\rstring" + "\"";
+      var parser = new CStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
+
+    [Fact]
     public void OneEscapeSequenceIsExtracted() {
       String input = "\"" + @"some\rstring" + "\"";
       var parser = new CStringScanner(input);
