@@ -6,7 +6,6 @@ namespace Winterdom.Viasfora {
     bool FlowControlUseItalics { get; set; }
     bool EscapeSequencesEnabled { get; set; }
     
-    bool CurrentLineHighlightEnabled { get; set; }
     bool CurrentColumnHighlightEnabled { get; set; }
     double HighlightLineWidth { get; set; }
 

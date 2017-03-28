@@ -22,10 +22,6 @@ namespace Winterdom.Viasfora.Settings {
       get { return GetBoolean(nameof(EscapeSequencesEnabled), true); }
       set { SetValue(nameof(EscapeSequencesEnabled), value); }
     }
-    public bool CurrentLineHighlightEnabled {
-      get { return GetBoolean(nameof(CurrentLineHighlightEnabled), false); }
-      set { SetValue(nameof(CurrentLineHighlightEnabled), value); }
-    }
     public bool CurrentColumnHighlightEnabled {
       get { return GetBoolean(nameof(CurrentColumnHighlightEnabled), false); }
       set { SetValue(nameof(CurrentColumnHighlightEnabled), value); }

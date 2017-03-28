@@ -14,7 +14,6 @@ namespace Winterdom.Viasfora.Options {
       var settings = SettingsContext.GetSettings();
       var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
 
-      settings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
       settings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
       settings.HighlightLineWidth = this.HighlightLineWidth;
       settings.KeywordClassifierEnabled = KeywordClassifierEnabled;
@@ -33,7 +32,6 @@ namespace Winterdom.Viasfora.Options {
     public override void LoadSettingsFromStorage() {
       var settings = SettingsContext.GetSettings();
 
-      CurrentLineHighlightEnabled = settings.CurrentLineHighlightEnabled;
       CurrentColumnHighlightEnabled = settings.CurrentColumnHighlightEnabled;
       highlightLineWidth = settings.HighlightLineWidth;
       KeywordClassifierEnabled = settings.KeywordClassifierEnabled;
@@ -148,12 +146,6 @@ namespace Winterdom.Viasfora.Options {
         this.highlightLineWidth = value;
       }
     }
-
-    // current line highlight
-    [LocDisplayName("Line Highlight")]
-    [Description("Enables highlighting the current line in the text editor")]
-    [Category("Location Tracking")]
-    public bool CurrentLineHighlightEnabled { get; set; }
 
     [LocDisplayName("Line Highlight Foreground")]
     [Description("Foreground color used to highlight the current line")]
