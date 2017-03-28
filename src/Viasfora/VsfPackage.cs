@@ -20,7 +20,6 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.RainbowOptionsPage), "Viasfora", "Rainbow Braces", 200, 320, true)]
   [ProvideOptionPage(typeof(Options.XmlOptionsPage), "Viasfora", "XML Editor", 200, 330, true)]
   [ProvideOptionPage(typeof(Options.PresentationModeOptionsPage), "Viasfora", "Presentation Mode", 200, 340, true)]
-  [ProvideOptionPage(typeof(Options.IntellisenseOptions), "Viasfora", "Intellisense", 200, 350, true)]
   [ProvideOptionPage(typeof(Options.TextObfuscationOptionsPage), "Viasfora", "Text Hiding", 200, 360, true)]
   [ProvideOptionPage(typeof(Options.AllLanguagesOptionsPage), "Viasfora", "Languages", 200, 370, false)]
   [ProvideOptionPage(typeof(Options.CSharpOptionsPage), "Viasfora\\Languages", "C#", 210, 371, true)]

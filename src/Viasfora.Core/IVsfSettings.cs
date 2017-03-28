@@ -18,9 +18,6 @@ namespace Winterdom.Viasfora {
     int ModelinesNumLines { get; set; }
 
     bool DeveloperMarginEnabled { get; set; }
-    bool TextCompletionEnabled { get; set; }
-    bool TCCompleteDuringTyping { get; set; }
-    bool TCHandleCompleteWord { get; set; }
     Outlining.AutoExpandMode AutoExpandRegions { get; set; }
     bool BoldAsItalicsEnabled { get; set; }
     String TextObfuscationRegexes { get; set; }

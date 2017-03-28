@@ -141,9 +141,6 @@
   <data name="340" xml:space="preserve">
     <value>Presentation Mode</value>
   </data>
-  <data name="350" xml:space="preserve">
-    <value>Intellisense</value>
-  </data>
   <data name="360" xml:space="preserve">
     <value>Text Hiding</value>
   </data>

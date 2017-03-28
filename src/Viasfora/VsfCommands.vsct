@@ -44,9 +44,6 @@
         <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_CODEWIN"/>
       </Group>
       <!-- subgroup that contains our intellisense commands -->
-      <Group guid="guidVsfTextEditorCmdSet" id="groupIntellisenseMenu" priority="0xA101">
-        <Parent guid="guidVsfTextEditorCmdSet" id="menuTextEditorMenu"/>
-      </Group>
       <!-- subgroup that contains our rainbow commands -->
       <Group guid="guidVsfTextEditorCmdSet" id="groupRainbowMenu" priority="0xA102">
         <Parent guid="guidVsfTextEditorCmdSet" id="menuTextEditorMenu"/>
@@ -111,15 +108,6 @@
         <Strings>
           <CommandName>Outline Selection</CommandName>
           <ButtonText>Outline Selection</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidVsfTextEditorCmdSet" id="cmdidCompleteWord" priority="0x0010" type="Button">
-        <Parent guid="guidVsfTextEditorCmdSet" id="groupIntellisenseMenu"/>
-        <CommandFlag>DefaultDisabled</CommandFlag>
-        <Strings>
-          <CommandName>Complete Plain-Text Word</CommandName>
-          <ButtonText>Complete Plain-Text Word</ButtonText>
         </Strings>
       </Button>
 
@@ -218,7 +206,6 @@
       <IDSymbol name="menuTextEditorMenu" value="0x0001" />
       <IDSymbol name="groupTextEditorMenu" value="0x0101" />
       <IDSymbol name="groupEditMenu" value="0x0102" />
-      <IDSymbol name="groupIntellisenseMenu" value="0x0104" />
       <IDSymbol name="groupRainbowMenu" value="0x0105" />
 
       <IDSymbol name="cmdidAddOutlining" value="0x1101" />

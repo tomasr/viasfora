@@ -104,9 +104,6 @@
     <Compile Include="Options\TextObfuscationOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Options\IntellisenseOptions.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Options\PowerShellOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>

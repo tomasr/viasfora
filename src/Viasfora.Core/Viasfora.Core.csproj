@@ -177,10 +177,6 @@
     <Compile Include="EditorFormats\StringEscapeSequenceFormat.cs" />
     <Compile Include="EditorFormats\VisibilityKeywordFormat.cs" />
     <Compile Include="Guids.cs" />
-    <Compile Include="Intellisense\PlainTextCompletionCommandHandler.cs" />
-    <Compile Include="Intellisense\PlainTextCompletionContext.cs" />
-    <Compile Include="Intellisense\PlainTextCompletionSource.cs" />
-    <Compile Include="Intellisense\PlainTextCompletionSourceProvider.cs" />
     <Compile Include="IUpdatableSettings.cs" />
     <Compile Include="IVsfSettings.cs" />
     <Compile Include="JsonExtensions.cs" />

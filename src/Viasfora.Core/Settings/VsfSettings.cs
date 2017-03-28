@@ -58,18 +58,6 @@ namespace Winterdom.Viasfora.Settings {
       get { return GetBoolean(nameof(DeveloperMarginEnabled), true); }
       set { SetValue(nameof(DeveloperMarginEnabled), value); }
     }
-    public bool TextCompletionEnabled {
-      get { return GetBoolean(nameof(TextCompletionEnabled), true); }
-      set { SetValue(nameof(TextCompletionEnabled), value); }
-    }
-    public bool TCCompleteDuringTyping {
-      get { return GetBoolean(nameof(TCCompleteDuringTyping), false); }
-      set { SetValue(nameof(TCCompleteDuringTyping), value); }
-    }
-    public bool TCHandleCompleteWord {
-      get { return GetBoolean(nameof(TCHandleCompleteWord), false); }
-      set { SetValue(nameof(TCHandleCompleteWord), value); }
-    }
     public Outlining.AutoExpandMode AutoExpandRegions {
       get { return GetEnum(nameof(AutoExpandRegions), Outlining.AutoExpandMode.No); }
       set { SetValue(nameof(AutoExpandRegions), value); }
