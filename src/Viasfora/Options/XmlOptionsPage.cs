@@ -18,6 +18,7 @@ namespace Winterdom.Viasfora.Options {
       settings.XmlMatchTagsEnabled = XmlMatchTagsEnabled;
 
       colors.Save();
+      settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       var settings = SettingsContext.GetSpecificSettings<IXmlSettings>();

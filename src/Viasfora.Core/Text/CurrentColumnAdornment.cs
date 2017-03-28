@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
+using System.Windows.Threading;
 
 namespace Winterdom.Viasfora.Text {
   public class CurrentColumnAdornment {
@@ -15,6 +16,7 @@ namespace Winterdom.Viasfora.Text {
     private IClassificationType formatType;
     private IVsfSettings settings;
     private Rectangle columnRect;
+    private Dispatcher dispatcher;
 
     public CurrentColumnAdornment(
           IWpfTextView view, IClassificationFormatMap formatMap,
@@ -23,6 +25,7 @@ namespace Winterdom.Viasfora.Text {
       this.formatMap = formatMap;
       this.formatType = formatType;
       this.settings = settings;
+      this.dispatcher = Dispatcher.CurrentDispatcher;
       this.columnRect = new Rectangle();
       layer = view.GetAdornmentLayer(Constants.COLUMN_HIGHLIGHT);
 
@@ -41,13 +44,27 @@ namespace Winterdom.Viasfora.Text {
       CreateDrawingObjects();
     }
 
-
     void OnSettingsChanged(object sender, EventArgs e) {
       if ( this.view != null ) {
-        CreateDrawingObjects();
-        RedrawAdornments();
+        this.UpdateViewOnUIThread();
       }
     }
+
+    void UpdateViewOnUIThread() {
+      var dispatcher = Dispatcher.CurrentDispatcher;
+      if ( !dispatcher.CheckAccess() ) {
+        Action action = this.UpdateView;
+        dispatcher.Invoke(action);
+      } else {
+        this.UpdateView();
+      }
+    }
+
+    void UpdateView() {
+      CreateDrawingObjects();
+      RedrawAdornments();
+    }
+
     void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
       if ( this.view != null ) {
         // the user changed something in Fonts and Colors, so
