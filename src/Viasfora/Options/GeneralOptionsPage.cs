@@ -47,7 +47,6 @@ namespace Winterdom.Viasfora.Options {
       this.colors = new ClassificationList(new ColorStorage(this.Site));
       colors.Load(
         Constants.COLUMN_HIGHLIGHT,
-        Constants.LINE_HIGHLIGHT,
         Constants.KEYWORD_CLASSIF_NAME,
         Constants.LINQ_CLASSIF_NAME,
         Constants.VISIBILITY_CLASSIF_NAME,
