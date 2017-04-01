@@ -17,6 +17,10 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
       get { return settings.GetBoolean(nameof(RainbowTagsEnabled), true); }
       set { settings.SetValue(nameof(RainbowTagsEnabled), value); }
     }
+    public bool RainbowColorize {
+      get { return settings.GetBoolean(nameof(RainbowColorize), true); }
+      set { settings.SetValue(nameof(RainbowColorize), value); }
+    }
     public long RainbowCtrlTimer {
       get { return settings.GetInt64(nameof(RainbowCtrlTimer), 300); }
       set { settings.SetValue(nameof(RainbowCtrlTimer), value); }

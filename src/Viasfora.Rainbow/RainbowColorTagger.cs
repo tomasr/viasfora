@@ -35,7 +35,7 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( provider == null || provider.Settings == null  ) {
         yield break;
       }
-      if ( !provider.Settings.RainbowTagsEnabled || spans.Count == 0 ) {
+      if ( !IsEnabled()|| spans.Count == 0 ) {
         yield break;
       }
 
@@ -67,6 +67,11 @@ namespace Winterdom.Viasfora.Rainbow {
         };
         provider.Dispatcher.BeginInvoke(action, DispatcherPriority.Background);
       }
+    }
+
+    private bool IsEnabled() {
+      return this.provider.Settings.RainbowTagsEnabled
+          && this.provider.Settings.RainbowColorize;
     }
   }
 }

@@ -15,6 +15,7 @@ namespace Winterdom.Viasfora.Options {
 
       rainbowSettings.RainbowDepth = RainbowDepth;
       rainbowSettings.RainbowTagsEnabled = RainbowTagsEnabled;
+      rainbowSettings.RainbowColorize = RainbowColorize;
       rainbowSettings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
       rainbowSettings.RainbowHighlightMode = RainbowHighlightMode;
       rainbowSettings.RainbowColoringMode = RainbowColoringMode;
@@ -27,6 +28,7 @@ namespace Winterdom.Viasfora.Options {
 
       RainbowDepth = rainbowSettings.RainbowDepth;
       RainbowTagsEnabled = rainbowSettings.RainbowTagsEnabled;
+      RainbowColorize = rainbowSettings.RainbowColorize;
       RainbowHighlightMode = rainbowSettings.RainbowHighlightMode;
       RainbowToolTipsEnabled = rainbowSettings.RainbowToolTipsEnabled;
       RainbowColoringMode = rainbowSettings.RainbowColoringMode;
@@ -48,9 +50,14 @@ namespace Winterdom.Viasfora.Options {
     }
 
     [LocDisplayName("Enable Rainbow Braces")]
-    [Description("Highlight matching braces using colors based on nesting")]
+    [Description("Enables/Disables all rainbow braces features")]
     [Category("Rainbow Braces")]
     public bool RainbowTagsEnabled { get; set; }
+
+    [LocDisplayName("Colorize Rainbow Braces")]
+    [Description("Highlight matching braces using colors based on nesting")]
+    [Category("Rainbow Braces")]
+    public bool RainbowColorize { get; set; }
 
     private int rainbowDepth;
     [LocDisplayName("Rainbow Depth")]

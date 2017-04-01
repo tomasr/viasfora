@@ -131,6 +131,9 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( point.Snapshot != this.Snapshot || point.Position >= Snapshot.Length ) {
         return null;
       }
+
+      this.EnsureLinesInPreferredSpan(point.SpanUntil());
+
       int index = FindIndexOfBraceAtOrAfter(point.Position);
       if ( index < 0 ) return null;
       BracePos one = this.braces[index];
@@ -150,9 +153,10 @@ namespace Winterdom.Viasfora.Rainbow {
         return null;
       }
 
+      this.EnsureLinesInPreferredSpan(point.SpanUntil());
+
       int openIndex = -1;
       BracePos? opening = null;
-
 
       if ( mode == RainbowHighlightMode.TrackInsertionPoint ) {
         opening = FindClosestOpeningBrace(point.Position, out openIndex);

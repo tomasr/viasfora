@@ -24,5 +24,9 @@ namespace Winterdom.Viasfora {
         return new SnapshotSpan();
       return new SnapshotSpan(spans[0].Start, spans[spans.Count - 1].End);
     }
+
+    public static SnapshotSpan SpanUntil(this SnapshotPoint end) {
+      return new SnapshotSpan(end.Snapshot, 0, end.Position);
+    }
   }
 }
