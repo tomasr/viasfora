@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
 using System.Windows.Threading;
+using System.Windows;
 
 namespace Winterdom.Viasfora.Text {
   public class CurrentColumnAdornment {
@@ -15,7 +16,7 @@ namespace Winterdom.Viasfora.Text {
     private IClassificationFormatMap formatMap;
     private IClassificationType formatType;
     private IVsfSettings settings;
-    private Rectangle columnRect;
+    private Border highlight;
     private Dispatcher dispatcher;
 
     public CurrentColumnAdornment(
@@ -26,7 +27,7 @@ namespace Winterdom.Viasfora.Text {
       this.formatType = formatType;
       this.settings = settings;
       this.dispatcher = Dispatcher.CurrentDispatcher;
-      this.columnRect = new Rectangle();
+      this.highlight = new Border();
       layer = view.GetAdornmentLayer(Constants.COLUMN_HIGHLIGHT);
 
       view.Caret.PositionChanged += OnCaretPositionChanged;
@@ -126,9 +127,23 @@ namespace Winterdom.Viasfora.Text {
       TextFormattingRunProperties format =
          formatMap.GetExplicitTextProperties(formatType);
 
-      this.columnRect.StrokeThickness = settings.HighlightLineWidth;
-      this.columnRect.Stroke = format.ForegroundBrush;
-      this.columnRect.Fill = format.BackgroundBrush;
+      this.highlight.BorderBrush = format.ForegroundBrush;
+      switch ( settings.CurrentColumnHighlightStyle ) {
+        case ColumnStyle.LeftBorder:
+          this.highlight.BorderThickness = new Thickness(settings.HighlightLineWidth, 0, 0, 0);
+          break;
+        case ColumnStyle.RightBorder:
+          this.highlight.BorderThickness = new Thickness(0, 0, settings.HighlightLineWidth, 0);
+          break;
+        default:
+          this.highlight.BorderThickness = new Thickness(settings.HighlightLineWidth);
+          break;
+      }
+      //this.border.BorderThickness = settings.HighlightLineWidth;
+      var fill = new Rectangle();
+      this.highlight.Child = fill;
+      fill.Fill = format.BackgroundBrush;
+      fill.StrokeThickness = 0;
     }
     private void RedrawAdornments() {
       if ( view.TextViewLines != null ) {
@@ -153,19 +168,19 @@ namespace Winterdom.Viasfora.Text {
         );
       var charBounds = line.GetCharacterBounds(caretPosition);
 
-      this.columnRect.Width = charBounds.Width;
-      this.columnRect.Height = this.view.ViewportHeight;
-      if ( this.columnRect.Height > 2 ) {
-        this.columnRect.Height -= 2;
+      this.highlight.Width = charBounds.Width;
+      this.highlight.Height = this.view.ViewportHeight;
+      if ( this.highlight.Height > 2 ) {
+        this.highlight.Height -= 2;
       }
 
       // Align the image with the top of the bounds of the text geometry
-      Canvas.SetLeft(this.columnRect, charBounds.Left);
-      Canvas.SetTop(this.columnRect, this.view.ViewportTop);
+      Canvas.SetLeft(this.highlight, charBounds.Left);
+      Canvas.SetTop(this.highlight, this.view.ViewportTop);
 
       layer.AddAdornment(
          AdornmentPositioningBehavior.OwnerControlled, null,
-         CUR_COL_TAG, columnRect, null
+         CUR_COL_TAG, highlight, null
       );
     }
   }

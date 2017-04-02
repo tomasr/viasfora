@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.Composition;
 using System.Globalization;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Settings {
 
@@ -25,6 +26,10 @@ namespace Winterdom.Viasfora.Settings {
     public bool CurrentColumnHighlightEnabled {
       get { return GetBoolean(nameof(CurrentColumnHighlightEnabled), false); }
       set { SetValue(nameof(CurrentColumnHighlightEnabled), value); }
+    }
+    public ColumnStyle CurrentColumnHighlightStyle {
+      get { return GetEnum<ColumnStyle>(nameof(CurrentColumnHighlightStyle), ColumnStyle.FullBorder); }
+      set { SetValue(nameof(CurrentColumnHighlightStyle), value); }
     }
     public double HighlightLineWidth {
       get { return GetDouble(nameof(HighlightLineWidth), 1.4); }

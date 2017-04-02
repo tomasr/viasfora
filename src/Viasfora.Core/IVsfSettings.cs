@@ -1,4 +1,5 @@
 ﻿using System;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora {
   public interface IVsfSettings : IUpdatableSettings {
@@ -7,6 +8,7 @@ namespace Winterdom.Viasfora {
     bool EscapeSequencesEnabled { get; set; }
     
     bool CurrentColumnHighlightEnabled { get; set; }
+    ColumnStyle CurrentColumnHighlightStyle { get; set; }
     double HighlightLineWidth { get; set; }
 
     bool PresentationModeEnabled { get; set; }

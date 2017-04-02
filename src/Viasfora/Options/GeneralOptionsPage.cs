@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Rainbow;
 using System.Drawing;
+using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.GeneralOptions)]
@@ -15,7 +16,8 @@ namespace Winterdom.Viasfora.Options {
       var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
 
       settings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
-      settings.HighlightLineWidth = this.HighlightLineWidth;
+      settings.CurrentColumnHighlightStyle = CurrentColumnHighlightStyle;
+      settings.HighlightLineWidth = HighlightLineWidth;
       settings.KeywordClassifierEnabled = KeywordClassifierEnabled;
       settings.FlowControlUseItalics = FlowControlUseItalics;
       settings.EscapeSequencesEnabled = EscapeSeqHighlightEnabled;
@@ -33,6 +35,7 @@ namespace Winterdom.Viasfora.Options {
       var settings = SettingsContext.GetSettings();
 
       CurrentColumnHighlightEnabled = settings.CurrentColumnHighlightEnabled;
+      CurrentColumnHighlightStyle = settings.CurrentColumnHighlightStyle;
       highlightLineWidth = settings.HighlightLineWidth;
       KeywordClassifierEnabled = settings.KeywordClassifierEnabled;
       FlowControlUseItalics = settings.FlowControlUseItalics;
@@ -168,6 +171,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Enables highlighting the current column in the text editor")]
     [Category("Location Tracking")]
     public bool CurrentColumnHighlightEnabled { get; set; }
+
+    [LocDisplayName("Column Highlight Style")]
+    [Description("Controls how the current column highlight is rendered.")]
+    [Category("Location Tracking")]
+    public ColumnStyle CurrentColumnHighlightStyle { get; set; }
 
     [LocDisplayName("Column Highlight Foreground")]
     [Description("Foreground color used to highlight the current column")]
