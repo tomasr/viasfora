@@ -134,7 +134,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
 
-
+    // current column highlight
     private double highlightLineWidth;
     [LocDisplayName("Highlight Line Width")]
     [Description("Defines the thickness of the current line/column highlight")]
@@ -149,24 +149,6 @@ namespace Winterdom.Viasfora.Options {
       }
     }
 
-    [LocDisplayName("Line Highlight Foreground")]
-    [Description("Foreground color used to highlight the current line")]
-    [Category("Location Tracking")]
-    public Color LineHighlightForeground {
-      get { return colors.Get(Constants.LINE_HIGHLIGHT, true); }
-      set { colors.Set(Constants.LINE_HIGHLIGHT, true, value); }
-    }
-
-    [LocDisplayName("Line Highlight Background")]
-    [Description("Background color used to highlight the current line")]
-    [Category("Location Tracking")]
-    public Color LineHighlightBackground {
-      get { return colors.Get(Constants.LINE_HIGHLIGHT, false); }
-      set { colors.Set(Constants.LINE_HIGHLIGHT, false, value); }
-    }
-
-
-    // current column highlight
     [LocDisplayName("Column Highlight")]
     [Description("Enables highlighting the current column in the text editor")]
     [Category("Location Tracking")]
