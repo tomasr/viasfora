@@ -55,7 +55,6 @@ Enable with the View -> Obfuscate Text command:
 ## Other features
 * Presentation Mode
 * Simple modelines support
-* Plain text completion
 * Editor margin for extension developers
 * All options configurable from the Visual Studio Options dialog
 
@@ -70,7 +69,10 @@ Most features include support for the following languages
 * TypeScript
 * Python
 * PowerShell
-* CSS, SASS, LESS
+* CSS, SASS, LES
+* S
 * R
+* HLSL
 
-
+# Building
+Visual Studio 2017 is needed for building from source.
