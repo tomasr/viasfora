@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.Shell.Interop;
+﻿using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel;
 
@@ -12,6 +13,13 @@ namespace Winterdom.Viasfora.Options {
       Shell = (IVsUIShell2)provider.GetService(typeof(SVsUIShell));
       Storage = (IVsFontAndColorStorage)provider.GetService(typeof(SVsFontAndColorStorage));
       Utilities = (IVsFontAndColorUtilities)Storage;
+    }
+
+    public uint GetAutomaticColor() {
+      uint result;
+      int hr = Utilities.EncodeAutomaticColor(out result);
+      ErrorHandler.ThrowOnFailure(hr);
+      return result;
     }
   }
 }

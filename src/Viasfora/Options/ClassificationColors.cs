@@ -38,11 +38,19 @@ namespace Winterdom.Viasfora.Options {
         ErrorHandler.ThrowOnFailure(hr);
 
         if ( this.foregroundChanged ) {
-          colors[0].crForeground = (uint)ColorTranslator.ToWin32(foreground);
+          if ( foreground == Color.Transparent ) {
+            colors[0].crForeground = colorStorage.GetAutomaticColor();
+          } else {
+            colors[0].crForeground = (uint)ColorTranslator.ToWin32(foreground);
+          }
           colors[0].bForegroundValid = 1;
         }
         if ( this.backgroundChanged ) {
-          colors[0].crBackground = (uint)ColorTranslator.ToWin32(background);
+          if ( background == Color.Transparent ) {
+            colors[0].crBackground = colorStorage.GetAutomaticColor();
+          } else {
+            colors[0].crBackground = (uint)ColorTranslator.ToWin32(background);
+          }
           colors[0].bBackgroundValid = 1;
         }
 
@@ -75,6 +83,8 @@ namespace Winterdom.Viasfora.Options {
           return FromColorIndex(storage, colorRef);
         case __VSCOLORTYPE.CT_VSCOLOR:
           return FromVsColor(storage, colorRef);
+        case __VSCOLORTYPE.CT_AUTOMATIC:
+          return Color.Transparent;
         default:
           throw new InvalidOperationException("Invalid VS color type");
       }

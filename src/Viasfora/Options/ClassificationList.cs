@@ -19,7 +19,6 @@ namespace Winterdom.Viasfora.Options {
 
       Guid category = new Guid(FontsAndColorsCategories.TextEditorCategory);
       uint flags = (uint)(__FCSTORAGEFLAGS.FCSF_LOADDEFAULTS
-                        | __FCSTORAGEFLAGS.FCSF_NOAUTOCOLORS
                         | __FCSTORAGEFLAGS.FCSF_READONLY);
       var hr = storage.Storage.OpenCategory(ref category, flags);
       ErrorHandler.ThrowOnFailure(hr);
