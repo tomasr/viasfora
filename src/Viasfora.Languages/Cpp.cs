@@ -7,7 +7,8 @@ using Winterdom.Viasfora.Util;
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
   class Cpp : CBasedLanguage {
-    public const String ContentType = "C/C++";
+    private readonly static String[] knownTypes =
+      new String[] { "C/C++", "HLSL" };
     static readonly String[] CPP_KEYWORDS = {
          "if", "else", "while", "do", "for", "each", "switch",
          "break", "continue", "return", "goto", "throw"
@@ -21,7 +22,7 @@ namespace Winterdom.Viasfora.Languages {
     public override String KeyName => Constants.Cpp;
 
     protected override String[] SupportedContentTypes
-      => new String[] { ContentType };
+      => knownTypes;
 
     [ImportingConstructor]
     public Cpp(IVsfSettings settings) : base(settings) {

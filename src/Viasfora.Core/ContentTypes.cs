@@ -8,6 +8,7 @@ namespace Winterdom.Viasfora {
     public const String Code = "code";
 
     public const String Cpp = "C/C++";
+    public const String HLSL = "HLSL";
     public const String CSharp = "CSharp";
     public const String XLang = "Fake.XLANG/s";
     public const String Css = "css";
