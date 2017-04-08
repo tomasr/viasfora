@@ -24,7 +24,7 @@ namespace Winterdom.Viasfora.Util {
       if ( obj == null ) return false;
       StringPart part = (StringPart)obj;
       return part.Span == this.Span
-          && part.Type == part.Type;
+          && part.Type == this.Type;
     }
     public override string ToString() {
       return String.Format(
