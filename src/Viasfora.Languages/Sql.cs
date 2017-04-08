@@ -7,8 +7,8 @@ using Winterdom.Viasfora.Rainbow;
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
   class Sql : LanguageInfo {
-    public const String ContentType = "Sql Server Tools";
-    public const String ContentTypeAlt = "SQL";
+    private readonly static String[] knownContentTypes =
+      new String[] { "Sql Server Tools", "SQL", "StreamAnalytics" };
 
     static readonly String[] KEYWORDS = {
           "begin", "end", "break", "continue", "goto", "if",
@@ -26,9 +26,7 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] LinqDefaults => LINQ_KEYWORDS;
     protected override String[] VisibilityDefaults => VIS_KEYWORDS;
     public override String KeyName => Constants.Sql;
-    protected override String[] SupportedContentTypes {
-      get { return new String[] { ContentType, ContentTypeAlt }; }
-    }
+    protected override String[] SupportedContentTypes => knownContentTypes;
 
     protected override IBraceScanner NewBraceScanner()
       => new SqlBraceScanner();
