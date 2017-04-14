@@ -6,6 +6,8 @@ using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Tags;
 using Winterdom.Viasfora.Util;
+using System.Linq;
+using Microsoft.VisualStudio.Text.Classification;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -55,27 +57,77 @@ namespace Winterdom.Viasfora.Text {
       }
 
       ITextSnapshot snapshot = spans[0].Snapshot;
-      foreach ( var tagSpan in aggregator.GetTags(spans) ) {
-        if ( tagSpan.Tag.ClassificationType is RainbowTag )
-          continue;
+
+      // Get all spans that contain interesting tags
+      // translated into our snapshot
+      var interestingSpans = from tagSpan in aggregator.GetTags(spans)
+                             let classificationType = tagSpan.Tag.ClassificationType
+                             where IsInterestingTag(lang, classificationType)
+                             select tagSpan.ToTagSpan(snapshot);
+
+      // GetTags() coalesce adjacent spans with the same tag
+      // so that we can process them as a single span
+      foreach ( var tagSpan in GetTags(interestingSpans, snapshot) ) {
         var classificationType = tagSpan.Tag.ClassificationType;
         String name = classificationType.Classification.ToLower();
         if ( eshe && name.Contains("string") ) {
-          var span = tagSpan.GetSpan(snapshot);
-          foreach ( var escapeTag in ProcessEscapeSequences(lang, span) ) {
+          foreach ( var escapeTag in ProcessEscapeSequences(lang, tagSpan.Span) ) {
             yield return escapeTag;
           }
         }
 
         if ( kce && lang.IsKeywordClassification(classificationType) ) {
-          var span = tagSpan.GetSpan(snapshot);
           // Is this one of the keywords we care about?
-          var result = IsInterestingKeyword(lang, span);
+          var result = IsInterestingKeyword(lang, tagSpan.Span);
           if ( result != null ) {
             yield return result;
           }
         }
       }
+    }
+
+    private bool IsInterestingTag(ILanguage lang, IClassificationType classification) {
+      if ( classification is RainbowTag )
+        return false;
+      var name = classification.Classification;
+      if ( settings.EscapeSequencesEnabled && name.IndexOf("string", StringComparison.InvariantCultureIgnoreCase) >= 0 )
+        return true;
+      if ( settings.KeywordClassifierEnabled && lang.IsKeywordClassification(classification) )
+        return true;
+      return false;
+    }
+
+    private IEnumerable<ITagSpan<IClassificationTag>> GetTags(IEnumerable<ITagSpan<IClassificationTag>> sourceSpans, ITextSnapshot snapshot) {
+      var e = sourceSpans.GetEnumerator();
+      try {
+        IClassificationTag currentTag = null;
+        SnapshotSpan currentSpan = new SnapshotSpan();
+        while ( e.MoveNext() ) {
+          var c1 = e.Current;
+          currentSpan = c1.Span;
+          currentTag = c1.Tag;
+          while ( e.MoveNext() ) {
+            var c2 = e.Current;
+            if ( IsSameTag(currentTag, c2) && AreAdjacent(currentSpan, c2) ) {
+              currentSpan = new SnapshotSpan(currentSpan.Start, c2.Span.End - currentSpan.Start);
+            } else {
+              yield return c1;
+              yield return c2;
+            }
+          }
+          yield return new TagSpan<IClassificationTag>(currentSpan, currentTag);
+        }
+      } finally {
+        e.Dispose();
+      }
+    }
+
+    private bool AreAdjacent(SnapshotSpan c1, ITagSpan<IClassificationTag> c2) {
+      return c1.End == c2.Span.Start;
+    }
+
+    private bool IsSameTag(IClassificationTag c1, ITagSpan<IClassificationTag> c2) {
+      return c1.ClassificationType.Classification == c2.Tag.ClassificationType.Classification;
     }
 
     public void Dispose() {

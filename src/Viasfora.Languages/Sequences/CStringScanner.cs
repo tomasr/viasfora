@@ -4,6 +4,8 @@ using Winterdom.Viasfora.Util;
 namespace Winterdom.Viasfora.Languages.Sequences {
   public class CStringScanner : IStringScanner {
     protected ITextChars text;
+    private bool isRString;
+
     public CStringScanner(String text) {
       this.text = new StringChars(text, 0, text.Length - 1);
       // If it's a C preprocessor include
@@ -11,7 +13,8 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       if ( this.text.Char() == '<' ) {
         this.text.SkipRemainder();
       } else if ( this.text.Char() == 'R' ) {
-        this.text.SkipRemainder();
+        isRString = true;
+        this.text.Skip(2);
       } else {
         // always skip the first char
         // (since quotes are included in the string)
@@ -20,7 +23,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     }
     public StringPart? Next() {
       while ( !text.EndOfLine ) {
-        if ( text.Char() == '\\' ) {
+        if ( text.Char() == '\\' && !isRString ) {
           return BasicCStringScanner.ParseEscapeSequence(text);
         } else if ( text.Char() == '%' ) {
           // skip %%

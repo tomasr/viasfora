@@ -28,5 +28,10 @@ namespace Winterdom.Viasfora {
     public static SnapshotSpan SpanUntil(this SnapshotPoint end) {
       return new SnapshotSpan(end.Snapshot, 0, end.Position);
     }
+
+    public static ITagSpan<IClassificationTag> ToTagSpan(this IMappingTagSpan<IClassificationTag> tagSpan, ITextSnapshot snapshot) {
+      var span = tagSpan.GetSpan(snapshot);
+      return new TagSpan<IClassificationTag>(span, tagSpan.Tag);
+    }
   }
 }
