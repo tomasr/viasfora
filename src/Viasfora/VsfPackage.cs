@@ -16,6 +16,7 @@ namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
   [ProvideAutoLoad(VSConstants.VsEditorFactoryGuid.TextEditor_string)]
   [Guid(Guids.VSPackage)]
+  [InstalledProductRegistration("#110", "#111", productId: VsfVersion.Version, IconResourceID = 400)]
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 200, 310, true)]
   [ProvideOptionPage(typeof(Options.RainbowOptionsPage), "Viasfora", "Rainbow Braces", 200, 320, true)]
   [ProvideOptionPage(typeof(Options.XmlOptionsPage), "Viasfora", "XML Editor", 200, 330, true)]
