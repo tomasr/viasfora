@@ -140,6 +140,13 @@ namespace Viasfora.Tests.StringScanners {
       Assert.Equal(null, parser.Next());
     }
     [Fact]
+    public void FormatSpecsInVerbatimStringIsExtracted() {
+      String input = "@\"" + @"Value: {0}" + "\"";
+      var parser = new CSharpStringScanner(input);
+      Assert.Equal(new StringPart(9, 3, StringPartType.FormatSpecifier), parser.Next());
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
     public void FormatSpecsInInterpolatedStringsAreIgnored() {
       String input = "$\"" + @"Value: {0}" + "\"";
       var parser = new CSharpStringScanner(input);

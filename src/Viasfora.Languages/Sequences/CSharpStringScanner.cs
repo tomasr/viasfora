@@ -5,13 +5,15 @@ namespace Winterdom.Viasfora.Languages.Sequences {
   public class CSharpStringScanner : IStringScanner {
     private ITextChars text;
     private bool isInterpolated;
+    private bool isVerbatim;
 
     public CSharpStringScanner(String text) {
       this.text = new StringChars(text, 0, text.Length - 1);
       // If this is an at-string, skip it
       char first = this.text.Char();
       if ( first == '@' ) {
-        this.text.SkipRemainder();
+        this.isVerbatim = true;
+        this.text.Skip(2);
       } else if ( first == '$' ) {
         if ( this.text.NChar() == '@' ) {
           this.text.SkipRemainder();
@@ -27,7 +29,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     }
     public StringPart? Next() {
       while ( !text.EndOfLine ) {
-        if ( text.Char() == '\\' ) {
+        if ( text.Char() == '\\' && !this.isVerbatim ) {
           return BasicCStringScanner.ParseEscapeSequence(text);
         } else if ( text.Char() == '{' && text.NChar() == '{' ) {
           text.Next(); // skip it
