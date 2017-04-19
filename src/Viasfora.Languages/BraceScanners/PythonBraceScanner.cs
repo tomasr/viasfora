@@ -76,8 +76,8 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
 
     private void ParseMultiLineString(ITextChars tc) {
       while ( !tc.EndOfLine ) {
-        if ( tc.Char() == '"' ) {
-          tc.Next();
+        if ( tc.Char() == this.quoteChar && tc.NChar() == this.quoteChar && tc.NNChar() == this.quoteChar ) {
+          tc.Skip(3);
           this.status = stText;
           return;
         } else {

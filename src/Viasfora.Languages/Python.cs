@@ -7,7 +7,9 @@ using Winterdom.Viasfora.Rainbow;
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
   class Python : LanguageInfo {
-    public const String ContentType = "Python";
+    public static readonly String[] knownContentTypes = new String[] {
+        "Python", "code++.Python"
+    };
 
     static readonly String[] KEYWORDS = {
           "break", "continue", "if", "elif", "else",
@@ -22,7 +24,7 @@ namespace Winterdom.Viasfora.Languages {
 
     public override String KeyName => Constants.Python;
     protected override String[] SupportedContentTypes
-      => new String[] { ContentType };
+      => knownContentTypes;
 
     protected override IBraceScanner NewBraceScanner() 
       => new PythonBraceScanner();
