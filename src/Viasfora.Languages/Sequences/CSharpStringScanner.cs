@@ -15,10 +15,11 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         this.isVerbatim = true;
         this.text.Skip(2);
       } else if ( first == '$' ) {
+        this.isInterpolated = true;
         if ( this.text.NChar() == '@' ) {
-          this.text.SkipRemainder();
+          this.isVerbatim = true;
+          this.text.Skip(3);
         } else {
-          this.isInterpolated = true;
           this.text.Skip(2);
         }
       } else if ( first == '"' || first == '\'' ) {
@@ -33,7 +34,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
           return BasicCStringScanner.ParseEscapeSequence(text);
         } else if ( text.Char() == '{' && text.NChar() == '{' ) {
           text.Next(); // skip it
-        } else if ( text.Char() == '{' && !isInterpolated ) {
+        } else if ( text.Char() == '{' && !this.isInterpolated ) {
           StringPart part = new StringPart();
           if ( ParseFormatSpecifier(ref part) )
             return part;
