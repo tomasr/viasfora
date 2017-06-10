@@ -6,9 +6,7 @@ using Winterdom.Viasfora.Text;
 namespace Winterdom.Viasfora.Settings {
 
   [Export(typeof(IVsfSettings))]
-  public class VsfSettings : IVsfSettings {
-
-    private ISettingsStore settings;
+  public class VsfSettings : SettingsBase, IVsfSettings {
     public event EventHandler SettingsChanged;
     
     public bool KeywordClassifierEnabled {
@@ -81,85 +79,16 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     [ImportingConstructor]
-    public VsfSettings(ISettingsStore store) {
-      this.settings = store;
+    public VsfSettings(ISettingsStore store, IStorageConversions converter)
+      : base(store, converter) {
     }
     public void Load() {
-      settings.Load();
+      Store.Load();
     }
     public void Save() {
-      settings.Save();
-      if ( SettingsChanged != null ) {
-        SettingsChanged(this, EventArgs.Empty);
-      }
+      Store.Save();
+      SettingsChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    public bool GetBoolean(String name, bool defval) {
-      String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : Convert.ToBoolean(val);
-    }
-
-    public int GetInt32(String name, int defval) {
-      String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : ConvertToInt32(val);
-    }
-    public long GetInt64(String name, long defval) {
-      String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : ConvertToInt64(val);
-    }
-    public double GetDouble(String name, double defval) {
-      String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : ConvertToDouble(val);
-    }
-    public T GetEnum<T>(String name, T defval) where T : struct {
-      String val = settings.Get(name);
-      T actual;
-      if ( Enum.TryParse<T>(val, out actual) ) {
-        return actual;
-      }
-      return defval;
-    }
-
-    public String GetValue(String name, String defValue) {
-      String val = settings.Get(name);
-      return String.IsNullOrEmpty(val) ? defValue : val;
-    }
-    public void SetValue(String name, object value) {
-      if ( value != null ) {
-        settings.Set(name, Convert.ToString(value, CultureInfo.InvariantCulture));
-      } else {
-        settings.Set(name, null);
-      }
-    }
-
-    public static double ConvertToDouble(String val) {
-      double result;
-      var styles = NumberStyles.AllowLeadingWhite
-                 | NumberStyles.AllowTrailingWhite
-                 | NumberStyles.AllowLeadingSign
-                 | NumberStyles.AllowDecimalPoint
-                 | NumberStyles.AllowThousands
-                 | NumberStyles.AllowExponent;
-      if ( !double.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
-        return Convert.ToDouble(val, CultureInfo.CurrentCulture);
-      }
-      return result;
-    }
-    public static int ConvertToInt32(String val) {
-      int result;
-      var styles = NumberStyles.Integer;
-      if ( !int.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
-        return Convert.ToInt32(val, CultureInfo.CurrentCulture);
-      }
-      return result;
-    }
-    public static long ConvertToInt64(String val) {
-      long result;
-      var styles = NumberStyles.Integer;
-      if ( !long.TryParse(val, styles, CultureInfo.InvariantCulture, out result) ) {
-        return Convert.ToInt64(val, CultureInfo.CurrentCulture);
-      }
-      return result;
-    }
   }
 }

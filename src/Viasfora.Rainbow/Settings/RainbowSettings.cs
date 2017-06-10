@@ -4,7 +4,6 @@ using System.ComponentModel.Composition;
 namespace Winterdom.Viasfora.Rainbow.Settings {
   [Export(typeof(IRainbowSettings))]
   public class RainbowSettings : IRainbowSettings {
-
     private IVsfSettings settings;
 
     public event EventHandler SettingsChanged;

@@ -193,7 +193,7 @@
     <Compile Include="Settings\GlobalXmlSettingsStoreTests.cs" />
     <Compile Include="Settings\OutlineSettingsTests.cs" />
     <Compile Include="Settings\SolutionUserSettingsTests.cs" />
-    <Compile Include="Settings\VsfSettingsTests.cs" />
+    <Compile Include="Settings\StorageConversionsTests.cs" />
     <Compile Include="StringScanners\RStringScannerTests.cs" />
     <Compile Include="VS15AssemblyResolver.cs" />
     <Compile Include="VsfEditorHost.cs" />
