@@ -7,8 +7,9 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     private bool isInterpolated;
     private bool isVerbatim;
 
-    public CSharpStringScanner(String text) {
+    public CSharpStringScanner(String text, String classificationName = "string") {
       this.text = new StringChars(text, 0, text.Length - 1);
+      this.isVerbatim = classificationName == "string - verbatim";
       // If this is an at-string, skip it
       char first = this.text.Char();
       if ( first == '@' ) {

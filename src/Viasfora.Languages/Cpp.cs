@@ -28,7 +28,7 @@ namespace Winterdom.Viasfora.Languages {
     public Cpp(IVsfSettings settings) : base(settings) {
     }
 
-    public override IStringScanner NewStringScanner(string text)
+    public override IStringScanner NewStringScanner(String classificationName, String text)
       => new CStringScanner(text);
   }
 }

@@ -30,7 +30,7 @@ namespace Winterdom.Viasfora.Languages {
       get { return QUERY; }
     }
 
-    protected override string[] VisibilityDefaults {
+    protected override String[] VisibilityDefaults {
       get { return VISIBILITY; }
     }
 
@@ -41,8 +41,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override IBraceScanner NewBraceScanner() {
       return new USqlBraceScanner();
     }
-    public override IStringScanner NewStringScanner(string text) {
-      return new CSharpStringScanner(text);
+    public override IStringScanner NewStringScanner(String classificationName, String text) {
+      return new CSharpStringScanner(text, classificationName);
     }
 
     [ImportingConstructor]

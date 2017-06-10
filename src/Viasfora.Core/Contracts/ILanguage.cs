@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.Contracts {
     bool Enabled { get; set; }
 
     T GetService<T>();
-    IStringScanner NewStringScanner(String text);
+    IStringScanner NewStringScanner(String classificationName, String text);
     bool IsControlFlowKeyword(String text);
     bool IsVisibilityKeyword(String text);
     bool IsLinqKeyword(String text);

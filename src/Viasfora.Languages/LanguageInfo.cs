@@ -48,7 +48,7 @@ namespace Winterdom.Viasfora.Languages {
     protected virtual IFirstLineCommentParser NewFirstLineCommentParser() {
       return new GenericCommentParser();
     }
-    public virtual IStringScanner NewStringScanner(String text) {
+    public virtual IStringScanner NewStringScanner(String classificationName, String text) {
       return null;
     }
 

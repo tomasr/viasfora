@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Languages {
 
     protected override IBraceScanner NewBraceScanner()
       => new CSharpBraceScanner();
-    public override IStringScanner NewStringScanner(string text)
+    public override IStringScanner NewStringScanner(String classificationName, String text)
       => new CSharpStringScanner(text);
 
     [ImportingConstructor]

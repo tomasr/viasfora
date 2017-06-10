@@ -32,8 +32,8 @@ namespace Winterdom.Viasfora.Languages {
 
     protected override IBraceScanner NewBraceScanner()
       => new CSharpBraceScanner();
-    public override IStringScanner NewStringScanner(string text)
-      => new CSharpStringScanner(text);
+    public override IStringScanner NewStringScanner(String classificationName, String text)
+      => new CSharpStringScanner(text, classificationName);
 
     [ImportingConstructor]
     public CSharp(IVsfSettings settings) : base(settings) {

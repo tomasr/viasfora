@@ -71,7 +71,7 @@ namespace Winterdom.Viasfora.Text {
         var classificationType = tagSpan.Tag.ClassificationType;
         String name = classificationType.Classification.ToLower();
         if ( eshe && name.Contains("string") ) {
-          foreach ( var escapeTag in ProcessEscapeSequences(lang, tagSpan.Span) ) {
+          foreach ( var escapeTag in ProcessEscapeSequences(lang, name, tagSpan.Span) ) {
             yield return escapeTag;
           }
         }
@@ -165,11 +165,11 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(
-          ILanguage lang, SnapshotSpan cs) {
+          ILanguage lang, String classificationName, SnapshotSpan cs) {
       if ( cs.IsEmpty ) yield break;
       String text = cs.GetText();
 
-      var parser = lang.NewStringScanner(text);
+      var parser = lang.NewStringScanner(classificationName, text);
       if ( parser == null )
         yield break;
 

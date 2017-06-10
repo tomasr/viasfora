@@ -26,7 +26,7 @@ namespace Winterdom.Viasfora.Languages {
     public Css(IVsfSettings settings) : base(settings) {
     }
 
-    public override IStringScanner NewStringScanner(string text)
+    public override IStringScanner NewStringScanner(String classificationName, String text)
       => new CssStringScanner(text);
     protected override IBraceScanner NewBraceScanner()
       => new CssBraceScanner();
