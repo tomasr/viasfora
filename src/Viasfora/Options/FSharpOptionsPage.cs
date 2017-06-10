@@ -14,19 +14,18 @@ namespace Winterdom.Viasfora.Options {
 
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
-      language.ControlFlow = ControlFlowKeywords.ToArray();
-      language.Linq = LinqKeywords.ToArray();
-      language.Visibility = VisibilityKeywords.ToArray();
-      language.Enabled = Enabled;
-      var settings = SettingsContext.GetSettings();
-      settings.Save();
+      language.Settings.ControlFlow = ControlFlowKeywords.ToArray();
+      language.Settings.Linq = LinqKeywords.ToArray();
+      language.Settings.Visibility = VisibilityKeywords.ToArray();
+      language.Settings.Enabled = Enabled;
+      language.Settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
-      ControlFlowKeywords = language.ControlFlow.ToList();
-      LinqKeywords = language.Linq.ToList();
-      VisibilityKeywords = language.Visibility.ToList();
-      Enabled = language.Enabled;
+      ControlFlowKeywords = language.Settings.ControlFlow.ToList();
+      LinqKeywords = language.Settings.Linq.ToList();
+      VisibilityKeywords = language.Settings.Visibility.ToList();
+      Enabled = language.Settings.Enabled;
     }
 
     [LocDisplayName("Enabled")]

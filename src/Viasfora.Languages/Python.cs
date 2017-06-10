@@ -3,26 +3,16 @@ using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
-  class Python : LanguageInfo {
+  class Python : LanguageInfo, ILanguage {
     public static readonly String[] knownContentTypes = new String[] {
         "Python", "code++.Python"
     };
+    public ILanguageSettings Settings { get; private set; }
 
-    static readonly String[] KEYWORDS = {
-          "break", "continue", "if", "elif", "else",
-          "for", "raise", "return", "while", "yield"
-      };
-    static readonly String[] LINQ_KEYWORDS = {
-          "from", "in"
-      };
-    protected override String[] ControlFlowDefaults => KEYWORDS;
-    protected override String[] LinqDefaults => LINQ_KEYWORDS;
-    protected override String[] VisibilityDefaults => EMPTY;
-
-    public override String KeyName => Constants.Python;
     protected override String[] SupportedContentTypes
       => knownContentTypes;
 
@@ -30,7 +20,23 @@ namespace Winterdom.Viasfora.Languages {
       => new PythonBraceScanner();
 
     [ImportingConstructor]
-    public Python(IVsfSettings settings) : base(settings) {
+    public Python(ISettingsStore store, IStorageConversions converter) {
+      this.Settings = new PythonSettings(store, converter);
+    }
+  }
+
+  class PythonSettings : LanguageSettings {
+    protected override String[] ControlFlowDefaults => new String[] {
+          "break", "continue", "if", "elif", "else",
+          "for", "raise", "return", "while", "yield"
+      };
+    protected override String[] LinqDefaults => new String[] {
+          "from", "in"
+      };
+    protected override String[] VisibilityDefaults => EMPTY;
+
+    public PythonSettings(ISettingsStore store, IStorageConversions converter)
+      : base (Constants.Python, store, converter) {
     }
   }
 }

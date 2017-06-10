@@ -154,6 +154,7 @@
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ContentTypes.cs" />
+    <Compile Include="Contracts\ILanguageSettings.cs" />
     <Compile Include="Contracts\ILogger.cs" />
     <Compile Include="Contracts\IPackageUserOptions.cs" />
     <Compile Include="Contracts\IPresentationModeState.cs" />
@@ -179,6 +180,7 @@
     <Compile Include="IUpdatableSettings.cs" />
     <Compile Include="IVsfSettings.cs" />
     <Compile Include="JsonExtensions.cs" />
+    <Compile Include="LanguageExtensions.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />
     <Compile Include="Margins\DevMarginViewModel.cs" />
     <Compile Include="Margins\DevMarginVisual.xaml.cs">

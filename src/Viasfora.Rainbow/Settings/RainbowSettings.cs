@@ -5,8 +5,6 @@ using Winterdom.Viasfora.Settings;
 namespace Winterdom.Viasfora.Rainbow.Settings {
   [Export(typeof(IRainbowSettings))]
   public class RainbowSettings : SettingsBase, IRainbowSettings {
-    public event EventHandler SettingsChanged;
-
     public int RainbowDepth {
       get { return GetInt32(nameof(RainbowDepth), 4); }
       set { SetValue(nameof(RainbowDepth), value); }
@@ -38,15 +36,6 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
 
     [ImportingConstructor]
     public RainbowSettings(ISettingsStore store, IStorageConversions converter) : base(store, converter) {
-    }
-
-    public void Load() {
-      this.Store.Load();
-    }
-
-    public void Save() {
-      this.Store.Save();
-      SettingsChanged?.Invoke(this, EventArgs.Empty);
     }
   }
 }

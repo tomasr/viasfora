@@ -9,6 +9,7 @@ namespace Winterdom.Viasfora.Settings {
   public abstract class SettingsBase {
     protected ISettingsStore Store { get; private set; }
     private IStorageConversions converter;
+    public event EventHandler SettingsChanged;
 
     public SettingsBase(ISettingsStore store, IStorageConversions converter) {
       this.Store = store;
@@ -40,6 +41,14 @@ namespace Winterdom.Viasfora.Settings {
       }
       return defval;
     }
+    public String[] GetList(String name, String[] defaultValue) {
+      String value = GetValue(name, "");
+      if ( String.IsNullOrEmpty(value) ) {
+        return defaultValue;
+      }
+      var list = converter.ToList(value);
+      return list.Length > 0 ? list : defaultValue; 
+    }
 
     public String GetValue(String name, String defValue) {
       String val = Store.Get(name);
@@ -53,5 +62,13 @@ namespace Winterdom.Viasfora.Settings {
       }
     }
 
+    public void Load() {
+      this.Store.Load();
+    }
+
+    public void Save() {
+      this.Store.Save();
+      SettingsChanged?.Invoke(this, EventArgs.Empty);
+    }
   }
 }

@@ -46,7 +46,7 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ILanguage lang = GetLanguageByContentType(theBuffer.ContentType);
-      if ( !lang.Enabled ) {
+      if ( !lang.Settings.Enabled ) {
         yield break;
       }
 

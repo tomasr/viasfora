@@ -40,7 +40,14 @@ namespace Winterdom.Viasfora.Settings {
     public bool ToEnum<T>(String value, out T result) where T : struct {
       return Enum.TryParse<T>(value, out result);
     }
+    public String[] ToList(String value) {
+      return String.IsNullOrEmpty(value) ? new String[0] : value.AsList(); 
+    }
     public String ToString(object value) {
+      String[] list = value as String[];
+      if ( list != null ) {
+        return list.FromList();
+      }
       return value != null ? Convert.ToString(value, CultureInfo.InvariantCulture) : null;
     }
   }

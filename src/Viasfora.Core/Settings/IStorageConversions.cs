@@ -7,6 +7,7 @@ namespace Winterdom.Viasfora.Settings {
     long ToInt64(String value);
     double ToDouble(String value);
     bool ToEnum<T>(String value, out T result) where T : struct;
+    String[] ToList(String value);
     String ToString(object value);
   }
 }

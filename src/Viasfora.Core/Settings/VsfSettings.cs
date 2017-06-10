@@ -7,8 +7,6 @@ namespace Winterdom.Viasfora.Settings {
 
   [Export(typeof(IVsfSettings))]
   public class VsfSettings : SettingsBase, IVsfSettings {
-    public event EventHandler SettingsChanged;
-    
     public bool KeywordClassifierEnabled {
       get { return GetBoolean(nameof(KeywordClassifierEnabled), true); }
       set { SetValue(nameof(KeywordClassifierEnabled), value); }
@@ -82,13 +80,5 @@ namespace Winterdom.Viasfora.Settings {
     public VsfSettings(ISettingsStore store, IStorageConversions converter)
       : base(store, converter) {
     }
-    public void Load() {
-      Store.Load();
-    }
-    public void Save() {
-      Store.Save();
-      SettingsChanged?.Invoke(this, EventArgs.Empty);
-    }
-
   }
 }

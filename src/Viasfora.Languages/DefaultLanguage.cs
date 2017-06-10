@@ -1,21 +1,20 @@
 ﻿using System;
-using Winterdom.Viasfora.Languages.BraceScanners;
-using Winterdom.Viasfora.Rainbow;
-using Winterdom.Viasfora.Util;
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Languages.BraceScanners;
+using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Settings;
+using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Languages {
-  public class DefaultLanguage : LanguageInfo {
-    protected override String[] ControlFlowDefaults => EMPTY;
-    protected override String[] LinqDefaults => EMPTY;
-    protected override String[] VisibilityDefaults => EMPTY;
+  public class DefaultLanguage : LanguageInfo, ILanguage {
 
-    protected override string[] SupportedContentTypes => EMPTY;
-    public override string KeyName => "Text";
+    protected override string[] SupportedContentTypes => new String[0];
+    public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public DefaultLanguage(IVsfSettings settings) : base(settings) {
+    public DefaultLanguage(ISettingsStore store, IStorageConversions converter) {
+      this.Settings = new DefaultSettings(store, converter);
     }
 
     public override bool MatchesContentType(IContentType contentType) {
@@ -23,5 +22,15 @@ namespace Winterdom.Viasfora.Languages {
     }
     protected override IBraceScanner NewBraceScanner()
       => new DefaultBraceScanner();
+  }
+
+  public class DefaultSettings : LanguageSettings {
+    protected override String[] ControlFlowDefaults => EMPTY;
+    protected override String[] LinqDefaults => EMPTY;
+    protected override String[] VisibilityDefaults => EMPTY;
+
+    public DefaultSettings(ISettingsStore store, IStorageConversions converter)
+      : base ("Text", store, converter) {
+    }
   }
 }

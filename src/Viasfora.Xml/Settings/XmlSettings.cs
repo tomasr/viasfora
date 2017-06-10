@@ -5,8 +5,6 @@ using Winterdom.Viasfora.Settings;
 namespace Winterdom.Viasfora.Xml.Settings {
   [Export(typeof(IXmlSettings))]
   public class XmlSettings : SettingsBase, IXmlSettings {
-    public event EventHandler SettingsChanged;
-
     public bool XmlnsPrefixEnabled {
       get { return GetBoolean(nameof(XmlnsPrefixEnabled), true); }
       set { SetValue(nameof(XmlnsPrefixEnabled), value); }
@@ -22,15 +20,6 @@ namespace Winterdom.Viasfora.Xml.Settings {
 
     [ImportingConstructor]
     public XmlSettings(ISettingsStore store, IStorageConversions converter) : base(store, converter) {
-    }
-
-    public void Load() {
-      this.Store.Load();
-    }
-
-    public void Save() {
-      this.Store.Save();
-      SettingsChanged?.Invoke(this, EventArgs.Empty);
     }
   }
 }
