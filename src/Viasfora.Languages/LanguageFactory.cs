@@ -14,8 +14,8 @@ namespace Winterdom.Viasfora.Languages {
     private ILanguage defaultLang;
 
     [ImportingConstructor]
-    public LanguageFactory(ISettingsStore store, IStorageConversions converter) {
-      this.defaultLang = new DefaultLanguage(store, converter);
+    public LanguageFactory(ITypedSettingsStore store) {
+      this.defaultLang = new DefaultLanguage(store);
     }
 
     public ILanguage TryCreateLanguage(IContentType contentType) {

@@ -20,8 +20,8 @@ namespace Winterdom.Viasfora.Languages {
       => new PythonBraceScanner();
 
     [ImportingConstructor]
-    public Python(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new PythonSettings(store, converter);
+    public Python(ITypedSettingsStore store) {
+      this.Settings = new PythonSettings(store);
     }
   }
 
@@ -35,8 +35,8 @@ namespace Winterdom.Viasfora.Languages {
       };
     protected override String[] VisibilityDefaults => EMPTY;
 
-    public PythonSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.Python, store, converter) {
+    public PythonSettings(ITypedSettingsStore store)
+      : base (Constants.Python, store) {
     }
   }
 }

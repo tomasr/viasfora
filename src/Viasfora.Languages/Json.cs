@@ -15,8 +15,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public JSON(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new JsonSettings(store, converter);
+    public JSON(ITypedSettingsStore store) {
+      this.Settings = new JsonSettings(store);
     }
 
     protected override IBraceScanner NewBraceScanner()
@@ -28,8 +28,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] LinqDefaults => EMPTY;
     protected override String[] VisibilityDefaults => EMPTY;
 
-    public JsonSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.Json, store, converter) {
+    public JsonSettings(ITypedSettingsStore store)
+      : base (Constants.Json, store) {
     }
   }
 }

@@ -1,65 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Winterdom.Viasfora.Settings {
-  public abstract class SettingsBase {
-    protected ISettingsStore Store { get; private set; }
-    private IStorageConversions converter;
+  public abstract class SettingsBase : IUpdatableSettings {
+    protected ITypedSettingsStore Store { get; private set; }
     public event EventHandler SettingsChanged;
 
-    public SettingsBase(ISettingsStore store, IStorageConversions converter) {
+    public SettingsBase(ITypedSettingsStore store) {
       this.Store = store;
-      this.converter = converter;
-    }
-
-    public bool GetBoolean(String name, bool defval) {
-      String val = Store.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : Convert.ToBoolean(val);
-    }
-
-    public int GetInt32(String name, int defval) {
-      String val = Store.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : converter.ToInt32(val);
-    }
-    public long GetInt64(String name, long defval) {
-      String val = Store.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : converter.ToInt64(val);
-    }
-    public double GetDouble(String name, double defval) {
-      String val = Store.Get(name);
-      return String.IsNullOrEmpty(val) ? defval : converter.ToDouble(val);
-    }
-    public T GetEnum<T>(String name, T defval) where T : struct {
-      String val = Store.Get(name);
-      T actual;
-      if ( converter.ToEnum<T>(val, out actual) ) {
-        return actual;
-      }
-      return defval;
-    }
-    public String[] GetList(String name, String[] defaultValue) {
-      String value = GetValue(name, "");
-      if ( String.IsNullOrEmpty(value) ) {
-        return defaultValue;
-      }
-      var list = converter.ToList(value);
-      return list.Length > 0 ? list : defaultValue; 
-    }
-
-    public String GetValue(String name, String defValue) {
-      String val = Store.Get(name);
-      return String.IsNullOrEmpty(val) ? defValue : val;
-    }
-    public void SetValue(String name, object value) {
-      if ( value != null ) {
-        Store.Set(name, converter.ToString(value));
-      } else {
-        Store.Set(name, null);
-      }
+      this.Store.SettingsChanged += OnStoreChanged;
     }
 
     public void Load() {
@@ -68,6 +16,9 @@ namespace Winterdom.Viasfora.Settings {
 
     public void Save() {
       this.Store.Save();
+    }
+
+    private void OnStoreChanged(object sender, EventArgs e) {
       SettingsChanged?.Invoke(this, EventArgs.Empty);
     }
   }

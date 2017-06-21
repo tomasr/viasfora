@@ -214,11 +214,13 @@
     <Compile Include="Settings\ISettingsStore.cs" />
     <Compile Include="Settings\ISolutionUserSettings.cs" />
     <Compile Include="Settings\IStorageConversions.cs" />
+    <Compile Include="Settings\ITypedSettingsStore.cs" />
     <Compile Include="Settings\OutlineSettings.cs" />
     <Compile Include="Settings\SettingsBase.cs" />
     <Compile Include="Settings\StorageConversions.cs" />
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="Settings\SuoPersistUserSettings.cs" />
+    <Compile Include="Settings\TypedSettingsStore.cs" />
     <Compile Include="Settings\VsfSettings.cs" />
     <Compile Include="Settings\VsfSettingsEventManager.cs" />
     <Compile Include="SnapshotExtensions.cs" />

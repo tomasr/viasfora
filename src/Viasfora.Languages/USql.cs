@@ -17,8 +17,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public USql(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new USqlSettings(store, converter);
+    public USql(ITypedSettingsStore store) {
+      this.Settings = new USqlSettings(store);
     }
 
     protected override IBraceScanner NewBraceScanner() {
@@ -39,8 +39,8 @@ namespace Winterdom.Viasfora.Languages {
         "readonly"
       };
 
-    public USqlSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.USql, store, converter) {
+    public USqlSettings(ITypedSettingsStore store)
+      : base (Constants.USql, store) {
     }
   }
 }

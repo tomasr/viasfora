@@ -20,8 +20,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public Css(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new CssSettings(store, converter);
+    public Css(ITypedSettingsStore store) {
+      this.Settings = new CssSettings(store);
     }
 
     public override IStringScanner NewStringScanner(String classificationName, String text)
@@ -35,8 +35,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] LinqDefaults => EMPTY;
     protected override String[] VisibilityDefaults => EMPTY;
 
-    public CssSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.Css, store, converter) {
+    public CssSettings(ITypedSettingsStore store)
+      : base (Constants.Css, store) {
     }
   }
 }

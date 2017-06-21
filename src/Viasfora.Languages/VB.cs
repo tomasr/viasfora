@@ -18,8 +18,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public VB(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new VBSettings(store, converter);
+    public VB(ITypedSettingsStore store) {
+      this.Settings = new VBSettings(store);
     }
 
     protected override IBraceScanner NewBraceScanner()
@@ -47,8 +47,8 @@ namespace Winterdom.Viasfora.Languages {
        "friend", "public", "private", "protected"
       };
 
-    public VBSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.VB, store, converter) {
+    public VBSettings(ITypedSettingsStore store)
+      : base (Constants.VB, store) {
     }
   }
 }

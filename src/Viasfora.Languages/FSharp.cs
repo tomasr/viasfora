@@ -16,8 +16,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public FSharp(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new FSharpSettings(store, converter);
+    public FSharp(ITypedSettingsStore store) {
+      this.Settings = new FSharpSettings(store);
     }
 
     protected override IBraceScanner NewBraceScanner()
@@ -39,8 +39,8 @@ namespace Winterdom.Viasfora.Languages {
        "public", "private", "internal"
       };
 
-    public FSharpSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.FSharp, store, converter) {
+    public FSharpSettings(ITypedSettingsStore store)
+      : base (Constants.FSharp, store) {
     }
   }
 }

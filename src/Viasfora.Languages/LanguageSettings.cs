@@ -11,24 +11,24 @@ namespace Winterdom.Viasfora.Languages {
 
     public String KeyName { get; private set; }
     public String[] ControlFlow {
-      get { return GetList(KeyName + "_ControlFlow", ControlFlowDefaults); }
-      set { SetValue(KeyName + "_ControlFlow", value); }
+      get { return this.Store.GetList(KeyName + "_ControlFlow", ControlFlowDefaults); }
+      set { this.Store.SetValue(KeyName + "_ControlFlow", value); }
     }
     public String[] Linq {
-      get { return GetList(KeyName + "_Linq", LinqDefaults); }
-      set { SetValue(KeyName + "_Linq", value); }
+      get { return this.Store.GetList(KeyName + "_Linq", LinqDefaults); }
+      set { this.Store.SetValue(KeyName + "_Linq", value); }
     }
     public String[] Visibility {
-      get { return GetList(KeyName + "_Visibility", VisibilityDefaults); }
-      set { SetValue(KeyName + "_Visibility", value); }
+      get { return this.Store.GetList(KeyName + "_Visibility", VisibilityDefaults); }
+      set { this.Store.SetValue(KeyName + "_Visibility", value); }
     }
     public bool Enabled {
-      get { return GetBoolean(KeyName + "_Enabled", true); }
-      set { SetValue(KeyName + "_Enabled", value); }
+      get { return this.Store.GetBoolean(KeyName + "_Enabled", true); }
+      set { this.Store.SetValue(KeyName + "_Enabled", value); }
     }
 
-    public LanguageSettings(String key, ISettingsStore store, IStorageConversions converter)
-      : base(store, converter) {
+    public LanguageSettings(String key, ITypedSettingsStore store)
+      : base(store) {
       this.KeyName = key;
     }
   }

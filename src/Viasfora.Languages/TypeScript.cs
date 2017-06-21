@@ -15,8 +15,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public TypeScript(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new TypeScriptSettings(store, converter);
+    public TypeScript(ITypedSettingsStore store) {
+      this.Settings = new TypeScriptSettings(store);
     }
 
     protected override IBraceScanner NewBraceScanner()
@@ -35,8 +35,8 @@ namespace Winterdom.Viasfora.Languages {
        "export", "public", "private"
       };
 
-    public TypeScriptSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.TypeScript, store, converter) {
+    public TypeScriptSettings(ITypedSettingsStore store)
+      : base (Constants.TypeScript, store) {
     }
   }
 }

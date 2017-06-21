@@ -21,8 +21,8 @@ namespace Winterdom.Viasfora.Languages {
       => new CSharpStringScanner(text, classificationName);
 
     [ImportingConstructor]
-    public CSharp(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new CSharpSettings(store, converter);
+    public CSharp(ITypedSettingsStore store) {
+      this.Settings = new CSharpSettings(store);
     }
   }
 
@@ -41,8 +41,8 @@ namespace Winterdom.Viasfora.Languages {
          "public", "private", "protected", "internal"
       };
 
-    public CSharpSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.CSharp, store, converter) {
+    public CSharpSettings(ITypedSettingsStore store)
+      : base (Constants.CSharp, store) {
     }
   }
 }

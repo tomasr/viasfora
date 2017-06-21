@@ -14,8 +14,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public Sql(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new SqlSettings(store, converter);
+    public Sql(ITypedSettingsStore store) {
+      this.Settings = new SqlSettings(store);
       // the SQL classifier will return text spans that include
       // trailing spaces (such as "IF ")
      this.NormalizationFunction = text => text.Trim();
@@ -38,8 +38,8 @@ namespace Winterdom.Viasfora.Languages {
        "public", "external"
       };
 
-    public SqlSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.Sql, store, converter) {
+    public SqlSettings(ITypedSettingsStore store)
+      : base (Constants.Sql, store) {
     }
   }
 }

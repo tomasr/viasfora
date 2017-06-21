@@ -17,8 +17,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public XLang(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new XLangSettings(store, converter);
+    public XLang(ITypedSettingsStore store) {
+      this.Settings = new XLangSettings(store);
     }
 
     protected override IBraceScanner NewBraceScanner()
@@ -32,8 +32,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] LinqDefaults => EMPTY;
     protected override String[] VisibilityDefaults => EMPTY;
 
-    public XLangSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.XLang, store, converter) {
+    public XLangSettings(ITypedSettingsStore store)
+      : base (Constants.XLang, store) {
     }
   }
 }

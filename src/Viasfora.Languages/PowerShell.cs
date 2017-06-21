@@ -19,8 +19,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public PowerShell(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new PowershellSettings(store, converter);
+    public PowerShell(ITypedSettingsStore store) {
+      this.Settings = new PowershellSettings(store);
     }
     protected override IBraceScanner NewBraceScanner()
       => new PsBraceScanner();
@@ -37,8 +37,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] LinqDefaults => EMPTY;
     protected override String[] VisibilityDefaults => EMPTY;
 
-    public PowershellSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.PowerShell, store, converter) {
+    public PowershellSettings(ITypedSettingsStore store)
+      : base (Constants.PowerShell, store) {
     }
   }
 }

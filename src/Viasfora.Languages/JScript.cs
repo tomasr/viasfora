@@ -15,8 +15,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public JScript(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new JScriptSettings(store, converter);
+    public JScript(ITypedSettingsStore store) {
+      this.Settings = new JScriptSettings(store);
     }
 
     protected override IBraceScanner NewBraceScanner()
@@ -33,8 +33,8 @@ namespace Winterdom.Viasfora.Languages {
       };
     protected override String[] VisibilityDefaults => EMPTY;
 
-    public JScriptSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.JS, store, converter) {
+    public JScriptSettings(ITypedSettingsStore store)
+      : base (Constants.JS, store) {
     }
   }
 }

@@ -16,8 +16,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public Cpp(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new CppSettings(store, converter);
+    public Cpp(ITypedSettingsStore store) {
+      this.Settings = new CppSettings(store);
     }
 
     public override IStringScanner NewStringScanner(String classificationName, String text)
@@ -26,8 +26,8 @@ namespace Winterdom.Viasfora.Languages {
 
   class CppSettings : LanguageSettings {
     protected override String[] ControlFlowDefaults => new String[] {
-         "if", "else", "while", "do", "for", "each", "switch",
-         "break", "continue", "return", "goto", "throw"
+       "if", "else", "while", "do", "for", "each", "switch",
+       "break", "continue", "return", "goto", "throw"
       };
 
     protected override String[] LinqDefaults => EMPTY;
@@ -36,8 +36,8 @@ namespace Winterdom.Viasfora.Languages {
       "public", "private", "protected", "internal", "friend"
     };
 
-    public CppSettings(ISettingsStore store, IStorageConversions converter)
-      : base (Constants.Cpp, store, converter) {
+    public CppSettings(ITypedSettingsStore store)
+      : base(Constants.Cpp, store) {
     }
   }
 }

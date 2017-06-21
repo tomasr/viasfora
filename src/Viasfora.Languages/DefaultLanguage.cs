@@ -13,8 +13,8 @@ namespace Winterdom.Viasfora.Languages {
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public DefaultLanguage(ISettingsStore store, IStorageConversions converter) {
-      this.Settings = new DefaultSettings(store, converter);
+    public DefaultLanguage(ITypedSettingsStore store) {
+      this.Settings = new DefaultSettings(store);
     }
 
     public override bool MatchesContentType(IContentType contentType) {
@@ -29,8 +29,8 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] LinqDefaults => EMPTY;
     protected override String[] VisibilityDefaults => EMPTY;
 
-    public DefaultSettings(ISettingsStore store, IStorageConversions converter)
-      : base ("Text", store, converter) {
+    public DefaultSettings(ITypedSettingsStore store)
+      : base ("Text", store) {
     }
   }
 }

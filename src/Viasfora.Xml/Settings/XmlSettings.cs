@@ -6,20 +6,20 @@ namespace Winterdom.Viasfora.Xml.Settings {
   [Export(typeof(IXmlSettings))]
   public class XmlSettings : SettingsBase, IXmlSettings {
     public bool XmlnsPrefixEnabled {
-      get { return GetBoolean(nameof(XmlnsPrefixEnabled), true); }
-      set { SetValue(nameof(XmlnsPrefixEnabled), value); }
+      get { return this.Store.GetBoolean(nameof(XmlnsPrefixEnabled), true); }
+      set { this.Store.SetValue(nameof(XmlnsPrefixEnabled), value); }
     }
     public bool XmlCloseTagEnabled {
-      get { return GetBoolean(nameof(XmlCloseTagEnabled), true); }
-      set { SetValue(nameof(XmlCloseTagEnabled), value); }
+      get { return this.Store.GetBoolean(nameof(XmlCloseTagEnabled), true); }
+      set { this.Store.SetValue(nameof(XmlCloseTagEnabled), value); }
     }
     public bool XmlMatchTagsEnabled {
-      get { return GetBoolean(nameof(XmlMatchTagsEnabled), true); }
-      set { SetValue(nameof(XmlMatchTagsEnabled), value); }
+      get { return this.Store.GetBoolean(nameof(XmlMatchTagsEnabled), true); }
+      set { this.Store.SetValue(nameof(XmlMatchTagsEnabled), value); }
     }
 
     [ImportingConstructor]
-    public XmlSettings(ISettingsStore store, IStorageConversions converter) : base(store, converter) {
+    public XmlSettings(ITypedSettingsStore store) : base(store) {
     }
   }
 }
