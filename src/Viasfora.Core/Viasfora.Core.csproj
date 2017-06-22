@@ -209,7 +209,9 @@
     <Compile Include="SettingsContext.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
+    <Compile Include="Settings\ICustomExport.cs" />
     <Compile Include="Settings\IPersistSettings.cs" />
+    <Compile Include="Settings\ISettingsExport.cs" />
     <Compile Include="Settings\ISettingsObject.cs" />
     <Compile Include="Settings\ISettingsStore.cs" />
     <Compile Include="Settings\ISolutionUserSettings.cs" />
@@ -217,6 +219,7 @@
     <Compile Include="Settings\ITypedSettingsStore.cs" />
     <Compile Include="Settings\OutlineSettings.cs" />
     <Compile Include="Settings\SettingsBase.cs" />
+    <Compile Include="Settings\SettingsExporter.cs" />
     <Compile Include="Settings\StorageConversions.cs" />
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="Settings\SuoPersistUserSettings.cs" />

@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Languages {
-  public abstract class LanguageSettings : SettingsBase, ILanguageSettings {
+  public abstract class LanguageSettings : SettingsBase, ILanguageSettings, ICustomExport {
     protected static readonly String[] EMPTY = { };
     protected abstract String[] ControlFlowDefaults { get; }
     protected abstract String[] LinqDefaults { get; }
@@ -30,6 +31,15 @@ namespace Winterdom.Viasfora.Languages {
     public LanguageSettings(String key, ITypedSettingsStore store)
       : base(store) {
       this.KeyName = key;
+    }
+
+    public IDictionary<String, object> Export() {
+      return new Dictionary<String, object> {
+        { KeyName + "_ControlFlow", ControlFlow },
+        { KeyName + "_Linq", Linq },
+        { KeyName + "_Visibility", Visibility },
+        { KeyName + "_Enabled", Enabled }
+      };
     }
   }
 }

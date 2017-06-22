@@ -18,6 +18,10 @@ namespace Winterdom.Viasfora.Languages {
       this.defaultLang = new DefaultLanguage(store);
     }
 
+    public IEnumerable<ILanguage> GetAllLanguages() {
+      return this.Languages;
+    }
+
     public ILanguage TryCreateLanguage(IContentType contentType) {
       foreach ( ILanguage lang in Languages ) {
         if ( lang.MatchesContentType(contentType) ) {
