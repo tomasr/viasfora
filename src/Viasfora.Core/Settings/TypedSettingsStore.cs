@@ -2,6 +2,7 @@
 using System.ComponentModel.Composition;
 
 namespace Winterdom.Viasfora.Settings {
+  [PartCreationPolicy(CreationPolicy.Shared)]
   [Export(typeof(ITypedSettingsStore))]
   public class TypedSettingsStore : ITypedSettingsStore {
     private ISettingsStore store;

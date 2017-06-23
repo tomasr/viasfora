@@ -19,7 +19,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void ExportButtonClick(object sender, EventArgs e) {
-      String filename = GetFileName();
+      String filename = GetExportFileName();
       if ( String.IsNullOrEmpty(filename) ) {
         return;
       }
@@ -38,12 +38,34 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void ImportButtonClick(object sender, EventArgs e) {
+      String filename = GetImportFileName();
+      if ( String.IsNullOrEmpty(filename) ) {
+        return;
+      }
+      var exporter = SettingsContext.GetService<ISettingsExport>();
+      exporter.Load(filename);
+      var store = SettingsContext.GetService<ITypedSettingsStore>();
+      exporter.Import(store);
+      store.Save();
 
+      MessageBox.Show(this, "Settings imported successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
-    private String GetFileName() {
+    private String GetExportFileName() {
       using ( var dialog = new SaveFileDialog() ) {
         dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        dialog.Filter = "XML Files (*.xml)|*.xml";
+        var result = dialog.ShowDialog(this);
+        if ( result == DialogResult.OK ) {
+          return dialog.FileName;
+        }
+        return null;
+      }
+    }
+    private String GetImportFileName() {
+      using ( var dialog = new OpenFileDialog() ) {
+        dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        dialog.CheckFileExists = true;
         dialog.Filter = "XML Files (*.xml)|*.xml";
         var result = dialog.ShowDialog(this);
         if ( result == DialogResult.OK ) {

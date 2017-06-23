@@ -47,8 +47,8 @@
       // 
       this.tableLayoutPanel1.ColumnCount = 4;
       this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 181F));
-      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 181F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 230F));
+      this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 230F));
       this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
       this.tableLayoutPanel1.Controls.Add(this.importButton, 2, 1);
       this.tableLayoutPanel1.Controls.Add(this.exportButton, 1, 1);
@@ -68,7 +68,7 @@
       this.importButton.Location = new System.Drawing.Point(385, 25);
       this.importButton.Margin = new System.Windows.Forms.Padding(5);
       this.importButton.Name = "importButton";
-      this.importButton.Size = new System.Drawing.Size(171, 42);
+      this.importButton.Size = new System.Drawing.Size(220, 42);
       this.importButton.TabIndex = 1;
       this.importButton.Text = "Import Settings";
       this.importButton.UseVisualStyleBackColor = true;
@@ -77,10 +77,10 @@
       // exportButton
       // 
       this.exportButton.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.exportButton.Location = new System.Drawing.Point(204, 25);
+      this.exportButton.Location = new System.Drawing.Point(155, 25);
       this.exportButton.Margin = new System.Windows.Forms.Padding(5);
       this.exportButton.Name = "exportButton";
-      this.exportButton.Size = new System.Drawing.Size(171, 42);
+      this.exportButton.Size = new System.Drawing.Size(220, 42);
       this.exportButton.TabIndex = 0;
       this.exportButton.Text = "Export Settings";
       this.exportButton.UseVisualStyleBackColor = true;
