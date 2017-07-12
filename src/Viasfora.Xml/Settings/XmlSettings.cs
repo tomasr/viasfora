@@ -1,39 +1,25 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Xml.Settings {
   [Export(typeof(IXmlSettings))]
-  public class XmlSettings : IXmlSettings {
-    private IVsfSettings settings;
-
-    public event EventHandler SettingsChanged;
-
+  public class XmlSettings : SettingsBase, IXmlSettings {
     public bool XmlnsPrefixEnabled {
-      get { return settings.GetBoolean(nameof(XmlnsPrefixEnabled), true); }
-      set { settings.SetValue(nameof(XmlnsPrefixEnabled), value); }
+      get { return this.Store.GetBoolean(nameof(XmlnsPrefixEnabled), true); }
+      set { this.Store.SetValue(nameof(XmlnsPrefixEnabled), value); }
     }
     public bool XmlCloseTagEnabled {
-      get { return settings.GetBoolean(nameof(XmlCloseTagEnabled), true); }
-      set { settings.SetValue(nameof(XmlCloseTagEnabled), value); }
+      get { return this.Store.GetBoolean(nameof(XmlCloseTagEnabled), true); }
+      set { this.Store.SetValue(nameof(XmlCloseTagEnabled), value); }
     }
     public bool XmlMatchTagsEnabled {
-      get { return settings.GetBoolean(nameof(XmlMatchTagsEnabled), true); }
-      set { settings.SetValue(nameof(XmlMatchTagsEnabled), value); }
+      get { return this.Store.GetBoolean(nameof(XmlMatchTagsEnabled), true); }
+      set { this.Store.SetValue(nameof(XmlMatchTagsEnabled), value); }
     }
 
     [ImportingConstructor]
-    public XmlSettings(IVsfSettings settings) {
-      this.settings = settings;
-      this.settings.SettingsChanged += OnSettingsChanged;
+    public XmlSettings(ITypedSettingsStore store) : base(store) {
     }
-
-    public void Save() {
-      this.settings.Save();
-    }
-
-    private void OnSettingsChanged(object sender, EventArgs e) {
-      SettingsChanged?.Invoke(this, e);
-    }
-
   }
 }

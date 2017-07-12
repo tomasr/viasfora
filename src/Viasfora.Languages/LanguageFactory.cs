@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguageFactory))]
@@ -13,8 +14,12 @@ namespace Winterdom.Viasfora.Languages {
     private ILanguage defaultLang;
 
     [ImportingConstructor]
-    public LanguageFactory(IVsfSettings settings) {
-      this.defaultLang = new DefaultLanguage(settings);
+    public LanguageFactory(ITypedSettingsStore store) {
+      this.defaultLang = new DefaultLanguage(store);
+    }
+
+    public IEnumerable<ILanguage> GetAllLanguages() {
+      return this.Languages;
     }
 
     public ILanguage TryCreateLanguage(IContentType contentType) {
@@ -34,7 +39,7 @@ namespace Winterdom.Viasfora.Languages {
     }
     public ILanguage TryCreateLanguage(String key) {
       foreach ( ILanguage lang in Languages ) {
-        if ( lang.KeyName == key ) {
+        if ( lang.Settings.KeyName == key ) {
           return lang;
         }
       }

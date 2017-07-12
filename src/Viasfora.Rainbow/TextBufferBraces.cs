@@ -17,7 +17,7 @@ namespace Winterdom.Viasfora.Rainbow {
     public String BraceChars { get; private set; }
     public int LastParsedPosition { get; private set; }
     public bool Enabled {
-      get { return language != null ? language.Enabled : false; }
+      get { return language != null ? language.Settings.Enabled : false; }
     }
 
     public TextBufferBraces(ITextSnapshot snapshot, ILanguage language, RainbowColoringMode coloringMode) {

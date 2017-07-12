@@ -11,7 +11,7 @@ namespace Winterdom.Viasfora.Options {
     private ClassificationList colors;
 
     public override void SaveSettingsToStorage() {
-      var settings = SettingsContext.GetSpecificSettings<IXmlSettings>();
+      var settings = SettingsContext.GetService<IXmlSettings>();
 
       settings.XmlnsPrefixEnabled = XmlnsPrefixHighlightEnabled;
       settings.XmlCloseTagEnabled = XmlCloseTagHighlightEnabled;
@@ -21,7 +21,7 @@ namespace Winterdom.Viasfora.Options {
       settings.Save();
     }
     public override void LoadSettingsFromStorage() {
-      var settings = SettingsContext.GetSpecificSettings<IXmlSettings>();
+      var settings = SettingsContext.GetService<IXmlSettings>();
       XmlnsPrefixHighlightEnabled = settings.XmlnsPrefixEnabled;
       XmlCloseTagHighlightEnabled = settings.XmlCloseTagEnabled;
       XmlMatchTagsEnabled = settings.XmlMatchTagsEnabled;

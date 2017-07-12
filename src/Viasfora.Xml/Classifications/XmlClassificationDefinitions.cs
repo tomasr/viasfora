@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Classifications {
 
-  internal static class XmlClassificationDefinitions {
+  public static class XmlClassificationDefinitions {
     [Export, Name(XmlConstants.XML_CLOSING)]
     internal static ClassificationTypeDefinition XmlClosingType = null;
 

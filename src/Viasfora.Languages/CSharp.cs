@@ -4,39 +4,45 @@ using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
-  public class CSharp : CBasedLanguage {
+  public class CSharp : CBasedLanguage, ILanguage {
     public const String ContentType = "CSharp";
-    static readonly String[] CS_KEYWORDS = {
-         "if", "else", "while", "do", "for", "foreach", 
+    protected override String[] SupportedContentTypes
+      => new String[] { ContentType };
+    public ILanguageSettings Settings { get; private set; }
+
+    protected override IBraceScanner NewBraceScanner()
+      => new CSharpBraceScanner();
+    public override IStringScanner NewStringScanner(String classificationName, String text)
+      => new CSharpStringScanner(text, classificationName);
+
+    [ImportingConstructor]
+    public CSharp(ITypedSettingsStore store) {
+      this.Settings = new CSharpSettings(store);
+    }
+  }
+
+  public class CSharpSettings : LanguageSettings {
+    protected override String[] ControlFlowDefaults => new String[] {
+         "if", "else", "while", "do", "for", "foreach",
          "switch", "break", "continue", "return", "goto", "throw",
          "yield"
       };
-    static readonly String[] CS_LINQ_KEYWORDS = {
+    protected override String[] LinqDefaults => new String[] {
          "select", "let", "where", "join", "orderby", "group",
          "by", "on", "equals", "into", "from", "descending",
          "ascending"
       };
-    static readonly String[] CS_VIS_KEYWORDS = {
+    protected override String[] VisibilityDefaults => new String[] {
          "public", "private", "protected", "internal"
       };
-    protected override String[] ControlFlowDefaults => CS_KEYWORDS;
-    protected override String[] LinqDefaults => CS_LINQ_KEYWORDS;
-    protected override String[] VisibilityDefaults => CS_VIS_KEYWORDS;
-    public override String KeyName => Constants.CSharp;
-    protected override String[] SupportedContentTypes
-      => new String[] { ContentType };
 
-    protected override IBraceScanner NewBraceScanner()
-      => new CSharpBraceScanner();
-    public override IStringScanner NewStringScanner(string text)
-      => new CSharpStringScanner(text);
-
-    [ImportingConstructor]
-    public CSharp(IVsfSettings settings) : base(settings) {
+    public CSharpSettings(ITypedSettingsStore store)
+      : base (Constants.CSharp, store) {
     }
   }
 }

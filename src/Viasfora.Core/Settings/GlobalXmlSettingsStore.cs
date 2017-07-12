@@ -6,6 +6,7 @@ using System.Xml;
 using System.Xml.Linq;
 
 namespace Winterdom.Viasfora.Settings {
+  [PartCreationPolicy(CreationPolicy.Shared)]
   [Export(typeof(ISettingsStore))]
   public class GlobalXmlSettingsStore : ISettingsStore {
     const String FILE_NAME = "viasfora.xml";

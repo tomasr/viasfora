@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Options {
 
     public override void SaveSettingsToStorage() {
       var settings = SettingsContext.GetSettings();
-      var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
+      var rainbowSettings = SettingsContext.GetService<IRainbowSettings>();
 
       settings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
       settings.CurrentColumnHighlightStyle = CurrentColumnHighlightStyle;
