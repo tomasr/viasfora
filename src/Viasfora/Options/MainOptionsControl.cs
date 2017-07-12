@@ -11,6 +11,8 @@ using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Xml;
 using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Classifications;
+using Winterdom.Viasfora.Rainbow.Classifications;
 
 namespace Winterdom.Viasfora.Options {
   public partial class MainOptionsControl : UserControl {
@@ -73,6 +75,17 @@ namespace Winterdom.Viasfora.Options {
         }
         return null;
       }
+    }
+
+    private void ExportColors(ISettingsExport exporter) {
+      ClassificationList list = new ClassificationList(new ColorStorage(this.Site));
+      list.Load(
+        typeof(CodeClassificationDefinitions),
+        typeof(RainbowClassifications),
+        typeof(XmlClassificationDefinitions)
+        );
+
+      exporter.Export(list);
     }
   }
 }
