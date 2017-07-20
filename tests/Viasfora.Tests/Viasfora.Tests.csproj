@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BraceScanners\BaseScannerTests.cs" />
+    <Compile Include="BraceScanners\JscriptBraceScannerTests.cs" />
     <Compile Include="BraceScanners\CSharpBraceScannerTests.cs" />
     <Compile Include="BraceScanners\CBraceScannerTests.cs" />
     <Compile Include="BraceScanners\FSharpBraceScannerTests.cs" />
