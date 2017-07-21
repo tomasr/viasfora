@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Rainbow;
@@ -16,12 +9,15 @@ using Winterdom.Viasfora.Rainbow.Classifications;
 
 namespace Winterdom.Viasfora.Options {
   public partial class MainOptionsControl : UserControl {
+    const String XML_FILTER = "XML Files (*.xml)|*.xml";
+    const String THEME_FILTER = "Viasfora Theme Files (*.vsftheme)|*.vsftheme";
+
     public MainOptionsControl() {
       InitializeComponent();
     }
 
     private void ExportButtonClick(object sender, EventArgs e) {
-      String filename = GetExportFileName();
+      String filename = GetSaveAsFilename(XML_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {
         return;
       }
@@ -40,7 +36,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void ImportButtonClick(object sender, EventArgs e) {
-      String filename = GetImportFileName();
+      String filename = GetOpenFilename(XML_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {
         return;
       }
@@ -53,10 +49,10 @@ namespace Winterdom.Viasfora.Options {
       MessageBox.Show(this, "Settings imported successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
-    private String GetExportFileName() {
+    private String GetSaveAsFilename(String filter) {
       using ( var dialog = new SaveFileDialog() ) {
         dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        dialog.Filter = "XML Files (*.xml)|*.xml";
+        dialog.Filter = filter;
         var result = dialog.ShowDialog(this);
         if ( result == DialogResult.OK ) {
           return dialog.FileName;
@@ -64,11 +60,11 @@ namespace Winterdom.Viasfora.Options {
         return null;
       }
     }
-    private String GetImportFileName() {
+    private String GetOpenFilename(String filter) {
       using ( var dialog = new OpenFileDialog() ) {
         dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         dialog.CheckFileExists = true;
-        dialog.Filter = "XML Files (*.xml)|*.xml";
+        dialog.Filter = filter;
         var result = dialog.ShowDialog(this);
         if ( result == DialogResult.OK ) {
           return dialog.FileName;
@@ -78,14 +74,34 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void ExportColors(ISettingsExport exporter) {
+      var list = GetClassifications();
+      exporter.Export(list);
+    }
+
+    private ClassificationList GetClassifications() {
       ClassificationList list = new ClassificationList(new ColorStorage(this.Site));
       list.Load(
         typeof(CodeClassificationDefinitions),
         typeof(RainbowClassifications),
         typeof(XmlClassificationDefinitions)
         );
+      return list;
+    }
 
-      exporter.Export(list);
+    private void SaveCurrentThemeButtonClick(object sender, EventArgs e) {
+      String filename = GetSaveAsFilename(THEME_FILTER);
+      if ( String.IsNullOrEmpty(filename) ) {
+        return;
+      }
+
+      var classifications = GetClassifications();
+      classifications.Export(filename);
+
+      MessageBox.Show(this, "Theme saved successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
+    }
+
+    private void LoadThemeButtonClick(object sender, EventArgs e) {
+
     }
   }
 }

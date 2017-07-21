@@ -1,14 +1,16 @@
 ﻿using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Utilities;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Options {
-  public class ClassificationList : ICustomExport {
+  public class ClassificationList {
     private ColorStorage storage;
     private IDictionary<String, ClassificationColors> classifications;
 
@@ -71,22 +73,21 @@ namespace Winterdom.Viasfora.Options {
       obj.Set(color, foreground);
     }
 
-    public IDictionary<String, object> Export() {
-      Dictionary<String, object> values = new Dictionary<String, object>();
+    public void Export(String filepath) {
+      JObject list = new JObject();
       foreach ( var key in this.classifications.Keys ) {
         var entry = this.classifications[key];
-        var fg = entry.Get(true);
-        var bg = entry.Get(false);
 
-        values[key.Replace(" ", "..")] = new String[] {
-          ColorTranslator.ToHtml(fg),
-          ColorTranslator.ToHtml(bg)
-          };
+        var item = new JObject();
+        item["foreground"] = ColorTranslator.ToHtml(entry.Foreground);
+        if ( entry.Background != Color.Transparent ) {
+          item["background"] = ColorTranslator.ToHtml(entry.Background);
+        }
+        item["style"] = JToken.FromObject(entry.Style);
+        list[key] = item;
       }
-      return values;
-    }
 
-    public void ExportValues(ISettingsStore store) {
+      File.WriteAllText(filepath, list.ToString());
     }
 
     private String[] ExtractClassificationNames(Type[] classificationDefinitions) {
