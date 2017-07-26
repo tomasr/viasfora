@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reflection;
-using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Options {
   public class ClassificationList {
@@ -88,6 +87,41 @@ namespace Winterdom.Viasfora.Options {
       }
 
       File.WriteAllText(filepath, list.ToString());
+    }
+
+    public void Import(String filepath) {
+      JObject list = JObject.Parse(File.ReadAllText(filepath));
+      foreach ( var obj in list.Children() ) {
+        var item = obj as JProperty;
+        if ( item == null )
+          continue;
+
+        String key = item.Name;
+        ClassificationColors classification;
+        if ( !this.classifications.TryGetValue(key, out classification) ) {
+          continue; // simply ignore it if it's unknown
+        }
+        JsonToClassification(item, classification);
+      }
+      this.Save();
+    }
+
+    private static void JsonToClassification(JProperty item, ClassificationColors classification) {
+      JObject value = item.Value as JObject;
+      var foreground = value["foreground"];
+      if ( foreground != null ) {
+        classification.Foreground = ColorTranslator.FromHtml(foreground.Value<String>());
+      }
+      var background = value["background"];
+      if ( background != null ) {
+        classification.Background = ColorTranslator.FromHtml(background.Value<String>());
+      }
+      var style = value["style"];
+      if ( style != null ) {
+        FontStyles parsedStyle;
+        if ( Enum.TryParse<FontStyles>(style.Value<String>(), out parsedStyle) )
+          classification.Style = parsedStyle;
+      }
     }
 
     private String[] ExtractClassificationNames(Type[] classificationDefinitions) {

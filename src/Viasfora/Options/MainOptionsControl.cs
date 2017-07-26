@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.Options {
       InitializeComponent();
     }
 
-    private void ExportButtonClick(object sender, EventArgs e) {
+    private void ExportSettingsButtonClick(object sender, EventArgs e) {
       String filename = GetSaveAsFilename(XML_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {
         return;
@@ -35,7 +35,7 @@ namespace Winterdom.Viasfora.Options {
       MessageBox.Show(this, "Settings exported successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
-    private void ImportButtonClick(object sender, EventArgs e) {
+    private void ImportSettingsButtonClick(object sender, EventArgs e) {
       String filename = GetOpenFilename(XML_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {
         return;
@@ -94,14 +94,34 @@ namespace Winterdom.Viasfora.Options {
         return;
       }
 
-      var classifications = GetClassifications();
-      classifications.Export(filename);
+      try {
+        var classifications = GetClassifications();
+        classifications.Export(filename);
 
-      MessageBox.Show(this, "Theme saved successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show(this, "Theme saved successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      } catch ( Exception ex ) {
+        var telemetry = SettingsContext.GetService<IVsfTelemetry>();
+        telemetry.WriteException("Failed to save current theme", ex);
+        MessageBox.Show(this, "Could not save theme: " + ex.Message, "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
     }
 
     private void LoadThemeButtonClick(object sender, EventArgs e) {
+      String filename = GetOpenFilename(THEME_FILTER);
+      if ( String.IsNullOrEmpty(filename) ) {
+        return;
+      }
 
+      try {
+        var classifications = GetClassifications();
+        classifications.Import(filename);
+
+        MessageBox.Show(this, "Theme saved successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      } catch ( Exception ex ) {
+        var telemetry = SettingsContext.GetService<IVsfTelemetry>();
+        telemetry.WriteException("Failed to load theme", ex);
+        MessageBox.Show(this, "Could not load theme: " + ex.Message, "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
     }
   }
 }

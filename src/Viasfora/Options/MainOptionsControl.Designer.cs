@@ -78,7 +78,7 @@
       this.importButton.TabIndex = 1;
       this.importButton.Text = "Import Settings";
       this.importButton.UseVisualStyleBackColor = true;
-      this.importButton.Click += new System.EventHandler(this.ImportButtonClick);
+      this.importButton.Click += new System.EventHandler(this.ImportSettingsButtonClick);
       // 
       // exportButton
       // 
@@ -90,7 +90,7 @@
       this.exportButton.TabIndex = 0;
       this.exportButton.Text = "Export Settings";
       this.exportButton.UseVisualStyleBackColor = true;
-      this.exportButton.Click += new System.EventHandler(this.ExportButtonClick);
+      this.exportButton.Click += new System.EventHandler(this.ExportSettingsButtonClick);
       // 
       // groupBox2
       // 

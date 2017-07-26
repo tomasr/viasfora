@@ -62,31 +62,12 @@ namespace Winterdom.Viasfora.Options {
     }
 
     public void Save(ColorStorage colorStorage) {
-      if ( this.backgroundChanged || this.foregroundChanged ) {
+      if ( this.HasChanged() ) {
         ColorableItemInfo[] colors = new ColorableItemInfo[1];
         var hr = colorStorage.Storage.GetItem(classificationName, colors);
         ErrorHandler.ThrowOnFailure(hr);
 
-        if ( this.foregroundChanged ) {
-          if ( foreground == Color.Transparent ) {
-            colors[0].crForeground = colorStorage.GetAutomaticColor();
-          } else {
-            colors[0].crForeground = (uint)ColorTranslator.ToWin32(foreground);
-          }
-          colors[0].bForegroundValid = 1;
-        }
-        if ( this.backgroundChanged ) {
-          if ( background == Color.Transparent ) {
-            colors[0].crBackground = colorStorage.GetAutomaticColor();
-          } else {
-            colors[0].crBackground = (uint)ColorTranslator.ToWin32(background);
-          }
-          colors[0].bBackgroundValid = 1;
-        }
-        if ( this.fontFlagsChanged ) {
-          colors[0].dwFontFlags = ToFontFlags(this.fontFlags);
-          colors[0].bFontFlagsValid = 1;
-        }
+        AssignForSave(colorStorage, colors);
 
         hr = colorStorage.Storage.SetItem(classificationName, colors);
         ErrorHandler.ThrowOnFailure(hr);
@@ -97,13 +78,44 @@ namespace Winterdom.Viasfora.Options {
       return getForeground ? this.foreground : this.background;
     }
     public void Set(Color color, bool isForeground) {
-      if ( isForeground && color != this.foreground ) {
-        this.foreground = color;
-        this.foregroundChanged = true;
+      if ( isForeground ) {
+        if ( this.foreground != color ) {
+          this.foreground = color;
+          this.foregroundChanged = true;
+        }
       } else if ( color != this.background ) {
         this.background = color;
         this.backgroundChanged = true;
       }
+    }
+
+    private void AssignForSave(ColorStorage colorStorage, ColorableItemInfo[] colors) {
+      if ( this.foregroundChanged ) {
+        if ( foreground == Color.Transparent ) {
+          colors[0].crForeground = colorStorage.GetAutomaticColor();
+        } else {
+          colors[0].crForeground = (uint)ColorTranslator.ToWin32(foreground);
+        }
+        colors[0].bForegroundValid = 1;
+      }
+      if ( this.backgroundChanged ) {
+        if ( background == Color.Transparent ) {
+          colors[0].crBackground = colorStorage.GetAutomaticColor();
+        } else {
+          colors[0].crBackground = (uint)ColorTranslator.ToWin32(background);
+        }
+        colors[0].bBackgroundValid = 1;
+      }
+      if ( this.fontFlagsChanged ) {
+        colors[0].dwFontFlags = ToFontFlags(this.fontFlags);
+        colors[0].bFontFlagsValid = 1;
+      }
+    }
+
+    private bool HasChanged() {
+      return this.foregroundChanged
+          || this.backgroundChanged
+          || this.fontFlagsChanged;
     }
 
     private Color MapColor(ColorStorage storage, uint colorRef) {
@@ -170,9 +182,12 @@ namespace Winterdom.Viasfora.Options {
         dwFontFlags |= (uint)FONTFLAGS.FF_BOLD;
       if ( style.HasFlag(FontStyles.Strikethrough) )
         dwFontFlags |= (uint)FONTFLAGS.FF_STRIKETHROUGH;
+      // sure wished the following worked
+      /*
+      if ( style.HasFlag(FontStyles.Italics) )
+        dwFontFlags |= (uint)4;
+      */
       return dwFontFlags;
     }
   }
-
-
 }
