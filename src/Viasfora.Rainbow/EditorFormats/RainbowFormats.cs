@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class Rainbow1Format : ClassificationFormatDefinition {
     public Rainbow1Format() {
-      this.DisplayName = Rainbows.Rainbow1;
+      this.DisplayName = "Viasfora Rainbow Brace 1";
       this.ForegroundColor = Color.FromArgb(0xff, 0xff, 0x99, 0x00);
     }
   }
@@ -23,7 +23,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class Rainbow2Format : ClassificationFormatDefinition {
     public Rainbow2Format() {
-      this.DisplayName = Rainbows.Rainbow2;
+      this.DisplayName = "Viasfora Rainbow Brace 2";
       this.ForegroundColor = Colors.DeepPink; //Colors.MediumVioletRed;
     }
   }
@@ -34,7 +34,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class Rainbow3Format : ClassificationFormatDefinition {
     public Rainbow3Format() {
-      this.DisplayName = Rainbows.Rainbow3;
+      this.DisplayName = "Viasfora Rainbow Brace 3";
       this.ForegroundColor = Colors.YellowGreen; //MediumSeaGreen;
     }
   }
@@ -45,7 +45,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class Rainbow4Format : ClassificationFormatDefinition {
     public Rainbow4Format() {
-      this.DisplayName = Rainbows.Rainbow4;
+      this.DisplayName = "Viasfora Rainbow Brace 4";
       this.ForegroundColor = Colors.DarkViolet;
     }
   }
@@ -56,7 +56,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class Rainbow5Format : ClassificationFormatDefinition {
     public Rainbow5Format() {
-      this.DisplayName = Rainbows.Rainbow5;
+      this.DisplayName = "Viasfora Rainbow Brace 5";
       this.ForegroundColor = Colors.DimGray;
     }
   }
@@ -67,7 +67,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class Rainbow6Format : ClassificationFormatDefinition {
     public Rainbow6Format() {
-      this.DisplayName = Rainbows.Rainbow6;
+      this.DisplayName = "Viasfora Rainbow Brace 6";
       this.ForegroundColor = Colors.RoyalBlue;
     }
   }
@@ -78,7 +78,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class Rainbow7Format : ClassificationFormatDefinition {
     public Rainbow7Format() {
-      this.DisplayName = Rainbows.Rainbow7;
+      this.DisplayName = "Viasfora Rainbow Brace 7";
       this.ForegroundColor = Colors.Crimson;
     }
   }
@@ -89,7 +89,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class Rainbow8Format : ClassificationFormatDefinition {
     public Rainbow8Format() {
-      this.DisplayName = Rainbows.Rainbow8;
+      this.DisplayName = "Viasfora Rainbow Brace 8";
       this.ForegroundColor = Colors.DarkTurquoise;
     }
   }
@@ -100,7 +100,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class Rainbow9Format : ClassificationFormatDefinition {
     public Rainbow9Format() {
-      this.DisplayName = Rainbows.Rainbow9;
+      this.DisplayName = "Viasfora Rainbow Brace 9";
       this.ForegroundColor = Colors.Green;
     }
   }
@@ -125,7 +125,7 @@ namespace Winterdom.Viasfora.Rainbow.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class RainbowErrorFormat : ClassificationFormatDefinition {
     public RainbowErrorFormat() {
-      this.DisplayName = Rainbows.RainbowError;
+      this.DisplayName = "Viasfora Rainbow Brace Error";
       this.BackgroundColor = Colors.LightCoral;
       this.ForegroundCustomizable = false;
     }

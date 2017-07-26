@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class VisibilityKeywordFormat : ClassificationFormatDefinition {
     public VisibilityKeywordFormat() {
-      this.DisplayName = Constants.VISIBILITY_CLASSIF_NAME;
+      this.DisplayName = "Viasfora Visibility Keyword";
       this.ForegroundColor = Colors.DimGray;
     }
   }

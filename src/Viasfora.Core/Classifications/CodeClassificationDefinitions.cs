@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.Utilities;
 namespace Winterdom.Viasfora.Classifications {
 
   public static class CodeClassificationDefinitions {
-    [Export, Name(Constants.KEYWORD_CLASSIF_NAME)]
+    [Export, Name(Constants.FLOW_CONTROL_CLASSIF_NAME)]
     internal static ClassificationTypeDefinition FlowControlClassificationType = null;
 
     [Export, Name(Constants.LINQ_CLASSIF_NAME)]

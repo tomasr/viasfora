@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class LinqKeywordFormat : ClassificationFormatDefinition {
     public LinqKeywordFormat() {
-      this.DisplayName = Constants.LINQ_CLASSIF_NAME;
+      this.DisplayName = "Viasfora Query Operator";
       this.ForegroundColor = Colors.MediumSeaGreen;
     }
   }

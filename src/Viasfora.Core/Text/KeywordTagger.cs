@@ -31,7 +31,7 @@ namespace Winterdom.Viasfora.Text {
       this.aggregator = provider.Aggregator.CreateTagAggregator<IClassificationTag>(buffer);
       this.langFactory = provider.LanguageFactory;
 
-      keywordClassification = provider.GetTag(Constants.KEYWORD_CLASSIF_NAME);
+      keywordClassification = provider.GetTag(Constants.FLOW_CONTROL_CLASSIF_NAME);
       linqClassification = provider.GetTag(Constants.LINQ_CLASSIF_NAME);
       visClassification = provider.GetTag(Constants.VISIBILITY_CLASSIF_NAME);
       stringEscapeClassification = provider.GetTag(Constants.STRING_ESCAPE_CLASSIF_NAME);

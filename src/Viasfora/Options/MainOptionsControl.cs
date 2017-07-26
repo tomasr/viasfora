@@ -116,7 +116,7 @@ namespace Winterdom.Viasfora.Options {
         var classifications = GetClassifications();
         classifications.Import(filename);
 
-        MessageBox.Show(this, "Theme saved successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        MessageBox.Show(this, "Theme imported successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
       } catch ( Exception ex ) {
         var telemetry = SettingsContext.GetService<IVsfTelemetry>();
         telemetry.WriteException("Failed to load theme", ex);

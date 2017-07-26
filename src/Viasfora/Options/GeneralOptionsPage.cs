@@ -50,7 +50,7 @@ namespace Winterdom.Viasfora.Options {
       this.colors = new ClassificationList(new ColorStorage(this.Site));
       colors.Load(
         Constants.COLUMN_HIGHLIGHT,
-        Constants.KEYWORD_CLASSIF_NAME,
+        Constants.FLOW_CONTROL_CLASSIF_NAME,
         Constants.LINQ_CLASSIF_NAME,
         Constants.VISIBILITY_CLASSIF_NAME,
         Constants.STRING_ESCAPE_CLASSIF_NAME,
@@ -101,8 +101,8 @@ namespace Winterdom.Viasfora.Options {
     [Description("Foreground color used to highlight flow control keywords")]
     [Category("Text Editor")]
     public Color FlowControlForegroundColor {
-      get { return colors.Get(Constants.KEYWORD_CLASSIF_NAME, true); }
-      set { colors.Set(Constants.KEYWORD_CLASSIF_NAME, true, value); }
+      get { return colors.Get(Constants.FLOW_CONTROL_CLASSIF_NAME, true); }
+      set { colors.Set(Constants.FLOW_CONTROL_CLASSIF_NAME, true, value); }
     }
     [LocDisplayName("Query Keywords")]
     [Description("Foreground color used to highlight LINQ/Query keywords")]
