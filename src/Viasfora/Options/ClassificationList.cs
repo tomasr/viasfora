@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora.Options {
   public class ClassificationList {
     private ColorStorage storage;
     private IDictionary<String, ClassificationColors> classifications;
+    private const String AUTOMATIC_COLOR = "Automatic";
 
     public ClassificationList(ColorStorage colorStorage) {
       storage = colorStorage;
@@ -78,10 +79,8 @@ namespace Winterdom.Viasfora.Options {
         var entry = this.classifications[key];
 
         var item = new JObject();
-        item["foreground"] = ColorTranslator.ToHtml(entry.Foreground);
-        if ( entry.Background != Color.Transparent ) {
-          item["background"] = ColorTranslator.ToHtml(entry.Background);
-        }
+        item["foreground"] = ColorToHtml(entry.Foreground);
+        item["background"] = ColorToHtml(entry.Background);
         item["style"] = JToken.FromObject(entry.Style);
         list[key] = item;
       }
@@ -106,15 +105,28 @@ namespace Winterdom.Viasfora.Options {
       this.Save();
     }
 
+    private static String ColorToHtml(Color color) {
+      return color == Color.Transparent
+           ? AUTOMATIC_COLOR
+           : ColorTranslator.ToHtml(color);
+    }
+
+    private static Color ColorFromHtml(String text) {
+      if ( text.Equals(AUTOMATIC_COLOR, StringComparison.InvariantCultureIgnoreCase) ) {
+        return Color.Transparent;
+      }
+      return ColorTranslator.FromHtml(text);
+    }
+
     private static void JsonToClassification(JProperty item, ClassificationColors classification) {
       JObject value = item.Value as JObject;
       var foreground = value["foreground"];
       if ( foreground != null ) {
-        classification.Foreground = ColorTranslator.FromHtml(foreground.Value<String>());
+        classification.Foreground = ColorFromHtml(foreground.Value<String>());
       }
       var background = value["background"];
       if ( background != null ) {
-        classification.Background = ColorTranslator.FromHtml(background.Value<String>());
+        classification.Background = ColorFromHtml(background.Value<String>());
       }
       var style = value["style"];
       if ( style != null ) {
