@@ -9,67 +9,57 @@ using Winterdom.Viasfora.Rainbow.Classifications;
 
 namespace Winterdom.Viasfora.Options {
   public partial class MainOptionsControl : UserControl {
-    const String XML_FILTER = "XML Files (*.xml)|*.xml";
-    const String THEME_FILTER = "Viasfora Theme Files (*.vsftheme)|*.vsftheme";
+    private const String XML_FILTER = "XML Files (*.xml)|*.xml";
+    private const String THEME_FILTER = "Viasfora Theme Files (*.vsftheme)|*.vsftheme";
+    private IVsfTelemetry telemetry;
 
     public MainOptionsControl() {
       InitializeComponent();
+      this.telemetry = SettingsContext.GetService<IVsfTelemetry>();
     }
 
     private void ExportSettingsButtonClick(object sender, EventArgs e) {
+      this.telemetry.WriteEvent("ExportSettings");
       String filename = GetSaveAsFilename(XML_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {
         return;
       }
 
-      var exporter = SettingsContext.GetService<ISettingsExport>();
-      exporter.Export(SettingsContext.GetSettings());
-      exporter.Export(SettingsContext.GetService<IRainbowSettings>());
-      exporter.Export(SettingsContext.GetService<IXmlSettings>());
+      try {
+        var exporter = SettingsContext.GetService<ISettingsExport>();
+        exporter.Export(SettingsContext.GetSettings());
+        exporter.Export(SettingsContext.GetService<IRainbowSettings>());
+        exporter.Export(SettingsContext.GetService<IXmlSettings>());
 
-      var languageFactory = SettingsContext.GetService<ILanguageFactory>();
-      foreach ( var lang in languageFactory.GetAllLanguages() ) {
-        exporter.Export(lang.Settings);
+        var languageFactory = SettingsContext.GetService<ILanguageFactory>();
+        foreach ( var lang in languageFactory.GetAllLanguages() ) {
+          exporter.Export(lang.Settings);
+        }
+        exporter.Save(filename);
+        MessageBox.Show(this, "Settings exported successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      } catch ( Exception ex ) {
+        this.telemetry.WriteException("Failed to export settings", ex);
+        MessageBox.Show(this, "Could not export settings: " + ex.Message, "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
-      exporter.Save(filename);
-      MessageBox.Show(this, "Settings exported successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
     }
 
     private void ImportSettingsButtonClick(object sender, EventArgs e) {
+      this.telemetry.WriteEvent("ImportSettings");
       String filename = GetOpenFilename(XML_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {
         return;
       }
-      var exporter = SettingsContext.GetService<ISettingsExport>();
-      exporter.Load(filename);
-      var store = SettingsContext.GetService<ITypedSettingsStore>();
-      exporter.Import(store);
-      store.Save();
+      try {
+        var exporter = SettingsContext.GetService<ISettingsExport>();
+        exporter.Load(filename);
+        var store = SettingsContext.GetService<ITypedSettingsStore>();
+        exporter.Import(store);
+        store.Save();
 
-      MessageBox.Show(this, "Settings imported successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
-    }
-
-    private String GetSaveAsFilename(String filter) {
-      using ( var dialog = new SaveFileDialog() ) {
-        dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        dialog.Filter = filter;
-        var result = dialog.ShowDialog(this);
-        if ( result == DialogResult.OK ) {
-          return dialog.FileName;
-        }
-        return null;
-      }
-    }
-    private String GetOpenFilename(String filter) {
-      using ( var dialog = new OpenFileDialog() ) {
-        dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-        dialog.CheckFileExists = true;
-        dialog.Filter = filter;
-        var result = dialog.ShowDialog(this);
-        if ( result == DialogResult.OK ) {
-          return dialog.FileName;
-        }
-        return null;
+        MessageBox.Show(this, "Settings imported successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      } catch ( Exception ex ) {
+        this.telemetry.WriteException("Failed to import settings", ex);
+        MessageBox.Show(this, "Could not import settings: " + ex.Message, "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
@@ -89,6 +79,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void SaveCurrentThemeButtonClick(object sender, EventArgs e) {
+      this.telemetry.WriteEvent("ExportTheme");
       String filename = GetSaveAsFilename(THEME_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {
         return;
@@ -100,13 +91,13 @@ namespace Winterdom.Viasfora.Options {
 
         MessageBox.Show(this, "Theme saved successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
       } catch ( Exception ex ) {
-        var telemetry = SettingsContext.GetService<IVsfTelemetry>();
-        telemetry.WriteException("Failed to save current theme", ex);
+        this.telemetry.WriteException("Failed to save current theme", ex);
         MessageBox.Show(this, "Could not save theme: " + ex.Message, "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Error);
       }
     }
 
     private void LoadThemeButtonClick(object sender, EventArgs e) {
+      this.telemetry.WriteEvent("ImportTheme");
       String filename = GetOpenFilename(THEME_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {
         return;
@@ -118,9 +109,33 @@ namespace Winterdom.Viasfora.Options {
 
         MessageBox.Show(this, "Theme imported successfully.", "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Information);
       } catch ( Exception ex ) {
-        var telemetry = SettingsContext.GetService<IVsfTelemetry>();
-        telemetry.WriteException("Failed to load theme", ex);
+        this.telemetry.WriteException("Failed to load theme", ex);
         MessageBox.Show(this, "Could not load theme: " + ex.Message, "Viasfora", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
+    }
+
+    private String GetSaveAsFilename(String filter) {
+      using ( var dialog = new SaveFileDialog() ) {
+        dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        dialog.Filter = filter;
+        var result = dialog.ShowDialog(this);
+        if ( result == DialogResult.OK ) {
+          return dialog.FileName;
+        }
+        return null;
+      }
+    }
+
+    private String GetOpenFilename(String filter) {
+      using ( var dialog = new OpenFileDialog() ) {
+        dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+        dialog.CheckFileExists = true;
+        dialog.Filter = filter;
+        var result = dialog.ShowDialog(this);
+        if ( result == DialogResult.OK ) {
+          return dialog.FileName;
+        }
+        return null;
       }
     }
   }
