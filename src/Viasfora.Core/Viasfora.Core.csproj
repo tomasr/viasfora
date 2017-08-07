@@ -170,6 +170,7 @@
       <DependentUpon>ZoomTrackBar.cs</DependentUpon>
     </Compile>
     <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
+    <Compile Include="EditorFormats\CurrentLineFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="EditorFormats\FormatSpecifierFormat.cs" />
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
