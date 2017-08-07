@@ -20,8 +20,8 @@ namespace Winterdom.Viasfora.Settings {
       set { this.Store.SetValue(nameof(EscapeSequencesEnabled), value); }
     }
     public bool CurrentLineHighlightEnabled {
-      get { return GetBoolean(nameof(CurrentLineHighlightEnabled), false); }
-      set { SetValue(nameof(CurrentLineHighlightEnabled), value); }
+      get { return this.Store.GetBoolean(nameof(CurrentLineHighlightEnabled), false); }
+      set { this.Store.SetValue(nameof(CurrentLineHighlightEnabled), value); }
     }
     public bool CurrentColumnHighlightEnabled {
       get { return this.Store.GetBoolean(nameof(CurrentColumnHighlightEnabled), false); }
