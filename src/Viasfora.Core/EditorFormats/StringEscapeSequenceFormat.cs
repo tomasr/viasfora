@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   [Order(After = Priority.High)]
   public sealed class StringEscapeSequenceFormat : ClassificationFormatDefinition {
     public StringEscapeSequenceFormat() {
-      this.DisplayName = Constants.STRING_ESCAPE_CLASSIF_NAME;
+      this.DisplayName = "Viasfora String Escape Sequence";
       this.ForegroundColor = Colors.Magenta;
     }
   }

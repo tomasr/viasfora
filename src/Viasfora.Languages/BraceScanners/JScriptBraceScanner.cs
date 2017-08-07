@@ -4,13 +4,16 @@ using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.BraceScanners {
-  public class JScriptBraceScanner : IBraceScanner {
+  public class JScriptBraceScanner : IBraceScanner, IResumeControl {
     const int stText = 0;
     const int stString = 1;
     const int stChar = 2;
     const int stRegex = 3;
     const int stMultiLineComment = 4;
+    const int stIString = 5;
     private int status = stText;
+    private int nestingLevel = 0;
+    private bool parsingExpression = false;
 
     public String BraceList {
       get { return "(){}[]"; }
@@ -20,7 +23,13 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     public void Reset(int state) {
-      this.status = stText;
+      this.status = state & 0xFF;
+      this.parsingExpression = (state & 0x08000000) != 0;
+      this.nestingLevel = (state & 0xFF0000) >> 24;
+    }
+
+    public bool CanResume(CharPos brace) {
+      return brace.State == stText;
     }
 
     public bool Extract(ITextChars tc, ref CharPos pos) {
@@ -29,6 +38,11 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           case stString: ParseString(tc); break;
           case stChar: ParseCharLiteral(tc); break;
           case stMultiLineComment: ParseMultiLineComment(tc); break;
+          case stIString:
+            if ( ParseInterpolatedString(tc, ref pos) ) {
+              return true;
+            }
+            break;
           default:
             return ParseText(tc, ref pos);
         }
@@ -58,6 +72,10 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           this.status = stString;
           tc.Next();
           this.ParseCharLiteral(tc);
+        } else if ( tc.Char() == '`' ) {
+          this.status = stIString;
+          tc.Next();
+          return this.ParseInterpolatedString(tc, ref pos);
         } else if ( this.BraceList.IndexOf(tc.Char()) >= 0 ) {
           pos = new CharPos(tc.Char(), tc.AbsolutePosition);
           tc.Next();
@@ -136,6 +154,79 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           tc.Next();
         }
       }
+    }
+
+    // template literal support, 
+    // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
+    private bool ParseInterpolatedString(ITextChars tc, ref CharPos pos) {
+      while ( !tc.EndOfLine ) {
+        if ( parsingExpression ) {
+          // inside template literal expression in ${}
+          if ( ParseTemplateExpressionChar(tc, ref pos) )
+            return true;
+        } else {
+          // in the string part
+          if ( tc.Char() == '\\' ) {
+            // skip over escape sequences
+            tc.Skip(2);
+          } else if ( tc.Char() == '$' && tc.NChar() == '{' ) {
+            // opening expression
+            this.parsingExpression = true;
+            this.nestingLevel++;
+            tc.Next(); // skip $
+            pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
+            tc.Next(); // skip {
+            return true;
+          } else if ( tc.Char() == '`' ) {
+            // done parsing the template 
+            this.status = stText;
+            tc.Next();
+            break;
+          } else {
+            tc.Next();
+          }
+        }
+      }
+      return false;
+    }
+
+    private bool ParseTemplateExpressionChar(ITextChars tc, ref CharPos pos) {
+      if ( tc.Char() == '"' ) {
+        // opening string
+        tc.Next();
+        this.ParseString(tc);
+        this.status = stIString;
+      } else if ( tc.Char() == '\'' ) {
+        tc.Next();
+        ParseCharLiteral(tc);
+        this.status = stIString;
+      } else if ( tc.Char() == '}' ) {
+        // reached the end
+        this.nestingLevel--;
+        if ( nestingLevel == 0 ) {
+          this.parsingExpression = false;
+        }
+        pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
+        tc.Next();
+        return true;
+      } else if ( BraceList.Contains(tc.Char()) ) {
+        pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
+        if ( tc.Char() == '{' )
+          this.nestingLevel++;
+        tc.Next();
+        return true;
+      } else {
+        tc.Next();
+      }
+      return false;
+    }
+
+    private int EncodedState() {
+      int encoded = status;
+      if ( parsingExpression )
+        encoded |= 0x08000000;
+      encoded |= (nestingLevel & 0xFF) << 24;
+      return encoded;
     }
   }
 }

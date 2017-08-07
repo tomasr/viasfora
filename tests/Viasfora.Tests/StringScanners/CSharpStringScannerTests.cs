@@ -96,6 +96,12 @@ namespace Viasfora.Tests.StringScanners {
       Assert.Equal(new StringPart(13,2), parser.Next());
       Assert.Equal(null, parser.Next());
     }
+    [Fact]
+    public void EscapeSequenceInVerbatimInterpolatedStringIsIgnored() {
+      String input = "$@\"some\\a value\"";
+      var parser = new CSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
     //
     // Format Specifier Tests
     //

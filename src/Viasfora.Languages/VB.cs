@@ -4,38 +4,22 @@ using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
-  class VB : LanguageInfo {
+  class VB : LanguageInfo, ILanguage {
     public const String ContentType = "Basic";
     public const String VBScriptContentType = "vbscript";
-
-    static readonly String[] VB_KEYWORDS = {
-         "goto", "resume", "throw", "exit", "stop",
-         "do", "loop", "for", "next", "for each",
-         "with", "choose", "if", "then", "else", "select",
-         "case", "switch", "call", "return", "while"
-      };
-    static readonly String[] VB_VIS_KEYWORDS = {
-         "friend", "public", "private", "protected"
-      };
-    static readonly String[] VB_LINQ_KEYWORDS = {
-         "aggregate", "distinct", "equals", "from", "in",
-         "group", "join", "let", "order", "by",
-         "skip", "take", "where"
-      };
-    protected override String[] ControlFlowDefaults => VB_KEYWORDS;
-    protected override String[] LinqDefaults => VB_LINQ_KEYWORDS;
-    protected override String[] VisibilityDefaults => VB_VIS_KEYWORDS;
-    public override String KeyName => Constants.VB;
 
     protected override String[] SupportedContentTypes {
       get { return new String[] { ContentType, VBScriptContentType }; }
     }
+    public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
-    public VB(IVsfSettings settings) : base(settings) {
+    public VB(ITypedSettingsStore store) {
+      this.Settings = new VBSettings(store);
     }
 
     protected override IBraceScanner NewBraceScanner()
@@ -44,6 +28,27 @@ namespace Winterdom.Viasfora.Languages {
     public override bool IsKeywordClassification(IClassificationType classificationType) {
       return CompareClassification(classificationType, "Keyword")
           || CompareClassification(classificationType, "VBScript Keyword");
+    }
+  }
+
+  class VBSettings : LanguageSettings {
+    protected override String[] ControlFlowDefaults => new String[] {
+       "goto", "resume", "throw", "exit", "stop",
+       "do", "loop", "for", "next", "for each",
+       "with", "choose", "if", "then", "else", "select",
+       "case", "switch", "call", "return", "while"
+      };
+    protected override String[] LinqDefaults => new String[] {
+       "aggregate", "distinct", "equals", "from", "in",
+       "group", "join", "let", "order", "by",
+       "skip", "take", "where"
+      };
+    protected override String[] VisibilityDefaults => new String[] {
+       "friend", "public", "private", "protected"
+      };
+
+    public VBSettings(ITypedSettingsStore store)
+      : base (Constants.VB, store) {
     }
   }
 }

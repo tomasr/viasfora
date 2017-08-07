@@ -31,7 +31,7 @@ namespace Winterdom.Viasfora.Text {
       this.aggregator = provider.Aggregator.CreateTagAggregator<IClassificationTag>(buffer);
       this.langFactory = provider.LanguageFactory;
 
-      keywordClassification = provider.GetTag(Constants.KEYWORD_CLASSIF_NAME);
+      keywordClassification = provider.GetTag(Constants.FLOW_CONTROL_CLASSIF_NAME);
       linqClassification = provider.GetTag(Constants.LINQ_CLASSIF_NAME);
       visClassification = provider.GetTag(Constants.VISIBILITY_CLASSIF_NAME);
       stringEscapeClassification = provider.GetTag(Constants.STRING_ESCAPE_CLASSIF_NAME);
@@ -46,7 +46,7 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ILanguage lang = GetLanguageByContentType(theBuffer.ContentType);
-      if ( !lang.Enabled ) {
+      if ( !lang.Settings.Enabled ) {
         yield break;
       }
 
@@ -71,7 +71,7 @@ namespace Winterdom.Viasfora.Text {
         var classificationType = tagSpan.Tag.ClassificationType;
         String name = classificationType.Classification.ToLower();
         if ( eshe && name.Contains("string") ) {
-          foreach ( var escapeTag in ProcessEscapeSequences(lang, tagSpan.Span) ) {
+          foreach ( var escapeTag in ProcessEscapeSequences(lang, name, tagSpan.Span) ) {
             yield return escapeTag;
           }
         }
@@ -165,11 +165,11 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(
-          ILanguage lang, SnapshotSpan cs) {
+          ILanguage lang, String classificationName, SnapshotSpan cs) {
       if ( cs.IsEmpty ) yield break;
       String text = cs.GetText();
 
-      var parser = lang.NewStringScanner(text);
+      var parser = lang.NewStringScanner(classificationName, text);
       if ( parser == null )
         yield break;
 

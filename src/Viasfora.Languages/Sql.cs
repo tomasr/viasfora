@@ -3,42 +3,43 @@ using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
-  class Sql : LanguageInfo {
+  class Sql : LanguageInfo, ILanguage {
     private readonly static String[] knownContentTypes =
       new String[] { "Sql Server Tools", "SQL", "StreamAnalytics" };
-
-    static readonly String[] KEYWORDS = {
-          "begin", "end", "break", "continue", "goto", "if",
-          "else", "then", "return", "throw", "try", "catch",
-          "waitfor", "while"
-      };
-    static readonly String[] VIS_KEYWORDS = {
-         "public", "external"
-      };
-    static readonly String[] LINQ_KEYWORDS = {
-         "select", "update", "insert", "delete", "merge"
-      };
-
-    protected override String[] ControlFlowDefaults => KEYWORDS;
-    protected override String[] LinqDefaults => LINQ_KEYWORDS;
-    protected override String[] VisibilityDefaults => VIS_KEYWORDS;
-    public override String KeyName => Constants.Sql;
     protected override String[] SupportedContentTypes => knownContentTypes;
+    public ILanguageSettings Settings { get; private set; }
+
+    [ImportingConstructor]
+    public Sql(ITypedSettingsStore store) {
+      this.Settings = new SqlSettings(store);
+      // the SQL classifier will return text spans that include
+      // trailing spaces (such as "IF ")
+     this.NormalizationFunction = text => text.Trim();
+    }
 
     protected override IBraceScanner NewBraceScanner()
       => new SqlBraceScanner();
+  }
 
-    [ImportingConstructor]
-    public Sql(IVsfSettings settings) : base(settings) {
-    }
+  class SqlSettings : LanguageSettings {
+    protected override String[] ControlFlowDefaults => new String[] {
+        "begin", "end", "break", "continue", "goto", "if",
+        "else", "then", "return", "throw", "try", "catch",
+        "waitfor", "while"
+      };
+    protected override String[] LinqDefaults => new String[] {
+       "select", "update", "insert", "delete", "merge"
+      };
+    protected override String[] VisibilityDefaults => new String[] {
+       "public", "external"
+      };
 
-    protected override string TextToCompare(string text) {
-      // the SQL classifier will return text spans that include
-      // trailing spaces (such as "IF ")
-      return text.Trim();
+    public SqlSettings(ITypedSettingsStore store)
+      : base (Constants.Sql, store) {
     }
   }
 }

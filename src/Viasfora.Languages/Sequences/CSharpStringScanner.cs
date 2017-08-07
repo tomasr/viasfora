@@ -7,18 +7,20 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     private bool isInterpolated;
     private bool isVerbatim;
 
-    public CSharpStringScanner(String text) {
+    public CSharpStringScanner(String text, String classificationName = "string") {
       this.text = new StringChars(text, 0, text.Length - 1);
+      this.isVerbatim = classificationName == "string - verbatim";
       // If this is an at-string, skip it
       char first = this.text.Char();
       if ( first == '@' ) {
         this.isVerbatim = true;
         this.text.Skip(2);
       } else if ( first == '$' ) {
+        this.isInterpolated = true;
         if ( this.text.NChar() == '@' ) {
-          this.text.SkipRemainder();
+          this.isVerbatim = true;
+          this.text.Skip(3);
         } else {
-          this.isInterpolated = true;
           this.text.Skip(2);
         }
       } else if ( first == '"' || first == '\'' ) {
@@ -33,7 +35,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
           return BasicCStringScanner.ParseEscapeSequence(text);
         } else if ( text.Char() == '{' && text.NChar() == '{' ) {
           text.Next(); // skip it
-        } else if ( text.Char() == '{' && !isInterpolated ) {
+        } else if ( text.Char() == '{' && !this.isInterpolated ) {
           StringPart part = new StringPart();
           if ( ParseFormatSpecifier(ref part) )
             return part;

@@ -31,7 +31,7 @@ namespace Winterdom.Viasfora.Text {
       var italicsFixer = textView.Properties.GetOrCreateSingletonProperty(
           () => new ItalicsFormatter(textView, map, Settings)
         );
-      italicsFixer.AddClassification(Constants.KEYWORD_CLASSIF_NAME);
+      italicsFixer.AddClassification(Constants.FLOW_CONTROL_CLASSIF_NAME);
       return new KeywordTagger(buffer, this) as ITagger<T>;
     }
 

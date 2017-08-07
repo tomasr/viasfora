@@ -132,6 +132,9 @@
   <data name="310" xml:space="preserve">
     <value>General</value>
   </data>
+  <data name="315" xml:space="preserve">
+    <value>Export / Import</value>
+  </data>
   <data name="320" xml:space="preserve">
     <value>Rainbow Braces</value>
   </data>

@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BraceScanners\BaseScannerTests.cs" />
+    <Compile Include="BraceScanners\JscriptBraceScannerTests.cs" />
     <Compile Include="BraceScanners\CSharpBraceScannerTests.cs" />
     <Compile Include="BraceScanners\CBraceScannerTests.cs" />
     <Compile Include="BraceScanners\FSharpBraceScannerTests.cs" />
@@ -193,7 +194,7 @@
     <Compile Include="Settings\GlobalXmlSettingsStoreTests.cs" />
     <Compile Include="Settings\OutlineSettingsTests.cs" />
     <Compile Include="Settings\SolutionUserSettingsTests.cs" />
-    <Compile Include="Settings\VsfSettingsTests.cs" />
+    <Compile Include="Settings\StorageConversionsTests.cs" />
     <Compile Include="StringScanners\RStringScannerTests.cs" />
     <Compile Include="VS15AssemblyResolver.cs" />
     <Compile Include="VsfEditorHost.cs" />

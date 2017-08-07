@@ -164,6 +164,7 @@
     <Compile Include="Json.cs" />
     <Compile Include="LanguageFactory.cs" />
     <Compile Include="LanguageInfo.cs" />
+    <Compile Include="LanguageSettings.cs" />
     <Compile Include="PowerShell.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Python.cs" />

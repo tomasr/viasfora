@@ -9,7 +9,7 @@ namespace Winterdom.Viasfora {
       var model = new SComponentModel();
       return model.GetService<IVsfSettings>();
     }
-    public static T GetSpecificSettings<T>() {
+    public static T GetService<T>() {
       var model = new SComponentModel();
       return model.GetService<T>();
     }

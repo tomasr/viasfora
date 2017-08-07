@@ -154,6 +154,7 @@
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ContentTypes.cs" />
+    <Compile Include="Contracts\ILanguageSettings.cs" />
     <Compile Include="Contracts\ILogger.cs" />
     <Compile Include="Contracts\IPackageUserOptions.cs" />
     <Compile Include="Contracts\IPresentationModeState.cs" />
@@ -169,6 +170,7 @@
       <DependentUpon>ZoomTrackBar.cs</DependentUpon>
     </Compile>
     <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
+    <Compile Include="EditorFormats\CurrentLineFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="EditorFormats\FormatSpecifierFormat.cs" />
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
@@ -179,6 +181,7 @@
     <Compile Include="IUpdatableSettings.cs" />
     <Compile Include="IVsfSettings.cs" />
     <Compile Include="JsonExtensions.cs" />
+    <Compile Include="LanguageExtensions.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />
     <Compile Include="Margins\DevMarginViewModel.cs" />
     <Compile Include="Margins\DevMarginVisual.xaml.cs">
@@ -207,13 +210,21 @@
     <Compile Include="SettingsContext.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
+    <Compile Include="Settings\ICustomExport.cs" />
     <Compile Include="Settings\IPersistSettings.cs" />
+    <Compile Include="Settings\ISettingsExport.cs" />
     <Compile Include="Settings\ISettingsObject.cs" />
     <Compile Include="Settings\ISettingsStore.cs" />
     <Compile Include="Settings\ISolutionUserSettings.cs" />
+    <Compile Include="Settings\IStorageConversions.cs" />
+    <Compile Include="Settings\ITypedSettingsStore.cs" />
     <Compile Include="Settings\OutlineSettings.cs" />
+    <Compile Include="Settings\SettingsBase.cs" />
+    <Compile Include="Settings\SettingsExporter.cs" />
+    <Compile Include="Settings\StorageConversions.cs" />
     <Compile Include="Settings\SolutionUserSettings.cs" />
     <Compile Include="Settings\SuoPersistUserSettings.cs" />
+    <Compile Include="Settings\TypedSettingsStore.cs" />
     <Compile Include="Settings\VsfSettings.cs" />
     <Compile Include="Settings\VsfSettingsEventManager.cs" />
     <Compile Include="SnapshotExtensions.cs" />
@@ -227,6 +238,8 @@
     <Compile Include="Text\ColumnStyle.cs" />
     <Compile Include="Text\CurrentColumnAdornment.cs" />
     <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
+    <Compile Include="Text\CurrentLineAdornment.cs" />
+    <Compile Include="Text\CurrentLineAdornmentFactory.cs" />
     <Compile Include="Text\KeywordTagger.cs" />
     <Compile Include="Text\KeywordTaggerProvider.cs" />
     <Compile Include="Text\ModelineFactory.cs" />

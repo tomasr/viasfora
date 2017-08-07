@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Windows.Media;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Classifications {
 
-  internal static class CodeClassificationDefinitions {
-    [Export, Name(Constants.KEYWORD_CLASSIF_NAME)]
+  public static class CodeClassificationDefinitions {
+    [Export, Name(Constants.FLOW_CONTROL_CLASSIF_NAME)]
     internal static ClassificationTypeDefinition FlowControlClassificationType = null;
 
     [Export, Name(Constants.LINQ_CLASSIF_NAME)]
@@ -24,6 +20,9 @@ namespace Winterdom.Viasfora.Classifications {
 
     [Export, Name(Constants.VISIBILITY_CLASSIF_NAME)]
     internal static ClassificationTypeDefinition VisibilityKeywordClassificationType = null;
+
+    [Export, Name(Constants.LINE_HIGHLIGHT)]
+    internal static ClassificationTypeDefinition CurrentLineClassificationType = null;
 
     [Export, Name(Constants.COLUMN_HIGHLIGHT)]
     internal static ClassificationTypeDefinition CurrentColumnClassificationType = null;

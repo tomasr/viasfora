@@ -13,8 +13,9 @@ namespace Winterdom.Viasfora.Options {
 
     public override void SaveSettingsToStorage() {
       var settings = SettingsContext.GetSettings();
-      var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
+      var rainbowSettings = SettingsContext.GetService<IRainbowSettings>();
 
+      settings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
       settings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
       settings.CurrentColumnHighlightStyle = CurrentColumnHighlightStyle;
       settings.HighlightLineWidth = HighlightLineWidth;
@@ -34,6 +35,7 @@ namespace Winterdom.Viasfora.Options {
     public override void LoadSettingsFromStorage() {
       var settings = SettingsContext.GetSettings();
 
+      CurrentLineHighlightEnabled = settings.CurrentLineHighlightEnabled;
       CurrentColumnHighlightEnabled = settings.CurrentColumnHighlightEnabled;
       CurrentColumnHighlightStyle = settings.CurrentColumnHighlightStyle;
       highlightLineWidth = settings.HighlightLineWidth;
@@ -49,8 +51,9 @@ namespace Winterdom.Viasfora.Options {
 
       this.colors = new ClassificationList(new ColorStorage(this.Site));
       colors.Load(
+        Constants.LINE_HIGHLIGHT,
         Constants.COLUMN_HIGHLIGHT,
-        Constants.KEYWORD_CLASSIF_NAME,
+        Constants.FLOW_CONTROL_CLASSIF_NAME,
         Constants.LINQ_CLASSIF_NAME,
         Constants.VISIBILITY_CLASSIF_NAME,
         Constants.STRING_ESCAPE_CLASSIF_NAME,
@@ -101,8 +104,8 @@ namespace Winterdom.Viasfora.Options {
     [Description("Foreground color used to highlight flow control keywords")]
     [Category("Text Editor")]
     public Color FlowControlForegroundColor {
-      get { return colors.Get(Constants.KEYWORD_CLASSIF_NAME, true); }
-      set { colors.Set(Constants.KEYWORD_CLASSIF_NAME, true, value); }
+      get { return colors.Get(Constants.FLOW_CONTROL_CLASSIF_NAME, true); }
+      set { colors.Set(Constants.FLOW_CONTROL_CLASSIF_NAME, true, value); }
     }
     [LocDisplayName("Query Keywords")]
     [Description("Foreground color used to highlight LINQ/Query keywords")]
@@ -133,8 +136,6 @@ namespace Winterdom.Viasfora.Options {
       set { colors.Set(Constants.FORMAT_SPECIFIER_NAME, true, value); }
     }
 
-
-    // current column highlight
     private double highlightLineWidth;
     [LocDisplayName("Highlight Line Width")]
     [Description("Defines the thickness of the current line/column highlight")]
@@ -149,6 +150,29 @@ namespace Winterdom.Viasfora.Options {
       }
     }
 
+    // current line highlight
+    [LocDisplayName("Line Highlight")]
+    [Description("Enables highlighting the current line in the text editor")]
+    [Category("Location Tracking")]
+    public bool CurrentLineHighlightEnabled { get; set; }
+
+    [LocDisplayName("Line Highlight Foreground")]
+    [Description("Foreground color used to highlight the current line")]
+    [Category("Location Tracking")]
+    public Color LineHighlightForeground {
+      get { return colors.Get(Constants.LINE_HIGHLIGHT, true); }
+      set { colors.Set(Constants.LINE_HIGHLIGHT, true, value); }
+    }
+
+    [LocDisplayName("Line Highlight Background")]
+    [Description("Background color used to highlight the current line")]
+    [Category("Location Tracking")]
+    public Color LineHighlightBackground {
+      get { return colors.Get(Constants.LINE_HIGHLIGHT, false); }
+      set { colors.Set(Constants.LINE_HIGHLIGHT, false, value); }
+    }
+
+    // current column highlight
     [LocDisplayName("Column Highlight")]
     [Description("Enables highlighting the current column in the text editor")]
     [Category("Location Tracking")]
@@ -174,9 +198,6 @@ namespace Winterdom.Viasfora.Options {
       get { return colors.Get(Constants.COLUMN_HIGHLIGHT, false); }
       set { colors.Set(Constants.COLUMN_HIGHLIGHT, false, value); }
     }
-
-
-
 
     // Modelines Configuration
     [LocDisplayName("Enable Modelines Support")]

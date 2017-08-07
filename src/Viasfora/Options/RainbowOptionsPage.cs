@@ -11,7 +11,7 @@ namespace Winterdom.Viasfora.Options {
     private ClassificationList colors;
 
     public override void SaveSettingsToStorage() {
-      var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
+      var rainbowSettings = SettingsContext.GetService<IRainbowSettings>();
 
       rainbowSettings.RainbowDepth = RainbowDepth;
       rainbowSettings.RainbowTagsEnabled = RainbowTagsEnabled;
@@ -24,7 +24,7 @@ namespace Winterdom.Viasfora.Options {
       colors.Save();
     }
     public override void LoadSettingsFromStorage() {
-      var rainbowSettings = SettingsContext.GetSpecificSettings<IRainbowSettings>();
+      var rainbowSettings = SettingsContext.GetService<IRainbowSettings>();
 
       RainbowDepth = rainbowSettings.RainbowDepth;
       RainbowTagsEnabled = rainbowSettings.RainbowTagsEnabled;

@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora.EditorFormats {
   [Order(Before = Priority.Default)]
   sealed class CurrentColumnFormat : ClassificationFormatDefinition {
     public CurrentColumnFormat() {
+      this.DisplayName = "Viasfora Current Column";
       this.ForegroundColor = Colors.LightGray;
       this.ForegroundOpacity = 0.3;
       this.BackgroundOpacity = 0.3;
