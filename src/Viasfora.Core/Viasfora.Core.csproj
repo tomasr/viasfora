@@ -237,6 +237,8 @@
     <Compile Include="Text\ColumnStyle.cs" />
     <Compile Include="Text\CurrentColumnAdornment.cs" />
     <Compile Include="Text\CurrentColumnAdornmentFactory.cs" />
+    <Compile Include="Text\CurrentLineAdornment.cs" />
+    <Compile Include="Text\CurrentLineAdornmentFactory.cs" />
     <Compile Include="Text\KeywordTagger.cs" />
     <Compile Include="Text\KeywordTaggerProvider.cs" />
     <Compile Include="Text\ModelineFactory.cs" />
