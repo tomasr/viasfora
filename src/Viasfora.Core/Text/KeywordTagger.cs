@@ -17,6 +17,7 @@ namespace Winterdom.Viasfora.Text {
     private KeywordTag linqClassification;
     private KeywordTag visClassification;
     private KeywordTag stringEscapeClassification;
+    private KeywordTag stringEscapeErrorClassification;
     private KeywordTag formatSpecClassification;
     private ITagAggregator<IClassificationTag> aggregator;
     private ILanguageFactory langFactory;
@@ -35,6 +36,7 @@ namespace Winterdom.Viasfora.Text {
       linqClassification = provider.GetTag(Constants.LINQ_CLASSIF_NAME);
       visClassification = provider.GetTag(Constants.VISIBILITY_CLASSIF_NAME);
       stringEscapeClassification = provider.GetTag(Constants.STRING_ESCAPE_CLASSIF_NAME);
+      stringEscapeErrorClassification = provider.GetTag(Constants.STRING_ESCAPE_ERROR_NAME);
       formatSpecClassification = provider.GetTag(Constants.FORMAT_SPECIFIER_NAME);
 
       this.settings = provider.Settings;
@@ -183,6 +185,9 @@ namespace Winterdom.Viasfora.Text {
             break;
           case StringPartType.FormatSpecifier:
             yield return new TagSpan<KeywordTag>(sspan, formatSpecClassification);
+            break;
+          case StringPartType.EscapeSequenceError:
+            yield return new TagSpan<KeywordTag>(sspan, stringEscapeErrorClassification);
             break;
         }
       }

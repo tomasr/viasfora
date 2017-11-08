@@ -35,6 +35,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     }
 
     private bool TryParseEscapeSequence(ref StringPart part) {
+      int start = this.text.Position;
       text.Next();
       if ( escapeChar.IndexOf(text.Char()) >= 0 ) {
         text.Next();
@@ -73,7 +74,11 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         }
         text.BackToMark();
       }
-      return false;
+      // unrecognized sequence, return it as error
+      text.Next();
+      int length = text.Position - start;
+      part = new StringPart(new Span(start, length), StringPartType.EscapeSequenceError);
+      return true;
     }
 
     private Span? TryParseShortUnicode() {

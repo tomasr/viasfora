@@ -27,12 +27,14 @@ namespace Viasfora.Tests.StringScanners {
       Assert.Equal(null, parser.Next());
     }
     [Fact]
-    public void NonEscapeSequenceIsNotHighlighted() {
+    public void NonEscapeSequenceIsMarkedAsError() {
       // regexp non-escape-chars = '\' [^"\'ntbrafv] 
       String input = "\"" +
           @"\h\l"
           + "\"";
       var parser = new FSharpStringScanner(input);
+      Assert.Equal(new StringPart(1,2, StringPartType.EscapeSequenceError), parser.Next());
+      Assert.Equal(new StringPart(3,2, StringPartType.EscapeSequenceError), parser.Next());
       Assert.Equal(null, parser.Next());
     }
     [Fact]
@@ -63,6 +65,7 @@ namespace Viasfora.Tests.StringScanners {
           @"\02abcd"
           + "\"";
       var parser = new FSharpStringScanner(input);
+      Assert.Equal(new StringPart(1, 2, StringPartType.EscapeSequenceError), parser.Next());
       Assert.Equal(null, parser.Next());
     }
     [Fact]
@@ -80,6 +83,7 @@ namespace Viasfora.Tests.StringScanners {
           @"\u12some other stuff"
           + "\"";
       var parser = new FSharpStringScanner(input);
+      Assert.Equal(new StringPart(1, 3, StringPartType.EscapeSequenceError), parser.Next());
       Assert.Equal(null, parser.Next());
     }
     [Fact]
