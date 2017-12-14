@@ -15,6 +15,9 @@ namespace Winterdom.Viasfora.Classifications {
     [Export, Name(Constants.STRING_ESCAPE_CLASSIF_NAME)]
     internal static ClassificationTypeDefinition StringEscapeSequenceClassificationType = null;
 
+    [Export, Name(Constants.STRING_ESCAPE_ERROR_NAME)]
+    internal static ClassificationTypeDefinition StringEscapeSequenceErrorClassificationType = null;
+
     [Export, Name(Constants.FORMAT_SPECIFIER_NAME)]
     internal static ClassificationTypeDefinition FormatSpecifierClassificationType = null;
 

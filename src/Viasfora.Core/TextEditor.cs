@@ -61,6 +61,9 @@ namespace Winterdom.Viasfora {
           uint formatIndex;
 		      try {
             int hr = pff.GetCurFile(out filename, out formatIndex);
+            // some windows will return E_NOTIMPL
+            if ( hr == Constants.E_NOTIMPL )
+              return null;
             CheckError(hr, "GetCurFile");
           } catch ( NotImplementedException ) {
             // Lovely stuff: SecondaryVsTextBuffer will
@@ -216,4 +219,4 @@ namespace Winterdom.Viasfora {
     }
 
   }
-}
+} 

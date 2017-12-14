@@ -58,7 +58,8 @@ namespace Winterdom.Viasfora.Util {
         CreateTipView();
       }
       this.pointToDisplay = bufferPosition;
-      this.tipView.Set(new ViewTipProperty(bufferPosition));
+      var viewTipProp = this.tipView.Get<ViewTipProperty>();
+      viewTipProp.Position = bufferPosition;
 
       return this.wrapper;
     }
@@ -143,6 +144,8 @@ namespace Winterdom.Viasfora.Util {
       this.tipView.ZoomLevel = GetSourceZoomFactor() * ZoomFactor * 100;
       this.wrapper = new Border();
       this.wrapper.Child = this.tipView.VisualElement;
+
+      this.tipView.Set(new ViewTipProperty());
     }
 
     private double GetSourceZoomFactor() {

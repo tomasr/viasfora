@@ -49,6 +49,8 @@ namespace Winterdom.Viasfora.Util {
           return 'E';
         case StringPartType.FormatSpecifier:
           return 'F';
+        case StringPartType.EscapeSequenceError:
+          return 'S';
         default:
           return 'U';
       }
@@ -57,6 +59,7 @@ namespace Winterdom.Viasfora.Util {
 
   public enum StringPartType {
     EscapeSequence = 0,
-    FormatSpecifier = 1
+    FormatSpecifier = 1,
+    EscapeSequenceError = 2,
   }
 }

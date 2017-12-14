@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
-using Winterdom.Viasfora.Rainbow;
 using System.Drawing;
 using Winterdom.Viasfora.Text;
 
@@ -13,13 +12,15 @@ namespace Winterdom.Viasfora.Options {
 
     public override void SaveSettingsToStorage() {
       var settings = SettingsContext.GetSettings();
-      var rainbowSettings = SettingsContext.GetService<IRainbowSettings>();
 
       settings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
       settings.CurrentColumnHighlightEnabled = CurrentColumnHighlightEnabled;
       settings.CurrentColumnHighlightStyle = CurrentColumnHighlightStyle;
       settings.HighlightLineWidth = HighlightLineWidth;
       settings.KeywordClassifierEnabled = KeywordClassifierEnabled;
+      settings.FlowControlKeywordsEnabled = FlowControlKeywordsEnabled;
+      settings.VisibilityKeywordsEnabled = VisibilityKeywordsEnabled;
+      settings.QueryKeywordsEnabled = QueryKeywordsEnabled;
       settings.FlowControlUseItalics = FlowControlUseItalics;
       settings.EscapeSequencesEnabled = EscapeSeqHighlightEnabled;
       settings.DeveloperMarginEnabled = DevMarginEnabled;
@@ -40,6 +41,9 @@ namespace Winterdom.Viasfora.Options {
       CurrentColumnHighlightStyle = settings.CurrentColumnHighlightStyle;
       highlightLineWidth = settings.HighlightLineWidth;
       KeywordClassifierEnabled = settings.KeywordClassifierEnabled;
+      FlowControlKeywordsEnabled = settings.FlowControlKeywordsEnabled;
+      VisibilityKeywordsEnabled = settings.VisibilityKeywordsEnabled;
+      QueryKeywordsEnabled = settings.QueryKeywordsEnabled;
       FlowControlUseItalics = settings.FlowControlUseItalics;
       EscapeSeqHighlightEnabled = settings.EscapeSequencesEnabled;
       DevMarginEnabled = settings.DeveloperMarginEnabled;
@@ -80,9 +84,24 @@ namespace Winterdom.Viasfora.Options {
 
     // Text Editor Extensions
     [LocDisplayName("Enable Keyword Classifier")]
-    [Description("Enable custom keyword highlighting for C#, CPP and JS")]
+    [Description("Enable custom keyword highlighting for all languages")]
     [Category("Keyword Highlight")]
     public bool KeywordClassifierEnabled { get; set; }
+
+    [LocDisplayName("Enable Flow Control Keywords")]
+    [Description("Enable custom keyword highlighting for all languages")]
+    [Category("Keyword Highlight")]
+    public bool FlowControlKeywordsEnabled { get; set; }
+
+    [LocDisplayName("Enable Visibility Keywords")]
+    [Description("Enable custom keyword highlighting for all languages")]
+    [Category("Keyword Highlight")]
+    public bool VisibilityKeywordsEnabled { get; set; }
+
+    [LocDisplayName("Enable Query Keywords")]
+    [Description("Enable custom keyword highlighting for all languages")]
+    [Category("Keyword Highlight")]
+    public bool QueryKeywordsEnabled { get; set; }
 
     [LocDisplayName("Use italics on Flow Control Keywords")]
     [Description("Use italics on text highlighted by the Keyword Classifier")]

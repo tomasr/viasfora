@@ -175,6 +175,7 @@
     <Compile Include="EditorFormats\FormatSpecifierFormat.cs" />
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
     <Compile Include="EditorFormats\ObfuscatedTextFormat.cs" />
+    <Compile Include="EditorFormats\StringEscapeSequenceErrorFormat.cs" />
     <Compile Include="EditorFormats\StringEscapeSequenceFormat.cs" />
     <Compile Include="EditorFormats\VisibilityKeywordFormat.cs" />
     <Compile Include="Guids.cs" />
