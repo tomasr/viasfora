@@ -156,11 +156,11 @@ namespace Winterdom.Viasfora.Text {
     private ITagSpan<KeywordTag> IsInterestingKeyword(ILanguage lang, SnapshotSpan cs) {
       if ( cs.IsEmpty ) return null;
       String text = cs.GetText();
-      if ( lang.IsControlFlowKeyword(text) ) {
+      if ( this.settings.FlowControlKeywordsEnabled && lang.IsControlFlowKeyword(text) ) {
         return new TagSpan<KeywordTag>(cs, keywordClassification);
-      } else if ( lang.IsVisibilityKeyword(text) ) {
+      } else if ( this.settings.VisibilityKeywordsEnabled && lang.IsVisibilityKeyword(text) ) {
         return new TagSpan<KeywordTag>(cs, visClassification);
-      } else if ( lang.IsLinqKeyword(text) ) {
+      } else if ( this.settings.QueryKeywordsEnabled && lang.IsLinqKeyword(text) ) {
         return new TagSpan<KeywordTag>(cs, linqClassification);
       }
       return null;

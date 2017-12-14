@@ -4,6 +4,9 @@ using Winterdom.Viasfora.Text;
 namespace Winterdom.Viasfora {
   public interface IVsfSettings : IUpdatableSettings {
     bool KeywordClassifierEnabled { get; set; }
+    bool FlowControlKeywordsEnabled { get; set; }
+    bool VisibilityKeywordsEnabled { get; set; }
+    bool QueryKeywordsEnabled { get; set; }
     bool FlowControlUseItalics { get; set; }
     bool EscapeSequencesEnabled { get; set; }
     

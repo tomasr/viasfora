@@ -11,6 +11,18 @@ namespace Winterdom.Viasfora.Settings {
       get { return this.Store.GetBoolean(nameof(KeywordClassifierEnabled), true); }
       set { this.Store.SetValue(nameof(KeywordClassifierEnabled), value); }
     }
+    public bool FlowControlKeywordsEnabled {
+      get { return this.Store.GetBoolean(nameof(FlowControlKeywordsEnabled), true); }
+      set { this.Store.SetValue(nameof(FlowControlKeywordsEnabled), value); }
+    }
+    public bool VisibilityKeywordsEnabled {
+      get { return this.Store.GetBoolean(nameof(VisibilityKeywordsEnabled), true); }
+      set { this.Store.SetValue(nameof(VisibilityKeywordsEnabled), value); }
+    }
+    public bool QueryKeywordsEnabled {
+      get { return this.Store.GetBoolean(nameof(QueryKeywordsEnabled), true); }
+      set { this.Store.SetValue(nameof(QueryKeywordsEnabled), value); }
+    }
     public bool FlowControlUseItalics {
       get { return this.Store.GetBoolean(nameof(FlowControlUseItalics), false); }
       set { this.Store.SetValue(nameof(FlowControlUseItalics), value); }
