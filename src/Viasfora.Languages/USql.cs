@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.Text.Classification;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.Sequences;
@@ -24,8 +25,13 @@ namespace Winterdom.Viasfora.Languages {
     protected override IBraceScanner NewBraceScanner() {
       return new USqlBraceScanner();
     }
+
     public override IStringScanner NewStringScanner(String classificationName, String text) {
       return new CSharpStringScanner(text, classificationName);
+    }
+
+    public override bool IsKeywordClassification(IClassificationType classificationType) {
+      return classificationType.Classification.EndsWith("keyword", StringComparison.OrdinalIgnoreCase);
     }
   }
 
