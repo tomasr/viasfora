@@ -19,6 +19,7 @@ namespace Winterdom.Viasfora.Options {
       rainbowSettings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
       rainbowSettings.RainbowHighlightMode = RainbowHighlightMode;
       rainbowSettings.RainbowColoringMode = RainbowColoringMode;
+      rainbowSettings.RainbowHighlightKey = RainbowHighlightKey;
       rainbowSettings.Save();
 
       colors.Save();
@@ -32,6 +33,7 @@ namespace Winterdom.Viasfora.Options {
       RainbowHighlightMode = rainbowSettings.RainbowHighlightMode;
       RainbowToolTipsEnabled = rainbowSettings.RainbowToolTipsEnabled;
       RainbowColoringMode = rainbowSettings.RainbowColoringMode;
+      RainbowHighlightKey = rainbowSettings.RainbowHighlightKey;
 
       this.colors = new ClassificationList(new ColorStorage(this.Site));
       colors.Load(
@@ -77,6 +79,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Controls how the caret position is used to identify braces to highlight.")]
     [Category("Rainbow Braces")]
     public RainbowHighlightMode RainbowHighlightMode { get; set; }
+
+    [LocDisplayName("Rainbow Highlight Key")]
+    [Description("Controls what key triggers Rainbow Hilights.")]
+    [Category("Rainbow Braces")]
+    public RainbowHighlightKey RainbowHighlightKey { get; set; }
 
     [LocDisplayName("Enable Rainbow ToolTips")]
     [Description("Show a tooltip highlighting matching braces when you hover the mouse over a rainbow brace")]

@@ -25,6 +25,10 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
       get { return this.Store.GetEnum(nameof(RainbowHighlightMode), RainbowHighlightMode.TrackNextScope); }
       set { this.Store.SetValue(nameof(RainbowHighlightMode), value); }
     }
+    public RainbowHighlightKey RainbowHighlightKey {
+      get { return this.Store.GetEnum(nameof(RainbowHighlightKey), RainbowHighlightKey.LeftCtrl); }
+      set { this.Store.SetValue(nameof(RainbowHighlightKey), value); }
+    }
     public bool RainbowToolTipsEnabled {
       get { return this.Store.GetBoolean(nameof(RainbowToolTipsEnabled), true); }
       set { this.Store.SetValue(nameof(RainbowToolTipsEnabled), value); }
