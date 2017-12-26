@@ -145,6 +145,7 @@
     <Compile Include="BraceScanners\CSharpBraceScanner.cs" />
     <Compile Include="BraceScanners\CssBraceScanner.cs" />
     <Compile Include="BraceScanners\DefaultBraceScanner.cs" />
+    <Compile Include="BraceScanners\FortranBraceScanner.cs" />
     <Compile Include="BraceScanners\FSharpBraceScanner.cs" />
     <Compile Include="BraceScanners\JScriptBraceScanner.cs" />
     <Compile Include="BraceScanners\PsBraceScanner.cs" />

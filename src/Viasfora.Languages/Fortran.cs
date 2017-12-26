@@ -19,7 +19,7 @@ namespace Winterdom.Viasfora.Languages {
     }
 
     protected override IBraceScanner NewBraceScanner()
-      => new DefaultBraceScanner();
+      => new FortranBraceScanner();
   }
 
   class FortranSettings : LanguageSettings {
