@@ -2,8 +2,6 @@
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
-using Winterdom.Viasfora.Compatibility;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {
