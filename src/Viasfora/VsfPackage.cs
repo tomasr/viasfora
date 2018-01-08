@@ -35,6 +35,7 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.PythonOptionsPage), "Viasfora\\Languages", "Python", 210, 379, true)]
   [ProvideOptionPage(typeof(Options.ROptionsPage), "Viasfora\\Languages", "R", 210, 380, true)]
   [ProvideOptionPage(typeof(Options.PowerShellOptionsPage), "Viasfora\\Languages", "PowerShell", 210, 381, true)]
+  [ProvideOptionPage(typeof(Options.FortranOptionsPage), "Viasfora\\Languages", "Fortran", 210, 382, true)]
   [ProvideMenuResource(1000, 1)]
   public sealed class VsfPackage
     : Package,

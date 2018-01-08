@@ -141,6 +141,7 @@
     <Compile Include="BracePos.cs" />
     <Compile Include="RainbowColoringMode.cs" />
     <Compile Include="PerBraceStacker.cs" />
+    <Compile Include="RainbowHighlightKey.cs" />
     <Compile Include="UnifiedBraceStacker.cs" />
     <Compile Include="CharPos.cs" />
     <Compile Include="Classifications\RainbowClassifications.cs" />

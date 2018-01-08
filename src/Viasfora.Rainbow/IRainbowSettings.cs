@@ -7,6 +7,7 @@ namespace Winterdom.Viasfora.Rainbow {
     bool RainbowColorize { get; set; }
     long RainbowCtrlTimer { get; set; }
     RainbowHighlightMode RainbowHighlightMode { get; set; }
+    RainbowHighlightKey RainbowHighlightKey { get; set; }
     bool RainbowToolTipsEnabled { get; set; }
     RainbowColoringMode RainbowColoringMode { get; set; }
     void Save();

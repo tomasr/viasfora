@@ -23,6 +23,7 @@ namespace Winterdom.Viasfora {
     public const String CSharp = "CSharp";
     public const String XLang = "XLANGs";
     public const String Css = "CSS";
+    public const String Fortran = "Fortran";
     public const String FSharp = "FSharp";
     public const String JS = "JScript";
     public const String Json = "JSON";

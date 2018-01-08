@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora.Languages {
       this.Settings = new SqlSettings(store);
       // the SQL classifier will return text spans that include
       // trailing spaces (such as "IF ")
-     this.NormalizationFunction = text => text.Trim();
+      this.NormalizationFunction = text => text.Trim();
     }
 
     protected override IBraceScanner NewBraceScanner()

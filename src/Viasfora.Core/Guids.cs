@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora {
     public const String CppOptions = "fa1cd8f0-2e7f-455d-bafe-594315674d7e";
     public const String JScriptOptions = "f65ed695-72d7-430e-a734-efb5690f9663";
     public const String VBOptions = "52787c4e-2f7f-47de-b645-82779f648a04";
+    public const String FortranOptions = "0fab2139-9de9-48bc-b484-054bc49ffd2e";
     public const String FSharpOptions = "4accae10-98db-4b60-9463-26a6ba9313da";
     public const String SqlOptions = "ea0d3217-2fed-4fa6-a47a-f88951a799fc";
     public const String USqlOptions = "ebacc073-f3ab-40c3-8ffa-869ac0e9b143";

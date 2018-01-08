@@ -49,7 +49,7 @@ namespace Winterdom.Viasfora.Rainbow {
     // as a work around.
     public override void PreviewKeyDown(KeyEventArgs args) {
       ITextView actualView = GetViewFromEvent(args);
-      if ( args.Key == Key.LeftCtrl ) {
+      if ( args.Key == (Key)(this.settings.RainbowHighlightKey)) {
         if ( timer.IsRunning ) {
           if ( timer.Elapsed >= pressTime ) {
             timer.Stop();
