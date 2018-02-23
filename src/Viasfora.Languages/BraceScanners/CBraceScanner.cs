@@ -47,8 +47,8 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           this.status = stString;
           tc.Next();
           this.ParseString(tc);
-        } else if ( Char.IsDigit(tc.Char()) && tc.NChar() == '\'' ) {
-          // this is a C++ 14 digit separator, such as 1'000'000
+        } else if ( IsHexDigit(tc.Char()) && tc.NChar() == '\'' ) {
+          // this is a C++ 14 digit separator, such as 1'000'000 or 0xFFFF'0000
           tc.Skip(2);
         } else if ( tc.Char() == '\'' ) {
           this.status = stString;
@@ -105,6 +105,12 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           tc.Next();
         }
       }
+    }
+
+    private static bool IsHexDigit(char c) {
+      return Char.IsDigit(c)
+          || (c >= 'a' && c <= 'f')
+          || (c >= 'A' && c <= 'F');
     }
   }
 }
