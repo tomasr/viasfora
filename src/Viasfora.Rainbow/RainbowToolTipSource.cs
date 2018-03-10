@@ -54,6 +54,16 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( IsTooClose(triggerPoint.Value, otherBrace.Value) ) {
         return;
       }
+
+      // IQuickInfoSession.Dismissed is never firing in VS2017 15.6
+      // so if the tooltip window still exists, kill it
+      // and hope to god leaving IQuickInfoSession.Dismissed hooked
+      // up doesn't end up in a memory leak
+      if ( toolTipWindow != null ) {
+        toolTipWindow.Dispose();
+        toolTipWindow = null;
+      }
+
       session.Dismissed += OnSessionDismissed;
 
       if ( toolTipWindow == null ) {
