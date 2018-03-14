@@ -89,7 +89,7 @@ namespace Winterdom.Viasfora.Util {
         return;
       }
       this.tipView.DisplayTextLineContainingBufferPosition(
-        viewPos, this.tipView.LineHeight, ViewRelativePosition.Top
+        viewPos, 2 * this.tipView.LineHeight, ViewRelativePosition.Top
         );
       SetViewportLeft();
       // it could very well be that after this
