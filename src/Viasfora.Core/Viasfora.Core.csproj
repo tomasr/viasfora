@@ -158,6 +158,7 @@
     <Compile Include="Contracts\ILogger.cs" />
     <Compile Include="Contracts\IPackageUserOptions.cs" />
     <Compile Include="Contracts\IPresentationModeState.cs" />
+    <Compile Include="Contracts\IVsFeatures.cs" />
     <Compile Include="Contracts\IVsfTelemetry.cs" />
     <Compile Include="DefaultNames.cs" />
     <Compile Include="Design\NativeMethods.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="IUpdatableSettings.cs" />
     <Compile Include="IVsfSettings.cs" />
     <Compile Include="JsonExtensions.cs" />
+    <Compile Include="KnownFeatures.cs" />
     <Compile Include="LanguageExtensions.cs" />
     <Compile Include="Margins\DevMarginProvider.cs" />
     <Compile Include="Margins\DevMarginViewModel.cs" />
@@ -263,6 +265,7 @@
     <Compile Include="Util\StringChars.cs" />
     <Compile Include="Util\StringPart.cs" />
     <Compile Include="Util\VsColors.cs" />
+    <Compile Include="Util\VsFeatures.cs" />
     <Compile Include="VsSolution.cs" />
     <Compile Include="XLangSupport\FakeContentTypeDefinition.cs" />
     <Compile Include="XLangSupport\XLangTextViewCreationListener.cs" />

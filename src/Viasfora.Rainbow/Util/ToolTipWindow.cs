@@ -2,10 +2,12 @@
 using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Util {
@@ -15,6 +17,8 @@ namespace Winterdom.Viasfora.Util {
     public ITextEditorFactoryService EditorFactory { get; set; }
     [Import]
     public IEditorOptionsFactoryService OptionsFactory { get; set; }
+    [Import]
+    public IVsFeatures VsFeatures { get; set; }
 
     public IToolTipWindow CreateToolTip(ITextView textView) {
       return new ToolTipWindow(textView, this);
@@ -139,6 +143,13 @@ namespace Winterdom.Viasfora.Util {
       options.SetOptionValue(ViewOptions.WordWrapStyleId, WordWrapStyles.None);
       options.SetOptionValue(ViewOptions.ViewProhibitUserInput, true);
 
+      // only for VS2017 15.6 and up, where IIntellisensePresenter is
+      // not supported anymore (replaced by the tooltip APIs), we
+      // set the background to transparent so that it looks like regular
+      // intellisense popup
+      if ( this.provider.VsFeatures.IsSupported(KnownFeatures.TooltipApi) ) {
+        this.tipView.Background = Brushes.Transparent;
+      }
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
       this.tipView.ZoomLevel = GetSourceZoomFactor() * ZoomFactor * 100;
