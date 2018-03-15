@@ -194,29 +194,19 @@ namespace Winterdom.Viasfora.Util {
     // Returning the EditBuffer as the ViewBuffer appears
     // to work around this.
     class TipTextViewModel : ITextViewModel {
-      private ITextView sourceView;
-      private PropertyCollection properties;
 
       public TipTextViewModel(ITextView source) {
-        this.sourceView = source;
-        this.properties = new PropertyCollection();
+        this.DataBuffer = source.TextViewModel.DataBuffer;
+        this.DataModel = source.TextViewModel.DataModel;
+        this.EditBuffer = source.TextViewModel.EditBuffer;
+        this.Properties = new PropertyCollection();
       }
 
-      public ITextBuffer DataBuffer {
-        get { return sourceView.TextViewModel.DataBuffer; }
-      }
-      public ITextDataModel DataModel {
-        get { return sourceView.TextViewModel.DataModel; }
-      }
-      public ITextBuffer EditBuffer {
-        get { return sourceView.TextViewModel.EditBuffer; }
-      }
-      public ITextBuffer VisualBuffer {
-        get { return this.EditBuffer; }
-      }
-      public PropertyCollection Properties {
-        get { return this.properties; }
-      }
+      public ITextBuffer DataBuffer { get; private set; }
+      public ITextDataModel DataModel { get; private set; }
+      public ITextBuffer EditBuffer { get; private set; }
+      public ITextBuffer VisualBuffer => this.EditBuffer;
+      public PropertyCollection Properties { get; private set; }
 
       public SnapshotPoint GetNearestPointInVisualBuffer(SnapshotPoint editBufferPoint) {
         // editBufferPoint MUST be in the editBuffer according to the docs
