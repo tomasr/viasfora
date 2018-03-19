@@ -2,10 +2,12 @@
 using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Utilities;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Rainbow;
 
 namespace Winterdom.Viasfora.Util {
@@ -15,6 +17,8 @@ namespace Winterdom.Viasfora.Util {
     public ITextEditorFactoryService EditorFactory { get; set; }
     [Import]
     public IEditorOptionsFactoryService OptionsFactory { get; set; }
+    [Import]
+    public IVsFeatures VsFeatures { get; set; }
 
     public IToolTipWindow CreateToolTip(ITextView textView) {
       return new ToolTipWindow(textView, this);
@@ -85,7 +89,7 @@ namespace Winterdom.Viasfora.Util {
         return;
       }
       this.tipView.DisplayTextLineContainingBufferPosition(
-        viewPos, this.tipView.LineHeight, ViewRelativePosition.Top
+        viewPos, 2 * this.tipView.LineHeight, ViewRelativePosition.Top
         );
       SetViewportLeft();
       // it could very well be that after this
@@ -139,6 +143,13 @@ namespace Winterdom.Viasfora.Util {
       options.SetOptionValue(ViewOptions.WordWrapStyleId, WordWrapStyles.None);
       options.SetOptionValue(ViewOptions.ViewProhibitUserInput, true);
 
+      // only for VS2017 15.6 and up, where IIntellisensePresenter is
+      // not supported anymore (replaced by the tooltip APIs), we
+      // set the background to transparent so that it looks like regular
+      // intellisense popup
+      if ( this.provider.VsFeatures.IsSupported(KnownFeatures.TooltipApi) ) {
+        this.tipView.Background = Brushes.Transparent;
+      }
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
       this.tipView.ZoomLevel = GetSourceZoomFactor() * ZoomFactor * 100;
@@ -183,29 +194,19 @@ namespace Winterdom.Viasfora.Util {
     // Returning the EditBuffer as the ViewBuffer appears
     // to work around this.
     class TipTextViewModel : ITextViewModel {
-      private ITextView sourceView;
-      private PropertyCollection properties;
 
       public TipTextViewModel(ITextView source) {
-        this.sourceView = source;
-        this.properties = new PropertyCollection();
+        this.DataBuffer = source.TextViewModel.DataBuffer;
+        this.DataModel = source.TextViewModel.DataModel;
+        this.EditBuffer = source.TextViewModel.EditBuffer;
+        this.Properties = new PropertyCollection();
       }
 
-      public ITextBuffer DataBuffer {
-        get { return sourceView.TextViewModel.DataBuffer; }
-      }
-      public ITextDataModel DataModel {
-        get { return sourceView.TextViewModel.DataModel; }
-      }
-      public ITextBuffer EditBuffer {
-        get { return sourceView.TextViewModel.EditBuffer; }
-      }
-      public ITextBuffer VisualBuffer {
-        get { return this.EditBuffer; }
-      }
-      public PropertyCollection Properties {
-        get { return this.properties; }
-      }
+      public ITextBuffer DataBuffer { get; private set; }
+      public ITextDataModel DataModel { get; private set; }
+      public ITextBuffer EditBuffer { get; private set; }
+      public ITextBuffer VisualBuffer => this.EditBuffer;
+      public PropertyCollection Properties { get; private set; }
 
       public SnapshotPoint GetNearestPointInVisualBuffer(SnapshotPoint editBufferPoint) {
         // editBufferPoint MUST be in the editBuffer according to the docs

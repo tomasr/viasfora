@@ -73,6 +73,7 @@ Most features include support for the following languages
 * S
 * R
 * HLSL
+* Fortran
 
 # Building
 Visual Studio 2017 is needed for building from source.
