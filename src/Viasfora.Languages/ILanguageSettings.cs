@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Winterdom.Viasfora.Contracts {
+namespace Winterdom.Viasfora.Languages {
   public interface ILanguageSettings {
     String KeyName { get; }
     String[] ControlFlow { get; set; }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Rainbow {
   public class TextBufferBraces : ITextBufferBraces {
@@ -298,7 +298,7 @@ namespace Winterdom.Viasfora.Rainbow {
         if ( braceList[p.Brace] == cp.Char ) {
           // it does, add it
           pairs.Pop(cp.Char);
-          Add(cp.AsBrace(p.Depth));
+          Add(new BracePos(cp, p.Depth));
         } else {
           // it doesn't; it's an error
           this.braceErrors.Add(cp);

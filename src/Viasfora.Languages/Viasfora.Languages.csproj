@@ -155,16 +155,21 @@
     <Compile Include="BraceScanners\USqlBraceScanner.cs" />
     <Compile Include="BraceScanners\VbBraceScanner.cs" />
     <Compile Include="CBasedLanguage.cs" />
+    <Compile Include="CharExtensions.cs" />
+    <Compile Include="CharPos.cs" />
     <Compile Include="CommentParsers\GenericCommentParser.cs" />
+    <Compile Include="Langs.cs" />
     <Compile Include="Cpp.cs" />
     <Compile Include="CSharp.cs" />
     <Compile Include="Css.cs" />
     <Compile Include="DefaultLanguage.cs" />
     <Compile Include="Fortran.cs" />
     <Compile Include="FSharp.cs" />
+    <Compile Include="IBraceScanner.cs" />
     <Compile Include="ILanguage.cs" />
     <Compile Include="ILanguageFactory.cs" />
     <Compile Include="ILanguageSettings.cs" />
+    <Compile Include="IResumeControl.cs" />
     <Compile Include="JScript.cs" />
     <Compile Include="Json.cs" />
     <Compile Include="LanguageFactory.cs" />
@@ -184,22 +189,25 @@
     <Compile Include="Sql.cs" />
     <Compile Include="TypeScript.cs" />
     <Compile Include="USql.cs" />
+    <Compile Include="Util\IFirstLineCommentParser.cs" />
+    <Compile Include="Util\IModeLineParser.cs" />
+    <Compile Include="Util\IStringScanner.cs" />
+    <Compile Include="Util\ITextChars.cs" />
+    <Compile Include="Util\StringChars.cs" />
+    <Compile Include="Util\StringPart.cs" />
+    <Compile Include="Util\TextSpan.cs" />
     <Compile Include="VB.cs" />
     <Compile Include="XLang.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Viasfora.Core\Viasfora.Core.csproj">
-      <Project>{419c99ad-185a-4d31-a7ff-e1754c7b806d}</Project>
-      <Name>Viasfora.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Viasfora.Rainbow\Viasfora.Rainbow.csproj">
-      <Project>{944758a5-90a4-4de7-8ef6-4fb2e7f4efb3}</Project>
-      <Name>Viasfora.Rainbow</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Viasfora.Contracts\Viasfora.Contracts.csproj">
+      <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
+      <Name>Viasfora.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!--

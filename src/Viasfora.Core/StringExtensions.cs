@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 
 namespace Winterdom.Viasfora {
-
   public static class StringExtensions {
     public static String[] AsList(this String str) {
       if ( String.IsNullOrEmpty(str) ) return null;
@@ -21,11 +20,5 @@ namespace Winterdom.Viasfora {
       }
       return sb.ToString();
     }
-
-    public static bool IsHexDigit(this char c) {
-      if ( Char.IsDigit(c) ) return true;
-      return (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
-    }
   }
-
 }

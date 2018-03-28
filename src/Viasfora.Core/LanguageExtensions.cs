@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.Utilities;
 using System;
 using System.Linq;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora {
   public static class LanguageExtensions {

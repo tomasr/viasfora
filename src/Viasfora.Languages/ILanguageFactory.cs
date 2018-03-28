@@ -1,9 +1,7 @@
 ﻿using System;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Utilities;
 using System.Collections.Generic;
 
-namespace Winterdom.Viasfora.Contracts {
+namespace Winterdom.Viasfora.Languages {
   public interface ILanguageFactory {
     IEnumerable<ILanguage> GetAllLanguages();
     ILanguage TryCreateLanguage(Func<String, bool> contentTypeMatcher);

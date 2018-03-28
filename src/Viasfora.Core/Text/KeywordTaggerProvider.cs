@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Tags;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Text {
 

@@ -3,7 +3,6 @@ using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Settings;
-using Winterdom.Viasfora.Contracts;
 
 namespace Winterdom.Viasfora.Languages {
   public class DefaultLanguage : LanguageInfo, ILanguage {

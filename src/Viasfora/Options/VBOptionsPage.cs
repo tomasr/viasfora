@@ -5,12 +5,12 @@ using System.Drawing.Design;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.VBOptions)]
   public class VBOptionsPage : DialogPage {
-    private ILanguage language = SettingsContext.GetLanguage(Constants.VB);
+    private ILanguage language = SettingsContext.GetLanguage(Langs.VB);
 
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();

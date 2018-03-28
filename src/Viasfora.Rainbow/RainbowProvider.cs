@@ -4,7 +4,7 @@ using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Rainbow {

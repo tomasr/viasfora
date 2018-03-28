@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Settings;
@@ -36,7 +35,7 @@ namespace Winterdom.Viasfora.Languages {
       };
 
     public TypeScriptSettings(ITypedSettingsStore store)
-      : base (Constants.TypeScript, store) {
+      : base (Langs.TypeScript, store) {
     }
   }
 }

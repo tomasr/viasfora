@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public BracePos Push(CharPos brace) {
-      var bp = brace.AsBrace(pairs.Count);
+      var bp = new BracePos(brace, pairs.Count);
       pairs.Push(bp);
       return bp;
     }

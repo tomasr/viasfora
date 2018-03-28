@@ -154,7 +154,6 @@
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ContentTypes.cs" />
-    <Compile Include="Contracts\ILanguageSettings.cs" />
     <Compile Include="Contracts\ILogger.cs" />
     <Compile Include="Contracts\IPackageUserOptions.cs" />
     <Compile Include="Contracts\IPresentationModeState.cs" />
@@ -180,7 +179,6 @@
     <Compile Include="EditorFormats\StringEscapeSequenceFormat.cs" />
     <Compile Include="EditorFormats\VisibilityKeywordFormat.cs" />
     <Compile Include="Guids.cs" />
-    <Compile Include="IUpdatableSettings.cs" />
     <Compile Include="IVsfSettings.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="KnownFeatures.cs" />
@@ -206,23 +204,12 @@
     <Compile Include="Outlining\UserOutliningTaggerProvider.cs" />
     <Compile Include="PkgSource.cs" />
     <Compile Include="PkgCmdIdList.cs" />
-    <Compile Include="Contracts\ILanguage.cs" />
-    <Compile Include="Contracts\ILanguageFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReSharper.cs" />
     <Compile Include="SettingsContext.cs" />
     <Compile Include="Settings\FilePersistUserSettings.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStore.cs" />
-    <Compile Include="Settings\ICustomExport.cs" />
-    <Compile Include="Settings\IPersistSettings.cs" />
-    <Compile Include="Settings\ISettingsExport.cs" />
-    <Compile Include="Settings\ISettingsObject.cs" />
-    <Compile Include="Settings\ISettingsStore.cs" />
-    <Compile Include="Settings\ISolutionUserSettings.cs" />
-    <Compile Include="Settings\IStorageConversions.cs" />
-    <Compile Include="Settings\ITypedSettingsStore.cs" />
     <Compile Include="Settings\OutlineSettings.cs" />
-    <Compile Include="Settings\SettingsBase.cs" />
     <Compile Include="Settings\SettingsExporter.cs" />
     <Compile Include="Settings\StorageConversions.cs" />
     <Compile Include="Settings\SolutionUserSettings.cs" />
@@ -252,19 +239,12 @@
     <Compile Include="Text\PresentationModeFontChanger.cs" />
     <Compile Include="Text\PresentationModeState.cs" />
     <Compile Include="Text\TextObfuscation.cs" />
-    <Compile Include="Util\IFirstLineCommentParser.cs" />
-    <Compile Include="Util\IModeLineParser.cs" />
-    <Compile Include="Util\IStringScanner.cs" />
-    <Compile Include="Util\ITextChars.cs" />
     <Compile Include="Util\ITokenizer.cs" />
     <Compile Include="Util\LineChars.cs" />
     <Compile Include="Util\ModeLineParser.cs" />
     <Compile Include="Util\RegexEntry.cs" />
     <Compile Include="Util\RelayCommand.cs" />
     <Compile Include="Util\SimpleTokenizer.cs" />
-    <Compile Include="Util\StringChars.cs" />
-    <Compile Include="Util\StringPart.cs" />
-    <Compile Include="Util\TextSpan.cs" />
     <Compile Include="Util\VsColors.cs" />
     <Compile Include="Util\VsFeatures.cs" />
     <Compile Include="VsSolution.cs" />
@@ -313,6 +293,16 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ShowTVR.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Viasfora.Contracts\Viasfora.Contracts.csproj">
+      <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
+      <Name>Viasfora.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Viasfora.Languages\Viasfora.Languages.csproj">
+      <Project>{14b957db-0ed2-4dea-85c9-b670f6653c1b}</Project>
+      <Name>Viasfora.Languages</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

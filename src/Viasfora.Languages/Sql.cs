@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Settings;
@@ -39,7 +38,7 @@ namespace Winterdom.Viasfora.Languages {
       };
 
     public SqlSettings(ITypedSettingsStore store)
-      : base (Constants.Sql, store) {
+      : base (Langs.Sql, store) {
     }
   }
 }

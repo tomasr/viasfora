@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Util;
@@ -37,7 +36,7 @@ namespace Winterdom.Viasfora.Languages {
     };
 
     public CppSettings(ITypedSettingsStore store)
-      : base(Constants.Cpp, store) {
+      : base(Langs.Cpp, store) {
     }
   }
 }

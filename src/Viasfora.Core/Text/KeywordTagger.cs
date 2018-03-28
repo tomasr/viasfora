@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Tags;
 using Winterdom.Viasfora.Util;
 using System.Linq;
 using Microsoft.VisualStudio.Text.Classification;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Text {
 

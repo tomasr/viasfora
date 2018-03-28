@@ -1,5 +1,4 @@
 ﻿using System;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;

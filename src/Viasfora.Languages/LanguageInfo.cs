@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Languages {

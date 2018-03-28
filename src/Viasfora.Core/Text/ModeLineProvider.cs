@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.Text.Editor;
 using System;
 using System.Collections.Generic;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Text {
