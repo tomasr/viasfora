@@ -1,21 +1,20 @@
-﻿using Microsoft.VisualStudio.Text;
-using System;
+﻿using System;
 
 namespace Winterdom.Viasfora.Util {
   public struct StringPart {
-    public Span Span { get; set; }
+    public TextSpan Span { get; set; }
     public StringPartType Type { get; set; }
 
     public StringPart(int start, int length)
-      : this(new Span(start, length), StringPartType.EscapeSequence) {
+      : this(new TextSpan(start, length), StringPartType.EscapeSequence) {
     }
     public StringPart(int start, int length, StringPartType type)
-      : this(new Span(start, length), type) {
+      : this(new TextSpan(start, length), type) {
     }
-    public StringPart(Span span)
+    public StringPart(TextSpan span)
       : this(span, StringPartType.EscapeSequence) {
     }
-    public StringPart(Span span, StringPartType type) : this() {
+    public StringPart(TextSpan span, StringPartType type) : this() {
       this.Span = span;
       this.Type = type;
     }

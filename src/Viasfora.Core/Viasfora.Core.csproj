@@ -264,6 +264,7 @@
     <Compile Include="Util\SimpleTokenizer.cs" />
     <Compile Include="Util\StringChars.cs" />
     <Compile Include="Util\StringPart.cs" />
+    <Compile Include="Util\TextSpan.cs" />
     <Compile Include="Util\VsColors.cs" />
     <Compile Include="Util\VsFeatures.cs" />
     <Compile Include="VsSolution.cs" />
