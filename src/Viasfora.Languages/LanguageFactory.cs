@@ -23,8 +23,10 @@ namespace Winterdom.Viasfora.Languages {
     }
 
     public ILanguage TryCreateLanguage(IContentType contentType) {
+      bool matches(string ct) => contentType.IsOfType(ct);
+
       foreach ( ILanguage lang in Languages ) {
-        if ( lang.MatchesContentType(contentType) ) {
+        if ( lang.MatchesContentType(matches) ) {
           return lang;
         }
       }

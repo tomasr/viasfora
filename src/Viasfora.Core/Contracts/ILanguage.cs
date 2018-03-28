@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.Utilities;
 using Microsoft.VisualStudio.Text.Classification;
 using Winterdom.Viasfora.Util;
 
@@ -8,7 +7,7 @@ namespace Winterdom.Viasfora.Contracts {
     ILanguageSettings Settings { get; }
     T GetService<T>();
     IStringScanner NewStringScanner(String classificationName, String text);
-    bool MatchesContentType(IContentType contentType);
+    bool MatchesContentType(Func<String, bool> contentTypeMatches);
     bool IsKeywordClassification(IClassificationType classificationType);
     Func<String, String> NormalizationFunction { get; }
   }

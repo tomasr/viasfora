@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Settings;
@@ -17,7 +16,7 @@ namespace Winterdom.Viasfora.Languages {
       this.Settings = new DefaultSettings(store);
     }
 
-    public override bool MatchesContentType(IContentType contentType) {
+    public override bool MatchesContentType(Func<String, bool> _) {
       return true;
     }
     protected override IBraceScanner NewBraceScanner()
