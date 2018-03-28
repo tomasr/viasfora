@@ -162,6 +162,9 @@
     <Compile Include="DefaultLanguage.cs" />
     <Compile Include="Fortran.cs" />
     <Compile Include="FSharp.cs" />
+    <Compile Include="ILanguage.cs" />
+    <Compile Include="ILanguageFactory.cs" />
+    <Compile Include="ILanguageSettings.cs" />
     <Compile Include="JScript.cs" />
     <Compile Include="Json.cs" />
     <Compile Include="LanguageFactory.cs" />
