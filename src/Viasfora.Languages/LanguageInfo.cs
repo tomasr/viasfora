@@ -1,9 +1,7 @@
 ﻿using System;
-using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
-using Microsoft.VisualStudio.Text.Classification;
 
 namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo {

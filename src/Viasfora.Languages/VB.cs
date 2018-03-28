@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.Text.Classification;
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
