@@ -85,11 +85,12 @@ namespace Winterdom.Viasfora.Rainbow {
       this.Snapshot = snapshot;
     }
 
+    // TODO: Wrap use of NormalizedSnapshotSpanCollection
     public IEnumerable<BracePos> BracesInSpans(NormalizedSnapshotSpanCollection spans) {
       if ( ScanIsUnnecessary() ) yield break;
 
       for ( int i = 0; i < spans.Count; i++ ) {
-        var wantedSpan = spans[i];
+        var wantedSpan = new TextSpan(spans[i].Start, spans[i].Length);
         EnsureLinesInPreferredSpan(wantedSpan);
         int startIndex = FindIndexOfBraceAtOrAfter(wantedSpan.Start);
         if ( startIndex < 0 ) {
@@ -103,13 +104,16 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
+    // TODO: Wrap use of NormalizedSnapshotSpanCollection
     public IEnumerable<CharPos> ErrorBracesInSpans(NormalizedSnapshotSpanCollection spans) {
       if ( ScanIsUnnecessary() )
         return Enumerable.Empty<CharPos>();
 
       // we expect there to be very few brace errors,
       // so it's not worth optimizing this too much
-      EnsureLinesInPreferredSpan(spans.Complete());
+      var fullSpan = spans.Complete();
+      var wantedSpan = new TextSpan(fullSpan.Start, fullSpan.Length); 
+      EnsureLinesInPreferredSpan(wantedSpan);
       if ( this.braceErrors.Count == 0 )
         return Enumerable.Empty<CharPos>();
 
@@ -126,13 +130,15 @@ namespace Winterdom.Viasfora.Rainbow {
       return BracesInSpans(new NormalizedSnapshotSpanCollection(span));
     }
 
+    // TODO: avoid use of SnapshotPoint here
     // returns the brace pair when the point is already a brace
     public Tuple<BracePos, BracePos> GetBracePair(SnapshotPoint point) {
       if ( point.Snapshot != this.Snapshot || point.Position >= Snapshot.Length ) {
         return null;
       }
 
-      this.EnsureLinesInPreferredSpan(point.SpanUntil());
+      var span = point.SpanUntil();
+      this.EnsureLinesInPreferredSpan(new TextSpan(span.Start, span.Length));
 
       int index = FindIndexOfBraceAtOrAfter(point.Position);
       if ( index < 0 ) return null;
@@ -148,12 +154,14 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
+    // TODO: Avoid use of SnapshotPoint
     public Tuple<BracePos, BracePos> GetBracePairFromPosition(SnapshotPoint point, RainbowHighlightMode mode) {
       if ( point.Snapshot != this.Snapshot || point.Position >= Snapshot.Length ) {
         return null;
       }
 
-      this.EnsureLinesInPreferredSpan(point.SpanUntil());
+      var span = point.SpanUntil();
+      this.EnsureLinesInPreferredSpan(new TextSpan(span.Start, span.Length));
 
       int openIndex = -1;
       BracePos? opening = null;
@@ -218,12 +226,12 @@ namespace Winterdom.Viasfora.Rainbow {
     // as it is too expensive, so force a larger span if
     // necessary. However, if we've already parsed
     // beyond the span, leave it be
-    private void EnsureLinesInPreferredSpan(SnapshotSpan span) {
-      int minSpanLen = Math.Max(100, (int)(span.Snapshot.Length * 0.10));
+    private void EnsureLinesInPreferredSpan(TextSpan span) {
+      var snapshot = this.Snapshot;
+      int minSpanLen = Math.Max(100, (int)(snapshot.Length * 0.10));
       var realSpan = span;
       int lastPosition = this.LastParsedPosition;
 
-      var snapshot = this.Snapshot;
       if ( lastPosition > 0 && lastPosition >= span.End ) {
         // already parsed this, so no need to do it again
         return;

@@ -1,6 +1,7 @@
 ﻿using System;
 
 namespace Winterdom.Viasfora.Util {
+  // TODO: Get rid of virtual properties
   public class StringChars : ITextChars {
     private String text;
     private int position;
@@ -8,17 +9,11 @@ namespace Winterdom.Viasfora.Util {
     private int mark;
     const int NO_MARK = -1;
     const char EOT = '\0';
-    public int Position {
-      get { return position; }
-    }
 
-    public virtual int AbsolutePosition {
-      get { return position; }
-    }
-
-    public bool EndOfLine {
-      get { return position >= length; }
-    }
+    public int Position => position;
+    public virtual int AbsolutePosition => position;
+    public bool EndOfLine => position >= length;
+    public virtual int End => Position + length;
 
     public StringChars(String text, int start=0, int len=-1) {
       this.text = text;

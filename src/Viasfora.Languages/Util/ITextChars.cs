@@ -4,6 +4,7 @@ namespace Winterdom.Viasfora.Util {
   public interface ITextChars {
     int Position { get; }
     int AbsolutePosition { get; }
+    int End { get; }
     bool EndOfLine { get; }
     char Char();
     char NChar();

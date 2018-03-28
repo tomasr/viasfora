@@ -139,9 +139,11 @@
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
     <Compile Include="BracePos.cs" />
+    <Compile Include="ITextLinesSource.cs" />
     <Compile Include="RainbowColoringMode.cs" />
     <Compile Include="PerBraceStacker.cs" />
     <Compile Include="RainbowHighlightKey.cs" />
+    <Compile Include="SnapshotLineSource.cs" />
     <Compile Include="UnifiedBraceStacker.cs" />
     <Compile Include="Classifications\RainbowClassifications.cs" />
     <Compile Include="IBraceStacker.cs" />
