@@ -8,7 +8,7 @@ namespace Winterdom.Viasfora.Contracts {
     T GetService<T>();
     IStringScanner NewStringScanner(String classificationName, String text);
     bool MatchesContentType(Func<String, bool> contentTypeMatches);
-    bool IsKeywordClassification(IClassificationType classificationType);
+    bool IsKeywordClassification(String classificationType);
     Func<String, String> NormalizationFunction { get; }
   }
 }

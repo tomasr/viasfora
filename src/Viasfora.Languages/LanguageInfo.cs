@@ -33,7 +33,7 @@ namespace Winterdom.Viasfora.Languages {
       return false;
     }
 
-    public virtual bool IsKeywordClassification(IClassificationType classificationType) {
+    public virtual bool IsKeywordClassification(String classificationType) {
       return CompareClassification(classificationType, "Keyword");
     }
 
@@ -41,8 +41,8 @@ namespace Winterdom.Viasfora.Languages {
 
     protected abstract String[] SupportedContentTypes { get; }
 
-    protected bool CompareClassification(IClassificationType classificationType, String name) {
-      return classificationType.Classification.Equals(name, StringComparison.OrdinalIgnoreCase);
+    protected bool CompareClassification(String classificationType, String name) {
+      return classificationType.Equals(name, StringComparison.OrdinalIgnoreCase);
     }
 
     public LanguageInfo() {

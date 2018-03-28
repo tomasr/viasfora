@@ -30,8 +30,8 @@ namespace Winterdom.Viasfora.Languages {
       return new CSharpStringScanner(text, classificationName);
     }
 
-    public override bool IsKeywordClassification(IClassificationType classificationType) {
-      return classificationType.Classification.EndsWith("keyword", StringComparison.OrdinalIgnoreCase);
+    public override bool IsKeywordClassification(String classificationType) {
+      return classificationType.EndsWith("keyword", StringComparison.OrdinalIgnoreCase);
     }
   }
 

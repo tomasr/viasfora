@@ -25,7 +25,7 @@ namespace Winterdom.Viasfora.Languages {
     protected override IBraceScanner NewBraceScanner()
       => new VbBraceScanner();
 
-    public override bool IsKeywordClassification(IClassificationType classificationType) {
+    public override bool IsKeywordClassification(String classificationType) {
       return CompareClassification(classificationType, "Keyword")
           || CompareClassification(classificationType, "VBScript Keyword");
     }
