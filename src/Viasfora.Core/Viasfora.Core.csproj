@@ -282,9 +282,9 @@
     <Resource Include="Resources\ShowTVR.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Viasfora.Contracts\Viasfora.Contracts.csproj">
+    <ProjectReference Include="..\Viasfora.Settings\Viasfora.Settings.csproj">
       <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
-      <Name>Viasfora.Contracts</Name>
+      <Name>Viasfora.Settings</Name>
     </ProjectReference>
     <ProjectReference Include="..\Viasfora.Languages\Viasfora.Languages.csproj">
       <Project>{14b957db-0ed2-4dea-85c9-b670f6653c1b}</Project>

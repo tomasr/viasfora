@@ -34,7 +34,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Xml", "src\Viasfor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Rainbow", "src\Viasfora.Rainbow\Viasfora.Rainbow.csproj", "{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Contracts", "src\\Viasfora.Contracts\Viasfora.Contracts.csproj", "{DD9ED7C5-417C-43A2-BE13-14CD948566B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Settings", "src\\Viasfora.Settings\Viasfora.Settings.csproj", "{DD9ED7C5-417C-43A2-BE13-14CD948566B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

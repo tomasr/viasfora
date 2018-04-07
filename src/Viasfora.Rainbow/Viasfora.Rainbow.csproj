@@ -174,9 +174,9 @@
     <Compile Include="Util\ViewTipProperty.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Viasfora.Contracts\Viasfora.Contracts.csproj">
+    <ProjectReference Include="..\Viasfora.Settings\Viasfora.Settings.csproj">
       <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
-      <Name>Viasfora.Contracts</Name>
+      <Name>Viasfora.Settings</Name>
     </ProjectReference>
     <ProjectReference Include="..\Viasfora.Core\Viasfora.Core.csproj">
       <Project>{419c99ad-185a-4d31-a7ff-e1754c7b806d}</Project>

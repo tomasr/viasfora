@@ -207,10 +207,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Viasfora.Contracts\Viasfora.Contracts.csproj">
-      <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
-      <Name>Viasfora.Contracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\Viasfora.Core\Viasfora.Core.csproj">
       <Project>{419c99ad-185a-4d31-a7ff-e1754c7b806d}</Project>
       <Name>Viasfora.Core</Name>
@@ -222,6 +218,10 @@
     <ProjectReference Include="..\..\src\Viasfora.Rainbow\Viasfora.Rainbow.csproj">
       <Project>{944758a5-90a4-4de7-8ef6-4fb2e7f4efb3}</Project>
       <Name>Viasfora.Rainbow</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Viasfora.Settings\Viasfora.Settings.csproj">
+      <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
+      <Name>Viasfora.Settings</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Viasfora.Xml\Viasfora.Xml.csproj">
       <Project>{3274163b-e647-40e2-8d9f-6df7e7c50411}</Project>

@@ -8,8 +8,8 @@
     <ProjectGuid>{DD9ED7C5-417C-43A2-BE13-14CD948566B4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Viasfora.Contracts</RootNamespace>
-    <AssemblyName>Viasfora.Contracts</AssemblyName>
+    <RootNamespace>Viasfora.Settings</RootNamespace>
+    <AssemblyName>Viasfora.Settings</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
