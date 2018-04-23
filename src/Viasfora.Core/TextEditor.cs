@@ -16,10 +16,7 @@ namespace Winterdom.Viasfora {
   public static class TextEditor {
     public static ITextCaret GetCurrentCaret() {
       ITextView view = GetCurrentView();
-      if ( view == null ) {
-        return null;
-      }
-      return view.Caret;
+      return view?.Caret;
     }
     public static ITextSelection GetCurrentSelection() {
       ITextView view = GetCurrentView();

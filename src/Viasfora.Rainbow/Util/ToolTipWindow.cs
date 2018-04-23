@@ -153,8 +153,9 @@ namespace Winterdom.Viasfora.Util {
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
       this.tipView.ZoomLevel = GetSourceZoomFactor() * ZoomFactor * 100;
-      this.wrapper = new Border();
-      this.wrapper.Child = this.tipView.VisualElement;
+      this.wrapper = new Border() {
+        Child = this.tipView.VisualElement
+      };
 
       this.tipView.Set(new ViewTipProperty());
     }

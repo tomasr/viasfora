@@ -6,12 +6,12 @@ using System.Xml;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Text.Tagging;
 using Winterdom.Viasfora.Util;
-using System.Windows.Media;
 
 namespace Winterdom.Viasfora.Xml {
   internal class XmlQuickInfoSource : IQuickInfoSource {

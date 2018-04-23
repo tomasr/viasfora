@@ -19,7 +19,6 @@ namespace Winterdom.Viasfora.Commands {
       base.OnInvoke(sender, e);
       TextObfuscationState.Invert();
       Telemetry.WriteEvent("Obfuscate Text");
-
     }
   }
 }
