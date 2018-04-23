@@ -94,13 +94,14 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private Rect CreateVisual(SnapshotSpan span, Rect rc, ResourceDictionary properties) {
-      Rectangle highlight = new Rectangle();
-      highlight.UseLayoutRounding = true;
-      highlight.SnapsToDevicePixels = true;
-      highlight.Fill = new SolidColorBrush((Color)properties["BackgroundColor"]);
-      highlight.Opacity = 0.10;
-      highlight.Width = rc.Width;
-      highlight.Height = rc.Height;
+      Rectangle highlight = new Rectangle() {
+        UseLayoutRounding = true,
+        SnapsToDevicePixels = true,
+        Fill = new SolidColorBrush((Color)properties["BackgroundColor"]),
+        Opacity = 0.10,
+        Width = rc.Width,
+        Height = rc.Height,
+      };
 
       // Align the image with the top of the bounds of the text geometry
       Canvas.SetLeft(highlight, rc.Left);

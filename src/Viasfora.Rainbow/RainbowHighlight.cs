@@ -71,7 +71,6 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public void Start(SnapshotPoint opening, SnapshotPoint closing, int depth) {
       SnapshotSpan span = new SnapshotSpan(opening, closing);
-      var lines = this.view.TextViewLines;
       PathGeometry path = BuildSpanGeometry(span);
       path = path.GetOutlinedPathGeometry();
 
@@ -133,13 +132,12 @@ namespace Winterdom.Viasfora.Rainbow {
         spanGeometry.Freeze();
       }
 
-      Path path = new Path();
-      path.Data = spanGeometry;
-      path.Stroke = brush;
-      path.StrokeThickness = 1.3;
-      path.Fill = MakeBackgroundBrush(brush);
-
-      return path;
+      return new Path() {
+        Data = spanGeometry,
+        Stroke = brush,
+        StrokeThickness = 1.3,
+        Fill = MakeBackgroundBrush(brush),
+      };
     }
 
     private Brush GetRainbowBrush(int depth) {
@@ -151,9 +149,9 @@ namespace Winterdom.Viasfora.Rainbow {
     private Brush MakeBackgroundBrush(Brush brush) {
       SolidColorBrush scb = brush as SolidColorBrush;
       if ( scb == null ) return Brushes.Transparent;
-      Brush newBrush = new SolidColorBrush(scb.Color);
-      newBrush.Opacity = 0.10;
-      return newBrush;
+      return new SolidColorBrush(scb.Color) {
+        Opacity = 0.10
+      };
     }
   }
 }

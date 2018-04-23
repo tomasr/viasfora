@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
@@ -43,7 +42,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
           len++;
         }
       }
-      var span = new Span(start, len + 1);
+      var span = new TextSpan(start, len + 1);
       return new StringPart(span, StringPartType.EscapeSequence);
     }
   }

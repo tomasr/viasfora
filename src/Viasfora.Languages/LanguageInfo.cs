@@ -1,10 +1,7 @@
 ﻿using System;
-using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.CommentParsers;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
-using Microsoft.VisualStudio.Text.Classification;
 
 namespace Winterdom.Viasfora.Languages {
   public abstract class LanguageInfo {
@@ -25,15 +22,15 @@ namespace Winterdom.Viasfora.Languages {
       return null;
     }
 
-    public virtual bool MatchesContentType(IContentType contentType) {
+    public virtual bool MatchesContentType(Func<String, bool> contentTypeMatches) {
       foreach ( String str in this.SupportedContentTypes ) {
-        if ( contentType.IsOfType(str) ) 
+        if ( contentTypeMatches(str) ) 
           return true;
       }
       return false;
     }
 
-    public virtual bool IsKeywordClassification(IClassificationType classificationType) {
+    public virtual bool IsKeywordClassification(String classificationType) {
       return CompareClassification(classificationType, "Keyword");
     }
 
@@ -41,8 +38,8 @@ namespace Winterdom.Viasfora.Languages {
 
     protected abstract String[] SupportedContentTypes { get; }
 
-    protected bool CompareClassification(IClassificationType classificationType, String name) {
-      return classificationType.Classification.Equals(name, StringComparison.OrdinalIgnoreCase);
+    protected bool CompareClassification(String classificationType, String name) {
+      return classificationType.Equals(name, StringComparison.OrdinalIgnoreCase);
     }
 
     public LanguageInfo() {

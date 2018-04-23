@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;
@@ -40,7 +39,7 @@ namespace Winterdom.Viasfora.Languages {
       };
 
     public FSharpSettings(ITypedSettingsStore store)
-      : base (Constants.FSharp, store) {
+      : base (Langs.FSharp, store) {
     }
   }
 }

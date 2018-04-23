@@ -1,6 +1,6 @@
 ﻿using System;
 using Winterdom.Viasfora.Compatibility;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora {
   public class SettingsContext {

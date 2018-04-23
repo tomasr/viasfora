@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Text.Classification;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;
@@ -30,8 +28,8 @@ namespace Winterdom.Viasfora.Languages {
       return new CSharpStringScanner(text, classificationName);
     }
 
-    public override bool IsKeywordClassification(IClassificationType classificationType) {
-      return classificationType.Classification.EndsWith("keyword", StringComparison.OrdinalIgnoreCase);
+    public override bool IsKeywordClassification(String classificationType) {
+      return classificationType.EndsWith("keyword", StringComparison.OrdinalIgnoreCase);
     }
   }
 
@@ -46,7 +44,7 @@ namespace Winterdom.Viasfora.Languages {
       };
 
     public USqlSettings(ITypedSettingsStore store)
-      : base (Constants.USql, store) {
+      : base (Langs.USql, store) {
     }
   }
 }

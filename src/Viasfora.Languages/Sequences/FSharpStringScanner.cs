@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
@@ -39,25 +38,25 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       text.Next();
       if ( escapeChar.IndexOf(text.Char()) >= 0 ) {
         text.Next();
-        part = new StringPart(new Span(text.Position - 2, 2));
+        part = new StringPart(new TextSpan(text.Position - 2, 2));
         return true;
       }
       if ( Char.IsDigit(text.Char()) && Char.IsDigit(text.NChar()) && Char.IsDigit(text.NNChar()) ) {
         // a trigraph
         text.Skip(3);
-        part = new StringPart(new Span(text.Position - 4, 4));
+        part = new StringPart(new TextSpan(text.Position - 4, 4));
         return true;
       }
       if ( text.Char() == '0' && !Char.IsDigit(text.NChar()) ) {
         // \0
         text.Next();
-        part = new StringPart(new Span(text.Position - 2, 2));
+        part = new StringPart(new TextSpan(text.Position - 2, 2));
         return true;
       }
       if ( text.Char() == 'u' ) {
         text.Next();
         text.Mark();
-        Span? span = TryParseShortUnicode();
+        TextSpan? span = TryParseShortUnicode();
         if ( span.HasValue ) {
           part = new StringPart(span.Value);
           return true;
@@ -67,7 +66,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       if ( text.Char() == 'U' ) {
         text.Next();
         text.Mark();
-        Span? span = TryParseLongUnicode();
+        TextSpan? span = TryParseLongUnicode();
         if ( span.HasValue ) {
           part = new StringPart(span.Value);
           return true;
@@ -77,11 +76,11 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       // unrecognized sequence, return it as error
       text.Next();
       int length = text.Position - start;
-      part = new StringPart(new Span(start, length), StringPartType.EscapeSequenceError);
+      part = new StringPart(new TextSpan(start, length), StringPartType.EscapeSequenceError);
       return true;
     }
 
-    private Span? TryParseShortUnicode() {
+    private TextSpan? TryParseShortUnicode() {
       // \Uhhhhhhhh
       for ( int i = 0; i < 4; i++ ) {
         if ( !text.Char().IsHexDigit() ) {
@@ -89,9 +88,9 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         }
         text.Next();
       }
-      return new Span(text.Position - 6, 6);
+      return new TextSpan(text.Position - 6, 6);
     }
-    private Span? TryParseLongUnicode() {
+    private TextSpan? TryParseLongUnicode() {
       // \Uhhhhhhhh
       for ( int i = 0; i < 8; i++ ) {
         if ( !text.Char().IsHexDigit() ) {
@@ -99,7 +98,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         }
         text.Next();
       }
-      return new Span(text.Position - 10, 10);
+      return new TextSpan(text.Position - 10, 10);
     }
 
     private bool TryParseFormatSpecifier(ref StringPart result) {

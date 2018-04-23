@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Languages {
@@ -22,21 +19,15 @@ namespace Winterdom.Viasfora.Languages {
       return this.Languages;
     }
 
-    public ILanguage TryCreateLanguage(IContentType contentType) {
+    public ILanguage TryCreateLanguage(Func<String, bool> contentTypeMatcher) {
       foreach ( ILanguage lang in Languages ) {
-        if ( lang.MatchesContentType(contentType) ) {
+        if ( lang.MatchesContentType(contentTypeMatcher) ) {
           return lang;
         }
       }
       return defaultLang;
     }
 
-    public ILanguage TryCreateLanguage(ITextBuffer textBuffer) {
-      return TryCreateLanguage(textBuffer.ContentType);
-    }
-    public ILanguage TryCreateLanguage(ITextSnapshot snapshot) {
-      return TryCreateLanguage(snapshot.ContentType);
-    }
     public ILanguage TryCreateLanguage(String key) {
       foreach ( ILanguage lang in Languages ) {
         if ( lang.Settings.KeyName == key ) {

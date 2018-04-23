@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Text;
 
 namespace Winterdom.Viasfora.Util {
+  // TODO: Eliminate inheritance from StringChars, or get completely rid of
   public class LineChars : StringChars {
     private ITextSnapshotLine line;
     const char EOT = '\0';
@@ -11,8 +12,7 @@ namespace Winterdom.Viasfora.Util {
       this.line = line;
     }
 
-    public override int AbsolutePosition {
-      get { return this.line.Start + this.Position;  }
-    }
+    public override int AbsolutePosition => this.line.Start + this.Position; 
+    public override int End => this.line.End;
   }
 }

@@ -8,9 +8,9 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using Winterdom.Viasfora;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.Rainbow;
+using Winterdom.Viasfora.Xml;
 using Xunit;
 
 namespace Viasfora.Tests {
@@ -69,9 +69,11 @@ namespace Viasfora.Tests {
       if ( cachedEditorHost == null ) {
         var editorHostFactory = new EditorHostFactory();
         var catalog = new AggregateCatalog(
-          new AssemblyCatalog(typeof(LanguageFactory).Assembly),
-          new AssemblyCatalog(typeof(PkgSource).Assembly),
-          new AssemblyCatalog(typeof(TextBufferBraces).Assembly)
+          new AssemblyCatalog(typeof(PkgSource).Assembly), // Viasfora.Settings
+          new AssemblyCatalog(typeof(LanguageFactory).Assembly), // Viasfora.Languages
+          new AssemblyCatalog(typeof(Guids).Assembly), // Viasfora.Core
+          new AssemblyCatalog(typeof(TextBufferBraces).Assembly), // Viasfora.Rainbow
+          new AssemblyCatalog(typeof(XmlTaggerProvider).Assembly) // Viasfora.Xml
           );
         editorHostFactory.Add(catalog);
         var compositionContainer = editorHostFactory.CreateCompositionContainer();

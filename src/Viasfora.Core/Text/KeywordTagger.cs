@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Tags;
 using Winterdom.Viasfora.Util;
 using System.Linq;
 using Microsoft.VisualStudio.Text.Classification;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -78,7 +78,7 @@ namespace Winterdom.Viasfora.Text {
           }
         }
 
-        if ( kce && lang.IsKeywordClassification(classificationType) ) {
+        if ( kce && lang.IsKeywordClassification(classificationType.Classification) ) {
           // Is this one of the keywords we care about?
           var result = IsInterestingKeyword(lang, tagSpan.Span);
           if ( result != null ) {
@@ -94,7 +94,7 @@ namespace Winterdom.Viasfora.Text {
       var name = classification.Classification;
       if ( settings.EscapeSequencesEnabled && name.IndexOf("string", StringComparison.InvariantCultureIgnoreCase) >= 0 )
         return true;
-      if ( settings.KeywordClassifierEnabled && lang.IsKeywordClassification(classification) )
+      if ( settings.KeywordClassifierEnabled && lang.IsKeywordClassification(classification.Classification) )
         return true;
       return false;
     }

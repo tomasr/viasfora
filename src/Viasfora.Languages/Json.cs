@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Settings;
@@ -29,7 +28,7 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults => EMPTY;
 
     public JsonSettings(ITypedSettingsStore store)
-      : base (Constants.Json, store) {
+      : base (Langs.Json, store) {
     }
   }
 }

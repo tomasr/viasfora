@@ -6,6 +6,7 @@ using Winterdom.Viasfora.Xml;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Classifications;
 using Winterdom.Viasfora.Rainbow.Classifications;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Options {
   public partial class MainOptionsControl : UserControl {
