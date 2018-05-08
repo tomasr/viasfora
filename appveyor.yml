@@ -2,6 +2,11 @@ configuration: Release
 
 platform: Any CPU
 
+image: Visual Studio 2017
+
+environment:
+  EnableNuGetPackageRestore: true
+
 install: 
   - ps: (new-object Net.WebClient).DownloadString("https://raw.github.com/madskristensen/ExtensionScripts/master/AppVeyor/vsix.ps1") | iex
 
@@ -19,7 +24,6 @@ build:
 branches:
   only:
     - develop
-    - vs15
 
 after_test:
   - ps: Vsix-PushArtifacts | Vsix-PublishToGallery
