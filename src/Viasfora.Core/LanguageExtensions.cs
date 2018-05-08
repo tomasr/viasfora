@@ -25,7 +25,7 @@ namespace Winterdom.Viasfora {
       return factory.TryCreateLanguage(snapshot.ContentType);
     }
     public static ILanguage TryCreateLanguage(this ILanguageFactory factory, IContentType contentType) {
-      bool matcher(String lang) => contentType.IsOfType(lang);
+      Func<String, bool> matcher = (String lang) => contentType.IsOfType(lang);
       return factory.TryCreateLanguage(matcher);
     }
   }
