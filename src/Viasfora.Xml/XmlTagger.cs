@@ -127,7 +127,7 @@ namespace Winterdom.Viasfora.Xml {
         } else if ( IsXmlName(tagName) || IsXmlAttribute(tagName) ) {
           lastSpan = cs;
           lastSpanTagName = tagName;
-        } else if ( IsRazorTag(tagName) ) {
+        } else if ( IsRazorTag(tagName) && settings.XmlCloseTagEnabled ) {
           if ( snapshot.GetText(new Span(cs.Span.Start - 2, 2)) == "</" ) {
             yield return new TagSpan<ClassificationTag>(cs, razorCloseTagClassification);
           }
