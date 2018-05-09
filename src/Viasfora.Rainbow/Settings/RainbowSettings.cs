@@ -37,6 +37,10 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
       get { return this.Store.GetEnum(nameof(RainbowColoringMode), RainbowColoringMode.Unified); }
       set { this.Store.SetValue(nameof(RainbowColoringMode), value); }
     }
+    public bool RainbowLinesEnabled {
+      get { return this.Store.GetBoolean(nameof(RainbowLinesEnabled), true); }
+      set { this.Store.SetValue(nameof(RainbowLinesEnabled), value); }
+    }
 
     [ImportingConstructor]
     public RainbowSettings(ITypedSettingsStore store) : base(store) {

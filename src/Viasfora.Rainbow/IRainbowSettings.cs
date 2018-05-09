@@ -10,6 +10,7 @@ namespace Winterdom.Viasfora.Rainbow {
     RainbowHighlightKey RainbowHighlightKey { get; set; }
     bool RainbowToolTipsEnabled { get; set; }
     RainbowColoringMode RainbowColoringMode { get; set; }
+    bool RainbowLinesEnabled { get; set; }
     void Save();
   }
 }

@@ -5,9 +5,7 @@ using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -54,7 +52,6 @@ namespace Winterdom.Viasfora.Rainbow {
     private readonly IClassificationFormatMap formatMap;
     private readonly IClassificationType[] rainbowTags;
     private readonly RainbowLinesProvider provider;
-    private SnapshotSpan currentSpan;
 
     public RainbowLines(
         IWpfTextView textView, 
@@ -66,8 +63,9 @@ namespace Winterdom.Viasfora.Rainbow {
       this.rainbowTags = provider.GetRainbowTags();
       layer = view.GetAdornmentLayer(LAYER);
 
+      this.provider.Settings.SettingsChanged += OnSettingsChanged;
       this.view.Caret.PositionChanged += OnCaretPositionChanged;
-      this.view.Options.OptionChanged += OnSettingsChanged;
+      this.view.Options.OptionChanged += OnOptionsChanged;
       this.view.LayoutChanged += OnLayoutChanged;
       this.view.ViewportLeftChanged += OnViewportLeftChanged;
       this.view.ViewportWidthChanged += OnViewportWidthChanged;
@@ -77,7 +75,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
     private void OnViewClosed(object sender, EventArgs e) {
       if ( this.view != null ) {
-        this.view.Options.OptionChanged -= OnSettingsChanged;
+        this.view.Options.OptionChanged -= OnOptionsChanged;
         this.view.Caret.PositionChanged -= OnCaretPositionChanged;
         this.view.LayoutChanged -= OnLayoutChanged;
         this.view.ViewportWidthChanged -= OnViewportWidthChanged;
@@ -88,7 +86,14 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
-    private void OnSettingsChanged(object sender, EditorOptionChangedEventArgs e) {
+    private void OnSettingsChanged(object sender, EventArgs e) {
+      layer.RemoveAllAdornments();
+      var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
+      RedrawVisuals(bufferPos);
+    }
+
+    private void OnOptionsChanged(object sender, EditorOptionChangedEventArgs e) {
+      layer.RemoveAllAdornments();
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
       RedrawVisuals(bufferPos);
     }
@@ -125,6 +130,9 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void RedrawVisuals(SnapshotPoint caret) {
+      if ( !this.provider.Settings.RainbowLinesEnabled ) {
+        return;
+      }
       var provider = caret.Snapshot.TextBuffer.Get<RainbowProvider>();
       if ( provider == null ) {
         return;
@@ -137,10 +145,6 @@ namespace Winterdom.Viasfora.Rainbow {
       SnapshotPoint closing = braces.Item2.ToPoint(caret.Snapshot);
 
       var newSpan = new SnapshotSpan(opening, closing);
-
-      if ( currentSpan == newSpan ) {
-        //return;
-      }
 
       if ( RainbowProvider.TryMapToView(view, opening, out opening)
         && RainbowProvider.TryMapToView(view, closing, out closing) ) {
@@ -172,6 +176,7 @@ namespace Winterdom.Viasfora.Rainbow {
       };
     }
 
+    // do we want to cache this?
     private Brush GetRainbowBrush(int depth) {
       var rainbow = rainbowTags[depth % provider.GetRainbowDepth()];
       var properties = formatMap.GetTextProperties(rainbow);
@@ -208,23 +213,20 @@ namespace Winterdom.Viasfora.Rainbow {
       var indent = CalculateLeftOfFirstChar(opening, this.view.FormattedLineSource);
       var lines = this.view.TextViewLines.GetTextViewLinesIntersectingSpan(new SnapshotSpan(opening, closing));
 
-      // where the vertical line goes
-      var columnWidth = this.view.FormattedLineSource.ColumnWidth;
-      var guidelineX = indent + (columnWidth / 2) + 2;
-      double y = this.view.TextViewLines.FirstVisibleLine.Top;
+      // figure out where the vertical line goes
+      var guidelineX = indent + (this.view.FormattedLineSource.ColumnWidth / 2) + 2;
 
       List<LinePoint> points = new List<LinePoint>();
       for ( int i=0; i < lines.Count; i++ ) {
         var line = lines[i];
         if ( i == 0 && line.ContainsBufferPosition(opening) ) {
           // first line contains opening char
-          y = line.Bottom;
           var openBounds = line.GetCharacterBounds(opening);
           if ( openBounds.Left > guidelineX ) {
             // draw line from brace to guideline position
-            points.Add(new LinePoint(openBounds.Right, y));
+            points.Add(new LinePoint(openBounds.Right, line.Bottom));
           }
-          points.Add(new LinePoint(guidelineX, y));
+          points.Add(new LinePoint(guidelineX, line.Bottom));
         } else if ( i == lines.Count - 1 && line.ContainsBufferPosition(closing) ) {
           // last line contains the closing element and is visible
           points.Add(new LinePoint(guidelineX, line.Top));
@@ -235,6 +237,7 @@ namespace Winterdom.Viasfora.Rainbow {
             points.Add(new LinePoint(closeBounds.Left, line.Bottom));
           }
         } else {
+          // regular line in between
           var xPos = line.GetBufferPositionFromXCoordinate(guidelineX);
           if (xPos.HasValue && !Char.IsWhiteSpace(xPos.Value.GetChar()) ) {
             // add a hole in the line
@@ -260,7 +263,6 @@ namespace Winterdom.Viasfora.Rainbow {
     private IList<LinePoint> SingleLineSpan(SnapshotPoint opening, SnapshotPoint closing) {
       var startb = this.view.TextViewLines.GetCharacterBounds(opening);
       var endb = this.view.TextViewLines.GetCharacterBounds(closing);
-      var path = new PathGeometry();
 
       return new List<LinePoint> {
         new LinePoint(startb.Left, startb.Bottom),
