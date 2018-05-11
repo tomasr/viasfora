@@ -231,7 +231,7 @@ namespace Winterdom.Viasfora.Rainbow {
           // regular line in between
           var xPos = line.GetBufferPositionFromXCoordinate(guidelineX);
           if (xPos.HasValue && !Char.IsWhiteSpace(xPos.Value.GetChar()) ) {
-            // add a hole in the line
+            // add a hole in the line to avoid running it over text
             points.Add(new LinePoint(guidelineX, line.Top, true));
           }
           points.Add(new LinePoint(guidelineX, line.Bottom));
