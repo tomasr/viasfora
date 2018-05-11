@@ -137,7 +137,6 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( provider == null ) {
         return;
       }
-      // TODO: Check if this is enabled;
       var braces = provider.BufferBraces.GetBracePairFromPosition(caret, RainbowHighlightMode.TrackInsertionPoint);
       if ( braces == null ) return;
 
@@ -161,7 +160,6 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
-
     private UIElement MakeAdornment(SnapshotSpan span, Geometry spanGeometry, int depth) {
       var brush = GetRainbowBrush(depth);
 
@@ -184,9 +182,8 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private Geometry CreateVisuals(SnapshotPoint opening, SnapshotPoint closing, SnapshotPoint caret) {
-      var lines = GetLineSpan(opening, closing, caret);
-      var openLine = lines.Item1;
-      var closeLine = lines.Item2;
+      var openLine = this.view.TextViewLines.GetTextViewLineContainingBufferPosition(opening);
+      var closeLine = this.view.TextViewLines.GetTextViewLineContainingBufferPosition(closing);
 
       IList<LinePoint> points = null;
       if ( openLine != null && closeLine != null && openLine.Extent == closeLine.Extent ) {
@@ -214,7 +211,10 @@ namespace Winterdom.Viasfora.Rainbow {
       var lines = this.view.TextViewLines.GetTextViewLinesIntersectingSpan(new SnapshotSpan(opening, closing));
 
       // figure out where the vertical line goes
-      var guidelineX = indent + (this.view.FormattedLineSource.ColumnWidth / 2) + 2;
+      // ViewportLeft is substracted here so that if the view is scrolled
+      // to the right, we don't draw the line visible if it should be hidden.
+      var guidelineX = (indent + (this.view.FormattedLineSource.ColumnWidth / 2) + 2)
+                     - this.view.ViewportLeft;
 
       List<LinePoint> points = new List<LinePoint>();
       for ( int i=0; i < lines.Count; i++ ) {
@@ -227,15 +227,6 @@ namespace Winterdom.Viasfora.Rainbow {
             points.Add(new LinePoint(openBounds.Right, line.Bottom));
           }
           points.Add(new LinePoint(guidelineX, line.Bottom));
-        } else if ( i == lines.Count - 1 && line.ContainsBufferPosition(closing) ) {
-          // last line contains the closing element and is visible
-          points.Add(new LinePoint(guidelineX, line.Top));
-          var closeBounds = line.GetCharacterBounds(closing);
-          if ( closeBounds.Right < guidelineX || closeBounds.Left > guidelineX ) {
-            // closing is left of guideline
-            points.Add(new LinePoint(guidelineX, line.Bottom));
-            points.Add(new LinePoint(closeBounds.Left, line.Bottom));
-          }
         } else {
           // regular line in between
           var xPos = line.GetBufferPositionFromXCoordinate(guidelineX);
@@ -244,6 +235,13 @@ namespace Winterdom.Viasfora.Rainbow {
             points.Add(new LinePoint(guidelineX, line.Top, true));
           }
           points.Add(new LinePoint(guidelineX, line.Bottom));
+          if ( i == lines.Count - 1 && line.ContainsBufferPosition(closing) ) {
+            // last line contains the closing element and is visible
+            var closeBounds = line.GetCharacterBounds(closing);
+            if ( closeBounds.Right < guidelineX || closeBounds.Left > guidelineX ) {
+              points.Add(new LinePoint(closeBounds.Left, line.Bottom));
+            }
+          }
         }
       }
       return points;
@@ -254,8 +252,8 @@ namespace Winterdom.Viasfora.Rainbow {
       var x = this.view.ViewportLeft;
       var start = line.Start;
       while ( Char.IsWhiteSpace(start.GetChar()) ) {
-        start = start + 1;
         x += start.GetChar() == '\t' ? fls.TabSize * fls.ColumnWidth : fls.ColumnWidth;
+        start = start + 1;
       }
       return x;
     }
@@ -269,14 +267,6 @@ namespace Winterdom.Viasfora.Rainbow {
         new LinePoint(endb.Right, endb.Bottom)
       };
     }
-
-    private Tuple<ITextViewLine, ITextViewLine> GetLineSpan(SnapshotPoint opening, SnapshotPoint closing, SnapshotPoint caret) {
-      var openLine = this.view.TextViewLines.GetTextViewLineContainingBufferPosition(opening);
-      var closeLine = this.view.TextViewLines.GetTextViewLineContainingBufferPosition(closing);
-
-      return new Tuple<ITextViewLine, ITextViewLine>(openLine, closeLine);
-    }
-
 
     struct LinePoint {
       public readonly double X;
