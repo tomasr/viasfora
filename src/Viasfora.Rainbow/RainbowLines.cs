@@ -50,6 +50,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private IWpfTextView view;
     private Brush[] rainbowColors;
     private IClassificationFormatMap formatMap;
+    private SnapshotSpan currentSpan;
     private readonly IAdornmentLayer layer;
     private readonly RainbowLinesProvider provider;
 
@@ -103,37 +104,37 @@ namespace Winterdom.Viasfora.Rainbow {
     private void OnSettingsChanged(object sender, EventArgs e) {
       layer.RemoveAllAdornments();
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
-      RedrawVisuals(bufferPos);
+      RedrawVisuals(bufferPos, forceRedraw: true);
     }
 
     private void OnOptionsChanged(object sender, EditorOptionChangedEventArgs e) {
       layer.RemoveAllAdornments();
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
-      RedrawVisuals(bufferPos);
+      RedrawVisuals(bufferPos, forceRedraw: true);
     }
 
     private void OnCaretPositionChanged(object sender, CaretPositionChangedEventArgs e) {
-      RedrawVisuals(GetPosition(e.NewPosition.BufferPosition));
+      RedrawVisuals(GetPosition(e.NewPosition.BufferPosition), forceRedraw: false);
     }
 
     private void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
-      RedrawVisuals(bufferPos);
+      RedrawVisuals(bufferPos, forceRedraw: true);
     }
 
     private void OnViewportHeightChanged(object sender, EventArgs e) {
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
-      RedrawVisuals(bufferPos);
+      RedrawVisuals(bufferPos, forceRedraw: false);
     }
 
     private void OnViewportLeftChanged(object sender, EventArgs e) {
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
-      RedrawVisuals(bufferPos);
+      RedrawVisuals(bufferPos, forceRedraw: true);
     }
 
     private void OnViewportWidthChanged(object sender, EventArgs e) {
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
-      RedrawVisuals(bufferPos);
+      RedrawVisuals(bufferPos, forceRedraw: true);
     }
 
     private void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
@@ -147,7 +148,7 @@ namespace Winterdom.Viasfora.Rainbow {
       return position;
     }
 
-    private void RedrawVisuals(SnapshotPoint caret) {
+    private void RedrawVisuals(SnapshotPoint caret, bool forceRedraw) {
       if ( !this.provider.Settings.RainbowLinesEnabled ) {
         return;
       }
@@ -161,24 +162,34 @@ namespace Winterdom.Viasfora.Rainbow {
       SnapshotPoint opening = braces.Item1.ToPoint(caret.Snapshot);
       SnapshotPoint closing = braces.Item2.ToPoint(caret.Snapshot);
 
-      var newSpan = new SnapshotSpan(opening, closing);
 
       if ( RainbowProvider.TryMapToView(view, opening, out opening)
         && RainbowProvider.TryMapToView(view, closing, out closing) ) {
+        var newSpan = new SnapshotSpan(opening, closing);
 
+        if ( currentSpan == newSpan && !forceRedraw ) {
+          return; // don't redraw it
+        }
+        currentSpan = default(SnapshotSpan);
         var path = CreateVisuals(opening, closing, caret);
         layer.RemoveAllAdornments();
         if ( path != null ) {
-          var adornment = MakeAdornment(newSpan, path, braces.Item1.Depth);
+          var adornment = MakeAdornment(path, braces.Item1.Depth);
           layer.AddAdornment(
             AdornmentPositioningBehavior.OwnerControlled, newSpan,
-            TAG, adornment, null
+            TAG, adornment, OnAdornmentRemoved
             );
+
+          currentSpan = newSpan;
         }
       }
     }
 
-    private UIElement MakeAdornment(SnapshotSpan span, Geometry spanGeometry, int depth) {
+    private void OnAdornmentRemoved(object tag, UIElement element) {
+      this.currentSpan = default(SnapshotSpan);
+    }
+
+    private UIElement MakeAdornment(Geometry spanGeometry, int depth) {
       var brush = GetRainbowBrush(depth);
 
       if ( spanGeometry.CanFreeze ) {
