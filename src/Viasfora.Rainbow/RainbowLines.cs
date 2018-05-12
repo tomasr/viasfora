@@ -48,9 +48,9 @@ namespace Winterdom.Viasfora.Rainbow {
     public const String LAYER = "viasfora.rainbow.lines";
     public const String TAG = "viasfora.rainbow";
     private IWpfTextView view;
+    private Brush[] rainbowColors;
+    private IClassificationFormatMap formatMap;
     private readonly IAdornmentLayer layer;
-    private readonly IClassificationFormatMap formatMap;
-    private readonly IClassificationType[] rainbowTags;
     private readonly RainbowLinesProvider provider;
 
     public RainbowLines(
@@ -60,8 +60,8 @@ namespace Winterdom.Viasfora.Rainbow {
       this.view = textView;
       this.provider = provider;
       this.formatMap = provider.GetFormatMap(textView);
-      this.rainbowTags = provider.GetRainbowTags();
-      layer = view.GetAdornmentLayer(LAYER);
+      this.rainbowColors = GetRainbowColors(provider.GetRainbowTags());
+      this.layer = view.GetAdornmentLayer(LAYER);
 
       this.provider.Settings.SettingsChanged += OnSettingsChanged;
       this.view.Caret.PositionChanged += OnCaretPositionChanged;
@@ -71,6 +71,16 @@ namespace Winterdom.Viasfora.Rainbow {
       this.view.ViewportWidthChanged += OnViewportWidthChanged;
       this.view.ViewportHeightChanged += OnViewportHeightChanged;
       this.view.Closed += OnViewClosed;
+
+      this.formatMap.ClassificationFormatMappingChanged += OnClassificationFormatMappingChanged;
+    }
+
+    private Brush[] GetRainbowColors(IClassificationType[] rainbows) {
+      Brush[] brushes = new Brush[rainbows.Length];
+      for ( int i=0; i < brushes.Length; i++ ) {
+        brushes[i] = formatMap.GetTextProperties(rainbows[i]).ForegroundBrush;
+      }
+      return brushes;
     }
 
     private void OnViewClosed(object sender, EventArgs e) {
@@ -83,6 +93,10 @@ namespace Winterdom.Viasfora.Rainbow {
         this.view.ViewportLeftChanged -= OnViewportLeftChanged;
         this.view.Closed -= OnViewClosed;
         this.view = null;
+      }
+      if ( this.formatMap != null ) {
+        this.formatMap.ClassificationFormatMappingChanged -= OnClassificationFormatMappingChanged;
+        this.formatMap = null;
       }
     }
 
@@ -120,6 +134,10 @@ namespace Winterdom.Viasfora.Rainbow {
     private void OnViewportWidthChanged(object sender, EventArgs e) {
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
       RedrawVisuals(bufferPos);
+    }
+
+    private void OnClassificationFormatMappingChanged(object sender, EventArgs e) {
+      this.rainbowColors = GetRainbowColors(this.provider.GetRainbowTags());
     }
 
     private SnapshotPoint GetPosition(SnapshotPoint position) {
@@ -170,15 +188,12 @@ namespace Winterdom.Viasfora.Rainbow {
       return new Path() {
         Data = spanGeometry,
         Stroke = brush,
-        StrokeThickness = 1.2,
+        StrokeThickness = 1.8,
       };
     }
 
-    // do we want to cache this?
     private Brush GetRainbowBrush(int depth) {
-      var rainbow = rainbowTags[depth % provider.GetRainbowDepth()];
-      var properties = formatMap.GetTextProperties(rainbow);
-      return properties.ForegroundBrush;
+      return rainbowColors[depth % provider.GetRainbowDepth()];
     }
 
     private Geometry CreateVisuals(SnapshotPoint opening, SnapshotPoint closing, SnapshotPoint caret) {
@@ -211,10 +226,14 @@ namespace Winterdom.Viasfora.Rainbow {
       var lines = this.view.TextViewLines.GetTextViewLinesIntersectingSpan(new SnapshotSpan(opening, closing));
 
       // figure out where the vertical line goes
-      // ViewportLeft is substracted here so that if the view is scrolled
-      // to the right, we don't draw the line visible if it should be hidden.
+      bool useViewportRight = false;
       var guidelineX = (indent + (this.view.FormattedLineSource.ColumnWidth / 2) + 2)
                      - this.view.ViewportLeft;
+      if ( guidelineX < this.view.ViewportLeft ) {
+        // the left guideline would be hidden by the scroll, so draw it on the right side
+        guidelineX = this.view.ViewportRight - 2;
+        useViewportRight = true;
+      }
 
       List<LinePoint> points = new List<LinePoint>();
       for ( int i=0; i < lines.Count; i++ ) {
@@ -225,6 +244,8 @@ namespace Winterdom.Viasfora.Rainbow {
           if ( openBounds.Left > guidelineX ) {
             // draw line from brace to guideline position
             points.Add(new LinePoint(openBounds.Right, line.Bottom));
+          } else if ( useViewportRight ) {
+            points.Add(new LinePoint(openBounds.Left, line.Bottom));
           }
           points.Add(new LinePoint(guidelineX, line.Bottom));
         } else {
@@ -239,7 +260,7 @@ namespace Winterdom.Viasfora.Rainbow {
             // last line contains the closing element and is visible
             var closeBounds = line.GetCharacterBounds(closing);
             if ( closeBounds.Right < guidelineX || closeBounds.Left > guidelineX ) {
-              points.Add(new LinePoint(closeBounds.Left, line.Bottom));
+              points.Add(new LinePoint(closeBounds.Right, line.Bottom));
             }
           }
         }
