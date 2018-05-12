@@ -150,18 +150,24 @@ namespace Winterdom.Viasfora.Rainbow {
 
     private void RedrawVisuals(SnapshotPoint caret, bool forceRedraw) {
       if ( !this.provider.Settings.RainbowLinesEnabled ) {
+        this.layer.RemoveAllAdornments();
         return;
       }
+
+      if ( !RainbowProvider.TryMapPosToBuffer(this.view, caret, out caret) ) {
+        this.layer.RemoveAllAdornments();
+        return;
+      }
+
       var provider = caret.Snapshot.TextBuffer.Get<RainbowProvider>();
-      if ( provider == null ) {
+      var braces = provider?.BufferBraces.GetBracePairFromPosition(caret, RainbowHighlightMode.TrackInsertionPoint);
+      if ( braces == null ) {
+        this.layer.RemoveAllAdornments();
         return;
       }
-      var braces = provider.BufferBraces.GetBracePairFromPosition(caret, RainbowHighlightMode.TrackInsertionPoint);
-      if ( braces == null ) return;
 
       SnapshotPoint opening = braces.Item1.ToPoint(caret.Snapshot);
       SnapshotPoint closing = braces.Item2.ToPoint(caret.Snapshot);
-
 
       if ( RainbowProvider.TryMapToView(view, opening, out opening)
         && RainbowProvider.TryMapToView(view, closing, out closing) ) {
@@ -172,7 +178,7 @@ namespace Winterdom.Viasfora.Rainbow {
         }
         currentSpan = default(SnapshotSpan);
         var path = CreateVisuals(opening, closing, caret);
-        layer.RemoveAllAdornments();
+        this.layer.RemoveAllAdornments();
         if ( path != null ) {
           var adornment = MakeAdornment(path, braces.Item1.Depth);
           layer.AddAdornment(
@@ -225,7 +231,7 @@ namespace Winterdom.Viasfora.Rainbow {
       for ( int i=1; i < points.Count; i++ ) {
         var p1 = points[i];
         if ( !p.SkipNext ) {
-          geometry.AddGeometry(new LineGeometry(p.Point(), p1.Point()));
+          geometry.AddGeometry(new LineGeometry(p, p1));
         }
         p = p1;
       }
@@ -238,8 +244,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
       // figure out where the vertical line goes
       bool useViewportRight = false;
-      var guidelineX = (indent + (this.view.FormattedLineSource.ColumnWidth / 2) + 2)
-                     - this.view.ViewportLeft;
+      var guidelineX = (indent + (this.view.FormattedLineSource.ColumnWidth / 2) + 2);
       if ( guidelineX < this.view.ViewportLeft ) {
         // the left guideline would be hidden by the scroll, so draw it on the right side
         guidelineX = this.view.ViewportRight - 2;
@@ -281,7 +286,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
     private double CalculateLeftOfFirstChar(SnapshotPoint open, IFormattedLineSource fls) {
       var line = open.GetContainingLine();
-      var x = this.view.ViewportLeft;
+      var x = 0d;
       var start = line.Start;
       while ( Char.IsWhiteSpace(start.GetChar()) ) {
         x += start.GetChar() == '\t' ? fls.TabSize * fls.ColumnWidth : fls.ColumnWidth;
@@ -294,7 +299,7 @@ namespace Winterdom.Viasfora.Rainbow {
       var startb = this.view.TextViewLines.GetCharacterBounds(opening);
       var endb = this.view.TextViewLines.GetCharacterBounds(closing);
 
-      return new List<LinePoint> {
+      return new LinePoint[] {
         new LinePoint(startb.Left, startb.Bottom),
         new LinePoint(endb.Right, endb.Bottom)
       };
@@ -311,7 +316,7 @@ namespace Winterdom.Viasfora.Rainbow {
         this.SkipNext = skipNext;
       }
 
-      public Point Point() => new Point(X, Y);
+      public static implicit operator Point(LinePoint p) => new Point(p.X, p.Y);
     }
   }
 }
