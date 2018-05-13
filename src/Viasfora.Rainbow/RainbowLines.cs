@@ -53,6 +53,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private SnapshotSpan currentSpan;
     private readonly IAdornmentLayer layer;
     private readonly RainbowLinesProvider provider;
+    private readonly LinePoint[] slbuffer;
 
     public RainbowLines(
         IWpfTextView textView, 
@@ -74,6 +75,9 @@ namespace Winterdom.Viasfora.Rainbow {
       this.view.Closed += OnViewClosed;
 
       this.formatMap.ClassificationFormatMappingChanged += OnClassificationFormatMappingChanged;
+
+      // pre-allocate buffers
+      this.slbuffer = new LinePoint[2];
     }
 
     private Brush[] GetRainbowColors(IClassificationType[] rainbows) {
@@ -299,10 +303,9 @@ namespace Winterdom.Viasfora.Rainbow {
       var startb = this.view.TextViewLines.GetCharacterBounds(opening);
       var endb = this.view.TextViewLines.GetCharacterBounds(closing);
 
-      return new LinePoint[] {
-        new LinePoint(startb.Left, startb.Bottom),
-        new LinePoint(endb.Right, endb.Bottom)
-      };
+      slbuffer[0] = new LinePoint(startb.Left, startb.Bottom);
+      slbuffer[1] = new LinePoint(endb.Right, endb.Bottom);
+      return slbuffer;
     }
 
     struct LinePoint {
