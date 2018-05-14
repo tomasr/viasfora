@@ -1,14 +1,14 @@
-﻿using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Classification;
-using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Formatting;
-using Microsoft.VisualStudio.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Formatting;
+using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Rainbow {
   [Export(typeof(IWpfTextViewCreationListener))]
@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora.Rainbow {
   public class RainbowLinesProvider : IWpfTextViewCreationListener {
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(RainbowLines.LAYER)]
-    [Order(After = PredefinedAdornmentLayers.Text, Before=AdornmentLayers.InterLine)]
+    [Order(After = PredefinedAdornmentLayers.Text)]
     public AdornmentLayerDefinition LinesLayer = null;
 
     [Import]
@@ -55,10 +55,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private readonly RainbowLinesProvider provider;
     private readonly LinePoint[] slbuffer;
 
-    public RainbowLines(
-        IWpfTextView textView, 
-        RainbowLinesProvider provider
-        ) {
+    public RainbowLines(IWpfTextView textView, RainbowLinesProvider provider) {
       this.view = textView;
       this.provider = provider;
       this.formatMap = provider.GetFormatMap(textView);
@@ -146,10 +143,9 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private SnapshotPoint GetPosition(SnapshotPoint position) {
-      if ( position.Snapshot != this.view.TextSnapshot ) {
-        return position.TranslateTo(this.view.TextSnapshot, PointTrackingMode.Positive);
-      }
-      return position;
+      return position.Snapshot == this.view.TextSnapshot
+           ? position
+           : position.TranslateTo(this.view.TextSnapshot, PointTrackingMode.Positive);
     }
 
     private void RedrawVisuals(SnapshotPoint caret, bool forceRedraw) {
@@ -187,7 +183,7 @@ namespace Winterdom.Viasfora.Rainbow {
           var adornment = MakeAdornment(path, braces.Item1.Depth);
           layer.AddAdornment(
             AdornmentPositioningBehavior.OwnerControlled, newSpan,
-            TAG, adornment, OnAdornmentRemoved
+            TAG, adornment, null
             );
 
           currentSpan = newSpan;
@@ -195,20 +191,14 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
 
-    private void OnAdornmentRemoved(object tag, UIElement element) {
-      this.currentSpan = default(SnapshotSpan);
-    }
-
     private UIElement MakeAdornment(Geometry spanGeometry, int depth) {
-      var brush = GetRainbowBrush(depth);
-
       if ( spanGeometry.CanFreeze ) {
         spanGeometry.Freeze();
       }
 
       return new Path() {
         Data = spanGeometry,
-        Stroke = brush,
+        Stroke = GetRainbowBrush(depth),
         StrokeThickness = 1.8,
       };
     }
