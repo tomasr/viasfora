@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Rainbow.Settings {
@@ -43,7 +44,10 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
     }
 
     [ImportingConstructor]
-    public RainbowSettings(ITypedSettingsStore store) : base(store) {
+    public RainbowSettings(ITypedSettingsStore store, IVsfTelemetry telemetry) : base(store) {
+      telemetry.FeatureStatus("RainbowLines", RainbowLinesEnabled);
+      telemetry.FeatureStatus("RainbowBraces", RainbowTagsEnabled);
+      telemetry.FeatureStatus("RainbowToolTips", RainbowToolTipsEnabled);
     }
   }
 }

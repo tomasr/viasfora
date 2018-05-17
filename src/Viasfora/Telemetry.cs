@@ -45,6 +45,14 @@ namespace Winterdom.Viasfora {
 #endif
     }
 
+    public static void WriteEvent(EventTelemetry evt) {
+#if !DEBUG
+      if ( client != null && Enabled ) {
+        client.TrackEvent(evt);
+      }
+#endif
+    }
+
     public static void WriteException(String msg, Exception ex) {
 #if !DEBUG
       if ( client != null && Enabled ) {
