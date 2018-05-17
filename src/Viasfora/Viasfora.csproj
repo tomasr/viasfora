@@ -39,6 +39,9 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
+  </PropertyGroup>
   <!-- Look for the SDK specific to the current version of Visual Studio -->
   <!--
   <PropertyGroup>
