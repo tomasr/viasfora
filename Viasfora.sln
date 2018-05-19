@@ -12,6 +12,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1038A5
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{63E4723B-5D98-476B-861C-073CCD13FA11}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		appveyor.yml = appveyor.yml
 		src\AssemblyInfo.Common.cs = src\AssemblyInfo.Common.cs
 		Global.props = Global.props
@@ -34,7 +35,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Xml", "src\Viasfor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Rainbow", "src\Viasfora.Rainbow\Viasfora.Rainbow.csproj", "{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Settings", "src\\Viasfora.Settings\Viasfora.Settings.csproj", "{DD9ED7C5-417C-43A2-BE13-14CD948566B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Settings", "src\Viasfora.Settings\Viasfora.Settings.csproj", "{DD9ED7C5-417C-43A2-BE13-14CD948566B4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
