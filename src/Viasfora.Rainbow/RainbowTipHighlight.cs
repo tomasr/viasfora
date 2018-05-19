@@ -85,8 +85,8 @@ namespace Winterdom.Viasfora.Rainbow {
         return;
       }
       Rect rc = new Rect(
-         new Point(textView.ViewportLeft, line.TextTop),
-         new Point(Math.Max(textView.ViewportRight, line.TextRight), line.TextBottom)
+         new Point(this.textView.ViewportLeft, line.TextTop),
+         new Point(Math.Max(this.textView.ViewportRight, line.TextRight), line.TextBottom)
       );
 
       var properties = this.formatMap.GetProperties(Rainbows.TipHilight);
@@ -107,7 +107,7 @@ namespace Winterdom.Viasfora.Rainbow {
       Canvas.SetLeft(highlight, rc.Left);
       Canvas.SetTop(highlight, rc.Top);
 
-      layer.AddAdornment(
+      this.layer.AddAdornment(
          AdornmentPositioningBehavior.TextRelative, span,
          TAG, highlight, null
       );

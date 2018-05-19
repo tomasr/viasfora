@@ -62,7 +62,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.provider = provider;
       this.formatMap = provider.GetFormatMap(textView);
       this.rainbowTags = provider.GetRainbowTags();
-      layer = view.GetAdornmentLayer(LAYER);
+      this.layer = textView.GetAdornmentLayer(LAYER);
     }
 
     public static RainbowHighlight Get(ITextView view) {
@@ -75,14 +75,14 @@ namespace Winterdom.Viasfora.Rainbow {
       path = path.GetOutlinedPathGeometry();
 
       var adornment = MakeAdornment(span, path, depth);
-      layer.AddAdornment(
+      this.layer.AddAdornment(
         AdornmentPositioningBehavior.TextRelative, span,
         TAG, adornment, null
         );
     }
 
     public void Stop() {
-      layer.RemoveAllAdornments();
+      this.layer.RemoveAllAdornments();
     }
 
     private PathGeometry BuildSpanGeometry(SnapshotSpan span) {
@@ -141,8 +141,8 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private Brush GetRainbowBrush(int depth) {
-      var rainbow = rainbowTags[depth % provider.GetRainbowDepth()];
-      var properties = formatMap.GetTextProperties(rainbow);
+      var rainbow = this.rainbowTags[depth % this.provider.GetRainbowDepth()];
+      var properties = this.formatMap.GetTextProperties(rainbow);
       return properties.ForegroundBrush;
     }
 

@@ -17,7 +17,7 @@ namespace Winterdom.Viasfora.Rainbow {
     public String BraceChars { get; private set; }
     public int LastParsedPosition { get; private set; }
     public bool Enabled {
-      get { return language != null ? language.Settings.Enabled : false; }
+      get { return this.language != null ? this.language.Settings.Enabled : false; }
     }
 
     public TextBufferBraces(ITextSnapshot snapshot, ILanguage language, RainbowColoringMode coloringMode) {
@@ -70,7 +70,7 @@ namespace Winterdom.Viasfora.Rainbow {
       IResumeControl control = this.braceScanner as IResumeControl;
       if ( control != null ) {
         for ( ; newIndex > 0; newIndex-- ) {
-          if ( control.CanResume(braces[newIndex].ToCharPos()) )
+          if ( control.CanResume(this.braces[newIndex].ToCharPos()) )
             break;
         }
       }
@@ -96,8 +96,8 @@ namespace Winterdom.Viasfora.Rainbow {
         if ( startIndex < 0 ) {
           continue;
         }
-        for ( int j = startIndex; j < braces.Count; j++ ) {
-          BracePos bp = braces[j];
+        for ( int j = startIndex; j < this.braces.Count; j++ ) {
+          BracePos bp = this.braces[j];
           if ( bp.Position > wantedSpan.End ) break;
           yield return bp;
         }
@@ -251,8 +251,8 @@ namespace Winterdom.Viasfora.Rainbow {
       int lastState = 0;
       // figure out where to start parsing again
       var pairs = GetStacker(this.coloringMode);
-      for ( int i=0; i < braces.Count; i++ ) {
-        BracePos r = braces[i];
+      for ( int i=0; i < this.braces.Count; i++ ) {
+        BracePos r = this.braces[i];
         if ( r.Position > parseFrom ) break;
         if ( IsOpeningBrace(r.Brace) ) {
           pairs.Push(r.ToCharPos());
@@ -263,15 +263,15 @@ namespace Winterdom.Viasfora.Rainbow {
         lastGoodBrace = i;
         lastState = r.State;
       }
-      if ( lastGoodBrace < braces.Count - 1 ) {
-        braces.RemoveRange(lastGoodBrace+1, braces.Count - lastGoodBrace - 1);
+      if ( lastGoodBrace < this.braces.Count - 1 ) {
+        this.braces.RemoveRange(lastGoodBrace+1, this.braces.Count - lastGoodBrace - 1);
       }
 
       ExtractBraces(pairs, startPosition, parseUntil, lastState);
     }
 
     private void ExtractBraces(IBraceStacker pairs, int startOffset, int endOffset, int state) {
-      braceScanner.Reset(state);
+      this.braceScanner.Reset(state);
       int lineNum = Snapshot.GetLineNumberFromPosition(startOffset);
       while ( lineNum < Snapshot.LineCount  ) {
         var line = Snapshot.GetLineFromLineNumber(lineNum++);
@@ -303,7 +303,7 @@ namespace Winterdom.Viasfora.Rainbow {
         // check if this is a closing brace matching
         // the opening on the stack
         BracePos p = pairs.Peek(cp.Char);
-        if ( braceList[p.Brace] == cp.Char ) {
+        if ( this.braceList[p.Brace] == cp.Char ) {
           // it does, add it
           pairs.Pop(cp.Char);
           Add(new BracePos(cp, p.Depth));
@@ -318,7 +318,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void Add(BracePos brace) {
-      braces.Add(brace);
+      this.braces.Add(brace);
       LastParsedPosition = brace.Position;
     }
 
@@ -341,7 +341,7 @@ namespace Winterdom.Viasfora.Rainbow {
       int candidate = -1;
       while ( first <= last ) {
         int mid = (first + last) / 2;
-        BracePos midPos = braces[mid];
+        BracePos midPos = this.braces[mid];
         if ( midPos.Position < position ) {
           // keep looking in second half
           first = mid + 1;
@@ -363,7 +363,7 @@ namespace Winterdom.Viasfora.Rainbow {
       int candidate = -1;
       while ( first <= last ) {
         int mid = (first + last) / 2;
-        BracePos midPos = braces[mid];
+        BracePos midPos = this.braces[mid];
         if ( midPos.Position < position ) {
           // keep looking in second half
           candidate = mid;
@@ -384,13 +384,13 @@ namespace Winterdom.Viasfora.Rainbow {
 
 
     private void InvalidateFromBraceAtIndex(ITextSnapshot snapshot, int index) {
-      if ( index < braces.Count ) {
+      if ( index < this.braces.Count ) {
         // invalidate the brace list
-        braces.RemoveRange(index, braces.Count - index);
+        this.braces.RemoveRange(index, this.braces.Count - index);
       }
 
-      if ( braces.Count > 0 ) {
-        this.LastParsedPosition = braces[braces.Count - 1].Position;
+      if ( this.braces.Count > 0 ) {
+        this.LastParsedPosition = this.braces[this.braces.Count - 1].Position;
       } else {
         this.LastParsedPosition = -1;
       }
@@ -405,14 +405,14 @@ namespace Winterdom.Viasfora.Rainbow {
         if ( ch.Position >= position )
           break;
       }
-      if ( lastPos >= 0 && lastPos < braceErrors.Count ) {
-        braceErrors.RemoveRange(lastPos, braceErrors.Count - lastPos);
+      if ( lastPos >= 0 && lastPos < this.braceErrors.Count ) {
+        this.braceErrors.RemoveRange(lastPos, this.braceErrors.Count - lastPos);
       }
     }
 
     private bool IsOpeningBrace(char ch) {
       // linear search will be better with so few entries
-      var keys = braceList.Keys;
+      var keys = this.braceList.Keys;
       for ( int i = 0; i < keys.Count; i++ ) {
         if ( keys[i] == ch ) return true;
       }

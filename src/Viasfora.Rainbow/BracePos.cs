@@ -9,18 +9,10 @@ namespace Winterdom.Viasfora.Rainbow {
     private int depth;
     private CharPos charPos;
 
-    public char Brace {
-      get { return charPos.Char; }
-    }
-    public int Depth {
-      get { return depth; }
-    }
-    public int Position {
-      get { return charPos.Position; }
-    }
-    public int State {
-      get { return charPos.State; }
-    }
+    public char Brace => this.charPos.Char;
+    public int Depth => this.depth;
+    public int Position => this.charPos.Position;
+    public int State => this.charPos.State;
 
     public BracePos(char ch, int pos, int depth) {
       this.charPos = new CharPos(ch, pos);

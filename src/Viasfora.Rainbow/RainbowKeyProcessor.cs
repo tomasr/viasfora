@@ -34,7 +34,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.theView.LostAggregateFocus += OnLostFocus;
       this.theView.Closed += OnViewClosed;
       this.settings = settings;
-      pressTime = TimeSpan.FromMilliseconds(settings.RainbowCtrlTimer);
+      this.pressTime = TimeSpan.FromMilliseconds(settings.RainbowCtrlTimer);
     }
 
     // Strange things:
@@ -50,17 +50,17 @@ namespace Winterdom.Viasfora.Rainbow {
     public override void PreviewKeyDown(KeyEventArgs args) {
       ITextView actualView = GetViewFromEvent(args);
       if ( args.Key == (Key)(this.settings.RainbowHighlightKey)) {
-        if ( timer.IsRunning ) {
-          if ( timer.Elapsed >= pressTime ) {
-            timer.Stop();
-            RainbowHighlightMode mode = settings.RainbowHighlightMode;
+        if ( this.timer.IsRunning ) {
+          if ( this.timer.Elapsed >= this.pressTime ) {
+            this.timer.Stop();
+            RainbowHighlightMode mode = this.settings.RainbowHighlightMode;
             StartRainbowHighlight(actualView, mode);
           }
         } else {
-          timer.Start();
+          this.timer.Start();
         }
       } else {
-        timer.Stop();
+        this.timer.Stop();
       }
     }
 
@@ -71,7 +71,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public override void PreviewKeyUp(KeyEventArgs args) {
       ITextView actualView = GetViewFromEvent(args);
-      timer.Stop();
+      this.timer.Stop();
       StopRainbowHighlight(actualView);
     }
 
@@ -81,16 +81,15 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void OnLostFocus(object sender, EventArgs e) {
-      timer.Stop();
+      this.timer.Stop();
       StopRainbowHighlight(this.theView);
     }
 
     private void StartRainbowHighlight(ITextView view, RainbowHighlightMode mode) {
-      if ( startedEffect ) return;
-      startedEffect = true;
+      if ( this.startedEffect ) return;
+      this.startedEffect = true;
 
-      SnapshotPoint bufferPos;
-      if ( !RainbowProvider.TryMapCaretToBuffer(view, out bufferPos) ) {
+      if ( !RainbowProvider.TryMapCaretToBuffer(view, out SnapshotPoint bufferPos) ) {
         return;
       }
 
@@ -118,7 +117,7 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( highlight != null ) {
         highlight.Stop();
       }
-      startedEffect = false;
+      this.startedEffect = false;
     }
   }
 }

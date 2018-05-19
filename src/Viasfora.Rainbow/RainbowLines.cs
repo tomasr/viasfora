@@ -60,7 +60,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.provider = provider;
       this.formatMap = provider.GetFormatMap(textView);
       this.rainbowColors = GetRainbowColors(provider.GetRainbowTags());
-      this.layer = view.GetAdornmentLayer(LAYER);
+      this.layer = textView.GetAdornmentLayer(LAYER);
 
       this.provider.Settings.SettingsChanged += OnSettingsChanged;
       this.view.Caret.PositionChanged += OnCaretPositionChanged;
@@ -80,7 +80,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private Brush[] GetRainbowColors(IClassificationType[] rainbows) {
       Brush[] brushes = new Brush[rainbows.Length];
       for ( int i=0; i < brushes.Length; i++ ) {
-        brushes[i] = formatMap.GetTextProperties(rainbows[i]).ForegroundBrush;
+        brushes[i] = this.formatMap.GetTextProperties(rainbows[i]).ForegroundBrush;
       }
       return brushes;
     }
@@ -103,13 +103,13 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void OnSettingsChanged(object sender, EventArgs e) {
-      layer.RemoveAllAdornments();
+      this.layer.RemoveAllAdornments();
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
       RedrawVisuals(bufferPos, forceRedraw: true);
     }
 
     private void OnOptionsChanged(object sender, EditorOptionChangedEventArgs e) {
-      layer.RemoveAllAdornments();
+      this.layer.RemoveAllAdornments();
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
       RedrawVisuals(bufferPos, forceRedraw: true);
     }
@@ -169,24 +169,24 @@ namespace Winterdom.Viasfora.Rainbow {
       SnapshotPoint opening = braces.Item1.ToPoint(caret.Snapshot);
       SnapshotPoint closing = braces.Item2.ToPoint(caret.Snapshot);
 
-      if ( RainbowProvider.TryMapToView(view, opening, out opening)
-        && RainbowProvider.TryMapToView(view, closing, out closing) ) {
+      if ( RainbowProvider.TryMapToView(this.view, opening, out opening)
+        && RainbowProvider.TryMapToView(this.view, closing, out closing) ) {
         var newSpan = new SnapshotSpan(opening, closing);
 
-        if ( currentSpan == newSpan && !forceRedraw ) {
+        if ( this.currentSpan == newSpan && !forceRedraw ) {
           return; // don't redraw it
         }
-        currentSpan = default(SnapshotSpan);
+        this.currentSpan = default(SnapshotSpan);
         var path = CreateVisuals(opening, closing, caret);
         this.layer.RemoveAllAdornments();
         if ( path != null ) {
           var adornment = MakeAdornment(path, braces.Item1.Depth);
-          layer.AddAdornment(
+          this.layer.AddAdornment(
             AdornmentPositioningBehavior.OwnerControlled, newSpan,
             TAG, adornment, null
             );
 
-          currentSpan = newSpan;
+          this.currentSpan = newSpan;
         }
       }
     }
@@ -204,7 +204,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private Brush GetRainbowBrush(int depth) {
-      return rainbowColors[depth % provider.GetRainbowDepth()];
+      return this.rainbowColors[depth % this.provider.GetRainbowDepth()];
     }
 
     private Geometry CreateVisuals(SnapshotPoint opening, SnapshotPoint closing, SnapshotPoint caret) {
@@ -293,9 +293,9 @@ namespace Winterdom.Viasfora.Rainbow {
       var startb = this.view.TextViewLines.GetCharacterBounds(opening);
       var endb = this.view.TextViewLines.GetCharacterBounds(closing);
 
-      slbuffer[0] = new LinePoint(startb.Left, startb.Bottom);
-      slbuffer[1] = new LinePoint(endb.Right, endb.Bottom);
-      return slbuffer;
+      this.slbuffer[0] = new LinePoint(startb.Left, startb.Bottom);
+      this.slbuffer[1] = new LinePoint(endb.Right, endb.Bottom);
+      return this.slbuffer;
     }
 
     struct LinePoint {

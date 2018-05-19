@@ -35,9 +35,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private ITrackingSpan trackingSpan;
     private QuickInfoPresenter presenter;
 
-    public IIntellisenseSession Session {
-      get { return session; }
-    }
+    public IIntellisenseSession Session => this.session;
     public double Opacity {
       get { return this.presenter.Opacity; }
       set { this.presenter.Opacity = value; }
@@ -52,9 +50,7 @@ namespace Winterdom.Viasfora.Rainbow {
       }
     }
     public string SpaceReservationManagerName { get; private set; }
-    public UIElement SurfaceElement {
-      get { return this.presenter; }
-    }
+    public UIElement SurfaceElement => this.presenter;
 
 #pragma warning disable 0067
     public event EventHandler SurfaceElementChanged;

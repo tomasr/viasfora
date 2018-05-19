@@ -34,10 +34,10 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public void AugmentQuickInfoSession(IQuickInfoSession session, IList<object> quickInfoContent, out ITrackingSpan applicableToSpan) {
       applicableToSpan = null;
-      if ( !provider.Settings.RainbowToolTipsEnabled ) {
+      if ( !this.provider.Settings.RainbowToolTipsEnabled ) {
         return;
       }
-      SnapshotPoint? triggerPoint = session.GetTriggerPoint(textBuffer.CurrentSnapshot);
+      SnapshotPoint? triggerPoint = session.GetTriggerPoint(this.textBuffer.CurrentSnapshot);
       if ( !triggerPoint.HasValue ) {
         return;
       }
@@ -59,22 +59,22 @@ namespace Winterdom.Viasfora.Rainbow {
       // so if the tooltip window still exists, kill it
       // and hope to god leaving IQuickInfoSession.Dismissed hooked
       // up doesn't end up in a memory leak
-      if ( toolTipWindow != null ) {
-        toolTipWindow.Dispose();
-        toolTipWindow = null;
+      if ( this.toolTipWindow != null ) {
+        this.toolTipWindow.Dispose();
+        this.toolTipWindow = null;
       }
 
       session.Dismissed += OnSessionDismissed;
 
-      if ( toolTipWindow == null ) {
-        toolTipWindow = this.provider.ToolTipProvider.CreateToolTip(session.TextView);
-        toolTipWindow.SetSize(60, 5);
+      if ( this.toolTipWindow == null ) {
+        this.toolTipWindow = this.provider.ToolTipProvider.CreateToolTip(session.TextView);
+        this.toolTipWindow.SetSize(60, 5);
       }
 
       var span = new SnapshotSpan(triggerPoint.Value, 1);
       applicableToSpan = span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgePositive);
 
-      var element = toolTipWindow.GetWindow(otherBrace.Value);
+      var element = this.toolTipWindow.GetWindow(otherBrace.Value);
       if ( element != null ) {
         quickInfoContent.Add(element);
         session.Set(new RainbowToolTipContext());

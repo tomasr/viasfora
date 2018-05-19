@@ -32,14 +32,14 @@ namespace Winterdom.Viasfora.Rainbow {
     public IEnumerable<ITagSpan<RainbowTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
       // Needed to prevent race condition on some extensions
       // using a Tag Aggregator while the view is being closed
-      if ( provider == null || provider.Settings == null  ) {
+      if ( this.provider?.Settings == null ) {
         yield break;
       }
       if ( !IsEnabled()|| spans.Count == 0 ) {
         yield break;
       }
 
-      var braceCache = provider.BufferBraces;
+      var braceCache = this.provider.BufferBraces;
       ITextSnapshot snapshot = spans[0].Snapshot;
       if ( braceCache == null || !braceCache.Enabled ) {
         yield break;
@@ -49,13 +49,13 @@ namespace Winterdom.Viasfora.Rainbow {
       }
 
       foreach ( var brace in braceCache.BracesInSpans(spans) ) {
-        var ctype = rainbowTags[brace.Depth % this.provider.Settings.RainbowDepth];
+        var ctype = this.rainbowTags[brace.Depth % this.provider.Settings.RainbowDepth];
         yield return brace.ToSpan(snapshot, ctype);
       }
       foreach ( var error in braceCache.ErrorBracesInSpans(spans) ) {
         yield return new TagSpan<RainbowTag>(
           new SnapshotSpan(snapshot, error.Position, 1),
-          new RainbowTag(rainbowError)
+          new RainbowTag(this.rainbowError)
           );
       }
     }
@@ -65,7 +65,7 @@ namespace Winterdom.Viasfora.Rainbow {
         Action action = delegate() {
           tempEvent(this, new SnapshotSpanEventArgs(span));
         };
-        provider.Dispatcher.BeginInvoke(action, DispatcherPriority.Background);
+        this.provider.Dispatcher.BeginInvoke(action, DispatcherPriority.Background);
       }
     }
 

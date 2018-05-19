@@ -119,7 +119,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void SynchronousUpdate(bool notify, SnapshotPoint startPoint) {
-      lock ( updateLock ) {
+      lock ( this.updateLock ) {
         if ( notify ) {
           // only change the update mark if the current change is *before*
           // a pending one, or there are no notifications pending
@@ -135,19 +135,19 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( TextBuffer == null ) {
         return;
       }
-      if ( dispatcherTimer == null ) {
-        dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background, this.Dispatcher);
-        dispatcherTimer.Interval = TimeSpan.FromMilliseconds(500);
-        dispatcherTimer.Tick += OnScheduledUpdate;
+      if ( this.dispatcherTimer == null ) {
+        this.dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background, this.Dispatcher);
+        this.dispatcherTimer.Interval = TimeSpan.FromMilliseconds(500);
+        this.dispatcherTimer.Tick += OnScheduledUpdate;
       }
-      dispatcherTimer.Stop();
-      dispatcherTimer.Start();
+      this.dispatcherTimer.Stop();
+      this.dispatcherTimer.Start();
     }
 
     private void OnScheduledUpdate(object sender, EventArgs e) {
       if ( TextBuffer == null ) return;
       try {
-        dispatcherTimer.Stop();
+        this.dispatcherTimer.Stop();
         FireTagsChanged();
       } catch {
       }
