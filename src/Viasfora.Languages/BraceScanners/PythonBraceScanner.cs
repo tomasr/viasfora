@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     public bool Extract(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
           case stMultiLineString: ParseMultiLineString(tc); break;
@@ -34,7 +34,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private bool ParseText(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '#' ) {
           tc.SkipRemainder();
         } else if ( (tc.Char() == '"' && tc.NChar() == '"' && tc.NNChar() == '"') 
@@ -60,7 +60,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
@@ -75,7 +75,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseMultiLineString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == this.quoteChar && tc.NChar() == this.quoteChar && tc.NNChar() == this.quoteChar ) {
           tc.Skip(3);
           this.status = stText;

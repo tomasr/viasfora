@@ -23,7 +23,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     public bool Extract(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         switch ( this.state ) {
           case stComment: ParseComment(tc); break;
           case stSingleQuotedString: ParseString(tc); break;
@@ -37,7 +37,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
 
     private bool ParseText(ITextChars tc, ref CharPos pos) {
       pos = CharPos.Empty;
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '/' && tc.NChar() == '*' ) {
           this.state = stComment;
           tc.Skip(2);
@@ -72,7 +72,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       ParseString(tc, '"');
     }
     private void ParseString(ITextChars tc, char quote) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\\' ) {
           // escape sequence
           // could be 1-6 hex digits or something else
@@ -86,7 +86,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       }
     }
     private void ParseComment(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '*' && tc.NChar() == '/' ) {
           tc.Skip(2);
           this.state = stText;

@@ -17,7 +17,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       this.text.Next();
     }
     public StringPart? Next() {
-      while ( !text.EndOfLine ) {
+      while ( !text.AtEnd ) {
         if ( text.Char() == '\\' ) {
           StringPart part = new StringPart();
           if ( TryParseEscapeSequence(ref part) )
@@ -112,11 +112,11 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         return false;
       }
       // ignore EOF
-      if ( text.EndOfLine || text.Char() == '\"' )
+      if ( text.AtEnd || text.Char() == '\"' )
         return false;
 
       int len = 1;
-      while ( !text.EndOfLine ) {
+      while ( !text.AtEnd ) {
         len++;
         if ( Char.IsLetter(text.Char()) ) {
           text.Next();

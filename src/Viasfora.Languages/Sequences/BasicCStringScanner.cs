@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       }
     }
     public StringPart? Next() {
-      while ( !text.EndOfLine ) {
+      while ( !text.AtEnd ) {
         if ( text.Char() == '\\' ) {
           return ParseEscapeSequence(text);
         }

@@ -288,7 +288,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private void ExtractFromLine(IBraceStacker pairs, ITextSnapshotLine line, int lineOffset) {
       var lc = new LineChars(line, lineOffset);
       CharPos cp = CharPos.Empty;
-      while ( !lc.EndOfLine ) {
+      while ( !lc.AtEnd ) {
         if ( !this.braceScanner.Extract(lc, ref cp) )
           continue;
         MatchBrace(pairs, cp);

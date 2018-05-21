@@ -15,16 +15,16 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public bool Next() {
-      if ( this.tc.EndOfLine ) {
+      if ( this.tc.AtEnd ) {
         this.currentToken = "";
         this.reachedEnd = true;
        return false;
       }
       // skip whitespace
-      while ( !this.tc.EndOfLine && Char.IsWhiteSpace(this.tc.Char()) ) {
+      while ( !this.tc.AtEnd && Char.IsWhiteSpace(this.tc.Char()) ) {
         this.tc.Next();
       }
-      if ( this.tc.EndOfLine ) {
+      if ( this.tc.AtEnd ) {
         this.currentToken = "";
         this.reachedEnd = true;
         return false;
@@ -38,7 +38,7 @@ namespace Winterdom.Viasfora.Util {
       }
       // return the word
       StringBuilder sb = new StringBuilder();
-      while ( !this.tc.EndOfLine ) {
+      while ( !this.tc.AtEnd ) {
         char ch = this.tc.Char();
         if ( !Char.IsLetterOrDigit(ch) ) break;
         this.tc.Next();

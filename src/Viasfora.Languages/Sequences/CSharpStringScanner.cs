@@ -30,7 +30,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       }
     }
     public StringPart? Next() {
-      while ( !this.text.EndOfLine ) {
+      while ( !this.text.AtEnd ) {
         if ( this.text.Char() == '\\' && !this.isVerbatim ) {
           return BasicCStringScanner.ParseEscapeSequence(this.text);
         } else if ( this.text.Char() == '{' && this.text.NChar() == '{' ) {
@@ -49,7 +49,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       int start = this.text.Position;
       int len = 1;
       this.text.Next();
-      while ( !this.text.EndOfLine ) {
+      while ( !this.text.AtEnd ) {
         len++;
         if ( this.text.Char() == '}' ) {
           result = new StringPart(start, len, StringPartType.FormatSpecifier);

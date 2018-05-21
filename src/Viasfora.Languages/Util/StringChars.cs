@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.Util {
 
     public int Position => position;
     public virtual int AbsolutePosition => position;
-    public bool EndOfLine => position >= length;
+    public bool AtEnd => position >= length;
     public virtual int End => Position + length;
 
     public StringChars(String text, int start=0, int len=-1) {

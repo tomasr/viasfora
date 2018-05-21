@@ -35,7 +35,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     public bool Extract(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         switch ( this.status ) {
           case stString:
             if ( this.multiLine ) {
@@ -60,7 +60,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private bool ParseText(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         // multi-line comment
         if ( tc.Char() == '/' && tc.NChar() == '*' ) {
           this.status = stMultiLineComment;
@@ -105,7 +105,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseCharLiteral(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
@@ -120,7 +120,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
@@ -135,7 +135,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseMultiLineString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '"' && tc.NChar() == '"' ) {
           // means a single embedded double quote
           tc.Skip(2);
@@ -151,7 +151,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseMultiLineComment(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '*' && tc.NChar() == '/' ) {
           tc.Skip(2);
           this.status = stText;
@@ -165,7 +165,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     // this is a hack. It will not handle all possible expressions
     // but will handle most basic stuff
     private bool ParseInterpolatedString(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( parsingExpression ) {
           //
           // we're inside an interpolated section

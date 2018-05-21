@@ -5,7 +5,7 @@ namespace Winterdom.Viasfora.Util {
     int Position { get; }
     int AbsolutePosition { get; }
     int End { get; }
-    bool EndOfLine { get; }
+    bool AtEnd { get; }
     char Char();
     char NChar();
     char NNChar();

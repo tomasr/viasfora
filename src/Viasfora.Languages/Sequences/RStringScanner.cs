@@ -12,7 +12,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       this.text.Next();
     }
     public StringPart? Next() {
-      while ( !text.EndOfLine ) {
+      while ( !text.AtEnd ) {
         if ( text.Char() == '\\' ) {
           return ParseEscapeSequence(text);
         }
@@ -42,7 +42,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         }
       } else if ( (f == 'u' || f == 'U') && text.Char() == '{' ) {
         len++;
-        while ( text.Char() != '}' && !text.EndOfLine ) {
+        while ( text.Char() != '}' && !text.AtEnd ) {
           text.Next();
           len++;
         }

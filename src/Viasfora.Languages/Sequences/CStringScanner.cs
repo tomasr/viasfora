@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       }
     }
     public StringPart? Next() {
-      while ( !text.EndOfLine ) {
+      while ( !text.AtEnd ) {
         if ( text.Char() == '\\' && !isRString ) {
           return BasicCStringScanner.ParseEscapeSequence(text);
         } else if ( text.Char() == '%' ) {
@@ -48,7 +48,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       text.Next(); // skip %
       int len = 1;
       while ( true ) {
-        if ( text.EndOfLine || text.Char() == '\\' ) {
+        if ( text.AtEnd || text.Char() == '\\' ) {
           break;
         }
         len++;
