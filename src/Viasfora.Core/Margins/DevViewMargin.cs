@@ -18,14 +18,14 @@ namespace Winterdom.Viasfora.Margins {
     public DevViewMargin(IWpfTextViewHost wpfTextViewHost, 
             IFileExtensionRegistryService fers,
             IVsfSettings settings) {
-      model = new DevMarginViewModel();
+      this.model = new DevMarginViewModel();
       this.wpfTextViewHost = wpfTextViewHost;
       this.extensionRegistry = fers;
       this.settings = settings;
       this.settings.SettingsChanged += OnSettingsChanged;
       this.wpfTextViewHost.Closed += OnTextViewHostClosed;
 
-      this.visual = new DevMarginVisual(model, settings);
+      this.visual = new DevMarginVisual(this.model, settings);
       this.visual.ViewBuffer += OnViewBuffer;
 
       UpdateVisibility();
@@ -39,7 +39,7 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     public bool Enabled {
-      get { return settings != null ? settings.DeveloperMarginEnabled : false;  }
+      get { return this.settings != null ? this.settings.DeveloperMarginEnabled : false;  }
     }
 
     public ITextViewMargin GetTextViewMargin(string marginName) {
@@ -171,7 +171,7 @@ namespace Winterdom.Viasfora.Margins {
     }
     private void OpenBufferInEditor(ITextBuffer buffer) {
       try {
-        String extension = extensionRegistry
+        String extension = this.extensionRegistry
           .GetExtensionsForContentType(buffer.ContentType)
           .FirstOrDefault();
         if ( String.IsNullOrEmpty(extension) ) {

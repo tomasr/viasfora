@@ -13,19 +13,17 @@ namespace Winterdom.Viasfora.Margins {
     private String bufferPosition;
     private BufferInfoViewModel selectedBuffer;
     public ReadOnlyObservableCollection<BufferInfoViewModel> BufferGraph {
-      get { return new ReadOnlyObservableCollection<BufferInfoViewModel>(bufferGraph); }
+      get { return new ReadOnlyObservableCollection<BufferInfoViewModel>(this.bufferGraph); }
     }
     public String BufferPosition {
-      get { return bufferPosition; }
-      set { bufferPosition = value; NotifyChanged("BufferPosition"); }
+      get { return this.bufferPosition; }
+      set { this.bufferPosition = value; NotifyChanged("BufferPosition"); }
     }
     public BufferInfoViewModel SelectedBuffer {
-      get { return selectedBuffer; }
-      set { selectedBuffer = value; NotifyChanged("SelectedBuffer"); }
+      get { return this.selectedBuffer; }
+      set { this.selectedBuffer = value; NotifyChanged("SelectedBuffer"); }
     }
-    public ObservableCollection<String> TextViewRoles {
-      get { return this.textViewRoles; }
-    }
+    public ObservableCollection<String> TextViewRoles => this.textViewRoles;
 
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -52,9 +50,7 @@ namespace Winterdom.Viasfora.Margins {
         b => TextEditor.IsNonProjectionOrElisionBufferType(b.BufferType));
     }
     private void NotifyChanged(String property) {
-      if ( PropertyChanged != null ) {
-        PropertyChanged(this, new PropertyChangedEventArgs(property));
-      }
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
     }
   }
 
@@ -65,20 +61,20 @@ namespace Winterdom.Viasfora.Margins {
     private int index;
     private ContentTypeViewModel ctViewModel;
     public String ContentType {
-      get { return contentType; }
-      set { contentType = value; NotifyChanged("ContentType"); }
+      get { return this.contentType; }
+      set { this.contentType = value; NotifyChanged("ContentType"); }
     }
     public Type BufferType {
-      get { return bufferType; }
-      set { bufferType = value; NotifyChanged("BufferType"); }
+      get { return this.bufferType; }
+      set { this.bufferType = value; NotifyChanged("BufferType"); }
     }
     public int Index {
-      get { return index; }
-      set { index = value; NotifyChanged("Index"); }
+      get { return this.index; }
+      set { this.index = value; NotifyChanged("Index"); }
     }
     public ContentTypeViewModel ActualContentType {
-      get { return ctViewModel; }
-      set { ctViewModel = value; NotifyChanged("ActualContentType"); }
+      get { return this.ctViewModel; }
+      set { this.ctViewModel = value; NotifyChanged("ActualContentType"); }
     }
 
     public String DisplayName {
@@ -86,9 +82,7 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     private void NotifyChanged(String property) {
-      if ( PropertyChanged != null ) {
-        PropertyChanged(this, new PropertyChangedEventArgs(property));
-      }
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
     }
   }
   public class ContentTypeViewModel : INotifyPropertyChanged {
@@ -96,12 +90,12 @@ namespace Winterdom.Viasfora.Margins {
     private String displayName;
     private ObservableCollection<ContentTypeViewModel> baseTypes;
     public String DisplayName {
-      get { return displayName; }
-      set { displayName = value; NotifyChanged("DisplayName"); }
+      get { return this.displayName; }
+      set { this.displayName = value; NotifyChanged("DisplayName"); }
     }
     public ObservableCollection<ContentTypeViewModel> BaseTypes {
-      get { return baseTypes; }
-      set { baseTypes = value; NotifyChanged("BaseTypes"); }
+      get { return this.baseTypes; }
+      set { this.baseTypes = value; NotifyChanged("BaseTypes"); }
     }
 
     public ContentTypeViewModel(IContentType type) {
@@ -113,9 +107,7 @@ namespace Winterdom.Viasfora.Margins {
       this.BaseTypes = btCollection;
     }
     private void NotifyChanged(String property) {
-      if ( PropertyChanged != null ) {
-        PropertyChanged(this, new PropertyChangedEventArgs(property));
-      }
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
     }
   }
 }

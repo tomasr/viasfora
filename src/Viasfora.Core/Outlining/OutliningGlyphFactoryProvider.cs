@@ -28,7 +28,7 @@ namespace Winterdom.Viasfora.Outlining {
     public IMouseProcessor GetAssociatedMouseProcessor(IWpfTextViewHost wpfTextViewHost, IWpfTextViewMargin margin) {
       return new GlyphMouseProcessor(
         wpfTextViewHost, margin, 
-        aggregatorFactory.CreateTagAggregator<IGlyphTag>(wpfTextViewHost.TextView.TextBuffer)
+        this.aggregatorFactory.CreateTagAggregator<IGlyphTag>(wpfTextViewHost.TextView.TextBuffer)
         );
     }
 
@@ -48,13 +48,15 @@ namespace Winterdom.Viasfora.Outlining {
       }
 
       private TextBlock CreateGlyphElement(double minSize) {
-        TextBlock tb = new TextBlock();
-        tb.Text = "V";
-        tb.FontWeight = FontWeights.Bold;
-        tb.Height = tb.Width = minSize;
-        tb.TextAlignment = TextAlignment.Center;
-        tb.VerticalAlignment = VerticalAlignment.Center;
-        tb.Foreground = Brushes.White;
+        TextBlock tb = new TextBlock {
+          Text = "V",
+          FontWeight = FontWeights.Bold,
+          TextAlignment = TextAlignment.Center,
+          VerticalAlignment = VerticalAlignment.Center,
+          Foreground = Brushes.White,
+          Height = minSize,
+          Width = minSize
+        };
 
         Rectangle rect = new Rectangle();
         rect.Height = rect.Width = minSize * 0.9;
@@ -81,11 +83,11 @@ namespace Winterdom.Viasfora.Outlining {
       public GlyphMouseProcessor() {
       }
       public override void PreprocessMouseLeftButtonDown(MouseButtonEventArgs e) {
-        clickPos = GetLocation(e);
+        this.clickPos = GetLocation(e);
       }
       public override void PostprocessMouseLeftButtonUp(MouseButtonEventArgs e) {
         Point pos = GetLocation(e);
-        var oLine = GetLineAt(clickPos);
+        var oLine = GetLineAt(this.clickPos);
         var cLine = GetLineAt(pos);
         if ( oLine != cLine || cLine == null ) return;
         // find what outlining regions start on the current line
@@ -93,7 +95,7 @@ namespace Winterdom.Viasfora.Outlining {
         SnapshotSpan span = new SnapshotSpan(cLine.Start, cLine.End);
         var spans = new NormalizedSnapshotSpanCollection(span);
 
-        foreach ( var tag in tagAggregator.GetTags(spans) ) {
+        foreach ( var tag in this.tagAggregator.GetTags(spans) ) {
           if ( !(tag.Tag is OutliningGlyphTag) ) continue;
           var tagSpan = tag.GetSpan(cLine.Snapshot);
           if ( tagSpan.IsEmpty ) continue;
@@ -125,8 +127,8 @@ namespace Winterdom.Viasfora.Outlining {
       }
       private Point GetLocation(MouseButtonEventArgs e) {
         Point location = e.GetPosition(this.theHost.TextView.VisualElement);
-        location.X += theHost.TextView.ViewportLeft;
-        location.Y += theHost.TextView.ViewportTop;
+        location.X += this.theHost.TextView.ViewportLeft;
+        location.Y += this.theHost.TextView.ViewportTop;
         return location;
       }
       private void OnTextViewHostClosed(object sender, EventArgs e) {

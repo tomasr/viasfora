@@ -26,7 +26,7 @@ namespace Winterdom.Viasfora.Text {
       if ( snapshot.LineCount <= numLine ) {
         return;
       }
-      ILanguage language = langFactory.TryCreateLanguage(snapshot);
+      ILanguage language = this.langFactory.TryCreateLanguage(snapshot);
       if ( language == null ) return;
 
       var firstLine = snapshot.GetLineFromLineNumber(numLine);
@@ -56,7 +56,7 @@ namespace Winterdom.Viasfora.Text {
       }
       Action<IWpfTextView, String> option;
       if ( optionMap.TryGetValue(key, out option) ) {
-        option(theView, value);
+        option(this.theView, value);
       }
     }
 

@@ -31,15 +31,15 @@ namespace Winterdom.Viasfora.Xml {
         IXmlSettings settings) {
       this.theBuffer = buffer;
       this.settings = settings;
-      xmlCloseTagClassification =
+      this.xmlCloseTagClassification =
          new ClassificationTag(registry.GetClassificationType(XmlConstants.XML_CLOSING));
-      xmlPrefixClassification =
+      this.xmlPrefixClassification =
          new ClassificationTag(registry.GetClassificationType(XmlConstants.XML_PREFIX));
-      xmlClosingPrefixClassification =
+      this.xmlClosingPrefixClassification =
          new ClassificationTag(registry.GetClassificationType(XmlConstants.XML_CLOSING_PREFIX));
-      xmlDelimiterClassification =
+      this.xmlDelimiterClassification =
          new ClassificationTag(registry.GetClassificationType(XmlConstants.DELIMITER));
-      razorCloseTagClassification =
+      this.razorCloseTagClassification =
          new ClassificationTag(registry.GetClassificationType(XmlConstants.RAZOR_CLOSING));
       settings.SettingsChanged += OnSettingsChanged;
       this.aggregator = aggregator;
@@ -50,14 +50,14 @@ namespace Winterdom.Viasfora.Xml {
         ITextSnapshot snapshot = spans[0].Snapshot;
         IContentType fileType = snapshot.TextBuffer.ContentType;
         if ( fileType.IsOfType(XmlConstants.CT_XML) ) {
-          if ( language == null ) language = new XmlMarkup();
+          this.language = this.language ?? new XmlMarkup();
           return DoXML(spans);
         } else if ( fileType.IsOfType(XmlConstants.CT_XAML) ) {
-          if ( language == null ) language = new XamlMarkup();
+          this.language = this.language ?? new XamlMarkup();
           return DoXAMLorHTML(spans);
         } else if ( fileType.IsOfType(XmlConstants.CT_HTML) 
                  || fileType.IsOfType(XmlConstants.CT_HTMLX) ) {
-          if ( language == null ) language = new HtmlMarkup();
+          this.language = this.language ?? new HtmlMarkup();
           return DoXAMLorHTML(spans);
         }
       }
@@ -69,21 +69,17 @@ namespace Winterdom.Viasfora.Xml {
         this.settings.SettingsChanged -= OnSettingsChanged;
         this.settings = null;
       }
-      theBuffer = null;
+      this.theBuffer = null;
     }
     void OnSettingsChanged(object sender, EventArgs e) {
-      var tempEvent = TagsChanged;
-      if ( tempEvent != null ) {
-        tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(theBuffer.CurrentSnapshot, 0,
-            theBuffer.CurrentSnapshot.Length)));
-      }
+      TagsChanged?.Invoke(this, new SnapshotSpanEventArgs(this.theBuffer.CurrentSnapshot.GetSpan()));
     }
 
     private IEnumerable<ITagSpan<ClassificationTag>> DoXML(NormalizedSnapshotSpanCollection spans) {
       ITextSnapshot snapshot = spans[0].Snapshot;
       bool foundClosingTag = false;
 
-      foreach ( var tagSpan in aggregator.GetTags(spans) ) {
+      foreach ( var tagSpan in this.aggregator.GetTags(spans) ) {
         String tagName = tagSpan.Tag.ClassificationType.Classification;
         var cs = tagSpan.Span.GetSpans(snapshot)[0];
         if ( IsXmlDelimiter(tagName) ) {
@@ -106,20 +102,20 @@ namespace Winterdom.Viasfora.Xml {
       String lastSpanTagName = null;
 
       // XAML parses stuff in really weird ways, so we need to special case it
-      foreach ( var tagSpan in aggregator.GetTags(spans) ) {
+      foreach ( var tagSpan in this.aggregator.GetTags(spans) ) {
         String tagName = tagSpan.Tag.ClassificationType.Classification;
         var cs = tagSpan.Span.GetSpans(snapshot)[0];
         if ( IsXmlDelimiter(tagName) ) {
           String text = cs.GetText();
           if ( text.EndsWith("</") ) {
             foundClosingTag = true;
-          } else if ( text == ":" && lastSpan.HasValue && settings.XmlnsPrefixEnabled ) {
-            var prefixCT = foundClosingTag && settings.XmlCloseTagEnabled
-                         ? xmlClosingPrefixClassification
-                         : xmlPrefixClassification;
+          } else if ( text == ":" && lastSpan.HasValue && this.settings.XmlnsPrefixEnabled ) {
+            var prefixCT = foundClosingTag && this.settings.XmlCloseTagEnabled
+                         ? this.xmlClosingPrefixClassification
+                         : this.xmlPrefixClassification;
             yield return new TagSpan<ClassificationTag>(lastSpan.Value, prefixCT);
-          } else if ( text.IndexOf('>') >= 0 && lastSpan.HasValue && foundClosingTag && settings.XmlCloseTagEnabled ) {
-            yield return new TagSpan<ClassificationTag>(lastSpan.Value, xmlCloseTagClassification);
+          } else if ( text.IndexOf('>') >= 0 && lastSpan.HasValue && foundClosingTag && this.settings.XmlCloseTagEnabled ) {
+            yield return new TagSpan<ClassificationTag>(lastSpan.Value, this.xmlCloseTagClassification);
             foundClosingTag = false;
           }
           lastSpan = null;
@@ -127,9 +123,9 @@ namespace Winterdom.Viasfora.Xml {
         } else if ( IsXmlName(tagName) || IsXmlAttribute(tagName) ) {
           lastSpan = cs;
           lastSpanTagName = tagName;
-        } else if ( IsRazorTag(tagName) && settings.XmlCloseTagEnabled ) {
+        } else if ( IsRazorTag(tagName) && this.settings.XmlCloseTagEnabled ) {
           if ( cs.Span.Start >= 2 && snapshot.GetText(new Span(cs.Span.Start - 2, 2)) == "</" ) {
-            yield return new TagSpan<ClassificationTag>(cs, razorCloseTagClassification);
+            yield return new TagSpan<ClassificationTag>(cs, this.razorCloseTagClassification);
           }
         }
       }
@@ -138,45 +134,34 @@ namespace Winterdom.Viasfora.Xml {
     private IEnumerable<ITagSpan<ClassificationTag>> ProcessXmlName(SnapshotSpan cs, bool isClosing) {
       String text = cs.GetText();
       int colon = text.IndexOf(':');
-      if ( colon < 0 && isClosing && settings.XmlCloseTagEnabled ) {
-        yield return new TagSpan<ClassificationTag>(cs, xmlCloseTagClassification);
-      } else if ( colon > 0 && settings.XmlnsPrefixEnabled ) {
+      if ( colon < 0 && isClosing && this.settings.XmlCloseTagEnabled ) {
+        yield return new TagSpan<ClassificationTag>(cs, this.xmlCloseTagClassification);
+      } else if ( colon > 0 && this.settings.XmlnsPrefixEnabled ) {
         string prefix = text.Substring(0, colon);
         string name = text.Substring(colon + 1);
 
-        var prefixCT = isClosing && settings.XmlCloseTagEnabled
-                     ? xmlClosingPrefixClassification
-                     : xmlPrefixClassification;
+        var prefixCT = isClosing && this.settings.XmlCloseTagEnabled
+                     ? this.xmlClosingPrefixClassification
+                     : this.xmlPrefixClassification;
         yield return new TagSpan<ClassificationTag>(
           new SnapshotSpan(cs.Start, prefix.Length), prefixCT);
 
         yield return new TagSpan<ClassificationTag>(new SnapshotSpan(
-          cs.Start.Add(prefix.Length), 1), xmlDelimiterClassification);
+          cs.Start.Add(prefix.Length), 1), this.xmlDelimiterClassification);
 
-        if ( isClosing && settings.XmlCloseTagEnabled ) {
+        if ( isClosing && this.settings.XmlCloseTagEnabled ) {
           yield return new TagSpan<ClassificationTag>(new SnapshotSpan(
-            cs.Start.Add(prefix.Length + 1), name.Length), xmlCloseTagClassification);
+            cs.Start.Add(prefix.Length + 1), name.Length), this.xmlCloseTagClassification);
         }
-      } else if ( isClosing && settings.XmlCloseTagEnabled ) {
+      } else if ( isClosing && this.settings.XmlCloseTagEnabled ) {
         // XmlnsPrefix hl disabled, but we still want to highlight the closing tag
-        yield return new TagSpan<ClassificationTag>(cs, xmlCloseTagClassification);
+        yield return new TagSpan<ClassificationTag>(cs, this.xmlCloseTagClassification);
       }
     }
 
-    private bool IsXmlName(String tagName) {
-      return language.IsName(tagName);
-    }
-
-    private bool IsXmlAttribute(String tagName) {
-      return language.IsAttribute(tagName);
-    }
-
-    private bool IsXmlDelimiter(String tagName) {
-      return language.IsDelimiter(tagName);
-    }
-
-    private bool IsRazorTag(String tagName) {
-      return language.IsRazorTag(tagName);
-    }
+    private bool IsXmlName(String tagName) => this.language.IsName(tagName);
+    private bool IsXmlAttribute(String tagName) => this.language.IsAttribute(tagName);
+    private bool IsXmlDelimiter(String tagName) => this.language.IsDelimiter(tagName);
+    private bool IsRazorTag(String tagName) => this.language.IsRazorTag(tagName);
   }
 }

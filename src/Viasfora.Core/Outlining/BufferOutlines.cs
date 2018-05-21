@@ -7,27 +7,25 @@ namespace Winterdom.Viasfora.Outlining {
   public class BufferOutlines {
     private List<ITrackingSpan> regions = new List<ITrackingSpan>();
 
-    public int Count {
-      get { return regions.Count; }
-    }
+    public int Count => regions.Count;
 
     public void Add(SnapshotSpan span) {
-      regions.Add(span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgeInclusive));
+      this.regions.Add(span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgeInclusive));
     }
     public void Add(ITrackingSpan span) {
-      regions.Add(span);
+      this.regions.Add(span);
     }
     public IEnumerable<ITrackingSpan> Enumerate() {
-      return regions;
+      return this.regions;
     }
     public void Clear() {
-      regions.Clear();
+      this.regions.Clear();
     }
     public int FindRegionContaining(SnapshotPoint point) {
       int candidate = -1;
       int distance = Int32.MaxValue;
-      for (int i=0; i < regions.Count; i++ ) {
-        var spSpan = regions[i].GetSpan(point.Snapshot);
+      for (int i=0; i < this.regions.Count; i++ ) {
+        var spSpan = this.regions[i].GetSpan(point.Snapshot);
         if ( spSpan.Contains(point) ) {
           int d = point - spSpan.Start;
           if ( d < distance ) {
@@ -38,9 +36,9 @@ namespace Winterdom.Viasfora.Outlining {
       return candidate;
     }
     public SnapshotSpan RemoveAt(ITextSnapshot snapshot, int index) {
-      var trackingSpan = regions[index];
+      var trackingSpan = this.regions[index];
       var result = trackingSpan.GetSpan(snapshot);
-      regions.RemoveAt(index);
+      this.regions.RemoveAt(index);
       return result;
     }
 

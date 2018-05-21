@@ -27,24 +27,24 @@ namespace Winterdom.Viasfora.Xml {
       }
     }
     public void ConnectSubjectBuffer(ITextBuffer subjectBuffer) {
-      textBuffers.Add(subjectBuffer);
+      this.textBuffers.Add(subjectBuffer);
     }
 
     public void DisconnectSubjectBuffer(ITextBuffer subjectBuffer) {
-      textBuffers.Remove(subjectBuffer);
+      this.textBuffers.Remove(subjectBuffer);
     }
     void OnTextViewMouseHover(object sender, MouseHoverEventArgs e) {
-      SnapshotPoint? point = textView.BufferGraph.MapDownToFirstMatch(
-        new SnapshotPoint(textView.TextSnapshot, e.Position),
+      SnapshotPoint? point = this.textView.BufferGraph.MapDownToFirstMatch(
+        new SnapshotPoint(this.textView.TextSnapshot, e.Position),
         PointTrackingMode.Positive,
-        snapshot => textBuffers.Contains(snapshot.TextBuffer),
+        snapshot => this.textBuffers.Contains(snapshot.TextBuffer),
         PositionAffinity.Predecessor
       );
       if ( point != null ) {
         ITrackingPoint triggerPoint = point.Value.Snapshot.CreateTrackingPoint(
           point.Value.Position, PointTrackingMode.Positive);
-        if ( provider.QuickInfoBroker.IsQuickInfoActive(textView) ) {
-          session = provider.QuickInfoBroker.TriggerQuickInfo(textView, triggerPoint, true);
+        if ( this.provider.QuickInfoBroker.IsQuickInfoActive(this.textView) ) {
+          this.session = this.provider.QuickInfoBroker.TriggerQuickInfo(this.textView, triggerPoint, true);
         }
       }
     }

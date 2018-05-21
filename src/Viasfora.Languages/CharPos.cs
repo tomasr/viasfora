@@ -1,24 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Winterdom.Viasfora.Rainbow {
   public struct CharPos {
-    private char ch;
-    private int state;
-    private int position;
+    private readonly char ch;
+    private readonly int state;
+    private readonly int position;
     public static CharPos Empty = new CharPos('\0', 0);
 
-    public char Char {
-      get { return ch; }
-    }
-    public int State {
-      get { return state; }
-    }
-    public int Position {
-      get { return position; }
-    }
+    public char Char => this.ch;
+    public int State => this.state;
+    public int Position => this.position;
 
     public CharPos(char ch, int pos) : this(ch, pos, 0) {
     }

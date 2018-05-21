@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora.Outlining {
     private IVsOutliningManagerService outlining = null;
 
     public void TextViewCreated(IWpfTextView textView) {
-      var manager = outlining.GetOutliningManager(textView);
+      var manager = this.outlining.GetOutliningManager(textView);
       if ( manager != null ) {
         textView.Properties.GetOrCreateSingletonProperty(
           () => new OutliningController(textView, manager)

@@ -40,11 +40,11 @@ namespace Winterdom.Viasfora.Xml {
     }
 
     public IEnumerable<ITagSpan<TextMarkerTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      if ( !settings.XmlMatchTagsEnabled ) yield break;
+      if ( !this.settings.XmlMatchTagsEnabled ) yield break;
       if ( spans.Count == 0 ) yield break;
-      if ( !currentSpan.HasValue ) yield break;
+      if ( !this.currentSpan.HasValue ) yield break;
 
-      SnapshotSpan current = currentSpan.Value;
+      SnapshotSpan current = this.currentSpan.Value;
 
       if ( current.Snapshot != spans[0].Snapshot ) {
         current = current.TranslateTo(spans[0].Snapshot, SpanTrackingMode.EdgePositive);
@@ -235,18 +235,18 @@ namespace Winterdom.Viasfora.Xml {
         this.aggregator.Dispose();
         this.aggregator = null;
       }
-      theBuffer = null;
+      this.theBuffer = null;
     }
 
     private void OnSettingsChanged(object sender, EventArgs e) {
       if ( this.theView != null ) {
-        UpdateAtCaretPosition(theView.Caret.Position);
+        UpdateAtCaretPosition(this.theView.Caret.Position);
       }
     }
 
     private void ViewLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       if ( e.NewSnapshot != e.OldSnapshot ) {
-        UpdateAtCaretPosition(theView.Caret.Position);
+        UpdateAtCaretPosition(this.theView.Caret.Position);
       }
     }
 
@@ -255,27 +255,23 @@ namespace Winterdom.Viasfora.Xml {
     }
 
     private void UpdateAtCaretPosition(CaretPosition caretPosition) {
-      var point = caretPosition.Point.GetPoint(theBuffer, caretPosition.Affinity);
+      var point = caretPosition.Point.GetPoint(this.theBuffer, caretPosition.Affinity);
       if ( !point.HasValue )
         return;
 
       // get the tag beneath our position:
       this.currentSpan = GetTagAtPoint(point.Value);
 
-      var tempEvent = TagsChanged;
-      if ( tempEvent != null ) {
-        tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(theBuffer.CurrentSnapshot, 0,
-            theBuffer.CurrentSnapshot.Length)));
-      }
+      TagsChanged?.Invoke(this, new SnapshotSpanEventArgs(this.theBuffer.CurrentSnapshot.GetSpan()));
     }
 
     private SnapshotSpan? GetTagAtPoint(SnapshotPoint point) {
       int pos = point.Position >= 1 ? point.Position - 1 : 0;
       SnapshotSpan testSpan = new SnapshotSpan(point.Snapshot, new Span(pos, 0));
 
-      foreach ( var tagSpan in aggregator.GetTags(testSpan) ) {
+      foreach ( var tagSpan in this.aggregator.GetTags(testSpan) ) {
         String tagName = tagSpan.Tag.ClassificationType.Classification;
-        if ( !language.IsName(tagName) ) continue;
+        if ( !this.language.IsName(tagName) ) continue;
         foreach ( var span in tagSpan.Span.GetSpans(point.Snapshot.TextBuffer) ) {
           if ( span.Contains(point.Position) ) {
             return span;
