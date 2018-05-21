@@ -50,8 +50,11 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       int len = 1;
       this.text.Next();
       while ( !this.text.AtEnd ) {
+        char ch = this.text.Char();
+        if ( Char.IsWhiteSpace(ch) || ch.IsEndOfLine() )
+          break;
         len++;
-        if ( this.text.Char() == '}' ) {
+        if ( ch == '}' ) {
           result = new StringPart(start, len, StringPartType.FormatSpecifier);
           this.text.Next();
           return true;
