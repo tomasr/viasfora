@@ -30,33 +30,33 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       }
     }
     public StringPart? Next() {
-      while ( !text.EndOfLine ) {
-        if ( text.Char() == '\\' && !this.isVerbatim ) {
-          return BasicCStringScanner.ParseEscapeSequence(text);
-        } else if ( text.Char() == '{' && text.NChar() == '{' ) {
-          text.Next(); // skip it
-        } else if ( text.Char() == '{' && !this.isInterpolated ) {
+      while ( !this.text.EndOfLine ) {
+        if ( this.text.Char() == '\\' && !this.isVerbatim ) {
+          return BasicCStringScanner.ParseEscapeSequence(this.text);
+        } else if ( this.text.Char() == '{' && this.text.NChar() == '{' ) {
+          this.text.Next(); // skip it
+        } else if ( this.text.Char() == '{' && !this.isInterpolated ) {
           StringPart part = new StringPart();
           if ( ParseFormatSpecifier(ref part) )
             return part;
         }
-        text.Next();
+        this.text.Next();
       }
       return null;
     }
     private bool ParseFormatSpecifier(ref StringPart result) {
       // text.Char() == '{'
-      int start = text.Position;
+      int start = this.text.Position;
       int len = 1;
-      text.Next();
-      while ( !text.EndOfLine ) {
+      this.text.Next();
+      while ( !this.text.EndOfLine ) {
         len++;
-        if ( text.Char() == '}' ) {
+        if ( this.text.Char() == '}' ) {
           result = new StringPart(start, len, StringPartType.FormatSpecifier);
-          text.Next();
+          this.text.Next();
           return true;
         }
-        text.Next();
+        this.text.Next();
       }
       return false;
     }

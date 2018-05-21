@@ -5,20 +5,20 @@ namespace Winterdom.Viasfora.Options {
   public partial class PresentationModeDialogPage : UserControl {
 
     public bool PMEnabled {
-      get { return enableCheckbox.Checked; }
-      set { enableCheckbox.Checked = value; }
+      get { return this.enableCheckbox.Checked; }
+      set { this.enableCheckbox.Checked = value; }
     }
     public int DefaultZoom {
-      get { return defaultZoom.Value; }
-      set { defaultZoom.Value = value; }
+      get { return this.defaultZoom.Value; }
+      set { this.defaultZoom.Value = value; }
     }
     public int EnabledZoom {
-      get { return enabledZoom.Value; }
-      set { enabledZoom.Value = value; }
+      get { return this.enabledZoom.Value; }
+      set { this.enabledZoom.Value = value; }
     }
     public bool IncludeEnvironmentFonts {
-      get { return includeEnvFontsCheckBox.Checked; }
-      set { includeEnvFontsCheckBox.Checked = value; }
+      get { return this.includeEnvFontsCheckBox.Checked; }
+      set { this.includeEnvFontsCheckBox.Checked = value; }
     }
 
     public PresentationModeDialogPage() {
@@ -26,8 +26,8 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void OnEnableCheckboxChecked(object sender, EventArgs e) {
-      enabledZoom.Enabled = enableCheckbox.Checked;
-      defaultZoom.Enabled = enableCheckbox.Checked;
+      this.enabledZoom.Enabled = this.enableCheckbox.Checked;
+      this.defaultZoom.Enabled = this.enableCheckbox.Checked;
     }
 
   }

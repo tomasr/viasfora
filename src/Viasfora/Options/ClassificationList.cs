@@ -15,8 +15,8 @@ namespace Winterdom.Viasfora.Options {
     private const String AUTOMATIC_COLOR = "Automatic";
 
     public ClassificationList(ColorStorage colorStorage) {
-      storage = colorStorage;
-      classifications = new Dictionary<String, ClassificationColors>();
+      this.storage = colorStorage;
+      this.classifications = new Dictionary<String, ClassificationColors>();
     }
 
     public void Load(params Type[] classificationDefinitions) {
@@ -25,22 +25,22 @@ namespace Winterdom.Viasfora.Options {
     }
 
     public void Load(params String[] classificationNames) {
-      classifications.Clear();
+      this.classifications.Clear();
 
       Guid category = new Guid(FontsAndColorsCategories.TextEditorCategory);
       uint flags = (uint)(__FCSTORAGEFLAGS.FCSF_LOADDEFAULTS
                         | __FCSTORAGEFLAGS.FCSF_READONLY);
-      var hr = storage.Storage.OpenCategory(ref category, flags);
+      var hr = this.storage.Storage.OpenCategory(ref category, flags);
       ErrorHandler.ThrowOnFailure(hr);
 
       try {
         foreach ( var classification in classificationNames ) {
           var colors = new ClassificationColors(classification);
-          colors.Load(storage);
-          classifications.Add(classification, colors);
+          colors.Load(this.storage);
+          this.classifications.Add(classification, colors);
         }
       } finally {
-        storage.Storage.CloseCategory();
+        this.storage.Storage.CloseCategory();
       }
     }
 
@@ -48,28 +48,28 @@ namespace Winterdom.Viasfora.Options {
       Guid category = new Guid(FontsAndColorsCategories.TextEditorCategory);
       uint flags = (uint)(__FCSTORAGEFLAGS.FCSF_LOADDEFAULTS
                         | __FCSTORAGEFLAGS.FCSF_PROPAGATECHANGES);
-      var hr = storage.Storage.OpenCategory(ref category, flags);
+      var hr = this.storage.Storage.OpenCategory(ref category, flags);
       ErrorHandler.ThrowOnFailure(hr);
 
       try {
-        foreach ( var colors in classifications.Values ) {
-          colors.Save(storage);
+        foreach ( var colors in this.classifications.Values ) {
+          colors.Save(this.storage);
         }
       } finally {
-        storage.Storage.CloseCategory();
+        this.storage.Storage.CloseCategory();
       }
     }
 
     public Color Get(String classificationName, bool foreground) {
       ClassificationColors entry;
-      if ( classifications.TryGetValue(classificationName, out entry) ) {
+      if ( this.classifications.TryGetValue(classificationName, out entry) ) {
         return entry.Get(foreground);
       }
       return default(Color);
     }
 
     public void Set(String classificationName, bool foreground, Color color) {
-      var obj = classifications[classificationName];
+      var obj = this.classifications[classificationName];
       obj.Set(color, foreground);
     }
 
@@ -78,10 +78,11 @@ namespace Winterdom.Viasfora.Options {
       foreach ( var key in this.classifications.Keys ) {
         var entry = this.classifications[key];
 
-        var item = new JObject();
-        item["foreground"] = ColorToHtml(entry.Foreground);
-        item["background"] = ColorToHtml(entry.Background);
-        item["style"] = JToken.FromObject(entry.Style);
+        var item = new JObject {
+          ["foreground"] = ColorToHtml(entry.Foreground),
+          ["background"] = ColorToHtml(entry.Background),
+          ["style"] = JToken.FromObject(entry.Style)
+        };
         list[key] = item;
       }
 
@@ -96,8 +97,7 @@ namespace Winterdom.Viasfora.Options {
           continue;
 
         String key = item.Name;
-        ClassificationColors classification;
-        if ( !this.classifications.TryGetValue(key, out classification) ) {
+        if ( !this.classifications.TryGetValue(key, out ClassificationColors classification) ) {
           continue; // simply ignore it if it's unknown
         }
         JsonToClassification(item, classification);

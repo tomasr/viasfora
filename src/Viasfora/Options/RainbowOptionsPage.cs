@@ -23,7 +23,7 @@ namespace Winterdom.Viasfora.Options {
       rainbowSettings.RainbowHighlightKey = RainbowHighlightKey;
       rainbowSettings.Save();
 
-      colors.Save();
+      this.colors.Save();
     }
     public override void LoadSettingsFromStorage() {
       var rainbowSettings = SettingsContext.GetService<IRainbowSettings>();
@@ -38,7 +38,7 @@ namespace Winterdom.Viasfora.Options {
       RainbowLinesEnabled = rainbowSettings.RainbowLinesEnabled;
 
       this.colors = new ClassificationList(new ColorStorage(this.Site));
-      colors.Load(
+      this.colors.Load(
         Rainbows.Rainbow1,
         Rainbows.Rainbow2,
         Rainbows.Rainbow3,
@@ -106,77 +106,77 @@ namespace Winterdom.Viasfora.Options {
     [Description("Colors to use to highlight braces at this level")]
     [Category("Rainbow Colors")]
     public Color Level1 {
-      get { return colors.Get(Rainbows.Rainbow1, true); }
-      set { colors.Set(Rainbows.Rainbow1, true, value); }
+      get { return this.colors.Get(Rainbows.Rainbow1, true); }
+      set { this.colors.Set(Rainbows.Rainbow1, true, value); }
     }
     [LocDisplayName("Level 2")]
     [Description("Colors to use to highlight braces at this level")]
     [Category("Rainbow Colors")]
     public Color Level2 {
-      get { return colors.Get(Rainbows.Rainbow2, true); }
-      set { colors.Set(Rainbows.Rainbow2, true, value); }
+      get { return this.colors.Get(Rainbows.Rainbow2, true); }
+      set { this.colors.Set(Rainbows.Rainbow2, true, value); }
     }
     [LocDisplayName("Level 3")]
     [Description("Colors to use to highlight braces at this level")]
     [Category("Rainbow Colors")]
     public Color Level3 {
-      get { return colors.Get(Rainbows.Rainbow3, true); }
-      set { colors.Set(Rainbows.Rainbow3, true, value); }
+      get { return this.colors.Get(Rainbows.Rainbow3, true); }
+      set { this.colors.Set(Rainbows.Rainbow3, true, value); }
     }
     [LocDisplayName("Level 4")]
     [Description("Colors to use to highlight braces at this level")]
     [Category("Rainbow Colors")]
     public Color Level4 {
-      get { return colors.Get(Rainbows.Rainbow4, true); }
-      set { colors.Set(Rainbows.Rainbow4, true, value); }
+      get { return this.colors.Get(Rainbows.Rainbow4, true); }
+      set { this.colors.Set(Rainbows.Rainbow4, true, value); }
     }
     [LocDisplayName("Level 5")]
     [Description("Colors to use to highlight braces at this level")]
     [Category("Rainbow Colors")]
     public Color Level5 {
-      get { return colors.Get(Rainbows.Rainbow5, true); }
-      set { colors.Set(Rainbows.Rainbow5, true, value); }
+      get { return this.colors.Get(Rainbows.Rainbow5, true); }
+      set { this.colors.Set(Rainbows.Rainbow5, true, value); }
     }
     [LocDisplayName("Level 6")]
     [Description("Colors to use to highlight braces at this level")]
     [Category("Rainbow Colors")]
     public Color Level6 {
-      get { return colors.Get(Rainbows.Rainbow6, true); }
-      set { colors.Set(Rainbows.Rainbow6, true, value); }
+      get { return this.colors.Get(Rainbows.Rainbow6, true); }
+      set { this.colors.Set(Rainbows.Rainbow6, true, value); }
     }
     [LocDisplayName("Level 7")]
     [Description("Colors to use to highlight braces at this level")]
     [Category("Rainbow Colors")]
     public Color Level7 {
-      get { return colors.Get(Rainbows.Rainbow7, true); }
-      set { colors.Set(Rainbows.Rainbow7, true, value); }
+      get { return this.colors.Get(Rainbows.Rainbow7, true); }
+      set { this.colors.Set(Rainbows.Rainbow7, true, value); }
     }
     [LocDisplayName("Level 8")]
     [Description("Colors to use to highlight braces at this level")]
     [Category("Rainbow Colors")]
     public Color Level8 {
-      get { return colors.Get(Rainbows.Rainbow8, true); }
-      set { colors.Set(Rainbows.Rainbow8, true, value); }
+      get { return this.colors.Get(Rainbows.Rainbow8, true); }
+      set { this.colors.Set(Rainbows.Rainbow8, true, value); }
     }
     [LocDisplayName("Level 9")]
     [Description("Colors to use to highlight braces at this level")]
     [Category("Rainbow Colors")]
     public Color Level9 {
-      get { return colors.Get(Rainbows.Rainbow9, true); }
-      set { colors.Set(Rainbows.Rainbow9, true, value); }
+      get { return this.colors.Get(Rainbows.Rainbow9, true); }
+      set { this.colors.Set(Rainbows.Rainbow9, true, value); }
     }
     [Description("Colors to use to highlight brace errors")]
     [Category("Rainbow Colors")]
     public Color Errors {
-      get { return colors.Get(Rainbows.RainbowError, false); }
-      set { colors.Set(Rainbows.RainbowError, false, value); }
+      get { return this.colors.Get(Rainbows.RainbowError, false); }
+      set { this.colors.Set(Rainbows.RainbowError, false, value); }
     }
     [LocDisplayName("Tip Highlight")]
     [Description("Colors to use to highlight rainbow tips")]
     [Category("Rainbow Colors")]
     public Color TipHighlight {
-      get { return colors.Get(Rainbows.TipHilight, false); }
-      set { colors.Set(Rainbows.TipHilight, false, value); }
+      get { return this.colors.Get(Rainbows.TipHilight, false); }
+      set { this.colors.Set(Rainbows.TipHilight, false, value); }
     }
   }
 }
