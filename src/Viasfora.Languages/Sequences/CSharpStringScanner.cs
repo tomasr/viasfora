@@ -55,8 +55,10 @@ namespace Winterdom.Viasfora.Languages.Sequences {
           break;
         len++;
         if ( ch == '}' ) {
-          result = new StringPart(start, len, StringPartType.FormatSpecifier);
           this.text.Next();
+          if ( len <= 2 ) // ignore {}
+            break;
+          result = new StringPart(start, len, StringPartType.FormatSpecifier);
           return true;
         }
         this.text.Next();

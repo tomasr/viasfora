@@ -179,5 +179,11 @@ namespace Viasfora.Tests.StringScanners {
       var parser = new CSharpStringScanner(input);
       Assert.Equal(null, parser.Next());
     }
+    [Fact]
+    public void EmptyFormatSpecIsIgnored() {
+      String input = "\"" + @"Value: {}" + "\"";
+      var parser = new CSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
   }
 }
