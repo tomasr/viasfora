@@ -64,7 +64,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
         if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
-        } else if ( tc.Char() == quoteChar ) {
+        } else if ( tc.Char() == this.quoteChar ) {
           tc.Next();
           break;
         } else {

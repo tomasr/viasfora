@@ -166,7 +166,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     // but will handle most basic stuff
     private bool ParseInterpolatedString(ITextChars tc, ref CharPos pos) {
       while ( !tc.AtEnd ) {
-        if ( parsingExpression ) {
+        if ( this.parsingExpression ) {
           //
           // we're inside an interpolated section
           //
@@ -182,7 +182,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           } else if ( tc.Char() == '}' ) {
             // reached the end
             this.nestingLevel--;
-            if ( nestingLevel == 0 ) {
+            if ( this.nestingLevel == 0 ) {
               this.parsingExpression = false;
             }
             pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
@@ -231,12 +231,12 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private int EncodedState() {
-      int encoded = status;
-      if ( parsingExpression )
+      int encoded = this.status;
+      if ( this.parsingExpression )
         encoded |= 0x08000000;
-      if ( multiLine )
+      if ( this.multiLine )
         encoded |= 0x04000000;
-      encoded |= (nestingLevel & 0xFF) << 24;
+      encoded |= (this.nestingLevel & 0xFF) << 24;
       return encoded;
     }
   }

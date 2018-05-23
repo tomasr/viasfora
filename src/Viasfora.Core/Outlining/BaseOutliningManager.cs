@@ -10,8 +10,8 @@ namespace Winterdom.Viasfora.Outlining {
   public abstract class BaseOutliningManager : IUserOutlining, IOutliningManager {
     protected BufferOutlines Regions { get; private set; }
     private static readonly SnapshotSpan[] empty = new SnapshotSpan[0];
-    private OutliningTagger outliningTagger;
-    private GlyphTagger glyphTagger;
+    private readonly OutliningTagger outliningTagger;
+    private readonly GlyphTagger glyphTagger;
 
     protected BaseOutliningManager(ITextBuffer buffer) {
       this.Regions = new BufferOutlines();

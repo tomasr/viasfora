@@ -12,11 +12,11 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       this.text.Next();
     }
     public StringPart? Next() {
-      while ( !text.AtEnd ) {
-        if ( text.Char() == '\\' ) {
-          return ParseEscapeSequence(text);
+      while ( !this.text.AtEnd ) {
+        if ( this.text.Char() == '\\' ) {
+          return ParseEscapeSequence(this.text);
         }
-        text.Next();
+        this.text.Next();
       }
       return null;
     }

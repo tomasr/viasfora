@@ -160,7 +160,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
     private bool ParseInterpolatedString(ITextChars tc, ref CharPos pos) {
       while ( !tc.AtEnd ) {
-        if ( parsingExpression ) {
+        if ( this.parsingExpression ) {
           // inside template literal expression in ${}
           if ( ParseTemplateExpressionChar(tc, ref pos) )
             return true;
@@ -203,7 +203,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       } else if ( tc.Char() == '}' ) {
         // reached the end
         this.nestingLevel--;
-        if ( nestingLevel == 0 ) {
+        if ( this.nestingLevel == 0 ) {
           this.parsingExpression = false;
         }
         pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
@@ -222,10 +222,10 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private int EncodedState() {
-      int encoded = status;
-      if ( parsingExpression )
+      int encoded = this.status;
+      if ( this.parsingExpression )
         encoded |= 0x08000000;
-      encoded |= (nestingLevel & 0xFF) << 24;
+      encoded |= (this.nestingLevel & 0xFF) << 24;
       return encoded;
     }
   }

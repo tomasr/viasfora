@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Windows.Threading;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using IVsOutliningManager = Microsoft.VisualStudio.Text.Outlining.IOutliningManager;
 using IVsOutliningManagerService = Microsoft.VisualStudio.Text.Outlining.IOutliningManagerService;
-using Microsoft.VisualStudio.Text;
-using System.Windows.Threading;
 
 namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IWpfTextViewCreationListener))]
