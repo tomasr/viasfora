@@ -18,10 +18,10 @@ namespace Winterdom.Viasfora.Outlining {
     [Import]
     private IVsfSettings settings = null;
     public void TextViewCreated(IWpfTextView textView) {
-      var manager = outlining.GetOutliningManager(textView);
+      var manager = this.outlining.GetOutliningManager(textView);
       if ( manager != null ) {
         textView.Properties.GetOrCreateSingletonProperty(
-          () => new AutoExpander(textView, manager, settings)
+          () => new AutoExpander(textView, manager, this.settings)
           );
       }
     }
@@ -45,9 +45,9 @@ namespace Winterdom.Viasfora.Outlining {
       this.theView.Closed += OnViewClosed;
       this.settings.SettingsChanged += OnSettingsChanged;
 
-      if ( expandMode == AutoExpandMode.Disable ) {
+      if ( this.expandMode == AutoExpandMode.Disable ) {
         outlining.Enabled = false;
-      } else if ( expandMode == AutoExpandMode.Expand ) {
+      } else if ( this.expandMode == AutoExpandMode.Expand ) {
         // in most cases, this is enough to 
         // expand all outlining as necessary.
         // However, it does not appear to work
@@ -68,7 +68,7 @@ namespace Winterdom.Viasfora.Outlining {
     }
 
     private void OnSettingsChanged(object sender, EventArgs e) {
-      if ( settings.AutoExpandRegions == AutoExpandMode.Disable ) {
+      if ( this.settings.AutoExpandRegions == AutoExpandMode.Disable ) {
         this.outliningManager.Enabled = false;
       } else {
         this.outliningManager.Enabled = true;
@@ -97,10 +97,10 @@ namespace Winterdom.Viasfora.Outlining {
     }
 
     private void ExpandAll() {
-      var snapshot = theView.TextSnapshot;
+      var snapshot = this.theView.TextSnapshot;
       if ( snapshot != null ) {
-        SnapshotSpan span = new SnapshotSpan(snapshot, 0, snapshot.Length);
-        outliningManager.ExpandAll(span, collapsed => true);
+        SnapshotSpan span = snapshot.GetSpan();
+        this.outliningManager.ExpandAll(span, collapsed => true);
       }
     }
   }

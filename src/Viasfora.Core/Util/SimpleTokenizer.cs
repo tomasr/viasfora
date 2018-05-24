@@ -7,45 +7,41 @@ namespace Winterdom.Viasfora.Util {
     private bool reachedEnd;
     private String currentToken;
 
-    public bool AtEnd {
-      get { return reachedEnd; }
-    }
-    public String Token {
-      get { return currentToken; }
-    }
+    public bool AtEnd => this.reachedEnd;
+    public String Token => this.currentToken;
 
     public SimpleTokenizer(String text) {
       this.tc = new StringChars(text);
     }
 
     public bool Next() {
-      if ( tc.EndOfLine ) {
+      if ( this.tc.AtEnd ) {
         this.currentToken = "";
         this.reachedEnd = true;
        return false;
       }
       // skip whitespace
-      while ( !tc.EndOfLine && Char.IsWhiteSpace(tc.Char()) ) {
-        tc.Next();
+      while ( !this.tc.AtEnd && Char.IsWhiteSpace(this.tc.Char()) ) {
+        this.tc.Next();
       }
-      if ( tc.EndOfLine ) {
+      if ( this.tc.AtEnd ) {
         this.currentToken = "";
         this.reachedEnd = true;
         return false;
       }
       // if it's a special character, return it on its own
-      if ( !Char.IsLetterOrDigit(tc.Char()) ) {
-        char ch = tc.Char();
-        tc.Next();
+      if ( !Char.IsLetterOrDigit(this.tc.Char()) ) {
+        char ch = this.tc.Char();
+        this.tc.Next();
         this.currentToken = "" + ch;
         return true;
       }
       // return the word
       StringBuilder sb = new StringBuilder();
-      while ( !tc.EndOfLine ) {
-        char ch = tc.Char();
+      while ( !this.tc.AtEnd ) {
+        char ch = this.tc.Char();
         if ( !Char.IsLetterOrDigit(ch) ) break;
-        tc.Next();
+        this.tc.Next();
         sb.Append(ch);
       }
       this.currentToken = sb.ToString();

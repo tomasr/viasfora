@@ -62,7 +62,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.provider = provider;
       this.formatMap = provider.GetFormatMap(textView);
       this.rainbowTags = provider.GetRainbowTags();
-      layer = view.GetAdornmentLayer(LAYER);
+      this.layer = textView.GetAdornmentLayer(LAYER);
     }
 
     public static RainbowHighlight Get(ITextView view) {
@@ -71,19 +71,18 @@ namespace Winterdom.Viasfora.Rainbow {
 
     public void Start(SnapshotPoint opening, SnapshotPoint closing, int depth) {
       SnapshotSpan span = new SnapshotSpan(opening, closing);
-      var lines = this.view.TextViewLines;
       PathGeometry path = BuildSpanGeometry(span);
       path = path.GetOutlinedPathGeometry();
 
       var adornment = MakeAdornment(span, path, depth);
-      layer.AddAdornment(
+      this.layer.AddAdornment(
         AdornmentPositioningBehavior.TextRelative, span,
         TAG, adornment, null
         );
     }
 
     public void Stop() {
-      layer.RemoveAllAdornments();
+      this.layer.RemoveAllAdornments();
     }
 
     private PathGeometry BuildSpanGeometry(SnapshotSpan span) {
@@ -133,27 +132,26 @@ namespace Winterdom.Viasfora.Rainbow {
         spanGeometry.Freeze();
       }
 
-      Path path = new Path();
-      path.Data = spanGeometry;
-      path.Stroke = brush;
-      path.StrokeThickness = 1.3;
-      path.Fill = MakeBackgroundBrush(brush);
-
-      return path;
+      return new Path() {
+        Data = spanGeometry,
+        Stroke = brush,
+        StrokeThickness = 1.3,
+        Fill = MakeBackgroundBrush(brush),
+      };
     }
 
     private Brush GetRainbowBrush(int depth) {
-      var rainbow = rainbowTags[depth % provider.GetRainbowDepth()];
-      var properties = formatMap.GetTextProperties(rainbow);
+      var rainbow = this.rainbowTags[depth % this.provider.GetRainbowDepth()];
+      var properties = this.formatMap.GetTextProperties(rainbow);
       return properties.ForegroundBrush;
     }
 
     private Brush MakeBackgroundBrush(Brush brush) {
       SolidColorBrush scb = brush as SolidColorBrush;
       if ( scb == null ) return Brushes.Transparent;
-      Brush newBrush = new SolidColorBrush(scb.Color);
-      newBrush.Opacity = 0.10;
-      return newBrush;
+      return new SolidColorBrush(scb.Color) {
+        Opacity = 0.10
+      };
     }
   }
 }

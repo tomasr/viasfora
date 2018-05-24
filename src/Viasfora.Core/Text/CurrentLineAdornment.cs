@@ -47,20 +47,20 @@ namespace Winterdom.Viasfora.Text {
         this.settings = null;
       }
       if ( this.view != null ) {
-        view.Options.OptionChanged -= OnSettingsChanged;
-        view.Caret.PositionChanged -= OnCaretPositionChanged;
-        view.ViewportWidthChanged -= OnViewportWidthChanged;
-        view.LayoutChanged -= OnLayoutChanged;
-        view.ViewportLeftChanged -= OnViewportLeftChanged;
-        view.Closed -= OnViewClosed;
-        view = null;
+        this.view.Options.OptionChanged -= OnSettingsChanged;
+        this.view.Caret.PositionChanged -= OnCaretPositionChanged;
+        this.view.ViewportWidthChanged -= OnViewportWidthChanged;
+        this.view.LayoutChanged -= OnLayoutChanged;
+        this.view.ViewportLeftChanged -= OnViewportLeftChanged;
+        this.view.Closed -= OnViewClosed;
+        this.view = null;
       }
-      if ( formatMap != null ) {
-        formatMap.ClassificationFormatMappingChanged -= OnClassificationFormatMappingChanged;
-        formatMap = null;
+      if ( this.formatMap != null ) {
+        this.formatMap.ClassificationFormatMappingChanged -= OnClassificationFormatMappingChanged;
+        this.formatMap = null;
       }
-      layer = null;
-      formatType = null;
+      this.layer = null;
+      this.formatType = null;
     }
     void OnSettingsChanged(object sender, EventArgs e) {
       CreateDrawingObjects();
@@ -79,12 +79,12 @@ namespace Winterdom.Viasfora.Text {
       ITextViewLine newLine = GetLineByPos(e.NewPosition);
       ITextViewLine oldLine = GetLineByPos(e.OldPosition);
       if ( newLine != oldLine ) {
-        layer.RemoveAdornmentsByTag(CUR_LINE_TAG);
+        this.layer.RemoveAdornmentsByTag(CUR_LINE_TAG);
         this.CreateVisuals(newLine);
       }
     }
     void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
-      SnapshotPoint caret = view.Caret.Position.BufferPosition;
+      SnapshotPoint caret = this.view.Caret.Position.BufferPosition;
       foreach ( var line in e.NewOrReformattedLines ) {
         if ( line.ContainsBufferPosition(caret) ) {
           this.CreateVisuals(line);
@@ -98,30 +98,30 @@ namespace Winterdom.Viasfora.Text {
       // user in Fonts and Colors (or the default in out
       // classification type).
       TextFormattingRunProperties format =
-         formatMap.GetTextProperties(formatType);
+         this.formatMap.GetTextProperties(this.formatType);
 
       this.lineRect.Fill = format.BackgroundBrush;
       this.lineRect.Stroke = format.ForegroundBrush;
-      this.lineRect.StrokeThickness = settings.HighlightLineWidth;
+      this.lineRect.StrokeThickness = this.settings.HighlightLineWidth;
     }
     private void RedrawAdornments() {
-      if ( view.TextViewLines != null ) {
-        layer.RemoveAllAdornments();
-        var caret = view.Caret.Position;
+      if ( this.view.TextViewLines != null ) {
+        this.layer.RemoveAllAdornments();
+        var caret = this.view.Caret.Position;
         ITextViewLine line = GetLineByPos(caret);
         this.CreateVisuals(line);
       }
     }
     private ITextViewLine GetLineByPos(CaretPosition pos) {
       SnapshotPoint point = pos.BufferPosition;
-      if ( point.Snapshot != view.TextSnapshot ) {
-        point = point.TranslateTo(view.TextSnapshot, PointTrackingMode.Positive);
+      if ( point.Snapshot != this.view.TextSnapshot ) {
+        point = point.TranslateTo(this.view.TextSnapshot, PointTrackingMode.Positive);
       }
-      return view.GetTextViewLineContainingBufferPosition(point);
+      return this.view.GetTextViewLineContainingBufferPosition(point);
     }
     private bool IsEnabled() {
-      return settings.CurrentLineHighlightEnabled
-          && !view.Options.GetOptionValue<bool>(ViewOptions.HighlightCurrentLineOption);
+      return this.settings.CurrentLineHighlightEnabled
+          && !this.view.Options.GetOptionValue<bool>(ViewOptions.HighlightCurrentLineOption);
     }
     private void CreateVisuals(ITextViewLine line) {
       if ( !IsEnabled() ) {
@@ -132,20 +132,20 @@ namespace Winterdom.Viasfora.Text {
         return; // not ready yet.
       SnapshotSpan span = line.Extent;
       Rect rc = new Rect(
-         new Point(view.ViewportLeft, line.TextTop),
-         new Point(Math.Max(view.ViewportRight - 2, line.TextRight), line.TextBottom)
+         new Point(this.view.ViewportLeft, line.TextTop),
+         new Point(Math.Max(this.view.ViewportRight - 2, line.TextRight), line.TextBottom)
       );
 
-      lineRect.Width = rc.Width;
-      lineRect.Height = rc.Height;
+      this.lineRect.Width = rc.Width;
+      this.lineRect.Height = rc.Height;
 
       //Align the image with the top of the bounds of the text geometry
-      Canvas.SetLeft(lineRect, rc.Left);
-      Canvas.SetTop(lineRect, rc.Top);
+      Canvas.SetLeft(this.lineRect, rc.Left);
+      Canvas.SetTop(this.lineRect, rc.Top);
 
-      layer.AddAdornment(
+      this.layer.AddAdornment(
          AdornmentPositioningBehavior.TextRelative, span,
-         CUR_LINE_TAG, lineRect, null
+         CUR_LINE_TAG, this.lineRect, null
       );
     }
   }

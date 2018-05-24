@@ -40,7 +40,7 @@ namespace Winterdom.Viasfora.Options {
 
     public void Load(ColorStorage colorStorage) {
       ColorableItemInfo[] colors = new ColorableItemInfo[1];
-      var hr = colorStorage.Storage.GetItem(classificationName, colors);
+      var hr = colorStorage.Storage.GetItem(this.classificationName, colors);
       ErrorHandler.ThrowOnFailure(hr);
 
       this.foregroundChanged = false;
@@ -64,12 +64,12 @@ namespace Winterdom.Viasfora.Options {
     public void Save(ColorStorage colorStorage) {
       if ( this.HasChanged() ) {
         ColorableItemInfo[] colors = new ColorableItemInfo[1];
-        var hr = colorStorage.Storage.GetItem(classificationName, colors);
+        var hr = colorStorage.Storage.GetItem(this.classificationName, colors);
         ErrorHandler.ThrowOnFailure(hr);
 
         AssignForSave(colorStorage, colors);
 
-        hr = colorStorage.Storage.SetItem(classificationName, colors);
+        hr = colorStorage.Storage.SetItem(this.classificationName, colors);
         ErrorHandler.ThrowOnFailure(hr);
       }
     }
@@ -91,18 +91,18 @@ namespace Winterdom.Viasfora.Options {
 
     private void AssignForSave(ColorStorage colorStorage, ColorableItemInfo[] colors) {
       if ( this.foregroundChanged ) {
-        if ( foreground == Color.Transparent ) {
+        if ( this.foreground == Color.Transparent ) {
           colors[0].crForeground = colorStorage.GetAutomaticColor();
         } else {
-          colors[0].crForeground = (uint)ColorTranslator.ToWin32(foreground);
+          colors[0].crForeground = (uint)ColorTranslator.ToWin32(this.foreground);
         }
         colors[0].bForegroundValid = 1;
       }
       if ( this.backgroundChanged ) {
-        if ( background == Color.Transparent ) {
+        if ( this.background == Color.Transparent ) {
           colors[0].crBackground = colorStorage.GetAutomaticColor();
         } else {
-          colors[0].crBackground = (uint)ColorTranslator.ToWin32(background);
+          colors[0].crBackground = (uint)ColorTranslator.ToWin32(this.background);
         }
         colors[0].bBackgroundValid = 1;
       }
@@ -119,8 +119,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private Color MapColor(ColorStorage storage, uint colorRef) {
-      int type;
-      var hr = storage.Utilities.GetColorType(colorRef, out type);
+      var hr = storage.Utilities.GetColorType(colorRef, out int type);
       switch ( (__VSCOLORTYPE)type ) {
         case __VSCOLORTYPE.CT_SYSCOLOR:
         case __VSCOLORTYPE.CT_RAW:
@@ -137,12 +136,10 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private Color FromVsColor(ColorStorage storage, uint colorRef) {
-      int vsColor;
-      var hr = storage.Utilities.GetEncodedVSColor(colorRef, out vsColor);
+      var hr = storage.Utilities.GetEncodedVSColor(colorRef, out int vsColor);
       ErrorHandler.ThrowOnFailure(hr);
 
-      uint rgb;
-      hr = storage.Shell.GetVSSysColorEx(vsColor, out rgb);
+      hr = storage.Shell.GetVSSysColorEx(vsColor, out uint rgb);
       ErrorHandler.ThrowOnFailure(hr);
 
       return FromWin32(rgb);
@@ -157,8 +154,7 @@ namespace Winterdom.Viasfora.Options {
       if ( index[0] == COLORINDEX.CI_SYSTEXT_BK || index[0] == COLORINDEX.CI_SYSTEXT_FG )
         return Color.Transparent;
 
-      uint rgb;
-      hr = storage.Utilities.GetRGBOfIndex(index[0], out rgb);
+      hr = storage.Utilities.GetRGBOfIndex(index[0], out uint rgb);
       ErrorHandler.ThrowOnFailure(hr);
       return FromWin32(rgb);
     }

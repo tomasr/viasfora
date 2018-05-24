@@ -14,12 +14,12 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     public void Reset(int state) {
-      status = stText;
+      this.status = stText;
     }
     public bool Extract(ITextChars tc, ref CharPos pos) {
       pos = CharPos.Empty;
-      while ( !tc.EndOfLine ) {
-        switch ( status ) {
+      while ( !tc.AtEnd ) {
+        switch ( this.status ) {
           case stString: ParseString(tc); break;
           case stMultiLineComment: ParseMultilineComment(tc); break;
           default:
@@ -30,19 +30,19 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private bool ParseText(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '/' && tc.NChar() == '*' ) {
           tc.Skip(2);
-          status = stMultiLineComment;
+          this.status = stMultiLineComment;
           ParseMultilineComment(tc);
         } else if ( tc.Char() == '/' && tc.NChar() == '/' ) {
           tc.SkipRemainder();
         } else if ( tc.Char() == '\'' ) {
-          status = stString;
+          this.status = stString;
           tc.Next();
           ParseCharLiteral(tc);
         } else if ( tc.Char() == '"' ) {
-          status = stString;
+          this.status = stString;
           tc.Next();
           ParseString(tc);
         } else if ( this.BraceList.IndexOf(tc.Char()) >= 0 ) {
@@ -57,7 +57,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseCharLiteral(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
@@ -72,10 +72,10 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseMultilineComment(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '*' && tc.Char() == '/' ) {
           tc.Skip(2);
-          status = stText;
+          this.status = stText;
           break;
         } else {
           tc.Next();
@@ -84,7 +84,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\"' ) {
           tc.Next();
           this.status = stText;

@@ -56,8 +56,7 @@ namespace Winterdom.Viasfora {
       InitializeTelemetry();
       InitializeActivityLog();
 
-      OleMenuCommandService mcs = GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
-      if ( null != mcs ) {
+      if ( GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs ) {
         InitializeViewMenuCommands(mcs);
         InitializeTextEditorCommands(mcs);
       }
@@ -86,8 +85,8 @@ namespace Winterdom.Viasfora {
 
     protected override void OnSaveOptions(string key, Stream stream) {
       base.OnSaveOptions(key, stream);
-      if ( key == USER_OPTIONS_KEY && userOptions != null ) {
-        stream.Write(userOptions, 0, userOptions.Length);
+      if ( key == USER_OPTIONS_KEY && this.userOptions != null ) {
+        stream.Write(this.userOptions, 0, this.userOptions.Length);
       }
     }
 
@@ -123,15 +122,15 @@ namespace Winterdom.Viasfora {
     }
 
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
-      commands.Add(new PresentationModeCommand(this, mcs));
-      commands.Add(new ObfuscateTextCommand(this, mcs));
+      this.commands.Add(new PresentationModeCommand(this, mcs));
+      this.commands.Add(new ObfuscateTextCommand(this, mcs));
     }
     private void InitializeTextEditorCommands(OleMenuCommandService mcs) {
-      commands.Add(new AddOutliningCommand(this, mcs));
-      commands.Add(new RemoveOutliningCommand(this, mcs));
-      commands.Add(new ClearOutliningCommand(this, mcs));
-      commands.Add(new SelectionOutliningCommand(this, mcs));
-      commands.Add(new CompleteWordCommand(this, mcs));
+      this.commands.Add(new AddOutliningCommand(this, mcs));
+      this.commands.Add(new RemoveOutliningCommand(this, mcs));
+      this.commands.Add(new ClearOutliningCommand(this, mcs));
+      this.commands.Add(new SelectionOutliningCommand(this, mcs));
+      this.commands.Add(new CompleteWordCommand(this, mcs));
     }
 
     private Version FindVSVersion() {

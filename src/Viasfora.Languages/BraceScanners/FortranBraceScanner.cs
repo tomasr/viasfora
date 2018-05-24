@@ -20,7 +20,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     public bool Extract(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         switch ( this.status ) {
           case stStringSingle: ParseStringSingle(tc); break;
           case stStringDouble: ParseStringDouble(tc); break;
@@ -32,7 +32,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private bool ParseText(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '!' ) {
           // single line comment
           tc.SkipRemainder();
@@ -59,7 +59,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     private void ParseStringDouble(ITextChars tc) => ParseString(tc, '"');
 
     private void ParseString(ITextChars tc, char quote) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == quote && tc.NChar() == quote ) {
           // double quote, meaning a single literal quote, skip
           tc.Skip(2);

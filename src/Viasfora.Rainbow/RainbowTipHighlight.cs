@@ -85,8 +85,8 @@ namespace Winterdom.Viasfora.Rainbow {
         return;
       }
       Rect rc = new Rect(
-         new Point(textView.ViewportLeft, line.TextTop),
-         new Point(Math.Max(textView.ViewportRight, line.TextRight), line.TextBottom)
+         new Point(this.textView.ViewportLeft, line.TextTop),
+         new Point(Math.Max(this.textView.ViewportRight, line.TextRight), line.TextBottom)
       );
 
       var properties = this.formatMap.GetProperties(Rainbows.TipHilight);
@@ -94,19 +94,20 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private Rect CreateVisual(SnapshotSpan span, Rect rc, ResourceDictionary properties) {
-      Rectangle highlight = new Rectangle();
-      highlight.UseLayoutRounding = true;
-      highlight.SnapsToDevicePixels = true;
-      highlight.Fill = new SolidColorBrush((Color)properties["BackgroundColor"]);
-      highlight.Opacity = 0.10;
-      highlight.Width = rc.Width;
-      highlight.Height = rc.Height;
+      Rectangle highlight = new Rectangle() {
+        UseLayoutRounding = true,
+        SnapsToDevicePixels = true,
+        Fill = new SolidColorBrush((Color)properties["BackgroundColor"]),
+        Opacity = 0.10,
+        Width = rc.Width,
+        Height = rc.Height,
+      };
 
       // Align the image with the top of the bounds of the text geometry
       Canvas.SetLeft(highlight, rc.Left);
       Canvas.SetTop(highlight, rc.Top);
 
-      layer.AddAdornment(
+      this.layer.AddAdornment(
          AdornmentPositioningBehavior.TextRelative, span,
          TAG, highlight, null
       );

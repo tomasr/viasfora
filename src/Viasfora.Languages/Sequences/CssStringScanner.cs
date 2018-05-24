@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
@@ -17,18 +13,18 @@ namespace Winterdom.Viasfora.Languages.Sequences {
     }
     public StringPart? Next() {
       const int maxHexLen = 6;
-      while ( start < text.Length - 2 ) {
-        if ( text[start] == '\\' ) {
+      while ( this.start < this.text.Length - 2 ) {
+        if ( this.text[this.start] == '\\' ) {
           int len = 1;
-          while ( (start+len) < text.Length && text[start+len+1].IsHexDigit() && len < maxHexLen ) {
+          while ( (this.start+len) < this.text.Length && this.text[this.start+len+1].IsHexDigit() && len < maxHexLen ) {
             len++;
           }
 
-          Span span = new Span(start, len+1);
-          start += len + 1;
+          var span = new TextSpan(this.start, len+1);
+          this.start += len + 1;
           return new StringPart(span, StringPartType.EscapeSequence);
         }
-        start++;
+        this.start++;
       }
       return null;
     }

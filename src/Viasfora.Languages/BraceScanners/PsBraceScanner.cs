@@ -24,7 +24,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     public bool Extract(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
           case stExpandableString: ParseExpandableString(tc); break;
@@ -39,7 +39,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private bool ParseText(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         // multi-line comment
         if ( tc.Char() == '<' && tc.NChar() == '#' ) {
           this.status = stMultiLineComment;
@@ -75,7 +75,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseExpandableString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '`' ) {
           // skip over escape sequences
           tc.Skip(2);
@@ -90,7 +90,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\'' ) {
           tc.Next();
           break;
@@ -102,7 +102,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseHereExpandableString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '`' ) {
           // skip over escape sequences
           tc.Skip(2);
@@ -116,7 +116,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       this.status = stText;
     }
     private void ParseHereString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\'' && tc.NChar() == '@' ) {
           tc.Skip(2);
           break;
@@ -128,7 +128,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseMultiLineComment(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '#' && tc.NChar() == '>' ) {
           tc.Skip(2);
           this.status = stText;

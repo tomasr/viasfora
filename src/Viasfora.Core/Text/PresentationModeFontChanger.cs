@@ -20,17 +20,17 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void TurnOn() {
-      if ( !settings.PresentationModeIncludeEnvFonts )
+      if ( !this.settings.PresentationModeIncludeEnvFonts )
         return;
 
       double zoomLevel = this.packageState.GetPresentationModeZoomLevel();
-      enabled = true;
+      this.enabled = true;
       foreach ( var category in this.categories ) {
         TurnOnCategory(category, zoomLevel);
       }
     }
     public void TurnOff(bool notifyChanges = true) {
-      if ( enabled ) {
+      if ( this.enabled ) {
         foreach ( var category in this.categories ) {
           TurnOffCategory(category, notifyChanges);
         }
@@ -47,7 +47,7 @@ namespace Winterdom.Viasfora.Text {
       EnsureFontsAndColors();
       Guid categoryId = category.Id;
 
-      int hr = fontsAndColors.OpenCategory(
+      int hr = this.fontsAndColors.OpenCategory(
         ref categoryId,
         (uint)(__FCSTORAGEFLAGS.FCSF_PROPAGATECHANGES | __FCSTORAGEFLAGS.FCSF_LOADDEFAULTS)
         );
@@ -56,7 +56,7 @@ namespace Winterdom.Viasfora.Text {
         LOGFONTW[] logfont = new LOGFONTW[1];
         FontInfo[] fontInfo = new FontInfo[1];
 
-        hr = fontsAndColors.GetFont(logfont, fontInfo);
+        hr = this.fontsAndColors.GetFont(logfont, fontInfo);
         if ( ErrorHandler.Succeeded(hr) ) {
           category.FontInfo = fontInfo[0];
           double size = fontInfo[0].wPointSize;
@@ -66,9 +66,9 @@ namespace Winterdom.Viasfora.Text {
           fontInfo[0].bCharSetValid = 0;
           fontInfo[0].bPointSizeValid = 1;
           fontInfo[0].wPointSize = Convert.ToUInt16(size);
-          fontsAndColors.SetFont(fontInfo);
+          this.fontsAndColors.SetFont(fontInfo);
         }
-        fontsAndColors.CloseCategory();
+        this.fontsAndColors.CloseCategory();
       }
     }
 
@@ -80,7 +80,7 @@ namespace Winterdom.Viasfora.Text {
         flags |= __FCSTORAGEFLAGS.FCSF_PROPAGATECHANGES;
       }
 
-      int hr = fontsAndColors.OpenCategory(ref categoryId, (uint)flags);
+      int hr = this.fontsAndColors.OpenCategory(ref categoryId, (uint)flags);
 
       if ( ErrorHandler.Succeeded(hr) ) {
         FontInfo[] fontInfo = new FontInfo[] {
@@ -89,8 +89,8 @@ namespace Winterdom.Viasfora.Text {
         fontInfo[0].bFaceNameValid = 0;
         fontInfo[0].bCharSetValid = 0;
         fontInfo[0].bPointSizeValid = 1;
-        fontsAndColors.SetFont(fontInfo);
-        fontsAndColors.CloseCategory();
+        this.fontsAndColors.SetFont(fontInfo);
+        this.fontsAndColors.CloseCategory();
       }
     }
 

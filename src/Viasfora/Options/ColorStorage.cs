@@ -16,8 +16,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     public uint GetAutomaticColor() {
-      uint result;
-      int hr = Utilities.EncodeAutomaticColor(out result);
+      int hr = Utilities.EncodeAutomaticColor(out uint result);
       ErrorHandler.ThrowOnFailure(hr);
       return result;
     }

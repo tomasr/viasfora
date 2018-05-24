@@ -1,0 +1,117 @@
+{
+  "viasfora.keyword.flowcontrol": {
+    "foreground": "OrangeRed",
+    "background": "Automatic",
+    "style": "None"
+  },
+  "viasfora.keyword.linq": {
+    "foreground": "MediumSeaGreen",
+    "background": "Automatic",
+    "style": "None"
+  },
+  "viasfora.string.escape_sequence": {
+    "foreground": "Fuchsia",
+    "background": "Automatic",
+    "style": "None"
+  },
+  "viasfora.string.escape_sequence.error": {
+    "foreground": "#FFA000",
+    "background": "Automatic",
+    "style": "None"
+  },
+  "viasfora.string.format.specifier": {
+    "foreground": "MediumSlateBlue",
+    "background": "Automatic",
+    "style": "None"
+  },
+  "viasfora.keyword.visibility": {
+    "foreground": "DimGray",
+    "background": "Automatic",
+    "style": "None"
+  },
+  "viasfora.line.current": {
+    "foreground": "Automatic",
+    "background": "Black",
+    "style": "None"
+  },
+  "viasfora.column.current": {
+    "foreground": "Automatic",
+    "background": "Black",
+    "style": "None"
+  },
+  "viasfora.text.obfuscated": {
+    "foreground": "White",
+    "background": "WhiteSmoke",
+    "style": "None"
+  },
+  "viasfora.rainbow.1": {
+    "foreground": "#FF6B4C",
+    "background": "Automatic",
+    "style": "Bold"
+  },
+  "viasfora.rainbow.2": {
+    "foreground": "Orange",
+    "background": "Automatic",
+    "style": "Bold"
+  },
+  "viasfora.rainbow.3": {
+    "foreground": "Tan",
+    "background": "Automatic",
+    "style": "Bold"
+  },
+  "viasfora.rainbow.4": {
+    "foreground": "#7ACBD7",
+    "background": "Automatic",
+    "style": "Bold"
+  },
+  "viasfora.rainbow.5": {
+    "foreground": "#31919F",
+    "background": "Automatic",
+    "style": "Bold"
+  },
+  "viasfora.rainbow.6": {
+    "foreground": "#7FE2A4",
+    "background": "Automatic",
+    "style": "Bold"
+  },
+  "viasfora.rainbow.7": {
+    "foreground": "#1BA950",
+    "background": "Automatic",
+    "style": "Bold"
+  },
+  "viasfora.rainbow.8": {
+    "foreground": "#85A0DD",
+    "background": "Automatic",
+    "style": "Bold"
+  },
+  "viasfora.rainbow.9": {
+    "foreground": "Orchid",
+    "background": "Automatic",
+    "style": "Bold"
+  },
+  "viasfora.rainbow.error": {
+    "foreground": "Automatic",
+    "background": "LightCoral",
+    "style": "None"
+  },
+  "viasfora.xml.closing": {
+    "foreground": "DarkOrange",
+    "background": "Automatic",
+    "style": "None"
+  },
+  "viasfora.xml.prefix": {
+    "foreground": "ForestGreen",
+    "background": "Automatic",
+    "style": "None"
+  },
+  "viasfora.xml.closing.prefix": {
+    "foreground": "OrangeRed",
+    "background": "Automatic",
+    "style": "None"
+  },
+  "viasfora.razor.closing.element": {
+    "foreground": "DarkOrange",
+    "background": "Automatic",
+    "style": "Bold"
+  }
+}

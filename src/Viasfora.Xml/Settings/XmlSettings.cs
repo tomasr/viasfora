@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora.Xml.Settings {
@@ -19,7 +20,10 @@ namespace Winterdom.Viasfora.Xml.Settings {
     }
 
     [ImportingConstructor]
-    public XmlSettings(ITypedSettingsStore store) : base(store) {
+    public XmlSettings(ITypedSettingsStore store, IVsfTelemetry telemetry) : base(store) {
+      telemetry.FeatureStatus("XmlnsPrefix", XmlnsPrefixEnabled);
+      telemetry.FeatureStatus("XmlCloseTag", XmlCloseTagEnabled);
+      telemetry.FeatureStatus("XmlMatchTag", XmlMatchTagsEnabled);
     }
   }
 }

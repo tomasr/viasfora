@@ -5,27 +5,27 @@ using System.Drawing.Design;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Options {
   [Guid(Guids.CSharpOptions)]
   public class CSharpOptionsPage : DialogPage {
-    private ILanguage language = SettingsContext.GetLanguage(Constants.CSharp);
+    private ILanguage language = SettingsContext.GetLanguage(Langs.CSharp);
 
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
-      language.Settings.ControlFlow = ControlFlowKeywords.ToArray();
-      language.Settings.Linq = LinqKeywords.ToArray();
-      language.Settings.Visibility = VisibilityKeywords.ToArray();
-      language.Settings.Enabled = Enabled;
-      language.Settings.Save();
+      this.language.Settings.ControlFlow = ControlFlowKeywords.ToArray();
+      this.language.Settings.Linq = LinqKeywords.ToArray();
+      this.language.Settings.Visibility = VisibilityKeywords.ToArray();
+      this.language.Settings.Enabled = Enabled;
+      this.language.Settings.Save();
     }
     public override void LoadSettingsFromStorage() {
       base.LoadSettingsFromStorage();
-      ControlFlowKeywords = language.Settings.ControlFlow.ToList();
-      LinqKeywords = language.Settings.Linq.ToList();
-      VisibilityKeywords = language.Settings.Visibility.ToList();
-      Enabled = language.Settings.Enabled;
+      ControlFlowKeywords = this.language.Settings.ControlFlow.ToList();
+      LinqKeywords = this.language.Settings.Linq.ToList();
+      VisibilityKeywords = this.language.Settings.Visibility.ToList();
+      Enabled = this.language.Settings.Enabled;
     }
 
     [LocDisplayName("Enabled")]

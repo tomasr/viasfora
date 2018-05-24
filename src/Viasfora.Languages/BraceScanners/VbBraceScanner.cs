@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
 
     public bool Extract(ITextChars tc, ref CharPos pos) {
       pos = CharPos.Empty;
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
           default:
@@ -33,7 +33,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private bool ParseText(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\'' ) {
           // single line comment
           tc.SkipRemainder();
@@ -53,7 +53,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '"' && tc.NChar() == '"' ) {
           // embedded quotes, skip
           tc.Skip(2);

@@ -8,11 +8,7 @@ namespace Winterdom.Viasfora.Options {
   public class MainOptionsPage : DialogPage {
     private MainOptionsControl dialog;
 
-    protected override IWin32Window Window {
-      get {
-        return dialog;
-      }
-    }
+    protected override IWin32Window Window => this.dialog;
 
     public MainOptionsPage() {
       this.dialog = new MainOptionsControl();

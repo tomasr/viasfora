@@ -22,25 +22,23 @@ namespace Winterdom.Viasfora.Text {
 
     public int GetPresentationModeZoomLevel() {
       return PresentationModeTurnedOn
-        ? settings.PresentationModeEnabledZoom
-        : settings.PresentationModeDefaultZoom;
+        ? this.settings.PresentationModeEnabledZoom
+        : this.settings.PresentationModeDefaultZoom;
     }
 
     public void TogglePresentationMode() {
       PresentationModeTurnedOn = !PresentationModeTurnedOn;
-      if (PresentationModeChanged != null) {
-        PresentationModeChanged(this, EventArgs.Empty);
-      }
+      PresentationModeChanged?.Invoke(this, EventArgs.Empty);
       if (PresentationModeTurnedOn) {
-        fontChanger.TurnOn();
-        telemetry.WriteEvent("Presentation Mode");
+        this.fontChanger.TurnOn();
+        this.telemetry.WriteEvent("Presentation Mode");
       } else {
-        fontChanger.TurnOff();
+        this.fontChanger.TurnOff();
       }
     }
 
     public void TurnOff(bool notifyChanges) {
-      fontChanger.TurnOff(notifyChanges);
+      this.fontChanger.TurnOff(notifyChanges);
     }
 
     public T GetService<T>() {

@@ -46,7 +46,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.provider = provider;
       this.textView = textView;
       //add the command to the command chain
-      viewAdapter.AddCommandFilter(this, out nextCommandHandler);
+      viewAdapter.AddCommandFilter(this, out this.nextCommandHandler);
     }
 
     public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText) {
@@ -64,7 +64,7 @@ namespace Winterdom.Viasfora.Rainbow {
         prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_ENABLED | (uint)OLECMDF.OLECMDF_SUPPORTED;
         return VSConstants.S_OK;
       }
-      return nextCommandHandler.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+      return this.nextCommandHandler.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
     }
 
     public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut) {
@@ -83,7 +83,7 @@ namespace Winterdom.Viasfora.Rainbow {
       }
       if ( !handled ) {
         // let other commands handle it
-        hr = nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+        hr = this.nextCommandHandler.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
       }
       return hr;
     }

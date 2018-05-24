@@ -22,9 +22,9 @@ namespace Winterdom.Viasfora.Text {
 
     public ITagger<T> CreateTagger<T>(ITextView view, ITextBuffer buffer) where T : ITag {
       var obfuscationType = 
-        registryService.GetClassificationType(Constants.OBFUSCATED_TEXT);
+        this.registryService.GetClassificationType(Constants.OBFUSCATED_TEXT);
       return new TextObfuscationTagger(
-                view, buffer, obfuscationType, settings
+                view, buffer, obfuscationType, this.settings
               ) as ITagger<T>;
     }
   }
@@ -58,7 +58,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public IEnumerable<ITagSpan<ObfuscatedTextTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-      bool scan = enabled
+      bool scan = this.enabled
                && this.expressionsToSearch.Count > 0
                && spans.Count > 0;
       if ( !scan ) {
@@ -69,9 +69,9 @@ namespace Winterdom.Viasfora.Text {
         ITextSnapshot snapshot = span.Snapshot;
         ITextSnapshotLine line = span.Start.GetContainingLine();
         do {
-          var tags = expressionsToSearch
-            .SelectMany(entry => entry.Match(line))
-            .Select(match => new TagSpan<ObfuscatedTextTag>(match, tag));
+          var tags = this.expressionsToSearch
+                         .SelectMany(entry => entry.Match(line))
+                         .Select(match => new TagSpan<ObfuscatedTextTag>(match, tag));
 
           foreach ( var tagSpan in tags ) {
             yield return tagSpan;
@@ -105,17 +105,14 @@ namespace Winterdom.Viasfora.Text {
     }
     private void OnSettingsChanged(object sender, EventArgs e) {
       this.expressionsToSearch = 
-        settings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
+        this.settings.TextObfuscationRegexes.ListFromJson<RegexEntry>();
       ITextSnapshot snapshot = this.theBuffer.CurrentSnapshot;
       SnapshotSpan span = new SnapshotSpan(snapshot, 0, snapshot.Length);
       ReportTagsChanged(span);
     }
 
     private void ReportTagsChanged(SnapshotSpan span) {
-      var handler = this.TagsChanged;
-      if ( handler != null ) {
-        handler(this, new SnapshotSpanEventArgs(span));
-      }
+      this.TagsChanged?.Invoke(this, new SnapshotSpanEventArgs(span));
     }
   }
 
@@ -128,10 +125,7 @@ namespace Winterdom.Viasfora.Text {
     }
     public static void Change(bool enabled) {
       Enabled = enabled;
-      var handler = EnabledChanged;
-      if ( handler != null ) {
-        handler(null, EventArgs.Empty);
-      }
+      EnabledChanged?.Invoke(null, EventArgs.Empty);
     }
   }
 }

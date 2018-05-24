@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.ApplicationInsights.DataContracts;
+using System;
 using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Contracts;
 
@@ -19,6 +20,12 @@ namespace Winterdom.Viasfora {
 
     public void WriteTrace(string message) {
       Telemetry.WriteTrace(message);
+    }
+
+    public void FeatureStatus(String feature, bool enabled) {
+      var evt = new EventTelemetry("Feature-" + feature);
+      evt.Properties["enabled"] = enabled.ToString();
+      Telemetry.WriteEvent(evt);
     }
   }
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Tags;
 using Winterdom.Viasfora.Util;
 using System.Linq;
 using Microsoft.VisualStudio.Text.Classification;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -28,16 +28,16 @@ namespace Winterdom.Viasfora.Text {
 #pragma warning restore 67
 
     internal KeywordTagger(ITextBuffer buffer, KeywordTaggerProvider provider) {
-      theBuffer = buffer;
+      this.theBuffer = buffer;
       this.aggregator = provider.Aggregator.CreateTagAggregator<IClassificationTag>(buffer);
       this.langFactory = provider.LanguageFactory;
 
-      keywordClassification = provider.GetTag(Constants.FLOW_CONTROL_CLASSIF_NAME);
-      linqClassification = provider.GetTag(Constants.LINQ_CLASSIF_NAME);
-      visClassification = provider.GetTag(Constants.VISIBILITY_CLASSIF_NAME);
-      stringEscapeClassification = provider.GetTag(Constants.STRING_ESCAPE_CLASSIF_NAME);
-      stringEscapeErrorClassification = provider.GetTag(Constants.STRING_ESCAPE_ERROR_NAME);
-      formatSpecClassification = provider.GetTag(Constants.FORMAT_SPECIFIER_NAME);
+      this.keywordClassification = provider.GetTag(Constants.FLOW_CONTROL_CLASSIF_NAME);
+      this.linqClassification = provider.GetTag(Constants.LINQ_CLASSIF_NAME);
+      this.visClassification = provider.GetTag(Constants.VISIBILITY_CLASSIF_NAME);
+      this.stringEscapeClassification = provider.GetTag(Constants.STRING_ESCAPE_CLASSIF_NAME);
+      this.stringEscapeErrorClassification = provider.GetTag(Constants.STRING_ESCAPE_ERROR_NAME);
+      this.formatSpecClassification = provider.GetTag(Constants.FORMAT_SPECIFIER_NAME);
 
       this.settings = provider.Settings;
       this.settings.SettingsChanged += this.OnSettingsChanged;
@@ -47,13 +47,13 @@ namespace Winterdom.Viasfora.Text {
       if ( spans.Count == 0 ) {
         yield break;
       }
-      ILanguage lang = GetLanguageByContentType(theBuffer.ContentType);
+      ILanguage lang = GetLanguageByContentType(this.theBuffer.ContentType);
       if ( !lang.Settings.Enabled ) {
         yield break;
       }
 
-      bool eshe = settings.EscapeSequencesEnabled;
-      bool kce = settings.KeywordClassifierEnabled;
+      bool eshe = this.settings.EscapeSequencesEnabled;
+      bool kce = this.settings.KeywordClassifierEnabled;
       if ( !(kce || eshe) ) {
         yield break;
       }
@@ -62,7 +62,7 @@ namespace Winterdom.Viasfora.Text {
 
       // Get all spans that contain interesting tags
       // translated into our snapshot
-      var interestingSpans = from tagSpan in aggregator.GetTags(spans)
+      var interestingSpans = from tagSpan in this.aggregator.GetTags(spans)
                              let classificationType = tagSpan.Tag.ClassificationType
                              where IsInterestingTag(lang, classificationType)
                              select tagSpan.ToTagSpan(snapshot);
@@ -78,7 +78,7 @@ namespace Winterdom.Viasfora.Text {
           }
         }
 
-        if ( kce && lang.IsKeywordClassification(classificationType) ) {
+        if ( kce && lang.IsKeywordClassification(classificationType.Classification) ) {
           // Is this one of the keywords we care about?
           var result = IsInterestingKeyword(lang, tagSpan.Span);
           if ( result != null ) {
@@ -92,9 +92,9 @@ namespace Winterdom.Viasfora.Text {
       if ( classification is RainbowTag )
         return false;
       var name = classification.Classification;
-      if ( settings.EscapeSequencesEnabled && name.IndexOf("string", StringComparison.InvariantCultureIgnoreCase) >= 0 )
+      if ( this.settings.EscapeSequencesEnabled && name.IndexOf("string", StringComparison.InvariantCultureIgnoreCase) >= 0 )
         return true;
-      if ( settings.KeywordClassifierEnabled && lang.IsKeywordClassification(classification) )
+      if ( this.settings.KeywordClassifierEnabled && lang.IsKeywordClassification(classification.Classification) )
         return true;
       return false;
     }
@@ -133,35 +133,31 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void Dispose() {
-      if ( settings != null ) {
-        settings.SettingsChanged -= OnSettingsChanged;
-        settings = null;
+      if ( this.settings != null ) {
+        this.settings.SettingsChanged -= OnSettingsChanged;
+        this.settings = null;
       }
-      if ( aggregator != null ) {
-        aggregator.Dispose();
-        aggregator = null;
+      if ( this.aggregator != null ) {
+        this.aggregator.Dispose();
+        this.aggregator = null;
       }
-      theBuffer = null;
+      this.theBuffer = null;
     }
     void OnSettingsChanged(object sender, EventArgs e) {
       if ( this.theBuffer == null )
         return;
-      var tempEvent = TagsChanged;
-      if ( tempEvent != null ) {
-        tempEvent(this, new SnapshotSpanEventArgs(new SnapshotSpan(theBuffer.CurrentSnapshot, 0,
-            theBuffer.CurrentSnapshot.Length)));
-      }
+      TagsChanged?.Invoke(this, new SnapshotSpanEventArgs(this.theBuffer.CurrentSnapshot.GetSpan()));
     }
 
     private ITagSpan<KeywordTag> IsInterestingKeyword(ILanguage lang, SnapshotSpan cs) {
       if ( cs.IsEmpty ) return null;
       String text = cs.GetText();
       if ( this.settings.FlowControlKeywordsEnabled && lang.IsControlFlowKeyword(text) ) {
-        return new TagSpan<KeywordTag>(cs, keywordClassification);
+        return new TagSpan<KeywordTag>(cs, this.keywordClassification);
       } else if ( this.settings.VisibilityKeywordsEnabled && lang.IsVisibilityKeyword(text) ) {
-        return new TagSpan<KeywordTag>(cs, visClassification);
+        return new TagSpan<KeywordTag>(cs, this.visClassification);
       } else if ( this.settings.QueryKeywordsEnabled && lang.IsLinqKeyword(text) ) {
-        return new TagSpan<KeywordTag>(cs, linqClassification);
+        return new TagSpan<KeywordTag>(cs, this.linqClassification);
       }
       return null;
     }
@@ -181,13 +177,13 @@ namespace Winterdom.Viasfora.Text {
         var sspan = new SnapshotSpan(cs.Snapshot, cs.Start.Position + span.Start, span.Length);
         switch ( part.Value.Type ) {
           case StringPartType.EscapeSequence:
-            yield return new TagSpan<KeywordTag>(sspan, stringEscapeClassification);
+            yield return new TagSpan<KeywordTag>(sspan, this.stringEscapeClassification);
             break;
           case StringPartType.FormatSpecifier:
-            yield return new TagSpan<KeywordTag>(sspan, formatSpecClassification);
+            yield return new TagSpan<KeywordTag>(sspan, this.formatSpecClassification);
             break;
           case StringPartType.EscapeSequenceError:
-            yield return new TagSpan<KeywordTag>(sspan, stringEscapeErrorClassification);
+            yield return new TagSpan<KeywordTag>(sspan, this.stringEscapeErrorClassification);
             break;
         }
       }

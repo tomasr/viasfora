@@ -6,11 +6,12 @@ using Winterdom.Viasfora.Xml;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Classifications;
 using Winterdom.Viasfora.Rainbow.Classifications;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Options {
   public partial class MainOptionsControl : UserControl {
     private const String XML_FILTER = "XML Files (*.xml)|*.xml";
-    private const String THEME_FILTER = "Viasfora Theme Files (*.vsftheme)|*.vsftheme";
+    private const String THEME_FILTER = "Viasfora Theme Files (*.vsftheme;*.json)|*.vsftheme;*.json";
     private IVsfTelemetry telemetry;
 
     public MainOptionsControl() {

@@ -139,11 +139,13 @@
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
     <Compile Include="BracePos.cs" />
+    <Compile Include="ITextLinesSource.cs" />
     <Compile Include="RainbowColoringMode.cs" />
     <Compile Include="PerBraceStacker.cs" />
     <Compile Include="RainbowHighlightKey.cs" />
+    <Compile Include="RainbowLines.cs" />
+    <Compile Include="SnapshotLineSource.cs" />
     <Compile Include="UnifiedBraceStacker.cs" />
-    <Compile Include="CharPos.cs" />
     <Compile Include="Classifications\RainbowClassifications.cs" />
     <Compile Include="IBraceStacker.cs" />
     <Compile Include="IToolTipWindow.cs" />
@@ -153,8 +155,6 @@
       <DependentUpon>QuickInfoPresenter.xaml</DependentUpon>
     </Compile>
     <Compile Include="EditorFormats\RainbowFormats.cs" />
-    <Compile Include="IBraceScanner.cs" />
-    <Compile Include="IResumeControl.cs" />
     <Compile Include="ITextBufferBraces.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RainbowColorTagger.cs" />
@@ -175,9 +175,17 @@
     <Compile Include="Util\ViewTipProperty.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Viasfora.Settings\Viasfora.Settings.csproj">
+      <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
+      <Name>Viasfora.Settings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Viasfora.Core\Viasfora.Core.csproj">
       <Project>{419c99ad-185a-4d31-a7ff-e1754c7b806d}</Project>
       <Name>Viasfora.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Viasfora.Languages\Viasfora.Languages.csproj">
+      <Project>{14b957db-0ed2-4dea-85c9-b670f6653c1b}</Project>
+      <Name>Viasfora.Languages</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

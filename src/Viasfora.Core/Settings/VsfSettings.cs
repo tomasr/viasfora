@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.Globalization;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Text;
 
 namespace Winterdom.Viasfora.Settings {
@@ -93,8 +93,17 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     [ImportingConstructor]
-    public VsfSettings(ITypedSettingsStore store)
+    public VsfSettings(ITypedSettingsStore store, IVsfTelemetry telemetry)
       : base(store) {
+      telemetry.FeatureStatus("DeveloperMargin", DeveloperMarginEnabled);
+      telemetry.FeatureStatus("Modelines", ModelinesEnabled);
+      telemetry.FeatureStatus("BoldAsItalics", BoldAsItalicsEnabled);
+      telemetry.FeatureStatus("CurrentColumnHighlight", CurrentColumnHighlightEnabled);
+      telemetry.FeatureStatus("CurrentLineHighlight", CurrentLineHighlightEnabled);
+      telemetry.FeatureStatus("EscapeSequences", EscapeSequencesEnabled);
+      telemetry.FeatureStatus("QueryKeywords", QueryKeywordsEnabled);
+      telemetry.FeatureStatus("FlowControlKeywords", FlowControlKeywordsEnabled);
+      telemetry.FeatureStatus("VisibilityKeywords", VisibilityKeywordsEnabled);
     }
   }
 }

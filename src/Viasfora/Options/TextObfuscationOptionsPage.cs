@@ -9,9 +9,8 @@ namespace Winterdom.Viasfora.Options {
   [Guid(Guids.TextObfuscationOptions)]
   public class TextObfuscationOptionsPage : UIElementDialogPage {
     private TextObfuscationDialog dialog;
-    protected override System.Windows.UIElement Child {
-      get { return dialog; }
-    }
+    protected override System.Windows.UIElement Child => this.dialog;
+
     public TextObfuscationOptionsPage() {
      this.dialog = new TextObfuscationDialog();
     }
@@ -24,7 +23,7 @@ namespace Winterdom.Viasfora.Options {
       MoveFocusToNext();
 
       var settings = SettingsContext.GetSettings();
-      settings.TextObfuscationRegexes = dialog.Entries.ListToJson();
+      settings.TextObfuscationRegexes = this.dialog.Entries.ListToJson();
       settings.Save();
     }
     public override void LoadSettingsFromStorage() {

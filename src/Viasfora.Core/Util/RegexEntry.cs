@@ -39,10 +39,10 @@ namespace Winterdom.Viasfora.Util {
       if ( String.IsNullOrEmpty(this.RegularExpression) ) {
         return null;
       }
-      if ( compiledExpression == null ) {
-        compiledExpression = new Regex(this.RegularExpression, RegexOptions.Compiled);
+      if ( this.compiledExpression == null ) {
+        this.compiledExpression = new Regex(this.RegularExpression, RegexOptions.Compiled);
       }
-      return compiledExpression;
+      return this.compiledExpression;
     }
 
     public IEnumerable<SnapshotSpan> Match(ITextSnapshotLine line) {

@@ -31,7 +31,7 @@ namespace Winterdom.Viasfora.Options {
       settings.TelemetryEnabled = TelemetryEnabled;
       settings.Save();
 
-      colors.Save();
+      this.colors.Save();
     }
     public override void LoadSettingsFromStorage() {
       var settings = SettingsContext.GetSettings();
@@ -39,7 +39,7 @@ namespace Winterdom.Viasfora.Options {
       CurrentLineHighlightEnabled = settings.CurrentLineHighlightEnabled;
       CurrentColumnHighlightEnabled = settings.CurrentColumnHighlightEnabled;
       CurrentColumnHighlightStyle = settings.CurrentColumnHighlightStyle;
-      highlightLineWidth = settings.HighlightLineWidth;
+      this.highlightLineWidth = settings.HighlightLineWidth;
       KeywordClassifierEnabled = settings.KeywordClassifierEnabled;
       FlowControlKeywordsEnabled = settings.FlowControlKeywordsEnabled;
       VisibilityKeywordsEnabled = settings.VisibilityKeywordsEnabled;
@@ -54,7 +54,7 @@ namespace Winterdom.Viasfora.Options {
       TelemetryEnabled = settings.TelemetryEnabled;
 
       this.colors = new ClassificationList(new ColorStorage(this.Site));
-      colors.Load(
+      this.colors.Load(
         Constants.LINE_HIGHLIGHT,
         Constants.COLUMN_HIGHLIGHT,
         Constants.FLOW_CONTROL_CLASSIF_NAME,
@@ -123,36 +123,36 @@ namespace Winterdom.Viasfora.Options {
     [Description("Foreground color used to highlight flow control keywords")]
     [Category("Text Editor")]
     public Color FlowControlForegroundColor {
-      get { return colors.Get(Constants.FLOW_CONTROL_CLASSIF_NAME, true); }
-      set { colors.Set(Constants.FLOW_CONTROL_CLASSIF_NAME, true, value); }
+      get { return this.colors.Get(Constants.FLOW_CONTROL_CLASSIF_NAME, true); }
+      set { this.colors.Set(Constants.FLOW_CONTROL_CLASSIF_NAME, true, value); }
     }
     [LocDisplayName("Query Keywords")]
     [Description("Foreground color used to highlight LINQ/Query keywords")]
     [Category("Text Editor")]
     public Color LinqForegroundColor {
-      get { return colors.Get(Constants.LINQ_CLASSIF_NAME, true); }
-      set { colors.Set(Constants.LINQ_CLASSIF_NAME, true, value); }
+      get { return this.colors.Get(Constants.LINQ_CLASSIF_NAME, true); }
+      set { this.colors.Set(Constants.LINQ_CLASSIF_NAME, true, value); }
     }
     [LocDisplayName("Visibility Keywords")]
     [Description("Foreground color used to highlight visibility keywords")]
     [Category("Text Editor")]
     public Color VisibilityForegroundColor {
-      get { return colors.Get(Constants.VISIBILITY_CLASSIF_NAME, true); }
-      set { colors.Set(Constants.VISIBILITY_CLASSIF_NAME, true, value); }
+      get { return this.colors.Get(Constants.VISIBILITY_CLASSIF_NAME, true); }
+      set { this.colors.Set(Constants.VISIBILITY_CLASSIF_NAME, true, value); }
     }
     [LocDisplayName("String Escape Sequences")]
     [Description("Foreground color used to highlight escape sequences in strings")]
     [Category("Text Editor")]
     public Color StringEscapeSeqColor {
-      get { return colors.Get(Constants.STRING_ESCAPE_CLASSIF_NAME, true); }
-      set { colors.Set(Constants.STRING_ESCAPE_CLASSIF_NAME, true, value); }
+      get { return this.colors.Get(Constants.STRING_ESCAPE_CLASSIF_NAME, true); }
+      set { this.colors.Set(Constants.STRING_ESCAPE_CLASSIF_NAME, true, value); }
     }
     [LocDisplayName("String Format Specifiers")]
     [Description("Foreground color used to highlight format specifiers in strings")]
     [Category("Text Editor")]
     public Color StringFormatSpecsColor {
-      get { return colors.Get(Constants.FORMAT_SPECIFIER_NAME, true); }
-      set { colors.Set(Constants.FORMAT_SPECIFIER_NAME, true, value); }
+      get { return this.colors.Get(Constants.FORMAT_SPECIFIER_NAME, true); }
+      set { this.colors.Set(Constants.FORMAT_SPECIFIER_NAME, true, value); }
     }
 
     private double highlightLineWidth;
@@ -179,16 +179,16 @@ namespace Winterdom.Viasfora.Options {
     [Description("Foreground color used to highlight the current line")]
     [Category("Location Tracking")]
     public Color LineHighlightForeground {
-      get { return colors.Get(Constants.LINE_HIGHLIGHT, true); }
-      set { colors.Set(Constants.LINE_HIGHLIGHT, true, value); }
+      get { return this.colors.Get(Constants.LINE_HIGHLIGHT, true); }
+      set { this.colors.Set(Constants.LINE_HIGHLIGHT, true, value); }
     }
 
     [LocDisplayName("Line Highlight Background")]
     [Description("Background color used to highlight the current line")]
     [Category("Location Tracking")]
     public Color LineHighlightBackground {
-      get { return colors.Get(Constants.LINE_HIGHLIGHT, false); }
-      set { colors.Set(Constants.LINE_HIGHLIGHT, false, value); }
+      get { return this.colors.Get(Constants.LINE_HIGHLIGHT, false); }
+      set { this.colors.Set(Constants.LINE_HIGHLIGHT, false, value); }
     }
 
     // current column highlight
@@ -206,16 +206,16 @@ namespace Winterdom.Viasfora.Options {
     [Description("Foreground color used to highlight the current column")]
     [Category("Location Tracking")]
     public Color ColumnHighlightForeground {
-      get { return colors.Get(Constants.COLUMN_HIGHLIGHT, true); }
-      set { colors.Set(Constants.COLUMN_HIGHLIGHT, true, value); }
+      get { return this.colors.Get(Constants.COLUMN_HIGHLIGHT, true); }
+      set { this.colors.Set(Constants.COLUMN_HIGHLIGHT, true, value); }
     }
 
     [LocDisplayName("Column Highlight Background")]
     [Description("Background color used to highlight the current column")]
     [Category("Location Tracking")]
     public Color ColumnHighlightBackground {
-      get { return colors.Get(Constants.COLUMN_HIGHLIGHT, false); }
-      set { colors.Set(Constants.COLUMN_HIGHLIGHT, false, value); }
+      get { return this.colors.Get(Constants.COLUMN_HIGHLIGHT, false); }
+      set { this.colors.Set(Constants.COLUMN_HIGHLIGHT, false, value); }
     }
 
     // Modelines Configuration
@@ -228,7 +228,5 @@ namespace Winterdom.Viasfora.Options {
     [Description("Number of lines to check for modeline commands")]
     [Category("Modelines")]
     public uint ModelinesNumLines {get; set; }
-
-
   }
 }

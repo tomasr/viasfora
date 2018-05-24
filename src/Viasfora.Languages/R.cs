@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;
@@ -11,7 +10,7 @@ namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
   public class R : LanguageInfo, ILanguage {
     protected override String[] SupportedContentTypes
-      => new String[] { ContentTypes.R };
+      => new String[] { "R" };
     public ILanguageSettings Settings { get; private set; }
 
     [ImportingConstructor]
@@ -37,7 +36,7 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults => EMPTY;
 
     public RSettings(ITypedSettingsStore store)
-      : base (Constants.R, store) {
+      : base (Langs.R, store) {
     }
   }
 }

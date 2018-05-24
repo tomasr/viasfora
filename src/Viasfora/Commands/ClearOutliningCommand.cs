@@ -14,14 +14,12 @@ namespace Winterdom.Viasfora.Commands {
 
     protected override void OnBeforeQueryStatus(object sender, EventArgs e) {
       base.OnBeforeQueryStatus(sender, e);
-      ITextBuffer buffer = null;
-      var outlining = GetOutlining(out buffer);
+      var outlining = GetOutlining(out ITextBuffer buffer);
       Command.Enabled = outlining != null && outlining.HasUserOutlines();
     }
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);
-      ITextBuffer buffer = null;
-      var outlining = GetOutlining(out buffer);
+      var outlining = GetOutlining(out ITextBuffer buffer);
       if ( outlining != null ) {
         outlining.RemoveAll(buffer.CurrentSnapshot);
         Telemetry.WriteEvent("Clear Outlining");

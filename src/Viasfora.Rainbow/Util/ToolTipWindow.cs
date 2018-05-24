@@ -41,10 +41,10 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public void SetSize(int widthChars, int heightChars) {
-      if ( tipView == null ) {
+      if ( this.tipView == null ) {
         CreateTipView();
       }
-      double zoom = (tipView.ZoomLevel / 100.0);
+      double zoom = (this.tipView.ZoomLevel / 100.0);
       double sourceZoom = this.GetSourceZoomFactor();
       double width = Math.Max(
         sourceZoom * WidthFactor * this.sourceTextView.ViewportWidth,
@@ -58,7 +58,7 @@ namespace Winterdom.Viasfora.Util {
     }
 
     public object GetWindow(SnapshotPoint bufferPosition) {
-      if ( tipView == null ) {
+      if ( this.tipView == null ) {
         CreateTipView();
       }
       this.pointToDisplay = bufferPosition;
@@ -107,7 +107,7 @@ namespace Winterdom.Viasfora.Util {
         this.tipView.ViewportTop
         );
       int lineNum = lines.IndexOf(line);
-      for ( int i = 0; i < linesDisplayed && lineNum + i < lines.Count; i++ ) {
+      for ( int i = 0; i < this.linesDisplayed && lineNum + i < lines.Count; i++ ) {
         line = lines[lineNum + i];
         // find the first significant char in the line
         // and check it's left position
@@ -153,8 +153,9 @@ namespace Winterdom.Viasfora.Util {
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
       this.tipView.ZoomLevel = GetSourceZoomFactor() * ZoomFactor * 100;
-      this.wrapper = new Border();
-      this.wrapper.Child = this.tipView.VisualElement;
+      this.wrapper = new Border() {
+        Child = this.tipView.VisualElement
+      };
 
       this.tipView.Set(new ViewTipProperty());
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Winterdom.Viasfora.Languages.Sequences;
 using Winterdom.Viasfora.Rainbow;
@@ -38,7 +37,7 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults => EMPTY;
 
     public PowershellSettings(ITypedSettingsStore store)
-      : base (Constants.PowerShell, store) {
+      : base (Langs.PowerShell, store) {
     }
   }
 }

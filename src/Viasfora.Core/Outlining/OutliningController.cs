@@ -1,11 +1,11 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Windows.Threading;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using IVsOutliningManager = Microsoft.VisualStudio.Text.Outlining.IOutliningManager;
 using IVsOutliningManagerService = Microsoft.VisualStudio.Text.Outlining.IOutliningManagerService;
-using Microsoft.VisualStudio.Text;
-using System.Windows.Threading;
 
 namespace Winterdom.Viasfora.Outlining {
   [Export(typeof(IWpfTextViewCreationListener))]
@@ -18,7 +18,7 @@ namespace Winterdom.Viasfora.Outlining {
     private IVsOutliningManagerService outlining = null;
 
     public void TextViewCreated(IWpfTextView textView) {
-      var manager = outlining.GetOutliningManager(textView);
+      var manager = this.outlining.GetOutliningManager(textView);
       if ( manager != null ) {
         textView.Properties.GetOrCreateSingletonProperty(
           () => new OutliningController(textView, manager)

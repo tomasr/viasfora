@@ -164,5 +164,26 @@ namespace Viasfora.Tests.StringScanners {
       var parser = new CSharpStringScanner(input);
       Assert.Equal(null, parser.Next());
     }
+    [Fact]
+    public void BracesInDifferentLinesAreIgnoredAsFormatSpecs() {
+      String input = "\"public interface IBar\r\n"
+                   + "{\r\n"
+                   + "   Task Foo();\r\n"
+                   + "}\"";
+      var parser = new CSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void FormatSpecsWithSpacesIsIgnored() {
+      String input = "\"" + @"Value: {some space}" + "\"";
+      var parser = new CSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
+    [Fact]
+    public void EmptyFormatSpecIsIgnored() {
+      String input = "\"" + @"Value: {}" + "\"";
+      var parser = new CSharpStringScanner(input);
+      Assert.Equal(null, parser.Next());
+    }
   }
 }

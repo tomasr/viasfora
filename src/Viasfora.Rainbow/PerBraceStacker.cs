@@ -15,20 +15,14 @@ namespace Winterdom.Viasfora.Rainbow {
         this.stack[braceList[i + 1]] = pairs;
       }
     }
-    public int Count(char brace) {
-      return stack[brace].Count;
-    }
 
-    public BracePos Pop(char brace) {
-      return stack[brace].Pop();
-    }
-    public BracePos Peek(char brace) {
-      return stack[brace].Peek();
-    }
+    public int Count(char brace) => this.stack[brace].Count;
+    public BracePos Pop(char brace) => this.stack[brace].Pop();
+    public BracePos Peek(char brace) => this.stack[brace].Peek();
 
     public BracePos Push(CharPos brace) {
-      var pairs = stack[brace.Char];
-      var bp = brace.AsBrace(pairs.Count);
+      var pairs = this.stack[brace.Char];
+      var bp = new BracePos(brace, pairs.Count);
       pairs.Push(bp);
       return bp;
     }

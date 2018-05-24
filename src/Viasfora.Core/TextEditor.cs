@@ -16,10 +16,7 @@ namespace Winterdom.Viasfora {
   public static class TextEditor {
     public static ITextCaret GetCurrentCaret() {
       ITextView view = GetCurrentView();
-      if ( view == null ) {
-        return null;
-      }
-      return view.Caret;
+      return view?.Caret;
     }
     public static ITextSelection GetCurrentSelection() {
       ITextView view = GetCurrentView();
@@ -34,8 +31,7 @@ namespace Winterdom.Viasfora {
       var textManager = (IVsTextManager)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsTextManager));
 
-      IVsTextView textView;
-      int hr = textManager.GetActiveView(1, null, out textView);
+      int hr = textManager.GetActiveView(1, null, out IVsTextView textView);
       CheckError(hr, "GetActiveView");
 
       var componentModel = new SComponentModel();
@@ -53,14 +49,11 @@ namespace Winterdom.Viasfora {
     }
 
     public static String GetFileName(ITextBuffer buffer) {
-      IVsTextBuffer adapter;
-      if ( buffer.Properties.TryGetProperty(typeof(IVsTextBuffer), out adapter) ) {
-        IPersistFileFormat pff = adapter as IPersistFileFormat;
-        if ( pff != null ) {
+      if ( buffer.Properties.TryGetProperty(typeof(IVsTextBuffer), out IVsTextBuffer adapter) ) {
+        if ( adapter is IPersistFileFormat pff ) {
           String filename;
-          uint formatIndex;
-		      try {
-            int hr = pff.GetCurFile(out filename, out formatIndex);
+          try {
+            int hr = pff.GetCurFile(out filename, out uint formatIndex);
             // some windows will return E_NOTIMPL
             if ( hr == Constants.E_NOTIMPL )
               return null;
@@ -167,11 +160,10 @@ namespace Winterdom.Viasfora {
 
     private static void MarkDocumentInFrameAsReadOnly(IVsWindowFrame frame) {
       var textView = VsShellUtilities.GetTextView(frame);
-      IVsTextLines textLines;
-      if ( textView.GetBuffer(out textLines) == Constants.S_OK ) {
+      if ( textView.GetBuffer(out IVsTextLines textLines) == Constants.S_OK ) {
         var vsBuffer = textLines as IVsTextBuffer;
         vsBuffer.SetStateFlags((uint)(
-          BUFFERSTATEFLAGS.BSF_USER_READONLY | 
+          BUFFERSTATEFLAGS.BSF_USER_READONLY |
           BUFFERSTATEFLAGS.BSF_FILESYS_READONLY
         ));
       }
@@ -185,18 +177,14 @@ namespace Winterdom.Viasfora {
                     | (uint)_VSRDTFLAGS.RDT_NonCreatable
                     | (uint)_VSRDTFLAGS.RDT_VirtualDocument
                     | (uint)_VSRDTFLAGS.RDT_PlaceHolderDoc;
-      IVsHierarchy hierarchy;
-      uint itemid;
-      uint documentCookie;
-      IntPtr docData;
 
       int hr = docTable.FindAndLockDocument(
         dwRDTLockType: lockType,
         pszMkDocument: moniker,
-        ppHier: out hierarchy,
-        pitemid: out itemid,
-        ppunkDocData: out docData,
-        pdwCookie: out documentCookie
+        ppHier: out IVsHierarchy hierarchy,
+        pitemid: out uint itemid,
+        ppunkDocData: out IntPtr docData,
+        pdwCookie: out uint documentCookie
         );
       CheckError(hr, "FindAndLockDocument");
       docTable.ModifyDocumentFlags(documentCookie, lockType, 1);

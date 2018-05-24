@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
@@ -19,13 +18,13 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         this.start = text.Length;
     }
     public StringPart? Next() {
-      while ( start < text.Length - 2 ) {
-        if ( text[start] == '`' ) {
-          var span = new Span(start, 2);
-          start += 2;
+      while ( this.start < this.text.Length - 2 ) {
+        if ( this.text[this.start] == '`' ) {
+          var span = new TextSpan(this.start, 2);
+          this.start += 2;
           return new StringPart(span);
         }
-        start++;
+        this.start++;
       }
       return null;
     }

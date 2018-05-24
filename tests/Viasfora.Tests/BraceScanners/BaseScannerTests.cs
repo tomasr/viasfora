@@ -10,7 +10,7 @@ namespace Viasfora.Tests.BraceScanners {
       ITextChars chars = new StringChars(input, start);
       IList<CharPos> list = new List<CharPos>();
       CharPos cp = CharPos.Empty;
-      while ( !chars.EndOfLine ) {
+      while ( !chars.AtEnd ) {
         if ( extractor.Extract(chars, ref cp) )
           list.Add(cp);
       }
@@ -26,7 +26,7 @@ namespace Viasfora.Tests.BraceScanners {
       foreach ( String line in lines ) {
         ITextChars chars = new StringChars(line);
         CharPos cp = CharPos.Empty;
-        while ( !chars.EndOfLine ) {
+        while ( !chars.AtEnd ) {
           if ( extractor.Extract(chars, ref cp) )
             result.Add(cp);
         }

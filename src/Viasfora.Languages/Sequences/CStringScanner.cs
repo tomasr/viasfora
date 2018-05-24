@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       if ( this.text.Char() == '<' ) {
         this.text.SkipRemainder();
       } else if ( this.text.Char() == 'R' ) {
-        isRString = true;
+        this.isRString = true;
         this.text.Skip(2);
       } else {
         // always skip the first char
@@ -22,20 +22,20 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       }
     }
     public StringPart? Next() {
-      while ( !text.EndOfLine ) {
-        if ( text.Char() == '\\' && !isRString ) {
-          return BasicCStringScanner.ParseEscapeSequence(text);
-        } else if ( text.Char() == '%' ) {
+      while ( !this.text.AtEnd ) {
+        if ( this.text.Char() == '\\' && !this.isRString ) {
+          return BasicCStringScanner.ParseEscapeSequence(this.text);
+        } else if ( this.text.Char() == '%' ) {
           // skip %%
-          if ( text.NChar() == '%' ) {
-            text.Skip(2);
+          if ( this.text.NChar() == '%' ) {
+            this.text.Skip(2);
             continue;
           }
           StringPart part = new StringPart();
           if ( ParseFormatSpecifier(ref part) )
             return part;
         }
-        text.Next();
+        this.text.Next();
       }
       return null;
     }
@@ -44,19 +44,19 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       // %[parameter][flags][width][.precision][length]type
 
       // text.Char() == '%'
-      int start = text.Position;
-      text.Next(); // skip %
+      int start = this.text.Position;
+      this.text.Next(); // skip %
       int len = 1;
       while ( true ) {
-        if ( text.EndOfLine || text.Char() == '\\' ) {
+        if ( this.text.AtEnd || this.text.Char() == '\\' ) {
           break;
         }
         len++;
-        if ( Char.IsLetter(text.Char()) ) {
-          text.Next();
+        if ( Char.IsLetter(this.text.Char()) ) {
+          this.text.Next();
           break;
         }
-        text.Next();
+        this.text.Next();
       }
       // if len == 1, then we found %"
       if ( len < 2 )

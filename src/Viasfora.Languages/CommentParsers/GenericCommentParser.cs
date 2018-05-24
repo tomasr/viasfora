@@ -46,7 +46,7 @@ namespace Winterdom.Viasfora.Languages.CommentParsers {
     }
 
     private void SkipWhitespace(ITextChars tc) {
-      while ( !tc.EndOfLine && Char.IsWhiteSpace(tc.Char()) ) {
+      while ( !tc.AtEnd && Char.IsWhiteSpace(tc.Char()) ) {
         tc.Next();
       }
     }
@@ -54,7 +54,7 @@ namespace Winterdom.Viasfora.Languages.CommentParsers {
     // we assume endChars is 2 or 3, which is the most common case
     private string TrimmedMinus(ITextChars tc, String t) {
       StringBuilder buffer = new StringBuilder();
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == t[0] && tc.NChar() == t[1] ) {
           if ( t.Length <= 2 || tc.NNChar() == t[2] ) {
             break;

@@ -1,5 +1,4 @@
-﻿using Microsoft.VisualStudio.Text;
-using System;
+﻿using System;
 using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.Sequences {
@@ -13,11 +12,11 @@ namespace Winterdom.Viasfora.Languages.Sequences {
       this.text.Next();
     }
     public StringPart? Next() {
-      while ( !text.EndOfLine ) {
-        if ( text.Char() == '\\' ) {
-          return ParseEscapeSequence(text);
+      while ( !this.text.AtEnd ) {
+        if ( this.text.Char() == '\\' ) {
+          return ParseEscapeSequence(this.text);
         }
-        text.Next();
+        this.text.Next();
       }
       return null;
     }
@@ -43,12 +42,12 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         }
       } else if ( (f == 'u' || f == 'U') && text.Char() == '{' ) {
         len++;
-        while ( text.Char() != '}' && !text.EndOfLine ) {
+        while ( text.Char() != '}' && !text.AtEnd ) {
           text.Next();
           len++;
         }
       }
-      var span = new Span(start, len + 1);
+      var span = new TextSpan(start, len + 1);
       return new StringPart(span, StringPartType.EscapeSequence);
     }
   }

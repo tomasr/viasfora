@@ -33,7 +33,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     public bool Extract(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         switch ( this.status ) {
           case stString: ParseString(tc); break;
           case stChar: ParseCharLiteral(tc); break;
@@ -51,7 +51,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private bool ParseText(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         // multi-line comment
         if ( tc.Char() == '/' && tc.NChar() == '*' ) {
           this.status = stMultiLineComment;
@@ -100,7 +100,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseCharLiteral(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
@@ -115,7 +115,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseRegex(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
@@ -130,7 +130,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseString(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '\\' ) {
           // skip over escape sequences
           tc.Skip(2);
@@ -145,7 +145,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private void ParseMultiLineComment(ITextChars tc) {
-      while ( !tc.EndOfLine ) {
+      while ( !tc.AtEnd ) {
         if ( tc.Char() == '*' && tc.NChar() == '/' ) {
           tc.Skip(2);
           this.status = stText;
@@ -159,8 +159,8 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     // template literal support, 
     // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals
     private bool ParseInterpolatedString(ITextChars tc, ref CharPos pos) {
-      while ( !tc.EndOfLine ) {
-        if ( parsingExpression ) {
+      while ( !tc.AtEnd ) {
+        if ( this.parsingExpression ) {
           // inside template literal expression in ${}
           if ( ParseTemplateExpressionChar(tc, ref pos) )
             return true;
@@ -203,7 +203,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       } else if ( tc.Char() == '}' ) {
         // reached the end
         this.nestingLevel--;
-        if ( nestingLevel == 0 ) {
+        if ( this.nestingLevel == 0 ) {
           this.parsingExpression = false;
         }
         pos = new CharPos(tc.Char(), tc.AbsolutePosition, EncodedState());
@@ -222,10 +222,10 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     }
 
     private int EncodedState() {
-      int encoded = status;
-      if ( parsingExpression )
+      int encoded = this.status;
+      if ( this.parsingExpression )
         encoded |= 0x08000000;
-      encoded |= (nestingLevel & 0xFF) << 24;
+      encoded |= (this.nestingLevel & 0xFF) << 24;
       return encoded;
     }
   }

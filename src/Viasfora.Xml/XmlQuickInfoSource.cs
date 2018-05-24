@@ -6,12 +6,12 @@ using System.Xml;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Text.Tagging;
 using Winterdom.Viasfora.Util;
-using System.Windows.Media;
 
 namespace Winterdom.Viasfora.Xml {
   internal class XmlQuickInfoSource : IQuickInfoSource {
@@ -29,7 +29,7 @@ namespace Winterdom.Viasfora.Xml {
         out ITrackingSpan applicableToSpan) {
       applicableToSpan = null;
       SnapshotPoint? subjectTriggerPoint =
-        session.GetTriggerPoint(textBuffer.CurrentSnapshot);
+        session.GetTriggerPoint(this.textBuffer.CurrentSnapshot);
       if ( !subjectTriggerPoint.HasValue ) {
         return;
       }
@@ -70,7 +70,7 @@ namespace Winterdom.Viasfora.Xml {
 
     private TextExtent FindExtentAtPoint(SnapshotPoint? subjectTriggerPoint) {
       ITextStructureNavigator navigator =
-        provider.NavigatorService.GetTextStructureNavigator(textBuffer);
+        this.provider.NavigatorService.GetTextStructureNavigator(this.textBuffer);
       TextExtent extent = navigator.GetExtentOfWord(subjectTriggerPoint.Value);
       return extent;
     }
@@ -137,7 +137,7 @@ namespace Winterdom.Viasfora.Xml {
     }
 
     private ITagAggregator<IClassificationTag> GetAggregator(IQuickInfoSession session) {
-      return provider.AggregatorFactory.CreateTagAggregator<IClassificationTag>(
+      return this.provider.AggregatorFactory.CreateTagAggregator<IClassificationTag>(
         session.TextView
       );
     }

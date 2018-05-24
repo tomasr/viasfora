@@ -20,18 +20,18 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void OnPresentationModeChanged(object sender, EventArgs e) {
-      if ( theView != null ) {
-        SetZoomLevel(theView);
+      if ( this.theView != null ) {
+        SetZoomLevel(this.theView);
       }
     }
 
     void OnViewportWidthChanged(object sender, EventArgs e) {
-      theView.ViewportWidthChanged -= OnViewportWidthChanged;
-      SetZoomLevel(theView);
+      this.theView.ViewportWidthChanged -= OnViewportWidthChanged;
+      SetZoomLevel(this.theView);
     }
 
     void OnSettingsChanged(object sender, EventArgs e) {
-      SetZoomLevel(theView);
+      SetZoomLevel(this.theView);
     }
 
     void OnTextViewClosed(object sender, EventArgs e) {
@@ -39,11 +39,11 @@ namespace Winterdom.Viasfora.Text {
         this.settings.SettingsChanged -= OnSettingsChanged;
         this.settings = null;
       }
-      if ( theView != null ) {
-        state.PresentationModeChanged -= OnPresentationModeChanged;
-        theView.Closed -= OnTextViewClosed;
-        theView.ViewportWidthChanged -= OnViewportWidthChanged;
-        theView = null;
+      if ( this.theView != null ) {
+        this.state.PresentationModeChanged -= OnPresentationModeChanged;
+        this.theView.Closed -= OnTextViewClosed;
+        this.theView.ViewportWidthChanged -= OnViewportWidthChanged;
+        this.theView = null;
       }
     }
 
@@ -53,11 +53,11 @@ namespace Winterdom.Viasfora.Text {
       if ( textView.IsPeekTextWindow() )
         return;
       if ( this.settings.PresentationModeEnabled  ) {
-        int zoomLevel = state.GetPresentationModeZoomLevel();
+        int zoomLevel = this.state.GetPresentationModeZoomLevel();
         // VS2015 supports automatic sync of all text windows with the 
         // zoom level once you zoom one
         // so if the current zoomLevel is not 100%, just ignore it.
-        if ( textView.ZoomLevel != 100 && state.PresentationModeTurnedOn )
+        if ( textView.ZoomLevel != 100 && this.state.PresentationModeTurnedOn )
           return;
         textView.ZoomLevel = zoomLevel;
       }

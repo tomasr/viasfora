@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Tags;
-using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -27,7 +27,7 @@ namespace Winterdom.Viasfora.Text {
     public IVsfSettings Settings { get; set; }
 
     public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag {
-      var map = formatService.GetClassificationFormatMap(textView);
+      var map = this.formatService.GetClassificationFormatMap(textView);
       var italicsFixer = textView.Properties.GetOrCreateSingletonProperty(
           () => new ItalicsFormatter(textView, map, Settings)
         );
@@ -82,29 +82,29 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void FixItalics() {
-      if ( working || formatMap.IsInBatchUpdate ) {
+      if ( this.working || this.formatMap.IsInBatchUpdate ) {
         return;
       }
-      working = true;
-      formatMap.BeginBatchUpdate();
+      this.working = true;
+      this.formatMap.BeginBatchUpdate();
       try {
-        foreach ( var classifierType in formatMap.CurrentPriorityOrder ) {
+        foreach ( var classifierType in this.formatMap.CurrentPriorityOrder ) {
           if ( classifierType == null ) {
             continue;
           }
-          if ( classificationTypes.Contains(classifierType.Classification) )
-            SetItalics(classifierType, settings.FlowControlUseItalics);
+          if ( this.classificationTypes.Contains(classifierType.Classification) )
+            SetItalics(classifierType, this.settings.FlowControlUseItalics);
         }
       } finally {
-        formatMap.EndBatchUpdate();
-        working = false;
+        this.formatMap.EndBatchUpdate();
+        this.working = false;
       }
     }
     private void SetItalics(IClassificationType classifierType, bool enable) {
-      var tp = formatMap.GetTextProperties(classifierType);
+      var tp = this.formatMap.GetTextProperties(classifierType);
 
       tp = tp.SetItalic(enable);
-      formatMap.SetTextProperties(classifierType, tp);
+      this.formatMap.SetTextProperties(classifierType, tp);
     }
   }
 }

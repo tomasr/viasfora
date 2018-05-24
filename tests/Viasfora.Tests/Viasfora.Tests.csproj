@@ -219,6 +219,10 @@
       <Project>{944758a5-90a4-4de7-8ef6-4fb2e7f4efb3}</Project>
       <Name>Viasfora.Rainbow</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Viasfora.Settings\Viasfora.Settings.csproj">
+      <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
+      <Name>Viasfora.Settings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Viasfora.Xml\Viasfora.Xml.csproj">
       <Project>{3274163b-e647-40e2-8d9f-6df7e7c50411}</Project>
       <Name>Viasfora.Xml</Name>

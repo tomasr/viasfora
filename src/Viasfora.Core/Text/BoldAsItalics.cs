@@ -51,26 +51,26 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void MakeBoldItalics() {
-      bool enabled = settings.BoldAsItalicsEnabled;
-      if ( !enabled || working || formatMap.IsInBatchUpdate ) {
+      bool enabled = this.settings.BoldAsItalicsEnabled;
+      if ( !enabled || this.working || this.formatMap.IsInBatchUpdate ) {
         return;
       }
-      working = true;
-      formatMap.BeginBatchUpdate();
+      this.working = true;
+      this.formatMap.BeginBatchUpdate();
       try {
-        foreach ( var classifierType in formatMap.CurrentPriorityOrder ) {
+        foreach ( var classifierType in this.formatMap.CurrentPriorityOrder ) {
           if ( classifierType == null ) {
             continue;
           }
           MakeItalicsIfApplies(classifierType);
         }
       } finally {
-        formatMap.EndBatchUpdate();
-        working = false;
+        this.formatMap.EndBatchUpdate();
+        this.working = false;
       }
     }
     private void MakeItalicsIfApplies(IClassificationType classifierType) {
-      var tp = formatMap.GetTextProperties(classifierType);
+      var tp = this.formatMap.GetTextProperties(classifierType);
       var font = tp.Typeface;
 
       // already italic
@@ -79,14 +79,14 @@ namespace Winterdom.Viasfora.Text {
       }
       if ( !tp.BoldEmpty && tp.Bold ) {
         tp = tp.SetBold(false).SetItalic(true);
-        formatMap.SetTextProperties(classifierType, tp);
+        this.formatMap.SetTextProperties(classifierType, tp);
       }
       if ( font.Weight > FontWeights.Normal ) {
         var newFont = new Typeface(
           font.FontFamily, FontStyles.Italic,
           FontWeights.Normal, FontStretches.Normal);
         tp = tp.SetTypeface(newFont);
-        formatMap.SetTextProperties(classifierType, tp);
+        this.formatMap.SetTextProperties(classifierType, tp);
       }
     }
   }

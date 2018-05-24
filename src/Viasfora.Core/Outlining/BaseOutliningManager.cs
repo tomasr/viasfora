@@ -10,8 +10,8 @@ namespace Winterdom.Viasfora.Outlining {
   public abstract class BaseOutliningManager : IUserOutlining, IOutliningManager {
     protected BufferOutlines Regions { get; private set; }
     private static readonly SnapshotSpan[] empty = new SnapshotSpan[0];
-    private OutliningTagger outliningTagger;
-    private GlyphTagger glyphTagger;
+    private readonly OutliningTagger outliningTagger;
+    private readonly GlyphTagger glyphTagger;
 
     protected BaseOutliningManager(ITextBuffer buffer) {
       this.Regions = new BufferOutlines();
@@ -95,15 +95,12 @@ namespace Winterdom.Viasfora.Outlining {
       }
 
       public IEnumerable<ITagSpan<IOutliningRegionTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-        return from span in manager.GetTags(spans)
+        return from span in this.manager.GetTags(spans)
                select new TagSpan<IOutliningRegionTag>(span, 
                  new OutliningRegionTag(false, false, "...", span.GetText()));
       }
       public void RaiseTagsChanged(SnapshotSpan span) {
-        var temp = this.TagsChanged;
-        if ( temp != null ) {
-          temp(this, new SnapshotSpanEventArgs(span));
-        }
+        this.TagsChanged?.Invoke(this, new SnapshotSpanEventArgs(span));
       }
     }
 
@@ -116,14 +113,11 @@ namespace Winterdom.Viasfora.Outlining {
       }
 
       public IEnumerable<ITagSpan<IGlyphTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
-        return from span in manager.GetTags(spans)
+        return from span in this.manager.GetTags(spans)
                select new TagSpan<IGlyphTag>(span, new OutliningGlyphTag());
       }
       public void RaiseTagsChanged(SnapshotSpan span) {
-        var temp = this.TagsChanged;
-        if ( temp != null ) {
-          temp(this, new SnapshotSpanEventArgs(span));
-        }
+        this.TagsChanged?.Invoke(this, new SnapshotSpanEventArgs(span));
       }
     }
   }
