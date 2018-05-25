@@ -32,7 +32,8 @@ namespace Winterdom.Viasfora {
         ServiceProvider.GlobalProvider.GetService(typeof(SVsTextManager));
 
       int hr = textManager.GetActiveView(1, null, out IVsTextView textView);
-      CheckError(hr, "GetActiveView");
+      if ( hr != Constants.S_OK || textView == null )
+        return null;
 
       var componentModel = new SComponentModel();
       var factory = componentModel.GetService<IVsEditorAdaptersFactoryService>();
