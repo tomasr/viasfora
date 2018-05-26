@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
@@ -54,6 +55,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private readonly IAdornmentLayer layer;
     private readonly RainbowLinesProvider provider;
     private readonly LinePoint[] slbuffer;
+    private readonly Dispatcher dispatcher;
 
     public RainbowLines(IWpfTextView textView, RainbowLinesProvider provider) {
       this.view = textView;
@@ -61,6 +63,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.formatMap = provider.GetFormatMap(textView);
       this.rainbowColors = GetRainbowColors(provider.GetRainbowTags());
       this.layer = textView.GetAdornmentLayer(LAYER);
+      this.dispatcher = Dispatcher.CurrentDispatcher;
 
       this.provider.Settings.SettingsChanged += OnSettingsChanged;
       this.view.Caret.PositionChanged += OnCaretPositionChanged;
@@ -103,9 +106,16 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void OnSettingsChanged(object sender, EventArgs e) {
-      this.layer.RemoveAllAdornments();
-      var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
-      RedrawVisuals(bufferPos, forceRedraw: true);
+      void UpdateView() {
+        this.layer.RemoveAllAdornments();
+        var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
+        RedrawVisuals(bufferPos, forceRedraw: true);
+      }
+      if ( !this.dispatcher.CheckAccess() ) {
+        this.dispatcher.Invoke(UpdateView);
+      } else {
+        UpdateView();
+      }
     }
 
     private void OnOptionsChanged(object sender, EditorOptionChangedEventArgs e) {
