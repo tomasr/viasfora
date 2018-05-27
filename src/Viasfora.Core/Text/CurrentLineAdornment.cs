@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
@@ -16,6 +17,7 @@ namespace Winterdom.Viasfora.Text {
     private IClassificationType formatType;
     private IVsfSettings settings;
     private Rectangle lineRect;
+    private Dispatcher dispatcher;
 
     public CurrentLineAdornment(
           IWpfTextView view, IClassificationFormatMap formatMap,
@@ -26,6 +28,7 @@ namespace Winterdom.Viasfora.Text {
       this.settings = settings;
       this.layer = view.GetAdornmentLayer(Constants.LINE_HIGHLIGHT);
       this.lineRect = new Rectangle();
+      this.dispatcher = Dispatcher.CurrentDispatcher;
 
       view.Caret.PositionChanged += OnCaretPositionChanged;
       view.ViewportWidthChanged += OnViewportWidthChanged;
@@ -63,8 +66,16 @@ namespace Winterdom.Viasfora.Text {
       this.formatType = null;
     }
     void OnSettingsChanged(object sender, EventArgs e) {
-      CreateDrawingObjects();
-      RedrawAdornments();
+      void UpdateUI() {
+        CreateDrawingObjects();
+        RedrawAdornments();
+      }
+
+      if ( !this.dispatcher.CheckAccess() ) {
+        this.dispatcher.Invoke(UpdateUI);
+      } else {
+        UpdateUI();
+      }
     }
     void OnViewportLeftChanged(object sender, EventArgs e) {
       RedrawAdornments();
