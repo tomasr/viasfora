@@ -89,6 +89,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void OnViewClosed(object sender, EventArgs e) {
+      this.provider.Settings.SettingsChanged -= OnSettingsChanged;
       if ( this.view != null ) {
         this.view.Options.OptionChanged -= OnOptionsChanged;
         this.view.Caret.PositionChanged -= OnCaretPositionChanged;
