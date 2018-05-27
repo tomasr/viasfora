@@ -209,7 +209,7 @@ namespace Winterdom.Viasfora.Rainbow {
       return new Path() {
         Data = spanGeometry,
         Stroke = GetRainbowBrush(depth),
-        StrokeThickness = 1.8,
+        StrokeThickness = 1.5,
       };
     }
 
