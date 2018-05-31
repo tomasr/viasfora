@@ -173,6 +173,7 @@ namespace Winterdom.Viasfora.Rainbow {
       var provider = caret.Snapshot.TextBuffer.Get<RainbowProvider>();
       var braces = provider?.BufferBraces.GetBracePairFromPosition(caret, RainbowHighlightMode.TrackInsertionPoint);
       if ( braces == null ) {
+        this.currentSpan = default(SnapshotSpan);
         this.layer.RemoveAllAdornments();
         return;
       }
