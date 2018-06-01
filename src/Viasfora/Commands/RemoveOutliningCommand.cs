@@ -41,7 +41,7 @@ namespace Winterdom.Viasfora.Commands {
         IUserOutlining outlining = 
           UserOutliningManager.Get(point.Value.Snapshot.TextBuffer);
         outlining.RemoveAt(point.Value);
-        Telemetry.WriteEvent("Remove Outlining");
+        //Telemetry.WriteEvent("Remove Outlining");
       }
     }
   }

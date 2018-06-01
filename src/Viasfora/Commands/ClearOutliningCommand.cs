@@ -22,7 +22,7 @@ namespace Winterdom.Viasfora.Commands {
       var outlining = GetOutlining(out ITextBuffer buffer);
       if ( outlining != null ) {
         outlining.RemoveAll(buffer.CurrentSnapshot);
-        Telemetry.WriteEvent("Clear Outlining");
+        //Telemetry.WriteEvent("Clear Outlining");
       }
     }
 

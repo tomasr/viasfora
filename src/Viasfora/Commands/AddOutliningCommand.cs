@@ -48,7 +48,7 @@ namespace Winterdom.Viasfora.Commands {
     private void AddOutlining(ITextBuffer buffer, SnapshotSpan span) {
       var outlines = UserOutliningManager.Get(buffer);
       outlines.Add(span);
-      Telemetry.WriteEvent("Add Outlining");
+      //Telemetry.WriteEvent("Add Outlining");
     }
   }
 }

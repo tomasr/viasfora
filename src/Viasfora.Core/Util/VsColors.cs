@@ -102,12 +102,7 @@ namespace Winterdom.Viasfora.Util {
 
     private static object Get(String key, object alternate) {
       if ( !assemblyLoadAttempted ) {
-        // do not attempt to load it on VS2010, because if 
-        // both VS2010 and VS2012 are installed, we'll get 
-        // unexpected results
-        if ( PkgSource.Instance != null && PkgSource.VsVersion.Major > 10 ) {
-          LoadAssemblyAndType();
-        }
+        LoadAssemblyAndType();
         assemblyLoadAttempted = true;
       }
       if ( envColorsType != null ) {

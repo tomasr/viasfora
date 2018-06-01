@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.IO;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {
@@ -52,7 +53,8 @@ namespace Winterdom.Viasfora {
       }
       IPersistSettings persist = new FilePersistUserSettings(solutionPath);
       */
-      IPersistSettings persist = new SuoPersistUserSettings(PkgSource.PackageUserOptions);
+      var userSettings = ServiceProvider.GlobalProvider.GetService(typeof(SPackageUserOptions)) as IPackageUserOptions;
+      IPersistSettings persist = new SuoPersistUserSettings(userSettings);
       return new SolutionUserSettings(persist);
     }
 

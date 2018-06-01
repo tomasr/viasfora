@@ -154,6 +154,7 @@
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="ContentTypes.cs" />
+    <Compile Include="Contracts\ILogger.cs" />
     <Compile Include="Contracts\IPresentationModeState.cs" />
     <Compile Include="Contracts\IVsFeatures.cs" />
     <Compile Include="Contracts\IVsfTelemetry.cs" />
@@ -200,6 +201,7 @@
     <Compile Include="Outlining\UserOutliningManager.cs" />
     <Compile Include="Outlining\UserOutliningTaggerProvider.cs" />
     <Compile Include="PkgCmdIdList.cs" />
+    <Compile Include="PkgSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReSharper.cs" />
     <Compile Include="SettingsContext.cs" />
@@ -232,6 +234,7 @@
     <Compile Include="Util\RegexEntry.cs" />
     <Compile Include="Util\RelayCommand.cs" />
     <Compile Include="Util\SimpleTokenizer.cs" />
+    <Compile Include="Util\VsActivityLogger.cs" />
     <Compile Include="Util\VsColors.cs" />
     <Compile Include="Util\VsFeatures.cs" />
     <Compile Include="VsSolution.cs" />

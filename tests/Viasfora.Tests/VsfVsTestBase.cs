@@ -21,7 +21,7 @@ namespace Viasfora.Tests {
     public const String CSharpContentType = "CSharp"; 
 
     public VsfEditorHost EditorHost {
-      get { return editorHost; }
+      get { return this.editorHost; }
     }
 
     public VsfVsTestBase() {
@@ -69,7 +69,7 @@ namespace Viasfora.Tests {
       if ( cachedEditorHost == null ) {
         var editorHostFactory = new EditorHostFactory();
         var catalog = new AggregateCatalog(
-          new AssemblyCatalog(typeof(PkgSource).Assembly), // Viasfora.Settings
+          new AssemblyCatalog(typeof(IUpdatableSettings).Assembly), // Viasfora.Settings
           new AssemblyCatalog(typeof(LanguageFactory).Assembly), // Viasfora.Languages
           new AssemblyCatalog(typeof(Guids).Assembly), // Viasfora.Core
           new AssemblyCatalog(typeof(TextBufferBraces).Assembly), // Viasfora.Rainbow

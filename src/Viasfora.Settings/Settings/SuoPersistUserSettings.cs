@@ -10,11 +10,11 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     public void Write(byte[] data) {
-      userOptions.Write(data);
+      this.userOptions.Write(data);
     }
 
     public byte[] Read() {
-      return userOptions.Read();
+      return this.userOptions.Read();
     }
   }
 }
