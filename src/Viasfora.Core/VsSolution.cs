@@ -53,8 +53,8 @@ namespace Winterdom.Viasfora {
       }
       IPersistSettings persist = new FilePersistUserSettings(solutionPath);
       */
-      var userSettings = ServiceProvider.GlobalProvider.GetService(typeof(SPackageUserOptions)) as IPackageUserOptions;
-      IPersistSettings persist = new SuoPersistUserSettings(userSettings);
+      // TODO: Find a way to enable loading/storing settings in .SUO file
+      IPersistSettings persist = new SuoPersistUserSettings(null);
       return new SolutionUserSettings(persist);
     }
 

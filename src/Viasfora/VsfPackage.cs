@@ -35,7 +35,6 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.ROptionsPage), "Viasfora\\Languages", "R", 210, 380, true)]
   [ProvideOptionPage(typeof(Options.PowerShellOptionsPage), "Viasfora\\Languages", "PowerShell", 210, 381, true)]
   [ProvideOptionPage(typeof(Options.FortranOptionsPage), "Viasfora\\Languages", "Fortran", 210, 382, true)]
-  [ProvideService(typeof(SPackageUserOptions))]
   [ProvideMenuResource(1000, 1)]
   public sealed class VsfPackage : Package, IPackageUserOptions {
     public const String USER_OPTIONS_KEY = "VsfUserOptions";
@@ -46,9 +45,6 @@ namespace Winterdom.Viasfora {
 
     protected override void Initialize() {
       base.Initialize();
-
-      IServiceContainer container = this;
-      container.AddService(typeof(SPackageUserOptions), this, true);
 
       if ( GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs ) {
         InitializeViewMenuCommands(mcs);
