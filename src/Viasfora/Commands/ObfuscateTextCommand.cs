@@ -18,6 +18,7 @@ namespace Winterdom.Viasfora.Commands {
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);
       TextObfuscationState.Invert();
+      // we'll make do without telemetry for now
       //Telemetry.WriteEvent("Obfuscate Text");
     }
   }

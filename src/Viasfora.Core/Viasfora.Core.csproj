@@ -150,6 +150,12 @@
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
     <Compile Include="Classifications\CodeClassificationDefinitions.cs" />
+    <Compile Include="Commands\SelectionOutliningCommand.cs" />
+    <Compile Include="Commands\ClearOutliningCommand.cs" />
+    <Compile Include="Commands\RemoveOutliningCommand.cs" />
+    <Compile Include="Commands\AddOutliningCommand.cs" />
+    <Compile Include="Commands\ITextViewCommandHandler.cs" />
+    <Compile Include="Commands\TextViewCommandListener.cs" />
     <Compile Include="CommonExtensions.cs" />
     <Compile Include="Compatibility\SComponentModel.cs" />
     <Compile Include="Constants.cs" />

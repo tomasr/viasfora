@@ -85,10 +85,6 @@ namespace Winterdom.Viasfora {
       this.commands.Add(new ObfuscateTextCommand(this, mcs));
     }
     private void InitializeTextEditorCommands(OleMenuCommandService mcs) {
-      this.commands.Add(new AddOutliningCommand(this, mcs));
-      this.commands.Add(new RemoveOutliningCommand(this, mcs));
-      this.commands.Add(new ClearOutliningCommand(this, mcs));
-      this.commands.Add(new SelectionOutliningCommand(this, mcs));
       this.commands.Add(new CompleteWordCommand(this, mcs));
     }
 
