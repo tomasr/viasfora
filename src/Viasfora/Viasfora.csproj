@@ -77,7 +77,6 @@
     <Compile Include="..\AssemblyInfo.Common.cs">
       <Link>Properties\AssemblyInfo.Common.cs</Link>
     </Compile>
-    <Compile Include="Commands\CompleteWordCommand.cs" />
     <Compile Include="Commands\ObfuscateTextCommand.cs" />
     <Compile Include="Commands\PresentationModeCommand.cs" />
     <Compile Include="Commands\VsCommand.cs" />

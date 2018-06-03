@@ -47,7 +47,6 @@ namespace Winterdom.Viasfora {
 
       if ( GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs ) {
         InitializeViewMenuCommands(mcs);
-        InitializeTextEditorCommands(mcs);
       }
 
       this.AddOptionKey(USER_OPTIONS_KEY);
@@ -82,9 +81,6 @@ namespace Winterdom.Viasfora {
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
       this.commands.Add(new PresentationModeCommand(this, mcs));
       this.commands.Add(new ObfuscateTextCommand(this, mcs));
-    }
-    private void InitializeTextEditorCommands(OleMenuCommandService mcs) {
-      this.commands.Add(new CompleteWordCommand(this, mcs));
     }
 
     private Version FindVSVersion() {
