@@ -212,6 +212,9 @@ namespace Winterdom.Viasfora.Rainbow {
         Data = spanGeometry,
         Stroke = GetRainbowBrush(depth),
         StrokeThickness = 1.5,
+        HorizontalAlignment = HorizontalAlignment.Right,
+        VerticalAlignment = VerticalAlignment.Center,
+        SnapsToDevicePixels = true
       };
     }
 
@@ -250,7 +253,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
       // figure out where the vertical line goes
       bool useViewportRight = false;
-      var guidelineX = (indent + (this.view.FormattedLineSource.ColumnWidth / 2) + 2);
+      var guidelineX = Math.Round((indent + (this.view.FormattedLineSource.ColumnWidth / 2)), 0) + 2;
       if ( guidelineX < this.view.ViewportLeft ) {
         // the left guideline would be hidden by the scroll, so draw it on the right side
         guidelineX = this.view.ViewportRight - 2;
