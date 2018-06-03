@@ -32,7 +32,8 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     public void Load() {
-      if ( File.Exists(this.filePath) ) {
+      var info = new FileInfo(this.filePath);
+      if ( info.Exists && info.Length > 0 ) {
         XDocument doc = XDocument.Load(this.filePath);
         foreach ( var element in doc.Root.Elements() ) {
           this.settings[element.Name.LocalName] = element.Value;
