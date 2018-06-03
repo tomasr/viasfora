@@ -16,12 +16,12 @@ namespace Winterdom.Viasfora.Commands {
 
     protected override void OnBeforeQueryStatus(object sender, EventArgs e) {
       base.OnBeforeQueryStatus(sender, e);
-      Command.Checked = state.PresentationModeTurnedOn;
-      Command.Enabled = settings.PresentationModeEnabled;
+      Command.Checked = this.state.PresentationModeTurnedOn;
+      Command.Enabled = this.settings.PresentationModeEnabled;
     }
     protected override void OnInvoke(object sender, EventArgs e) {
       base.OnInvoke(sender, e);
-      state.TogglePresentationMode();
+      this.state.TogglePresentationMode();
     }
   }
 }

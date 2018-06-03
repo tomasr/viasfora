@@ -13,7 +13,6 @@ using Winterdom.Viasfora.Compatibility;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
-  //[ProvideAutoLoad(VSConstants.VsEditorFactoryGuid.TextEditor_string)]
   [Guid(Guids.VSPackage)]
   [InstalledProductRegistration("#110", "#111", productId: VsfVersion.Version, IconResourceID = 400)]
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 200, 310, true)]
