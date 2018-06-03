@@ -1,31 +1,45 @@
 ﻿using Microsoft.ApplicationInsights.DataContracts;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Contracts;
+using Winterdom.Viasfora.Settings;
 
 namespace Winterdom.Viasfora {
   [Export(typeof(IVsfTelemetry))]
   public class TelemetryService : IVsfTelemetry {
+    private readonly Telemetry telemetry;
+
     public bool Enabled {
-      get { return Telemetry.Enabled; }
+      get { return this.telemetry.Enabled; }
+    }
+
+    [ImportingConstructor]
+    public TelemetryService(SVsServiceProvider serviceProvider, ITypedSettingsStore settings) {
+      // We can't ask for IVsfSettings here because we'd create acircular
+      // dependency chain, which would cause MEF to fail.
+      bool telemetryEnabled = settings.GetBoolean(nameof(IVsfSettings.TelemetryEnabled), true);
+      var dte = (EnvDTE80.DTE2)serviceProvider.GetService(typeof(SDTE));
+      this.telemetry = new Telemetry(telemetryEnabled, dte);
     }
 
     public void WriteEvent(string eventName) {
-      Telemetry.WriteEvent(eventName);
+      this.telemetry.WriteEvent(eventName);
     }
 
     public void WriteException(string msg, Exception ex) {
-      Telemetry.WriteException(msg, ex);
+      this.telemetry.WriteException(msg, ex);
     }
 
     public void WriteTrace(string message) {
-      Telemetry.WriteTrace(message);
+      this.telemetry.WriteTrace(message);
     }
 
     public void FeatureStatus(String feature, bool enabled) {
       var evt = new EventTelemetry("Feature-" + feature);
       evt.Properties["enabled"] = enabled.ToString();
-      Telemetry.WriteEvent(evt);
+      this.telemetry.WriteEvent(evt);
     }
   }
 }

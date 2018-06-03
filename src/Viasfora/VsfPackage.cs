@@ -5,7 +5,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio;
 using Winterdom.Viasfora.Commands;
 using Winterdom.Viasfora.Settings;
 using Winterdom.Viasfora.Text;
@@ -14,7 +13,6 @@ using Winterdom.Viasfora.Compatibility;
 
 namespace Winterdom.Viasfora {
   [PackageRegistration(UseManagedResourcesOnly = true)]
-  [ProvideAutoLoad(VSConstants.VsEditorFactoryGuid.TextEditor_string)]
   [Guid(Guids.VSPackage)]
   [InstalledProductRegistration("#110", "#111", productId: VsfVersion.Version, IconResourceID = 400)]
   [ProvideOptionPage(typeof(Options.GeneralOptionsPage), "Viasfora", "General", 200, 310, true)]
@@ -37,28 +35,18 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.PowerShellOptionsPage), "Viasfora\\Languages", "PowerShell", 210, 381, true)]
   [ProvideOptionPage(typeof(Options.FortranOptionsPage), "Viasfora\\Languages", "Fortran", 210, 382, true)]
   [ProvideMenuResource(1000, 1)]
-  public sealed class VsfPackage
-    : Package,
-      IPackageUserOptions,
-      ILogger
-    {
+  public sealed class VsfPackage : Package, IPackageUserOptions {
     public const String USER_OPTIONS_KEY = "VsfUserOptions";
 
     public PresentationModeFontChanger FontChanger { get; private set; } 
-    private IVsActivityLog activityLog;
     private List<VsCommand> commands = new List<VsCommand>();
     private byte[] userOptions;
 
     protected override void Initialize() {
       base.Initialize();
-      PkgSource.Initialize(this);
-      PkgSource.VsVersion = FindVSVersion();
-      InitializeTelemetry();
-      InitializeActivityLog();
 
       if ( GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs ) {
         InitializeViewMenuCommands(mcs);
-        InitializeTextEditorCommands(mcs);
       }
 
       this.AddOptionKey(USER_OPTIONS_KEY);
@@ -90,56 +78,9 @@ namespace Winterdom.Viasfora {
       }
     }
 
-    private void InitializeActivityLog() {
-      this.activityLog = (IVsActivityLog)GetService(typeof(SVsActivityLog));
-    }
-
-    private void InitializeTelemetry() {
-      var dte = (EnvDTE80.DTE2)GetService(typeof(SDTE));
-      Telemetry.Initialize(dte);
-    }
-
-    public void LogInfo(String format, params object[] args) {
-      var log = this.activityLog;
-      if ( log != null ) {
-        log.LogEntry(
-          (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_INFORMATION,
-          "Viasfora",
-          String.Format(format, args)
-        );
-      }
-    }
-    public void LogError(String message, Exception ex) {
-      var log = this.activityLog;
-      if ( log != null ) {
-        log.LogEntry(
-          (UInt32)__ACTIVITYLOG_ENTRYTYPE.ALE_ERROR,
-          "Viasfora",
-          String.Format("{0}. Exception: {1}", message, ex)
-        );
-      }
-      Telemetry.WriteException(message, ex);
-    }
-
     private void InitializeViewMenuCommands(OleMenuCommandService mcs) {
       this.commands.Add(new PresentationModeCommand(this, mcs));
       this.commands.Add(new ObfuscateTextCommand(this, mcs));
-    }
-    private void InitializeTextEditorCommands(OleMenuCommandService mcs) {
-      this.commands.Add(new AddOutliningCommand(this, mcs));
-      this.commands.Add(new RemoveOutliningCommand(this, mcs));
-      this.commands.Add(new ClearOutliningCommand(this, mcs));
-      this.commands.Add(new SelectionOutliningCommand(this, mcs));
-      this.commands.Add(new CompleteWordCommand(this, mcs));
-    }
-
-    private Version FindVSVersion() {
-      var dte = (EnvDTE80.DTE2)GetService(typeof(SDTE));
-      return Version.Parse(dte.Version);
-    }
-
-    internal static ISettingsStore GetGlobalSettingsStore() {
-      return new GlobalXmlSettingsStore(null);
     }
 
     void IPackageUserOptions.Write(byte[] options) {
@@ -148,10 +89,5 @@ namespace Winterdom.Viasfora {
     byte[] IPackageUserOptions.Read() {
       return this.userOptions;
     }
-
-    public T GetService<T>() {
-      return (T)GetService(typeof(T));
-    }
-
   }
 }
