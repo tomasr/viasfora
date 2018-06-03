@@ -83,24 +83,11 @@ namespace Winterdom.Viasfora {
       this.commands.Add(new ObfuscateTextCommand(this, mcs));
     }
 
-    private Version FindVSVersion() {
-      var dte = (EnvDTE80.DTE2)GetService(typeof(SDTE));
-      return Version.Parse(dte.Version);
-    }
-
-    internal static ISettingsStore GetGlobalSettingsStore() {
-      return new GlobalXmlSettingsStore(null);
-    }
-
     void IPackageUserOptions.Write(byte[] options) {
       this.userOptions = options;
     }
     byte[] IPackageUserOptions.Read() {
       return this.userOptions;
-    }
-
-    public T GetService<T>() {
-      return (T)GetService(typeof(T));
     }
   }
 }
