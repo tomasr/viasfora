@@ -21,9 +21,9 @@ namespace Winterdom.Viasfora.Text {
     [Import]
     private IVsfSettings settings = null;
     public void TextViewCreated(IWpfTextView textView) {
-      var formatMap = formatService.GetClassificationFormatMap(textView);
+      var formatMap = this.formatService.GetClassificationFormatMap(textView);
       textView.Properties.GetOrCreateSingletonProperty(
-        () => new BoldAsItalicsFormatter(textView, formatMap, settings)
+        () => new BoldAsItalicsFormatter(textView, formatMap, this.settings)
         );
     }
   }
