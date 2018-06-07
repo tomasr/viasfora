@@ -4,10 +4,8 @@ using Newtonsoft.Json;
 
 namespace Winterdom.Viasfora.Settings {
   public class OutlineSettings : ISettingsObject {
-    public string Name {
-      get { return "outlines"; }
-    }
-    public List<Tuple<int, int>> Regions = new List<Tuple<int, int>>();
+    public string Name => "outlines";
+    public List<Tuple<int, int>> Regions { get; private set; } = new List<Tuple<int, int>>();
 
     public void Read(JsonTextReader reader) {
       Regions.Clear();

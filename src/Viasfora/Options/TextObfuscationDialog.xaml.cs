@@ -13,12 +13,10 @@ namespace Winterdom.Viasfora.Options {
 
     private RegexEntry selectedEntry;
     public RegexEntry SelectedEntry {
-      get { return selectedEntry; }
-      set { selectedEntry = value; RaiseChanged(nameof(SelectedEntry)); RaiseChanged(nameof(IsEntrySelected)); }
+      get { return this.selectedEntry; }
+      set { this.selectedEntry = value; RaiseChanged(nameof(SelectedEntry)); RaiseChanged(nameof(IsEntrySelected)); }
     }
-    public bool IsEntrySelected {
-      get { return SelectedEntry != null; }
-    }
+    public bool IsEntrySelected => SelectedEntry != null;
 
     public TextObfuscationDialog() {
       this.Entries = new ObservableCollection<RegexEntry>();

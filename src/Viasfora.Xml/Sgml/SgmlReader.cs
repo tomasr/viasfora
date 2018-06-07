@@ -631,11 +631,7 @@ namespace Sgml {
             }
         }
 
-        public override string BaseURI { 
-            get {
-                return this.baseUri == null ? "" : this.baseUri.AbsoluteUri;
-            }
-        }
+        public override string BaseURI => this.baseUri?.AbsoluteUri ?? "";
 
         public override bool IsEmptyElement { 
             get {
@@ -722,23 +718,11 @@ namespace Sgml {
             throw new IndexOutOfRangeException();
         }
 
-        public override string this [ int i ] { 
-            get {
-                return GetAttribute(i);
-            }
-        }
+        public override string this [ int i ] => GetAttribute(i);
 
-        public override string this [ string name ] { 
-            get {
-                return GetAttribute(name);
-            }
-        }
+        public override string this [ string name ] => GetAttribute(name);
 
-        public override string this [ string name,string namespaceURI ] { 
-            get {
-                return GetAttribute(name, namespaceURI);
-            }
-        }
+        public override string this [ string name,string namespaceURI ] => GetAttribute(name, namespaceURI);
 
         public override bool MoveToAttribute(string name) {
             int i = this.node.GetAttribute(name);
@@ -795,11 +779,7 @@ namespace Sgml {
             return (this.node.NodeType == XmlNodeType.Element);
         }
 
-        bool IsHtml {
-            get {
-              return this.isHtml;
-            }
-        }
+        bool IsHtml => this.isHtml;
 
         public Encoding GetEncoding(){
             if (this.current == null) {
@@ -1510,11 +1490,7 @@ namespace Sgml {
             }
         }
 
-        public override bool EOF { 
-            get {
-                return this.state == State.Eof;
-            }
-        }
+        public override bool EOF => this.state == State.Eof;
 
         public override void Close() {
             if (this.current != null) {
@@ -1588,11 +1564,7 @@ namespace Sgml {
             return sw.ToString();
         }
 
-        public override XmlNameTable NameTable { 
-            get {
-                return this.nametable;
-            }
-        }
+        public override XmlNameTable NameTable => this.nametable;
 
         public override string LookupNamespace(string prefix) {           
             return null;// there are no namespaces in SGML.

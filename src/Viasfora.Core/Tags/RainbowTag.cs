@@ -9,5 +9,4 @@ namespace Winterdom.Viasfora.Tags {
       this.ClassificationType = classification;
     }
   }
-
 }

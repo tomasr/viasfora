@@ -4,9 +4,7 @@ using Winterdom.Viasfora.Util;
 
 namespace Winterdom.Viasfora.Languages.BraceScanners {
   public class DefaultBraceScanner : IBraceScanner {
-    public string BraceList {
-      get { return String.Empty; }
-    }
+    public string BraceList => String.Empty;
 
     public void Reset(int state) {
     }

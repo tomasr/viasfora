@@ -16,7 +16,7 @@ namespace Winterdom.Viasfora.Design {
       InitializeComponent();
     }
     public int GetValue() {
-      double trackbarValue = trackBar.Value;
+      double trackbarValue = this.trackBar.Value;
       double yp = trackbarValue;
       double zoomValue = ((yp * yp) / (50 * 50)) + 20;
       return (int)Math.Round(zoomValue);
@@ -24,11 +24,11 @@ namespace Winterdom.Viasfora.Design {
     public void SetValue(int zoomValue) {
       if ( zoomValue == 0 ) zoomValue = 20;
       double trackbarValue = 50 * Math.Sqrt(zoomValue-20);
-      trackBar.Value = (int)Math.Round(trackbarValue);
+      this.trackBar.Value = (int)Math.Round(trackbarValue);
     }
 
     public void OnTrackBarValueChanged(object sender, EventArgs e) {
-      label.Text = String.Format("{0} %", GetValue());
+      this.label.Text = String.Format("{0} %", GetValue());
     }
   }
 }

@@ -11,9 +11,7 @@ namespace Winterdom.Viasfora {
   public class TelemetryService : IVsfTelemetry {
     private readonly Telemetry telemetry;
 
-    public bool Enabled {
-      get { return this.telemetry.Enabled; }
-    }
+    public bool Enabled  => this.telemetry.Enabled;
 
     [ImportingConstructor]
     public TelemetryService(SVsServiceProvider serviceProvider, ITypedSettingsStore settings) {

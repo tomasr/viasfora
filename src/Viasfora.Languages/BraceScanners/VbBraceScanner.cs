@@ -8,9 +8,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     const int stString = 1;
     private int status;
 
-    public String BraceList {
-      get { return "(){}"; }
-    }
+    public String BraceList => "(){}";
 
     public VbBraceScanner() {
       this.status = stText;

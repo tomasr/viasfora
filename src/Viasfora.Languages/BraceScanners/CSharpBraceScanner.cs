@@ -16,9 +16,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     private bool parsingExpression = false;
     private bool multiLine = false;
 
-    public String BraceList {
-      get { return "(){}[]"; }
-    }
+    public String BraceList => "(){}[]";
 
     public CSharpBraceScanner() {
     }

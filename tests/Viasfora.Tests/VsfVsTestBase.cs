@@ -20,9 +20,7 @@ namespace Viasfora.Tests {
     private static VsfEditorHost cachedEditorHost;
     public const String CSharpContentType = "CSharp"; 
 
-    public VsfEditorHost EditorHost {
-      get { return this.editorHost; }
-    }
+    public VsfEditorHost EditorHost => this.editorHost;
 
     public VsfVsTestBase() {
       if ( Application.Current == null ) {
