@@ -48,6 +48,7 @@ namespace Winterdom.Viasfora.Rainbow {
   public class RainbowLines {
     public const String LAYER = "viasfora.rainbow.lines";
     public const String TAG = "viasfora.rainbow";
+    private const double LINE_WIDTH = 1.5;
     private IWpfTextView view;
     private Brush[] rainbowColors;
     private IClassificationFormatMap formatMap;
@@ -211,7 +212,7 @@ namespace Winterdom.Viasfora.Rainbow {
       return new Path() {
         Data = spanGeometry,
         Stroke = GetRainbowBrush(depth),
-        StrokeThickness = 1.5,
+        StrokeThickness = LINE_WIDTH,
         HorizontalAlignment = HorizontalAlignment.Right,
         VerticalAlignment = VerticalAlignment.Center,
         SnapsToDevicePixels = true
@@ -253,7 +254,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
       // figure out where the vertical line goes
       bool useViewportRight = false;
-      var guidelineX = Math.Round((indent + (this.view.FormattedLineSource.ColumnWidth / 2)), 0) + 2;
+      var guidelineX = (indent + ((this.view.FormattedLineSource.ColumnWidth) / 2)) + LINE_WIDTH;
       if ( guidelineX < this.view.ViewportLeft ) {
         // the left guideline would be hidden by the scroll, so draw it on the right side
         guidelineX = this.view.ViewportRight - 2;
