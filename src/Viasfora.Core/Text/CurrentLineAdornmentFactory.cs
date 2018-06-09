@@ -11,11 +11,11 @@ namespace Winterdom.Viasfora.Text {
   [TextViewRole(PredefinedTextViewRoles.Editable)]
   internal sealed class CurrentLineAdornmentFactory : IWpfTextViewCreationListener {
     [Import]
-    public IClassificationTypeRegistryService ClassificationRegistry = null;
+    public IClassificationTypeRegistryService ClassificationRegistry { get; set; }
     [Import]
-    public IClassificationFormatMapService FormatMapService = null;
+    public IClassificationFormatMapService FormatMapService { get; set; }
     [Import]
-    public IVsfSettings Settings = null;
+    public IVsfSettings Settings { get; set; }
 
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(Constants.LINE_HIGHLIGHT)]

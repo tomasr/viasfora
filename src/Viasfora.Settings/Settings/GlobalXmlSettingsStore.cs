@@ -21,37 +21,33 @@ namespace Winterdom.Viasfora.Settings {
     }
 
     public String Get(String name) {
-      String val;
-      if ( settings.TryGetValue(name, out val) ) {
+      if ( this.settings.TryGetValue(name, out string val) ) {
         return val;
       }
       return null;
     }
 
     public void Set(String name, String value) {
-      settings[name] = value;
+      this.settings[name] = value;
     }
 
     public void Load() {
-      if ( File.Exists(filePath) ) {
-        try {
-          XDocument doc = XDocument.Load(filePath);
-          foreach ( var element in doc.Root.Elements() ) {
-            settings[element.Name.LocalName] = element.Value;
-          }
-        } catch ( XmlException ex ) {
-          PkgSource.LogError(String.Format("Error loading '{0}'", filePath), ex);
+      var info = new FileInfo(this.filePath);
+      if ( info.Exists && info.Length > 0 ) {
+        XDocument doc = XDocument.Load(this.filePath);
+        foreach ( var element in doc.Root.Elements() ) {
+          this.settings[element.Name.LocalName] = element.Value;
         }
       }
     }
 
     public void Save() {
-      using ( var xw = XmlWriter.Create(filePath) ) {
+      using ( var xw = XmlWriter.Create(this.filePath) ) {
         xw.WriteStartElement("viasfora");
-        foreach ( String key in settings.Keys ) {
-          String value = settings[key];
+        foreach ( String key in this.settings.Keys ) {
+          String value = this.settings[key];
           if ( value != null ) {
-            xw.WriteElementString(key, settings[key]);
+            xw.WriteElementString(key, this.settings[key]);
           }
         }
         xw.WriteEndElement();

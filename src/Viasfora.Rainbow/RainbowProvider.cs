@@ -15,7 +15,6 @@ namespace Winterdom.Viasfora.Rainbow {
     public IClassificationTypeRegistryService Registry { get; private set; }
     public ILanguageFactory LanguageFactory { get; private set; }
     public IRainbowSettings Settings { get; private set; }
-    public RainbowTaggerProvider Provider { get; private set; }
     public Dispatcher Dispatcher { get; private set; }
     public RainbowColorTagger ColorTagger { get; private set; }
 
@@ -113,7 +112,10 @@ namespace Winterdom.Viasfora.Rainbow {
     private void UpdateBraceList(SnapshotPoint startPoint, bool notifyUpdate) {
       this.BufferBraces.Invalidate(startPoint);
       var restartPoint = startPoint;
-      if ( this.BufferBraces.LastParsedPosition > 0 )
+      int lastPosition = this.BufferBraces.LastParsedPosition;
+      // if lastPosition > snapshot.Length, then the entire text of the
+      // document has likely been replaced
+      if ( lastPosition > 0 && lastPosition < startPoint.Snapshot.Length )
         restartPoint = new SnapshotPoint(startPoint.Snapshot, this.BufferBraces.LastParsedPosition);
       SynchronousUpdate(notifyUpdate, restartPoint);
     }

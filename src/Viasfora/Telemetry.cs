@@ -10,69 +10,70 @@ using System.Security.Cryptography;
 using System.Text;
 
 namespace Winterdom.Viasfora {
-  static class Telemetry {
-    private static TelemetryClient client;
-    public static bool Enabled { get; private set; }
+  public class Telemetry {
+    private TelemetryClient client;
+    public bool Enabled { get; private set; }
 
-    public static void Initialize(EnvDTE80.DTE2 dte) {
+    public Telemetry(bool enabled, EnvDTE80.DTE2 dte = null) {
       TelemetryConfiguration config = TelemetryConfiguration.CreateDefault();
 
-      client = new TelemetryClient(config);
-      client.InstrumentationKey = "b59d19eb-668d-4ae3-b4c8-71536ebabbdc";
+      this.client = new TelemetryClient(config);
+      this.client.InstrumentationKey = "b59d19eb-668d-4ae3-b4c8-71536ebabbdc";
 
-      client.Context.User.Id = GetUserId();
-      client.Context.Session.Id = Guid.NewGuid().ToString();
-      client.Context.Properties.Add("Host", dte.Application.Edition);
-      client.Context.Properties.Add("HostVersion", dte.Version);
-      client.Context.Properties.Add("HostFullVersion", GetFullHostVersion());
-      client.Context.Component.Version = GetViasforaVersion();
-      client.Context.Properties.Add("AppVersion", GetFullHostVersion());
-      client.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
+      this.client.Context.User.Id = GetUserId();
+      this.client.Context.Session.Id = Guid.NewGuid().ToString();
+      this.client.Context.Properties.Add("Host", dte.Application.Edition);
+      this.client.Context.Properties.Add("HostVersion", dte.Version);
+      this.client.Context.Properties.Add("HostFullVersion", GetFullHostVersion());
+      this.client.Context.Component.Version = GetViasforaVersion();
+      this.client.Context.Properties.Add("AppVersion", GetFullHostVersion());
+      this.client.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
 
-      dte.Events.DTEEvents.OnBeginShutdown += OnBeginShutdown;
+      if (enabled && dte != null) {
+        dte.Events.DTEEvents.OnBeginShutdown += OnBeginShutdown;
+      }
 
-      var settings = SettingsContext.GetSettings();
-      Enabled = settings.TelemetryEnabled;
+      Enabled = enabled;
 
       WriteEvent("Viasfora Started");
     }
 
-    public static void WriteEvent(String eventName) {
+    public void WriteEvent(String eventName) {
 #if !DEBUG
-      if ( client != null && Enabled ) {
-        client.TrackEvent(new EventTelemetry(eventName));
+      if ( this.client != null && Enabled ) {
+        this.client.TrackEvent(new EventTelemetry(eventName));
       }
 #endif
     }
 
-    public static void WriteEvent(EventTelemetry evt) {
+    public void WriteEvent(EventTelemetry evt) {
 #if !DEBUG
-      if ( client != null && Enabled ) {
-        client.TrackEvent(evt);
+      if ( this.client != null && Enabled ) {
+        this.client.TrackEvent(evt);
       }
 #endif
     }
 
-    public static void WriteException(String msg, Exception ex) {
+    public void WriteException(String msg, Exception ex) {
 #if !DEBUG
-      if ( client != null && Enabled ) {
+      if ( this.client != null && Enabled ) {
         ExceptionTelemetry telemetry = new ExceptionTelemetry(ex);
         telemetry.Properties.Add("Message", msg);
-        client.TrackException(telemetry);
+        this.client.TrackException(telemetry);
       }
 #endif
     }
 
-    public static void WriteTrace(String message) {
+    public void WriteTrace(String message) {
 #if !DEBUG
-      if ( client != null && Enabled ) {
-        client.TrackTrace(message);
+      if ( this.client != null && Enabled ) {
+        this.client.TrackTrace(message);
       }
 #endif
     }
 
-    private static void OnBeginShutdown() {
-      client.Flush();
+    private void OnBeginShutdown() {
+      this.client.Flush();
     }
 
     private static String GetFullHostVersion() {

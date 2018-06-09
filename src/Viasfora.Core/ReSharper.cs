@@ -8,9 +8,7 @@ namespace Winterdom.Viasfora {
     public const String PackageId = "0C6E6407-13FC-4878-869A-C8B4016C57FE";
     private static Lazy<bool> isInstalled = new Lazy<bool>(GetInstalled);
 
-    public static bool Installed {
-      get { return isInstalled.Value; }
-    }
+    public static bool Installed => isInstalled.Value;
 
     private static bool GetInstalled() {
       IVsShell vsShell = (IVsShell)

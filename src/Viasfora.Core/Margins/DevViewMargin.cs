@@ -34,13 +34,9 @@ namespace Winterdom.Viasfora.Margins {
       this.model.RefreshView(wpfTextViewHost.TextView);
     }
 
-    public FrameworkElement VisualElement {
-      get { return this.visual; }
-    }
+    public FrameworkElement VisualElement => this.visual;
 
-    public bool Enabled {
-      get { return this.settings != null ? this.settings.DeveloperMarginEnabled : false;  }
-    }
+    public bool Enabled => this.settings?.DeveloperMarginEnabled ?? false;
 
     public ITextViewMargin GetTextViewMargin(string marginName) {
       if ( marginName == Constants.DEV_MARGIN )
@@ -48,9 +44,7 @@ namespace Winterdom.Viasfora.Margins {
       return null;
     }
 
-    public double MarginSize {
-      get { return this.visual.ActualHeight + 2;  }
-    }
+    public double MarginSize => this.visual.ActualHeight + 2; 
 
     public void Dispose() {
       Cleanup();

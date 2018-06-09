@@ -9,9 +9,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     const int stMultiLineComment = 4;
     private int status = stText;
 
-    public string BraceList {
-      get { return "()[]{}"; }
-    }
+    public string BraceList => "()[]{}";
 
     public void Reset(int state) {
       this.status = stText;

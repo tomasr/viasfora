@@ -90,11 +90,10 @@ namespace Winterdom.Viasfora.Settings {
         if ( data != null && data.Length > 0 ) {
           return JObject.Parse(this.encoding.GetString(data));
         }
-      } catch ( Exception ex ) {
+      } catch ( Exception ) {
         // avoid generating a VS error if 
         // the JSON stored is invalid.
         // See https://github.com/tomasr/viasfora/issues/112
-        PkgSource.LogError("Error loading solution user settings", ex);
       }
       return null;
     }

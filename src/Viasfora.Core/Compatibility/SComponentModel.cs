@@ -15,14 +15,14 @@ namespace Winterdom.Viasfora.Compatibility {
     private object sComponentModel;
 
     public SComponentModel() {
-      sComponentModel = 
+      this.sComponentModel = 
         ServiceProvider.GlobalProvider.GetService(new Guid(SComponentModelHost));
     }
 
     public T GetService<T>() {
-      MethodInfo generic = sComponentModel.GetType().GetMethod("GetService");
+      MethodInfo generic = this.sComponentModel.GetType().GetMethod("GetService");
       MethodInfo concrete = generic.MakeGenericMethod(typeof(T));
-      return (T)concrete.Invoke(sComponentModel, null);
+      return (T)concrete.Invoke(this.sComponentModel, null);
     }
   }
 }

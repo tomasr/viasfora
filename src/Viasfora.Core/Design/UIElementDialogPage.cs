@@ -246,11 +246,7 @@ namespace Winterdom.Viasfora.Design {
       /// <summary>
       /// Gets the IKeyboardInputSink associated with this site.
       /// </summary>
-      public IKeyboardInputSink Sink {
-        get {
-          return _source;
-        }
-      }
+      public IKeyboardInputSink Sink => _source;
 
       public void Unregister() {
         // We have nothing to unregister, so do nothing.

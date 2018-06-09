@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
@@ -47,6 +48,7 @@ namespace Winterdom.Viasfora.Rainbow {
   public class RainbowLines {
     public const String LAYER = "viasfora.rainbow.lines";
     public const String TAG = "viasfora.rainbow";
+    private const double LINE_WIDTH = 1.5;
     private IWpfTextView view;
     private Brush[] rainbowColors;
     private IClassificationFormatMap formatMap;
@@ -54,6 +56,7 @@ namespace Winterdom.Viasfora.Rainbow {
     private readonly IAdornmentLayer layer;
     private readonly RainbowLinesProvider provider;
     private readonly LinePoint[] slbuffer;
+    private readonly Dispatcher dispatcher;
 
     public RainbowLines(IWpfTextView textView, RainbowLinesProvider provider) {
       this.view = textView;
@@ -61,6 +64,7 @@ namespace Winterdom.Viasfora.Rainbow {
       this.formatMap = provider.GetFormatMap(textView);
       this.rainbowColors = GetRainbowColors(provider.GetRainbowTags());
       this.layer = textView.GetAdornmentLayer(LAYER);
+      this.dispatcher = Dispatcher.CurrentDispatcher;
 
       this.provider.Settings.SettingsChanged += OnSettingsChanged;
       this.view.Caret.PositionChanged += OnCaretPositionChanged;
@@ -86,6 +90,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void OnViewClosed(object sender, EventArgs e) {
+      this.provider.Settings.SettingsChanged -= OnSettingsChanged;
       if ( this.view != null ) {
         this.view.Options.OptionChanged -= OnOptionsChanged;
         this.view.Caret.PositionChanged -= OnCaretPositionChanged;
@@ -103,9 +108,16 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private void OnSettingsChanged(object sender, EventArgs e) {
-      this.layer.RemoveAllAdornments();
-      var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
-      RedrawVisuals(bufferPos, forceRedraw: true);
+      void UpdateView() {
+        this.layer.RemoveAllAdornments();
+        var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
+        RedrawVisuals(bufferPos, forceRedraw: true);
+      }
+      if ( !this.dispatcher.CheckAccess() ) {
+        this.dispatcher.Invoke(UpdateView);
+      } else {
+        UpdateView();
+      }
     }
 
     private void OnOptionsChanged(object sender, EditorOptionChangedEventArgs e) {
@@ -162,6 +174,7 @@ namespace Winterdom.Viasfora.Rainbow {
       var provider = caret.Snapshot.TextBuffer.Get<RainbowProvider>();
       var braces = provider?.BufferBraces.GetBracePairFromPosition(caret, RainbowHighlightMode.TrackInsertionPoint);
       if ( braces == null ) {
+        this.currentSpan = default(SnapshotSpan);
         this.layer.RemoveAllAdornments();
         return;
       }
@@ -199,7 +212,10 @@ namespace Winterdom.Viasfora.Rainbow {
       return new Path() {
         Data = spanGeometry,
         Stroke = GetRainbowBrush(depth),
-        StrokeThickness = 1.8,
+        StrokeThickness = LINE_WIDTH,
+        HorizontalAlignment = HorizontalAlignment.Right,
+        VerticalAlignment = VerticalAlignment.Center,
+        SnapsToDevicePixels = true
       };
     }
 
@@ -238,7 +254,7 @@ namespace Winterdom.Viasfora.Rainbow {
 
       // figure out where the vertical line goes
       bool useViewportRight = false;
-      var guidelineX = (indent + (this.view.FormattedLineSource.ColumnWidth / 2) + 2);
+      var guidelineX = (indent + ((this.view.FormattedLineSource.ColumnWidth) / 2)) + LINE_WIDTH;
       if ( guidelineX < this.view.ViewportLeft ) {
         // the left guideline would be hidden by the scroll, so draw it on the right side
         guidelineX = this.view.ViewportRight - 2;
