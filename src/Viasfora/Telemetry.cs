@@ -22,12 +22,10 @@ namespace Winterdom.Viasfora {
 
       this.client.Context.User.Id = GetUserId();
       this.client.Context.Session.Id = Guid.NewGuid().ToString();
-      this.client.Context.Properties.Add("Host", dte.Application.Edition);
+      this.client.Context.Properties.Add("Host", "VS");
       this.client.Context.Properties.Add("HostVersion", dte.Version);
       this.client.Context.Properties.Add("HostFullVersion", GetFullHostVersion());
       this.client.Context.Component.Version = GetViasforaVersion();
-      this.client.Context.Properties.Add("AppVersion", GetFullHostVersion());
-      this.client.Context.Device.OperatingSystem = Environment.OSVersion.ToString();
 
       if (enabled && dte != null) {
         dte.Events.DTEEvents.OnBeginShutdown += OnBeginShutdown;
