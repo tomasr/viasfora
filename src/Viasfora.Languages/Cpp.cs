@@ -8,7 +8,7 @@ namespace Winterdom.Viasfora.Languages {
   [Export(typeof(ILanguage))]
   class Cpp : CBasedLanguage, ILanguage {
     private readonly static String[] knownTypes =
-      new String[] { "C/C++", "HLSL" };
+      new String[] { "C/C++", "HLSL", "C/C++ (VisualGDB)" };
 
     protected override String[] SupportedContentTypes
       => knownTypes;
