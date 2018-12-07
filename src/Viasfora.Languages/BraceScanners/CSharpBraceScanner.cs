@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
 
     private int status = stText;
     private int nestingLevel = 0;
+    private int istringNestLevel = 0;
     private bool parsingExpression = false;
     private bool multiLine = false;
 
@@ -26,6 +27,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       this.parsingExpression = (state & 0x08000000) != 0;
       this.nestingLevel = (state & 0xFF0000) >> 24;
       this.multiLine = (state & 0x04000000) != 0;
+      this.istringNestLevel = (state & 0xFF00) >> 16; 
     }
 
     public bool CanResume(CharPos brace) {
@@ -168,7 +170,23 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           //
           // we're inside an interpolated section
           //
-          if ( tc.Char() == '"' ) {
+          if ( tc.Char() == '$' && tc.NChar() == '"' ) {
+            // opening nested interpolated string
+            tc.Skip(2);
+            this.parsingExpression = false;
+            this.istringNestLevel++;
+            this.nestingLevel = 0;
+            if ( this.ParseInterpolatedString(tc, ref pos) )
+              return true;
+            this.istringNestLevel--;
+            this.parsingExpression = true;
+            this.status = stIString;
+          } else if ( tc.Char() == '@' && tc.NChar() == '"' ) {
+            // opening nested verbatim string
+            tc.Skip(2);
+            this.ParseMultiLineString(tc);
+            this.status = stIString;
+          } else if ( tc.Char() == '"' ) {
             // opening string
             tc.Next();
             this.ParseString(tc);
@@ -216,8 +234,15 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
             tc.Skip(2);
           } else if ( tc.Char() == '"' ) {
             // done parsing the interpolated string
-            this.status = stText;
             this.multiLine = false;
+            this.istringNestLevel--;
+            if (this.istringNestLevel <= 0) {
+              this.istringNestLevel = 0;
+              this.status = stText;
+            } else {
+              this.status = stIString;
+              this.parsingExpression = true;
+            }
             tc.Next();
             break;
           } else {
@@ -235,6 +260,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       if ( this.multiLine )
         encoded |= 0x04000000;
       encoded |= (this.nestingLevel & 0xFF) << 24;
+      encoded |= (this.istringNestLevel & 0xFF) << 16;
       return encoded;
     }
   }
