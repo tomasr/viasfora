@@ -66,6 +66,9 @@
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '15.0' ">
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '16.0' ">
+    <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>

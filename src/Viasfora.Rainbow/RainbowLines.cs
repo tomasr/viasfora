@@ -298,8 +298,17 @@ namespace Winterdom.Viasfora.Rainbow {
       var line = open.GetContainingLine();
       var x = 0d;
       var start = line.Start;
+      int spacesSinceLastTab = 0;
       while ( Char.IsWhiteSpace(start.GetChar()) ) {
-        x += start.GetChar() == '\t' ? fls.TabSize * fls.ColumnWidth : fls.ColumnWidth;
+        char ch = start.GetChar();
+        if ( ch == ' ' ) {
+          spacesSinceLastTab = ++spacesSinceLastTab % fls.TabSize;
+          x += fls.ColumnWidth;
+        } else if ( ch == '\t' ) {
+          x += ((fls.TabSize - spacesSinceLastTab) * fls.ColumnWidth);
+          spacesSinceLastTab = 0;
+        }
+        //x += start.GetChar() == '\t' ? fls.TabSize * fls.ColumnWidth : fls.ColumnWidth;
         start = start + 1;
       }
       return x;

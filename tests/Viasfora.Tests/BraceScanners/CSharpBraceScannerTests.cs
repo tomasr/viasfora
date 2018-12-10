@@ -153,6 +153,13 @@ callCommented2(4);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(1+1+2+1+1+1+1, chars.Count);
     }
+    [Fact]
+    public void Bug259_InterpolatedStringEmbedded() {
+      String input = "$\"{(string.IsNullOrWhiteSpace(a) ? $\"{b}\" : $\"{c}\")}\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2+1+1+1+1+1+1+2, chars.Count);
+    }
 
 
     [Fact]

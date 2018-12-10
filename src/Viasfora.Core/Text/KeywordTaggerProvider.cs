@@ -8,6 +8,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Tags;
 using Winterdom.Viasfora.Languages;
+using System.Threading.Tasks;
 
 namespace Winterdom.Viasfora.Text {
 
@@ -97,14 +98,24 @@ namespace Winterdom.Viasfora.Text {
         }
       } finally {
         this.formatMap.EndBatchUpdate();
-        this.working = false;
+        // If we change the formats, the corresponding
+        // format map update event could fire just after we leave
+        // this block, causing cascading calls.
+        // To avoid this, delay resetting the working flag
+        // until after some small time has passed.
+        Task.Delay(500).ContinueWith(
+          (parentTask) => this.working = false
+        );
       }
     }
+
     private void SetItalics(IClassificationType classifierType, bool enable) {
       var tp = this.formatMap.GetTextProperties(classifierType);
 
-      tp = tp.SetItalic(enable);
-      this.formatMap.SetTextProperties(classifierType, tp);
+      if ( !tp.Italic ) {
+        tp = tp.SetItalic(enable);
+        this.formatMap.SetTextProperties(classifierType, tp);
+      }
     }
   }
 }

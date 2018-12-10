@@ -51,6 +51,8 @@ namespace Winterdom.Viasfora.Text {
       if ( !lang.Settings.Enabled ) {
         yield break;
       }
+      // ugly, ugly hack
+      bool isCpp = this.theBuffer.ContentType.IsOfType(ContentTypes.Cpp);
 
       bool eshe = this.settings.EscapeSequencesEnabled;
       bool kce = this.settings.KeywordClassifierEnabled;
@@ -73,7 +75,7 @@ namespace Winterdom.Viasfora.Text {
         var classificationType = tagSpan.Tag.ClassificationType;
         String name = classificationType.Classification.ToLower();
         if ( eshe && name.Contains("string") ) {
-          foreach ( var escapeTag in ProcessEscapeSequences(lang, name, tagSpan.Span) ) {
+          foreach ( var escapeTag in ProcessEscapeSequences(lang, name, tagSpan.Span, isCpp) ) {
             yield return escapeTag;
           }
         }
@@ -163,8 +165,14 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private IEnumerable<ITagSpan<KeywordTag>> ProcessEscapeSequences(
-          ILanguage lang, String classificationName, SnapshotSpan cs) {
+          ILanguage lang, String classificationName, SnapshotSpan cs, bool isCpp) {
       if ( cs.IsEmpty ) yield break;
+
+      if ( isCpp && cs.End < cs.Snapshot.Length - 1) {
+        if ( (cs.End+1).GetChar() == '>' ) {
+          yield break;
+        }
+      }
       String text = cs.GetText();
 
       var parser = lang.NewStringScanner(classificationName, text);
