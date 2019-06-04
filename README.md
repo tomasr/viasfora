@@ -1,6 +1,6 @@
 # Viasfora
 
-A Visual Studio 2012 - 2017 extension that enhances the
+A Visual Studio 2012 - 2019 extension that enhances the
 text editing experience!
 
 __Official Site__: http://viasfora.com/
