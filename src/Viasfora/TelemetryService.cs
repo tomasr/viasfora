@@ -17,7 +17,7 @@ namespace Winterdom.Viasfora {
     public TelemetryService(SVsServiceProvider serviceProvider, ITypedSettingsStore settings) {
       // We can't ask for IVsfSettings here because we'd create a circular
       // dependency chain, which would cause MEF to fail.
-      bool telemetryEnabled = settings.GetBoolean(nameof(IVsfSettings.TelemetryEnabled), true);
+      bool telemetryEnabled = false;//settings.GetBoolean(nameof(IVsfSettings.TelemetryEnabled), true);
       var dte = (EnvDTE80.DTE2)serviceProvider.GetService(typeof(SDTE));
       this.telemetry = new Telemetry(telemetryEnabled, dte);
     }
