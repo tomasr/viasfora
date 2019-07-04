@@ -107,6 +107,7 @@
     <Compile Include="Util\TextSpan.cs" />
     <Compile Include="VB.cs" />
     <Compile Include="XLang.cs" />
+    <Compile Include="Xpp.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

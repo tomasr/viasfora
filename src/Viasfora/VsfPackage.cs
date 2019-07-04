@@ -34,6 +34,7 @@ namespace Winterdom.Viasfora {
   [ProvideOptionPage(typeof(Options.ROptionsPage), "Viasfora\\Languages", "R", 210, 380, true)]
   [ProvideOptionPage(typeof(Options.PowerShellOptionsPage), "Viasfora\\Languages", "PowerShell", 210, 381, true)]
   [ProvideOptionPage(typeof(Options.FortranOptionsPage), "Viasfora\\Languages", "Fortran", 210, 382, true)]
+  [ProvideOptionPage(typeof(Options.XppOptionsPage), "Viasfora\\Languages", "X++", 210, 383, true)]
   [ProvideMenuResource(1000, 1)]
   public sealed class VsfPackage : Package, IPackageUserOptions {
     public const String USER_OPTIONS_KEY = "VsfUserOptions";

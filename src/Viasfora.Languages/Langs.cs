@@ -17,5 +17,6 @@ namespace Winterdom.Viasfora.Languages {
     public const String USql = "U-SQL";
     public const String TypeScript = "TypeScript";
     public const String VB = "VB";
+    public const String Xpp = "Xpp";
   }
 }
