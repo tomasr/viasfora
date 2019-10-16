@@ -25,6 +25,7 @@ namespace Winterdom.Viasfora {
     public const String TextObfuscationOptions = "98cf4318-e4c4-46e0-81c9-d8f22d9a4bcd";
     public const String XmlOptions = "8358872a-6e06-4935-912b-0fc0d93b60a8";
     public const String XppOptions = "1b1cf0b1-1872-4d6b-b052-0b8223fe5889";
+    public const String MplOptions = "6fd3c819-4fda-41dc-a6b9-6e32de91ea86";
 
     // Command groups
     public const String guidVsfViewCmdSet = "14e93c73-144b-4909-9cdc-694be6125e8c";

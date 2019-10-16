@@ -87,6 +87,9 @@
     <Compile Include="Options\ClassificationColors.cs" />
     <Compile Include="Options\ClassificationList.cs" />
     <Compile Include="Options\ColorStorage.cs" />
+    <Compile Include="Options\MplOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Options\XppOptionsPage.cs">
       <SubType>Component</SubType>
     </Compile>
