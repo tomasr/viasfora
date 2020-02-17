@@ -190,6 +190,7 @@
     <Compile Include="StringScanners\CSharpStringScannerTests.cs" />
     <Compile Include="StringScanners\FSharpStringScannerTests.cs" />
     <Compile Include="StringScanners\CssStringScannerTests.cs" />
+    <Compile Include="StringScanners\MplStringScannerTests.cs" />
     <Compile Include="StringScanners\PsStringScannerTests.cs" />
     <Compile Include="StringScanners\CStringScannerTests.cs" />
     <Compile Include="Settings\GlobalXmlSettingsStoreTests.cs" />

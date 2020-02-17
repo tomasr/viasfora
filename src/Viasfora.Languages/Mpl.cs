@@ -25,7 +25,7 @@ namespace Winterdom.Viasfora.Languages {
       => new MplBraceScanner();
 
     public override IStringScanner NewStringScanner(String classificationName, String text) {
-      return new CStringScanner(text);
+      return new MplStringScanner(text);
     }
 
     public override bool IsKeywordClassification(String classificationType) {

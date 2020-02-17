@@ -96,6 +96,7 @@
     <Compile Include="Sequences\CssStringScanner.cs" />
     <Compile Include="Sequences\CStringScanner.cs" />
     <Compile Include="Sequences\FSharpStringScanner.cs" />
+    <Compile Include="Sequences\MplStringScanner.cs" />
     <Compile Include="Sequences\PsStringScanner.cs" />
     <Compile Include="Sequences\RStringScanner.cs" />
     <Compile Include="Sql.cs" />
