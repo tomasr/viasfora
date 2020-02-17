@@ -11,6 +11,7 @@ namespace Winterdom.Viasfora.Languages {
   public class Mpl : LanguageInfo, ILanguageWithStrings {
     public const String ContentType = "MPL";
 
+    public override StringComparer Comparer => StringComparer.Ordinal;
     protected override String[] SupportedContentTypes
       => new String[] { ContentType };
 
@@ -30,7 +31,7 @@ namespace Winterdom.Viasfora.Languages {
 
     public override bool IsKeywordClassification(String classificationType) {
       var comp = StringComparer.OrdinalIgnoreCase;
-      return comp.Equals(classificationType, "MplBuiltin") || comp.Equals(classificationType, "MplLabel");
+      return comp.Equals(classificationType, "MplBuiltin");
     }
     public bool IsStringClassification(String classificationType) {
       var comp = StringComparer.OrdinalIgnoreCase;
@@ -40,7 +41,7 @@ namespace Winterdom.Viasfora.Languages {
 
   class MplSettings : LanguageSettings {
     protected override String[] ControlFlowDefaults => new String[] {
-      "times", "when", "while", "call", "if", "loop"
+      "call", "loop", "if", "ucall", "uif"
     };
     protected override String[] LinqDefaults => EMPTY;
     protected override String[] VisibilityDefaults => EMPTY;
