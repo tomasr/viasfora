@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props')" />
   <Import Project="..\..\Global.props" />
   <PropertyGroup>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Winterdom.Viasfora</RootNamespace>
     <AssemblyName>Viasfora</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <DeployExtension Condition=" '$(AppVeyor)' != '' ">False</DeployExtension>
     <!--
          GeneratePkgDef is necessary so that the build will generatre
@@ -38,6 +38,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
@@ -353,6 +354,24 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Viasfora.LanguageServices\Viasfora.LanguageService.Basic\Viasfora.LanguageService.Basic.vbproj">
+      <Project>{ac41a83d-0565-47cd-aa55-4a09874d722f}</Project>
+      <Name>Viasfora.LanguageService.Basic</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\Viasfora.LanguageServices\Viasfora.LanguageService.Core\Viasfora.LanguageService.Core.csproj">
+      <Project>{ce8301e8-e5ba-446b-9715-4b0f07e69190}</Project>
+      <Name>Viasfora.LanguageService.Core</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\Viasfora.LanguageServices\Viasfora.LanguageService.CSharp\Viasfora.LanguageService.CSharp.csproj">
+      <Project>{003c3d3d-b966-4ac5-a622-d4931810587d}</Project>
+      <Name>Viasfora.LanguageService.CSharp</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
     <ProjectReference Include="..\Viasfora.Settings\Viasfora.Settings.csproj">
       <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
       <Name>Viasfora.Settings</Name>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1038A55E-607B-4449-924E-1861530C2C56}"
 	ProjectSection(SolutionItems) = preProject
@@ -37,6 +37,20 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Rainbow", "src\Via
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Settings", "src\Viasfora.Settings\Viasfora.Settings.csproj", "{DD9ED7C5-417C-43A2-BE13-14CD948566B4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LanguageServices", "LanguageServices", "{1C2B4B39-2230-4094-A69D-8120C4BAB37A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.LanguageService.Core", "src\Viasfora.LanguageServices\Viasfora.LanguageService.Core\Viasfora.LanguageService.Core.csproj", "{CE8301E8-E5BA-446B-9715-4B0F07E69190}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.LanguageService.CSharp", "src\Viasfora.LanguageServices\Viasfora.LanguageService.CSharp\Viasfora.LanguageService.CSharp.csproj", "{003C3D3D-B966-4AC5-A622-D4931810587D}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Viasfora.LanguageService.Basic", "src\Viasfora.LanguageServices\Viasfora.LanguageService.Basic\Viasfora.LanguageService.Basic.vbproj", "{AC41A83D-0565-47CD-AA55-4A09874D722F}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Viasfora.LanguageService.Basic.Tests", "tests\Viasfora.LanguageService.Basic.Tests\Viasfora.LanguageService.Basic.Tests.vbproj", "{C7826A1B-55C0-40AA-B9F3-A58D7B155DA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.LanguageService.CSharp.Tests", "tests\Viasfora.LanguageService.CSharp.Tests\Viasfora.LanguageService.CSharp.Tests.csproj", "{51698343-EE6B-44AC-B0A9-3F606AE7FE80}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.LanguageService.Core.Tests", "tests\Viasfora.LanguageService.Core.Tests\Viasfora.LanguageService.Core.Tests.csproj", "{04588DE4-349F-466C-A57B-95D00D10269A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +85,30 @@ Global
 		{DD9ED7C5-417C-43A2-BE13-14CD948566B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD9ED7C5-417C-43A2-BE13-14CD948566B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD9ED7C5-417C-43A2-BE13-14CD948566B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE8301E8-E5BA-446B-9715-4B0F07E69190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE8301E8-E5BA-446B-9715-4B0F07E69190}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE8301E8-E5BA-446B-9715-4B0F07E69190}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE8301E8-E5BA-446B-9715-4B0F07E69190}.Release|Any CPU.Build.0 = Release|Any CPU
+		{003C3D3D-B966-4AC5-A622-D4931810587D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{003C3D3D-B966-4AC5-A622-D4931810587D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{003C3D3D-B966-4AC5-A622-D4931810587D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{003C3D3D-B966-4AC5-A622-D4931810587D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC41A83D-0565-47CD-AA55-4A09874D722F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC41A83D-0565-47CD-AA55-4A09874D722F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC41A83D-0565-47CD-AA55-4A09874D722F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC41A83D-0565-47CD-AA55-4A09874D722F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7826A1B-55C0-40AA-B9F3-A58D7B155DA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7826A1B-55C0-40AA-B9F3-A58D7B155DA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7826A1B-55C0-40AA-B9F3-A58D7B155DA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7826A1B-55C0-40AA-B9F3-A58D7B155DA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{51698343-EE6B-44AC-B0A9-3F606AE7FE80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51698343-EE6B-44AC-B0A9-3F606AE7FE80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51698343-EE6B-44AC-B0A9-3F606AE7FE80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51698343-EE6B-44AC-B0A9-3F606AE7FE80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04588DE4-349F-466C-A57B-95D00D10269A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04588DE4-349F-466C-A57B-95D00D10269A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04588DE4-349F-466C-A57B-95D00D10269A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04588DE4-349F-466C-A57B-95D00D10269A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +121,13 @@ Global
 		{3274163B-E647-40E2-8D9F-6DF7E7C50411} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
 		{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
 		{DD9ED7C5-417C-43A2-BE13-14CD948566B4} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
+		{1C2B4B39-2230-4094-A69D-8120C4BAB37A} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
+		{CE8301E8-E5BA-446B-9715-4B0F07E69190} = {1C2B4B39-2230-4094-A69D-8120C4BAB37A}
+		{003C3D3D-B966-4AC5-A622-D4931810587D} = {1C2B4B39-2230-4094-A69D-8120C4BAB37A}
+		{AC41A83D-0565-47CD-AA55-4A09874D722F} = {1C2B4B39-2230-4094-A69D-8120C4BAB37A}
+		{C7826A1B-55C0-40AA-B9F3-A58D7B155DA9} = {6271BFBC-846E-48A5-86BD-0729B65DA933}
+		{51698343-EE6B-44AC-B0A9-3F606AE7FE80} = {6271BFBC-846E-48A5-86BD-0729B65DA933}
+		{04588DE4-349F-466C-A57B-95D00D10269A} = {6271BFBC-846E-48A5-86BD-0729B65DA933}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9497739-5303-4008-905D-EDFF9FC38583}

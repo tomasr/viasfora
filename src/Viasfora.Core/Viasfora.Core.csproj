@@ -177,6 +177,7 @@
     <Compile Include="Design\ZoomTrackBar.Designer.cs">
       <DependentUpon>ZoomTrackBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorFormats\ArgumentValidationFormat.cs" />
     <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />

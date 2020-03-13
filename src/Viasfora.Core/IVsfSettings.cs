@@ -9,7 +9,9 @@ namespace Winterdom.Viasfora {
     bool QueryKeywordsEnabled { get; set; }
     bool FlowControlUseItalics { get; set; }
     bool EscapeSequencesEnabled { get; set; }
-    
+
+    bool ArgumentValidationClassifierEnabled { get; set; }
+
     bool CurrentLineHighlightEnabled { get; set; }
     bool CurrentColumnHighlightEnabled { get; set; }
     ColumnStyle CurrentColumnHighlightStyle { get; set; }

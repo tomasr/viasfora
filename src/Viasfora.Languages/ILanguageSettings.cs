@@ -7,6 +7,7 @@ namespace Winterdom.Viasfora.Languages {
     String[] Linq { get; set; }
     String[] Visibility { get; set; }
     bool Enabled { get; set; }
+    bool ReduceOpacityForArgumentValidation { get; set; }
     void Load();
     void Save();
   }

@@ -18,6 +18,7 @@ namespace Winterdom.Viasfora.Options {
       this.language.Settings.Linq = LinqKeywords.ToArray();
       this.language.Settings.Visibility = VisibilityKeywords.ToArray();
       this.language.Settings.Enabled = Enabled;
+      this.language.Settings.ReduceOpacityForArgumentValidation = ReduceOpacityForArgumentValidation;
       this.language.Settings.Save();
     }
     public override void LoadSettingsFromStorage() {
@@ -26,6 +27,7 @@ namespace Winterdom.Viasfora.Options {
       LinqKeywords = this.language.Settings.Linq.ToList();
       VisibilityKeywords = this.language.Settings.Visibility.ToList();
       Enabled = this.language.Settings.Enabled;
+      ReduceOpacityForArgumentValidation = this.language.Settings.ReduceOpacityForArgumentValidation;
     }
 
     [LocDisplayName("Enabled")]
@@ -52,5 +54,10 @@ namespace Winterdom.Viasfora.Options {
     [Editor(Constants.STRING_COLLECTION_EDITOR, typeof(UITypeEditor))]
     [TypeConverter(typeof(Design.StringListConverter))]
     public List<String> LinqKeywords { get; set; }
+
+    [Category("Reduce Opacity")]
+    [LocDisplayName("ArgumentValidation")]
+    [Description("Reduce opacity for argument validation")]
+    public bool ReduceOpacityForArgumentValidation { get; set; }
   }
 }

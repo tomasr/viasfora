@@ -44,6 +44,7 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] VisibilityDefaults => new String[] {
        "friend", "public", "private", "protected"
       };
+    protected override bool ReduceOpacityForArgumentValidationDefaults => true;
 
     public VBSettings(ITypedSettingsStore store)
       : base (Langs.VB, store) {
