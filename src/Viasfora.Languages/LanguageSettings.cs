@@ -9,6 +9,7 @@ namespace Winterdom.Viasfora.Languages {
     protected abstract String[] LinqDefaults { get; }
     protected abstract String[] VisibilityDefaults { get; }
     protected virtual bool ReduceOpacityForArgumentValidationDefaults => false;
+    protected virtual bool ReduceOpacityForMethodOverloadsDefaults => false;
 
     public String KeyName { get; private set; }
     public String[] ControlFlow {
@@ -32,6 +33,10 @@ namespace Winterdom.Viasfora.Languages {
       set { this.Store.SetValue(KeyName + "_ReduceOpacityForArgumentValidation", value); }
     }
 
+    public bool ReduceOpacityForMethodOverloads {
+      get { return this.Store.GetBoolean(KeyName + "_ReduceOpacityForMethodOverloads", ReduceOpacityForMethodOverloadsDefaults); }
+      set { this.Store.SetValue(KeyName + "_ReduceOpacityForMethodOverloads", value); }
+    }
 
     public LanguageSettings(String key, ITypedSettingsStore store)
       : base(store) {

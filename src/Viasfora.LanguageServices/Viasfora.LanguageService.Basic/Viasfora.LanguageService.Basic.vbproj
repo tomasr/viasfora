@@ -155,6 +155,8 @@
     </Compile>
     <Compile Include="ArgumentValidationTagger\ArgumentValidationTaggerProvider.vb" />
     <Compile Include="ArgumentValidationTagger\SyntaxHelper.vb" />
+    <Compile Include="MethodOverloadsTagger\MethodOverloadsTaggerProvider.vb" />
+    <Compile Include="MethodOverloadsTagger\SyntaxHelper.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
   </ItemGroup>
   <ItemGroup>

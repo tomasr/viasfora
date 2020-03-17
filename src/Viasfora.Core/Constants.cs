@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora {
     public const String COLUMN_HIGHLIGHT = "viasfora.column.current";
     public const String DEV_MARGIN = "viasfora.dev.margin";
     public const String LANGUAGESERVICE_ARGUMENT_VALIDATION_NAME = "viasfora.statement.argument_validation";
+    public const String LANGAUGESERVICE_METHOD_OVERLOAD_NAME = "viasfora.statement.method_overload";
 
     public const String OBFUSCATED_TEXT = "viasfora.text.obfuscated";
 

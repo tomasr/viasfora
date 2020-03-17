@@ -30,6 +30,7 @@ namespace Winterdom.Viasfora.Options {
       settings.ModelinesNumLines = (int)ModelinesNumLines;
       settings.TelemetryEnabled = TelemetryEnabled;
       settings.ArgumentValidationClassifierEnabled = ArgumentValidationClassifierEnabled;
+      settings.MethodOverloadsClassifierEnabled = MethodOverloadsClassifierEnabled;
 
       settings.Save();
 
@@ -55,6 +56,7 @@ namespace Winterdom.Viasfora.Options {
       ModelinesNumLines = (uint)settings.ModelinesNumLines;
       TelemetryEnabled = settings.TelemetryEnabled;
       ArgumentValidationClassifierEnabled = settings.ArgumentValidationClassifierEnabled;
+      MethodOverloadsClassifierEnabled = settings.MethodOverloadsClassifierEnabled;
 
       this.colors = new ClassificationList(new ColorStorage(this.Site));
       this.colors.Load(
@@ -115,6 +117,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Enable reducing opacity of argument validation")]
     [Category("Text Editor")]
     public bool ArgumentValidationClassifierEnabled { get; set; }
+
+    [LocDisplayName("Enable Method Overload Classifier (Roslyn)")]
+    [Description("Enable reducing opacity of method overloads")]
+    [Category("Text Editor")]
+    public bool MethodOverloadsClassifierEnabled { get; set; }
 
 
     [LocDisplayName("Enable 'Bold As Italics'")]

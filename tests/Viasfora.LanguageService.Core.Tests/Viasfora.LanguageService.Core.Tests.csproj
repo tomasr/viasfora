@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentValidationTagger\SyntaxHelper.Tests.cs" />
+    <Compile Include="MethodOverloadsTagger\SyntaxHelper.Tests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

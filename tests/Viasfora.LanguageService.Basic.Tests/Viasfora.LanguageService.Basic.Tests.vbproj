@@ -119,6 +119,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArgumentValidationTagger\SyntaxHelper.Basic.Tests.vb" />
+    <Compile Include="MethodOverloadsTagger\SyntaxHelper.Basic.Tests.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

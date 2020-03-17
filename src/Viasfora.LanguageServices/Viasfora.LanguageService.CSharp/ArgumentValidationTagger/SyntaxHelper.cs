@@ -65,7 +65,7 @@ namespace Winterdom.Viasfora.LanguageService.CSharp.ArgumentValidationTagger {
       return true;
     }
 
-    private static bool IsAnyIfArgumentThrowSyntaxStatementCore(StatementSyntax statementSyntax, bool isCtor, IEnumerable<string> parameterNames) {
+    internal static bool IsAnyIfArgumentThrowSyntaxStatementCore(StatementSyntax statementSyntax, bool isCtor, IEnumerable<string> parameterNames) {
       var ifStatementSyntax = statementSyntax as IfStatementSyntax;
       if ( ifStatementSyntax != null )
         return IsIfArgumentThrowSyntaxStatementCore(ifStatementSyntax, parameterNames);

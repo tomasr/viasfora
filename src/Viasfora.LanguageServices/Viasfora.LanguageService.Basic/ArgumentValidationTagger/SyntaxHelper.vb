@@ -54,7 +54,7 @@ Namespace ArgumentValidationTagger
       Return True
     End Function
 
-    Private Shared Function IsAnyIfArgumentThrowSyntaxStatementCore(statementSyntax As StatementSyntax, parameterNames As IEnumerable(Of String)) As Boolean
+    Friend Shared Function IsAnyIfArgumentThrowSyntaxStatementCore(statementSyntax As StatementSyntax, parameterNames As IEnumerable(Of String)) As Boolean
       Dim multiLineIfBlockSyntax = TryCast(statementSyntax, MultiLineIfBlockSyntax)
       If multiLineIfBlockSyntax IsNot Nothing Then
         Return IsIfArgumentThrowSyntaxStatementCore(multiLineIfBlockSyntax, parameterNames)

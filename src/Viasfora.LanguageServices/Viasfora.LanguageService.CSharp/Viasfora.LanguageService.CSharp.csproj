@@ -126,6 +126,8 @@
     </Compile>
     <Compile Include="ArgumentValidationTagger\ArgumentValidationTaggerProvider.cs" />
     <Compile Include="ArgumentValidationTagger\SyntaxHelper.cs" />
+    <Compile Include="MethodOverloadsTagger\MethodOverloadsTaggerProvider.cs" />
+    <Compile Include="MethodOverloadsTagger\SyntaxHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

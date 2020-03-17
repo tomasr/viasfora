@@ -46,6 +46,7 @@ namespace Winterdom.Viasfora.Languages {
          "public", "private", "protected", "internal"
       };
     protected override bool ReduceOpacityForArgumentValidationDefaults => true;
+    protected override bool ReduceOpacityForMethodOverloadsDefaults => true;
 
     public CSharpSettings(ITypedSettingsStore store)
       : base (Langs.CSharp, store) {

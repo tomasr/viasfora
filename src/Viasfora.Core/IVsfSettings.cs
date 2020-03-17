@@ -11,6 +11,7 @@ namespace Winterdom.Viasfora {
     bool EscapeSequencesEnabled { get; set; }
 
     bool ArgumentValidationClassifierEnabled { get; set; }
+    bool MethodOverloadsClassifierEnabled { get; set; }
 
     bool CurrentLineHighlightEnabled { get; set; }
     bool CurrentColumnHighlightEnabled { get; set; }

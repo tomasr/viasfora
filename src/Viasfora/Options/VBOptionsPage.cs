@@ -19,6 +19,7 @@ namespace Winterdom.Viasfora.Options {
       this.language.Settings.Visibility = VisibilityKeywords.ToArray();
       this.language.Settings.Enabled = Enabled;
       this.language.Settings.ReduceOpacityForArgumentValidation = ReduceOpacityForArgumentValidation;
+      this.language.Settings.ReduceOpacityForMethodOverloads = ReduceOpacityForMethodOverloads;
       this.language.Settings.Save();
     }
     public override void LoadSettingsFromStorage() {
@@ -28,6 +29,7 @@ namespace Winterdom.Viasfora.Options {
       VisibilityKeywords = this.language.Settings.Visibility.ToList();
       Enabled = this.language.Settings.Enabled;
       ReduceOpacityForArgumentValidation = this.language.Settings.ReduceOpacityForArgumentValidation;
+      ReduceOpacityForMethodOverloads = this.language.Settings.ReduceOpacityForMethodOverloads;
     }
 
     [LocDisplayName("Enabled")]
@@ -59,5 +61,10 @@ namespace Winterdom.Viasfora.Options {
     [LocDisplayName("ArgumentValidation")]
     [Description("Reduce opacity for argument validation")]
     public bool ReduceOpacityForArgumentValidation { get; set; }
+
+    [Category("Reduce Opacity")]
+    [LocDisplayName("MethodOverloads")]
+    [Description("Reduce opacity for method overloads")]
+    public bool ReduceOpacityForMethodOverloads { get; set; }
   }
 }

@@ -183,6 +183,7 @@
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="EditorFormats\FormatSpecifierFormat.cs" />
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
+    <Compile Include="EditorFormats\MethodOverloadFormat.cs" />
     <Compile Include="EditorFormats\ObfuscatedTextFormat.cs" />
     <Compile Include="EditorFormats\StringEscapeSequenceErrorFormat.cs" />
     <Compile Include="EditorFormats\StringEscapeSequenceFormat.cs" />
