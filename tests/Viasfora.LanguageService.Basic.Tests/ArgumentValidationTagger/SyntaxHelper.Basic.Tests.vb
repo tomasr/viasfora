@@ -253,5 +253,28 @@ End Class
       VerifyBasicIsIfArgumentThrowSyntaxStatement(test, line:=5, column:=5, expectation:=True)
     End Sub
 
+    <Fact>
+    Public Sub test_skip_property()
+      Dim test = "
+Class MyClass
+
+  Public Property MyProp1 As Boolean
+  Public Property MyProp2 As Boolean
+    Get
+      Return False
+    End Get
+    Set(value As Boolean)
+      If value Then Throw New ArgumentException()
+    End Set
+  End Property
+    
+
+End Class
+"
+      VerifyBasicIsIfArgumentThrowSyntaxStatement(test, line:=4, column:=5, expectation:=False)
+      VerifyBasicIsIfArgumentThrowSyntaxStatement(test, line:=5, column:=10, expectation:=False)
+      VerifyBasicIsIfArgumentThrowSyntaxStatement(test, line:=10, column:=10, expectation:=False)
+    End Sub
+
   End Class
 End Namespace

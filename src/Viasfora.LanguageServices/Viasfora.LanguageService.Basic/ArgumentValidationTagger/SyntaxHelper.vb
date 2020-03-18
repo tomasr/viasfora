@@ -16,6 +16,12 @@ Namespace ArgumentValidationTagger
         Return False
       End If
 
+      Dim accessorBlockSyntax = TryCast(methodBlockBaseSyntax, AccessorBlockSyntax)
+      If accessorBlockSyntax IsNot Nothing Then
+        ' Skip Properties
+        Return False
+      End If
+
       For Each statementSyntax In methodBlockBaseSyntax.Statements
         If node.Span.IntersectsWith(statementSyntax.Span) Then
           Return IsAnyIfArgumentThrowSyntaxStatement(statementSyntax)
