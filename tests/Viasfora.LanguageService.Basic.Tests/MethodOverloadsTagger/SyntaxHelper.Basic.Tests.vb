@@ -253,5 +253,32 @@ End Class
       VerifyBasicIsMethodOverload(test, line:=5, column:=5, expectation:=False)
     End Sub
 
+    <Fact>
+    Public Sub test_skip_property()
+      Dim test = "
+Class MyClass
+
+  Public Property MyProp1 As Boolean
+  Public Property MyProp2 As Boolean
+    Get
+      Return GetProp()
+    End Get
+    Set(value As Boolean)
+      SetProp(value)
+    End Set
+  End Property
+    
+  Function GetProp() As Boolean
+  End Function
+  Sub SetProp(v As Boolean)
+  End Sub
+
+End Class
+"
+      VerifyBasicIsMethodOverload(test, line:=4, column:=5, expectation:=False)
+      VerifyBasicIsMethodOverload(test, line:=5, column:=10, expectation:=False)
+      VerifyBasicIsMethodOverload(test, line:=10, column:=10, expectation:=False)
+    End Sub
+
   End Class
 End Namespace

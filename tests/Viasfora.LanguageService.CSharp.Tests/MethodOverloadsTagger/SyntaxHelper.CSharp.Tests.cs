@@ -265,5 +265,32 @@ class MyTest {
       VerifyCSharpIsMethodOverload(test, line: 5, column: 8, expectation: false);
     }
 
+    [Fact]
+    public void test_skip_property() {
+      var test = @"
+class MyTest {
+
+  public bool MyProp1 => GetProp();
+  public bool MyProp2 { get; set; }
+  public bool MyProp3 {
+    get {
+      return GetProp();
+    }
+    set {
+      SetProp(value)
+    }
+  }
+
+  bool GetProp() => true;
+  void SetProp(bool v) { }
+}
+";
+
+      VerifyCSharpIsMethodOverload(test, line: 4, column: 5, expectation: false);
+      VerifyCSharpIsMethodOverload(test, line: 5, column: 27, expectation: false);
+      VerifyCSharpIsMethodOverload(test, line: 5, column: 32, expectation: false);
+      VerifyCSharpIsMethodOverload(test, line: 11, column: 10, expectation: false);
+    }
+
   }
 }
