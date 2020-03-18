@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using System;
 using System.Collections.Generic;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.LanguageService.Core.Utils;
 
@@ -12,15 +13,18 @@ namespace Winterdom.Viasfora.LanguageService.Core.RoslynTaggerProvider {
   public abstract class BaseRoslynTagger<TTag> : ITagger<TTag>
   where TTag : ITag {
 
+    protected IVsfTelemetry Telemetry { get; }
     protected ITextBuffer Buffer { get; }
     protected ILanguageFactory LangFactory { get; }
 
     private TextBufferCodeAnalysesCache cache;
 
     protected BaseRoslynTagger(
+      IVsfTelemetry telemetry,
       ITextBuffer buffer,
       ILanguageFactory langFactory
     ) {
+      this.Telemetry = telemetry ?? throw new ArgumentNullException(nameof(telemetry));
       this.Buffer = buffer ?? throw new ArgumentNullException(nameof(buffer));
       this.LangFactory = langFactory ?? throw new ArgumentNullException(nameof(langFactory));
     }
@@ -50,14 +54,32 @@ namespace Winterdom.Viasfora.LanguageService.Core.RoslynTaggerProvider {
         yield break;
 
       var node = rootNode.FindNode(roslynTextSpan);
-      var roslynTags = GetTags(node, roslynTextSpan);
 
-      foreach (var item in roslynTags ) {
-        var snapshotSpan = item.Span.ToSnapshotSpan(snapshot);
+      // get roslyn tags and catch unhandled exceptions
+      var tagsIter = GetTags(node, roslynTextSpan).GetEnumerator();
+      var catchIter = new TryCatchEnumerator<(TextSpan Span, TTag Tag)>(tagsIter, ex => {
+        if (ex is RoslynException) {
+          this.Telemetry.WriteException($"Error getting tags from {this.GetType().FullName}", ex);
+        } else {
+          System.Diagnostics.Debugger.Launch();
+          this.Telemetry.WriteException($"Error getting tags from {this.GetType().FullName}", RoslynException.Create(
+            "Unknown error getting tags",
+            node,
+            roslynTextSpan,
+            ex
+          ));
+        }
+        return false;
+      });
 
-        yield return new TagSpan<TTag>(snapshotSpan, item.Tag);
+      while ( catchIter.MoveNext() ) {
+        var snapshotSpan = catchIter.Current.Span.ToSnapshotSpan(snapshot);
+
+        yield return new TagSpan<TTag>(snapshotSpan, catchIter.Current.Tag);
       }
     }
+
+
 
     private ILanguage GetLanguageByContentType(IContentType contentType) {
       return this.LangFactory.TryCreateLanguage(contentType);

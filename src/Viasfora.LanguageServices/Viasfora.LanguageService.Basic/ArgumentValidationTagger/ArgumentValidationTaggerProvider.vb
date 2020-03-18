@@ -4,8 +4,8 @@ Imports Microsoft.VisualStudio.Text.Classification
 Imports Microsoft.VisualStudio.Text.Tagging
 Imports Microsoft.VisualStudio.Utilities
 Imports System.ComponentModel.Composition
+Imports Winterdom.Viasfora.Contracts
 Imports Winterdom.Viasfora.Languages
-Imports Winterdom.Viasfora.LanguageService.Core
 Imports Winterdom.Viasfora.LanguageService.Core.ArgumentValidationTagger
 
 Namespace ArgumentValidationTagger
@@ -17,8 +17,13 @@ Namespace ArgumentValidationTagger
     Inherits BaseArgumentValidationTaggerProvider
 
     <ImportingConstructor>
-    Public Sub New(classificationRegistry As IClassificationTypeRegistryService, languageFactory As ILanguageFactory, settings As IVsfSettings)
-      MyBase.New(classificationRegistry, languageFactory, settings)
+    Public Sub New(
+      telemetry As IVsfTelemetry,
+      classificationRegistry As IClassificationTypeRegistryService,
+      languageFactory As ILanguageFactory,
+      settings As IVsfSettings
+    )
+      MyBase.New(telemetry, classificationRegistry, languageFactory, settings)
     End Sub
 
     Public Overrides Function IsArgumentValidationSpan(node As SyntaxNode) As TextSpan

@@ -4,6 +4,7 @@ Imports Microsoft.VisualStudio.Text.Classification
 Imports Microsoft.VisualStudio.Text.Tagging
 Imports Microsoft.VisualStudio.Utilities
 Imports System.ComponentModel.Composition
+Imports Winterdom.Viasfora.Contracts
 Imports Winterdom.Viasfora.Languages
 Imports Winterdom.Viasfora.LanguageService.Core.MethodOverloadsTagger
 
@@ -16,8 +17,13 @@ Namespace MethodOverloadsTagger
     Inherits BaseMethodOverloadsTaggerProvider
 
     <ImportingConstructor>
-    Public Sub New(classificationRegistry As IClassificationTypeRegistryService, languageFactory As ILanguageFactory, settings As IVsfSettings)
-      MyBase.New(classificationRegistry, languageFactory, settings)
+    Public Sub New(
+      telemetry As IVsfTelemetry,
+      classificationRegistry As IClassificationTypeRegistryService,
+      languageFactory As ILanguageFactory,
+      settings As IVsfSettings
+    )
+      MyBase.New(telemetry, classificationRegistry, languageFactory, settings)
     End Sub
 
     Public Overrides Function IsMethodOverload(node As SyntaxNode) As TextSpan

@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Text;
 using System;
 using System.Collections.Generic;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.LanguageService.Core.RoslynTaggerProvider;
 
@@ -11,7 +12,11 @@ namespace Winterdom.Viasfora.LanguageService.Core.MethodOverloadsTagger {
     private BaseMethodOverloadsTaggerProvider provider;
     private MethodOverloadsTag methodOverloadsClassification;
 
-    internal MethodOverloadsTagger(ITextBuffer buffer, BaseMethodOverloadsTaggerProvider provider) : base(buffer, provider.LanguageFactory) {
+    internal MethodOverloadsTagger(
+      IVsfTelemetry telemetry, 
+      ITextBuffer buffer, 
+      BaseMethodOverloadsTaggerProvider provider
+    ) : base(telemetry, buffer, provider.LanguageFactory) {
       this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
       this.methodOverloadsClassification = provider.GetTag(Constants.LANGAUGESERVICE_METHOD_OVERLOAD_NAME);

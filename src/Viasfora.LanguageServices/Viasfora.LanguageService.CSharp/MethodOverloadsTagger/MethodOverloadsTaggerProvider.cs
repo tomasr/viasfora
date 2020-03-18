@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using System.ComponentModel.Composition;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.LanguageService.Core.MethodOverloadsTagger;
 
@@ -15,10 +16,11 @@ namespace Winterdom.Viasfora.LanguageService.CSharp.MethodOverloadsTagger {
 
     [ImportingConstructor]
     public MethodOverloadsTaggerProvider(
+      IVsfTelemetry telemetry,
       IClassificationTypeRegistryService classificationRegistry,
       ILanguageFactory languageFactory,
       IVsfSettings settings
-    ) : base(classificationRegistry, languageFactory, settings) {
+    ) : base(telemetry, classificationRegistry, languageFactory, settings) {
     }
 
     public override TextSpan IsMethodOverload(SyntaxNode node) {

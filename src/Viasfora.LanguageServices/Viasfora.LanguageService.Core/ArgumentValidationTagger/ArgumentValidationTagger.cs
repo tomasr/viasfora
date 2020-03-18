@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio.Text;
 using System;
 using System.Collections.Generic;
+using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.LanguageService.Core.RoslynTaggerProvider;
 
@@ -11,7 +12,11 @@ namespace Winterdom.Viasfora.LanguageService.Core.ArgumentValidationTagger {
     private BaseArgumentValidationTaggerProvider provider;
     private ArgumentValidationTag argumentValidationClassification;
 
-    internal ArgumentValidationTagger(ITextBuffer buffer, BaseArgumentValidationTaggerProvider provider) : base (buffer, provider.LanguageFactory) {
+    internal ArgumentValidationTagger(
+      IVsfTelemetry telemetry, 
+      ITextBuffer buffer, 
+      BaseArgumentValidationTaggerProvider provider
+    ) : base (telemetry, buffer, provider.LanguageFactory) {
       this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
 
       this.argumentValidationClassification = provider.GetTag(Constants.LANGUAGESERVICE_ARGUMENT_VALIDATION_NAME);
