@@ -47,6 +47,10 @@ namespace Winterdom.Viasfora.LanguageService.Core.RoslynTaggerProvider {
           .ConfigureAwait(false).GetAwaiter().GetResult();
       }
 
+      if (this.cache == null || this.cache.SyntaxRoot == null) {
+        yield break;
+      }
+
       var roslynTextSpan = spans[0].ToTextSpan();
       var rootNode = this.cache.SyntaxRoot.Value;
 
