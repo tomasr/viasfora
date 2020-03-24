@@ -1,5 +1,4 @@
-﻿using Microsoft.ApplicationInsights.DataContracts;
-using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Composition;
@@ -35,9 +34,6 @@ namespace Winterdom.Viasfora {
     }
 
     public void FeatureStatus(String feature, bool enabled) {
-      var evt = new EventTelemetry("Feature-" + feature);
-      evt.Properties["enabled"] = enabled.ToString();
-      this.telemetry.WriteEvent(evt);
     }
   }
 }
