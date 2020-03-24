@@ -19,10 +19,16 @@ namespace Winterdom.Viasfora.Languages {
     public override IStringScanner NewStringScanner(String classificationName, String text)
       => new CSharpStringScanner(text, classificationName);
 
+    public override bool IsKeywordClassification(String classificationType) {
+      return base.IsKeywordClassification(classificationType)
+          || CompareClassification(classificationType, "keyword - control");
+
+    }
     [ImportingConstructor]
     public CSharp(ITypedSettingsStore store) {
       this.Settings = new CSharpSettings(store);
     }
+
   }
 
   public class CSharpSettings : LanguageSettings {

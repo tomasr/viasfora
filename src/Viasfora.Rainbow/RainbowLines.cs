@@ -43,6 +43,9 @@ namespace Winterdom.Viasfora.Rainbow {
     public int GetRainbowDepth() {
       return this.Settings.RainbowDepth;
     }
+    public RainbowLinesMode GetMode() {
+      return this.Settings.RainbowLinesMode;
+    }
   }
 
   public class RainbowLines {
@@ -229,7 +232,11 @@ namespace Winterdom.Viasfora.Rainbow {
 
       IList<LinePoint> points = null;
       if ( openLine != null && closeLine != null && openLine.Extent == closeLine.Extent ) {
-        points = SingleLineSpan(opening, closing);
+        if ( this.provider.GetMode() == RainbowLinesMode.All ) {
+          points = SingleLineSpan(opening, closing);
+        } else {
+          return null;
+        }
       } else {
         points = MultiLineSpan(opening, closing);
       }

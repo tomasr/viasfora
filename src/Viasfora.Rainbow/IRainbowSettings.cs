@@ -11,6 +11,12 @@ namespace Winterdom.Viasfora.Rainbow {
     bool RainbowToolTipsEnabled { get; set; }
     RainbowColoringMode RainbowColoringMode { get; set; }
     bool RainbowLinesEnabled { get; set; }
+    RainbowLinesMode RainbowLinesMode { get; set; }
     void Save();
+  }
+
+  public enum RainbowLinesMode {
+    All = 0,
+    MultiLineOnly = 1
   }
 }

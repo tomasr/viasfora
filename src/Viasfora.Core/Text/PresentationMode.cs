@@ -53,14 +53,31 @@ namespace Winterdom.Viasfora.Text {
       if ( textView.IsPeekTextWindow() )
         return;
       if ( this.settings.PresentationModeEnabled  ) {
+        var textViewState = textView.Get<PresentationModeViewState>();
+        bool pmEnabled() { return textViewState?.Enabled ?? false; }
+
         int zoomLevel = this.state.GetPresentationModeZoomLevel();
-        // VS2015 supports automatic sync of all text windows with the 
-        // zoom level once you zoom one
-        // so if the current zoomLevel is not 100%, just ignore it.
-        if ( textView.ZoomLevel != 100 && this.state.PresentationModeTurnedOn )
-          return;
-        textView.ZoomLevel = zoomLevel;
+
+        if (this.state.PresentationModeTurnedOn) {
+          if (!pmEnabled()) {
+            textView.ZoomLevel = zoomLevel;
+            textView.Set(new PresentationModeViewState(true));
+          }
+        } else {
+          if ( pmEnabled() ) {
+            textViewState.Enabled = false;
+            textView.ZoomLevel = zoomLevel;
+          }
+        }
       }
+    }
+  }
+
+  internal class PresentationModeViewState {
+    public bool Enabled { get; set; }
+
+    public PresentationModeViewState(bool state) {
+      this.Enabled = state;
     }
   }
 }

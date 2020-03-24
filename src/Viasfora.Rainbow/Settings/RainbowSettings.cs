@@ -43,6 +43,11 @@ namespace Winterdom.Viasfora.Rainbow.Settings {
       set { this.Store.SetValue(nameof(RainbowLinesEnabled), value); }
     }
 
+    public RainbowLinesMode RainbowLinesMode {
+      get { return this.Store.GetEnum(nameof(RainbowLinesMode), RainbowLinesMode.All); }
+      set { this.Store.SetValue(nameof(RainbowLinesMode), value); }
+    }
+
     [ImportingConstructor]
     public RainbowSettings(ITypedSettingsStore store, IVsfTelemetry telemetry) : base(store) {
       telemetry.FeatureStatus("RainbowLines", RainbowLinesEnabled);

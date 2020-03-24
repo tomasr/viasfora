@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora.Languages {
       }
       return default(T);
     }
+    public virtual StringComparer Comparer => StringComparer.OrdinalIgnoreCase;
 
     protected abstract IBraceScanner NewBraceScanner();
     protected virtual IFirstLineCommentParser NewFirstLineCommentParser() {

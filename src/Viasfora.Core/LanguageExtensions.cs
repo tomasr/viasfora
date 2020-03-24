@@ -6,16 +6,14 @@ using Winterdom.Viasfora.Languages;
 
 namespace Winterdom.Viasfora {
   public static class LanguageExtensions {
-    private static StringComparer comparer = StringComparer.CurrentCultureIgnoreCase;
-
     public static bool IsControlFlowKeyword(this ILanguage lang, String text) {
-      return lang.Settings.ControlFlow.Contains(lang.NormalizationFunction(text), comparer);
+      return lang.Settings.ControlFlow.Contains(lang.NormalizationFunction(text), lang.Comparer);
     }
     public static bool IsVisibilityKeyword(this ILanguage lang, String text) {
-      return lang.Settings.Visibility.Contains(lang.NormalizationFunction(text), comparer);
+      return lang.Settings.Visibility.Contains(lang.NormalizationFunction(text), lang.Comparer);
     }
     public static bool IsLinqKeyword(this ILanguage lang, String text) {
-      return lang.Settings.Linq.Contains(lang.NormalizationFunction(text), comparer);
+      return lang.Settings.Linq.Contains(lang.NormalizationFunction(text), lang.Comparer);
     }
 
     public static ILanguage TryCreateLanguage(this ILanguageFactory factory, ITextBuffer buffer) {

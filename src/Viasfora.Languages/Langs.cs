@@ -10,6 +10,7 @@ namespace Winterdom.Viasfora.Languages {
     public const String FSharp = "FSharp";
     public const String JS = "JScript";
     public const String Json = "JSON";
+    public const String Mpl = "MPL";
     public const String PowerShell = "PowerShell";
     public const String Python = "Python";
     public const String R = "R";
@@ -17,5 +18,6 @@ namespace Winterdom.Viasfora.Languages {
     public const String USql = "U-SQL";
     public const String TypeScript = "TypeScript";
     public const String VB = "VB";
+    public const String Xpp = "Xpp";
   }
 }

@@ -18,6 +18,7 @@ namespace Winterdom.Viasfora.Options {
       rainbowSettings.RainbowColorize = RainbowColorize;
       rainbowSettings.RainbowToolTipsEnabled = RainbowToolTipsEnabled;
       rainbowSettings.RainbowLinesEnabled = RainbowLinesEnabled;
+      rainbowSettings.RainbowLinesMode = RainbowLinesMode;
       rainbowSettings.RainbowHighlightMode = RainbowHighlightMode;
       rainbowSettings.RainbowColoringMode = RainbowColoringMode;
       rainbowSettings.RainbowHighlightKey = RainbowHighlightKey;
@@ -36,6 +37,7 @@ namespace Winterdom.Viasfora.Options {
       RainbowColoringMode = rainbowSettings.RainbowColoringMode;
       RainbowHighlightKey = rainbowSettings.RainbowHighlightKey;
       RainbowLinesEnabled = rainbowSettings.RainbowLinesEnabled;
+      RainbowLinesMode = rainbowSettings.RainbowLinesMode;
 
       this.colors = new ClassificationList(new ColorStorage(this.Site));
       this.colors.Load(
@@ -101,6 +103,11 @@ namespace Winterdom.Viasfora.Options {
     [Description("Connect opening/closing braces of current scope with a colored line")]
     [Category("Rainbow Braces")]
     public bool RainbowLinesEnabled { get; set; }
+
+    [LocDisplayName("Rainbow Lines Mode")]
+    [Description("Controls if rainbow lines are shown for all spans, or just multi-line ones.")] 
+    [Category("Rainbow Braces")]
+    public RainbowLinesMode RainbowLinesMode { get; set; }
 
     [LocDisplayName("Level 1")]
     [Description("Colors to use to highlight braces at this level")]

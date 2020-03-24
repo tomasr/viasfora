@@ -87,6 +87,12 @@
     <Compile Include="Options\ClassificationColors.cs" />
     <Compile Include="Options\ClassificationList.cs" />
     <Compile Include="Options\ColorStorage.cs" />
+    <Compile Include="Options\MplOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Options\XppOptionsPage.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Options\FontStyles.cs" />
     <Compile Include="Options\FortranOptionsPage.cs">
       <SubType>Component</SubType>
@@ -196,10 +202,6 @@
     <Reference Include="envdte90a, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
       <HintPath>..\..\packages\VSSDK.DTE.9.9.0.4\lib\net20\envdte90a.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Microsoft.ApplicationInsights, Version=1.2.3.490, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.ApplicationInsights.1.2.3\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />

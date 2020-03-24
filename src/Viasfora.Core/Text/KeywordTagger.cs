@@ -48,6 +48,7 @@ namespace Winterdom.Viasfora.Text {
         yield break;
       }
       ILanguage lang = GetLanguageByContentType(this.theBuffer.ContentType);
+      ILanguageWithStrings langStr = lang as ILanguageWithStrings;
       if ( !lang.Settings.Enabled ) {
         yield break;
       }
@@ -73,8 +74,9 @@ namespace Winterdom.Viasfora.Text {
       // so that we can process them as a single span
       foreach ( var tagSpan in GetTags(interestingSpans, snapshot) ) {
         var classificationType = tagSpan.Tag.ClassificationType;
-        String name = classificationType.Classification.ToLower();
-        if ( eshe && name.Contains("string") ) {
+        String name = classificationType.Classification;
+
+        if ( eshe && IsString(langStr, name) ) {
           foreach ( var escapeTag in ProcessEscapeSequences(lang, name, tagSpan.Span, isCpp) ) {
             yield return escapeTag;
           }
@@ -90,15 +92,17 @@ namespace Winterdom.Viasfora.Text {
       }
     }
 
+    private bool IsString(ILanguageWithStrings langStr, string name) {
+      if ( langStr != null ) {
+        return langStr.IsStringClassification(name);
+      }
+      return name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
     private bool IsInterestingTag(ILanguage lang, IClassificationType classification) {
       if ( classification is RainbowTag )
         return false;
-      var name = classification.Classification;
-      if ( this.settings.EscapeSequencesEnabled && name.IndexOf("string", StringComparison.InvariantCultureIgnoreCase) >= 0 )
-        return true;
-      if ( this.settings.KeywordClassifierEnabled && lang.IsKeywordClassification(classification.Classification) )
-        return true;
-      return false;
+      return true;
     }
 
     private IEnumerable<ITagSpan<IClassificationTag>> GetTags(IEnumerable<ITagSpan<IClassificationTag>> sourceSpans, ITextSnapshot snapshot) {
