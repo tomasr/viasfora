@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Xunit;
 
@@ -161,6 +163,31 @@ callCommented2(4);
       Assert.Equal(2+1+1+1+1+1+1+2, chars.Count);
     }
 
+    public List<string> testList = new List<string>();
+
+    [Fact]
+    public void Bug263_InterpolatedStringWithInterpolatedString1() {
+
+      // bug is the missing ) in following section of the teststring:
+      // n => $\"pre_{n}_suf\").Aggregate
+
+      String input = "string.IsNullOrEmpty($\"{test} {(string.IsNullOrEmpty(test) ? \"\" : testList.Select(n => $\"pre_{n}_suf\").Aggregate((n,m) =>  n + \", \" + m))}\")";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(1+1+1+2+1+1+1+1+1+1+2+1+3+1, chars.Count);
+    }
+
+    [Fact]
+    public void Bug263_InterpolatedStringWithInterpolatedString2() {
+
+      // bug is the missing ) in following section of the teststring:
+      // n => $\"pre_{n}_suf\").Aggregate
+
+      String input = "string.IsNullOrEmpty($\"{test} {(string.IsNullOrEmpty(test) ? \"\" : testList.Select(n => $@\"pre_{n}_suf\").Aggregate((n,m) =>  n + \", \" + m))}\")";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(1 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 2 + 1 + 3 + 1, chars.Count);
+    }
 
     [Fact]
     public void InterpolatedAtString1() {
