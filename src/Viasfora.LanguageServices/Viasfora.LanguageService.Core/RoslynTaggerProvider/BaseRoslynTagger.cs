@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Languages;
 using Winterdom.Viasfora.LanguageService.Core.Utils;
@@ -32,6 +33,20 @@ namespace Winterdom.Viasfora.LanguageService.Core.RoslynTaggerProvider {
     public event EventHandler<SnapshotSpanEventArgs> TagsChanged;
 
     public IEnumerable<ITagSpan<TTag>> GetTags(NormalizedSnapshotSpanCollection spans) {
+      try {
+        var tags = GetTagsInner(spans)
+          .ToArray()
+        ;
+        return tags;
+      } catch (Exception ex) {
+        Telemetry.WriteException($@"Error analysing source code.
+Spans: {spans.ToString()}
+Source: {Buffer.CurrentSnapshot.GetText()}
+", ex);
+        return Enumerable.Empty<ITagSpan<TTag>>();
+      }
+    }
+    private IEnumerable<ITagSpan<TTag>> GetTagsInner(NormalizedSnapshotSpanCollection spans) { 
       if ( spans.Count == 0 )
         yield break;
 
@@ -65,7 +80,6 @@ namespace Winterdom.Viasfora.LanguageService.Core.RoslynTaggerProvider {
         if (ex is RoslynException) {
           this.Telemetry.WriteException($"Error getting tags from {this.GetType().FullName}", ex);
         } else {
-          System.Diagnostics.Debugger.Launch();
           this.Telemetry.WriteException($"Error getting tags from {this.GetType().FullName}", RoslynException.Create(
             "Unknown error getting tags",
             node,
