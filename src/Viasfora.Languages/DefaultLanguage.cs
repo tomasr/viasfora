@@ -26,6 +26,7 @@ namespace Winterdom.Viasfora.Languages {
     protected override String[] ControlFlowDefaults => EMPTY;
     protected override String[] LinqDefaults => EMPTY;
     protected override String[] VisibilityDefaults => EMPTY;
+    protected override bool ReduceOpacityForArgumentValidationDefaults => false;
 
     public DefaultSettings(ITypedSettingsStore store)
       : base ("Text", store) {

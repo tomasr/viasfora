@@ -177,11 +177,13 @@
     <Compile Include="Design\ZoomTrackBar.Designer.cs">
       <DependentUpon>ZoomTrackBar.cs</DependentUpon>
     </Compile>
+    <Compile Include="EditorFormats\ArgumentValidationFormat.cs" />
     <Compile Include="EditorFormats\CurrentColumnFormat.cs" />
     <Compile Include="EditorFormats\CurrentLineFormat.cs" />
     <Compile Include="EditorFormats\FlowControlFormat.cs" />
     <Compile Include="EditorFormats\FormatSpecifierFormat.cs" />
     <Compile Include="EditorFormats\LinqKeywordFormat.cs" />
+    <Compile Include="EditorFormats\MethodOverloadFormat.cs" />
     <Compile Include="EditorFormats\ObfuscatedTextFormat.cs" />
     <Compile Include="EditorFormats\StringEscapeSequenceErrorFormat.cs" />
     <Compile Include="EditorFormats\StringEscapeSequenceFormat.cs" />

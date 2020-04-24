@@ -91,6 +91,15 @@ namespace Winterdom.Viasfora.Settings {
       get { return this.Store.GetBoolean(nameof(TelemetryEnabled), true); }
       set { this.Store.SetValue(nameof(TelemetryEnabled), value); }
     }
+    public bool ArgumentValidationClassifierEnabled {
+      get { return this.Store.GetBoolean(nameof(ArgumentValidationClassifierEnabled), true); }
+      set { this.Store.SetValue(nameof(ArgumentValidationClassifierEnabled), value); }
+    }
+
+    public bool MethodOverloadsClassifierEnabled {
+      get { return this.Store.GetBoolean(nameof(MethodOverloadsClassifierEnabled), true); }
+      set { this.Store.SetValue(nameof(MethodOverloadsClassifierEnabled), value); }
+    }
 
     [ImportingConstructor]
     public VsfSettings(ITypedSettingsStore store, IVsfTelemetry telemetry)
@@ -104,6 +113,8 @@ namespace Winterdom.Viasfora.Settings {
       telemetry.FeatureStatus("QueryKeywords", QueryKeywordsEnabled);
       telemetry.FeatureStatus("FlowControlKeywords", FlowControlKeywordsEnabled);
       telemetry.FeatureStatus("VisibilityKeywords", VisibilityKeywordsEnabled);
+      telemetry.FeatureStatus("ArgumentValidationClassifier", ArgumentValidationClassifierEnabled);
+      telemetry.FeatureStatus("MethodOverloadsClassifier", MethodOverloadsClassifierEnabled);
     }
   }
 }

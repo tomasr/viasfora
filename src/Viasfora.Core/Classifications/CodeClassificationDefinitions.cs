@@ -32,5 +32,11 @@ namespace Winterdom.Viasfora.Classifications {
 
     [Export, Name(Constants.OBFUSCATED_TEXT)]
     internal static ClassificationTypeDefinition ObfuscatedTextType = null;
+
+    [Export, Name(Constants.LANGUAGESERVICE_ARGUMENT_VALIDATION_NAME)]
+    internal static ClassificationTypeDefinition LANGUAGESERVICE_ARGUMENT_VALIDATION_NAME = null;
+
+    [Export, Name(Constants.LANGAUGESERVICE_METHOD_OVERLOAD_NAME)]
+    internal static ClassificationTypeDefinition LANGAUGESERVICE_METHOD_OVERLOAD_NAME = null;
   } 
 }
