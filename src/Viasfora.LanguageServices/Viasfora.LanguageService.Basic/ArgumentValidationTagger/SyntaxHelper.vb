@@ -46,6 +46,10 @@ Namespace ArgumentValidationTagger
         Return False
       End If
 
+      If methodBaseSyntax.ParameterList Is Nothing Then
+        Return False
+      End If
+
       Dim parameterNames = methodBaseSyntax.ParameterList.Parameters _
         .Select(Function(x) x.Identifier.Identifier.ValueText)
 
