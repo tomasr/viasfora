@@ -96,7 +96,7 @@ namespace Winterdom.Viasfora.Text {
       if ( langStr != null ) {
         return langStr.IsStringClassification(name);
       }
-      return name.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0;
+      return name.IndexOf("string", StringComparison.OrdinalIgnoreCase) >= 0;
     }
 
     private bool IsInterestingTag(ILanguage lang, IClassificationType classification) {
