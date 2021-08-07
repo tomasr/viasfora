@@ -146,7 +146,7 @@ namespace Winterdom.Viasfora.Text {
       fill.StrokeThickness = 0;
     }
     private void RedrawAdornments() {
-      if ( this.view.TextViewLines != null ) {
+      if ( !this.view.InLayout && this.view.TextViewLines != null ) {
         this.layer.RemoveAllAdornments();
         var caret = this.view.Caret.Position;
         this.CreateVisuals(caret.VirtualBufferPosition);
