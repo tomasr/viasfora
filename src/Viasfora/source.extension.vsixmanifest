@@ -16,12 +16,25 @@
         <Tags >rainbow braces, text editor, xml editor, colorization, outlining</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Version="[14.0,18.0)" Id="Microsoft.VisualStudio.Community" />
-        <InstallationTarget Version="[11.0,18.0)" Id="Microsoft.VisualStudio.Pro" />
-        <InstallationTarget Version="[11.0,18.0)" Id="Microsoft.VisualStudio.Enterprise" />
-        <InstallationTarget Version="[11.0,18.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
-        <InstallationTarget Version="[11.0,18.0)" Id="Microsoft.VisualStudio.Ultimate" />
-        <InstallationTarget Version="[11.0,18.0)" Id="Microsoft.VisualStudio.Premium" />
+        <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Community" />
+        <InstallationTarget Version="[11.0,17.0)" Id="Microsoft.VisualStudio.Pro" />
+        <InstallationTarget Version="[11.0,17.0)" Id="Microsoft.VisualStudio.Enterprise" />
+        <InstallationTarget Version="[11.0,17.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
+        <InstallationTarget Version="[11.0,17.0)" Id="Microsoft.VisualStudio.Ultimate" />
+        <InstallationTarget Version="[11.0,17.0)" Id="Microsoft.VisualStudio.Premium" />
+        <!-- VS2022 and up -->
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Enterprise">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Ultimate">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>      
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
@@ -36,6 +49,6 @@
         <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%.Settings" Path="|Viasfora.Settings|" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,17.0)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,18.0)" DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>
