@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0"
                  xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011"
                  xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
@@ -13,7 +13,7 @@
         <License>license.txt</License>
         <Icon>viasfora-icon.png</Icon>
         <PreviewImage>viasfora-preview.png</PreviewImage>
-        <Tags >rainbow braces, text editor, xml editor, colorization, outlining</Tags>
+        <Tags>rainbow braces, text editor, xml editor, colorization, outlining</Tags>
     </Metadata>
     <Installation>
         <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Community" />
@@ -22,7 +22,7 @@
         <InstallationTarget Version="[11.0,17.0)" Id="Microsoft.VisualStudio.IntegratedShell" />
         <InstallationTarget Version="[11.0,17.0)" Id="Microsoft.VisualStudio.Ultimate" />
         <InstallationTarget Version="[11.0,17.0)" Id="Microsoft.VisualStudio.Premium" />
-        <!-- VS2022 and up -->
+
         <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
             <ProductArchitecture>amd64</ProductArchitecture>
         </InstallationTarget>
