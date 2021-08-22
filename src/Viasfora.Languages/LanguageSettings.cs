@@ -8,6 +8,8 @@ namespace Winterdom.Viasfora.Languages {
     protected abstract String[] ControlFlowDefaults { get; }
     protected abstract String[] LinqDefaults { get; }
     protected abstract String[] VisibilityDefaults { get; }
+    protected virtual bool ReduceOpacityForArgumentValidationDefaults => false;
+    protected virtual bool ReduceOpacityForMethodOverloadsDefaults => false;
 
     public String KeyName { get; private set; }
     public String[] ControlFlow {
@@ -26,6 +28,15 @@ namespace Winterdom.Viasfora.Languages {
       get { return this.Store.GetBoolean(KeyName + "_Enabled", true); }
       set { this.Store.SetValue(KeyName + "_Enabled", value); }
     }
+    public bool ReduceOpacityForArgumentValidation {
+      get { return this.Store.GetBoolean(KeyName + "_ReduceOpacityForArgumentValidation", ReduceOpacityForArgumentValidationDefaults); }
+      set { this.Store.SetValue(KeyName + "_ReduceOpacityForArgumentValidation", value); }
+    }
+
+    public bool ReduceOpacityForMethodOverloads {
+      get { return this.Store.GetBoolean(KeyName + "_ReduceOpacityForMethodOverloads", ReduceOpacityForMethodOverloadsDefaults); }
+      set { this.Store.SetValue(KeyName + "_ReduceOpacityForMethodOverloads", value); }
+    }
 
     public LanguageSettings(String key, ITypedSettingsStore store)
       : base(store) {
@@ -37,7 +48,8 @@ namespace Winterdom.Viasfora.Languages {
         { KeyName + "_ControlFlow", ControlFlow },
         { KeyName + "_Linq", Linq },
         { KeyName + "_Visibility", Visibility },
-        { KeyName + "_Enabled", Enabled }
+        { KeyName + "_Enabled", Enabled },
+        { KeyName + "_ReduceOpacityForArgumentValidation", ReduceOpacityForArgumentValidation }
       };
     }
   }

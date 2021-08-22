@@ -212,6 +212,18 @@
       <Project>{419c99ad-185a-4d31-a7ff-e1754c7b806d}</Project>
       <Name>Viasfora.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\src\Viasfora.LanguageServices\Viasfora.LanguageService.Basic\Viasfora.LanguageService.Basic.vbproj">
+      <Project>{ac41a83d-0565-47cd-aa55-4a09874d722f}</Project>
+      <Name>Viasfora.LanguageService.Basic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Viasfora.LanguageServices\Viasfora.LanguageService.Core\Viasfora.LanguageService.Core.csproj">
+      <Project>{ce8301e8-e5ba-446b-9715-4b0f07e69190}</Project>
+      <Name>Viasfora.LanguageService.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Viasfora.LanguageServices\Viasfora.LanguageService.CSharp\Viasfora.LanguageService.CSharp.csproj">
+      <Project>{003c3d3d-b966-4ac5-a622-d4931810587d}</Project>
+      <Name>Viasfora.LanguageService.CSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\src\Viasfora.Languages\Viasfora.Languages.csproj">
       <Project>{14b957db-0ed2-4dea-85c9-b670f6653c1b}</Project>
       <Name>Viasfora.Languages</Name>
