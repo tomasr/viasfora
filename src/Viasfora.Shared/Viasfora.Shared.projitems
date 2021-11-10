@@ -111,9 +111,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="$(MSBuildThisFileDirectory)Resources\cmdImages.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <Page Include="$(MSBuildThisFileDirectory)Options\TextObfuscationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

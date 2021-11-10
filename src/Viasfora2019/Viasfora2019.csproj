@@ -38,6 +38,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <DefineConstants>VS2019</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>

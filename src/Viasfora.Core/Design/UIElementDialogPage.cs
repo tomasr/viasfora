@@ -1,4 +1,5 @@
-﻿//
+﻿#if VS2019
+//
 // Code taken from 
 // http://social.msdn.microsoft.com/Forums/vstudio/en-US/6af9718e-8778-4233-875d-b38c03e9f4ba/vs-plugin-unable-to-access-wpf-user-control-in-option-dialog?forum=vsx
 //
@@ -288,3 +289,4 @@ namespace Winterdom.Viasfora.Design {
     }
   }
 }
+#endif

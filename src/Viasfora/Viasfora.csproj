@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props')" />
+  <Import Project="..\..\packages\Microsoft.VSSDK.BuildTools.17.0.5232\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\..\packages\Microsoft.VSSDK.BuildTools.17.0.5232\build\Microsoft.VSSDK.BuildTools.props')" />
   <Import Project="..\..\Global.props" />
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Winterdom.Viasfora</RootNamespace>
     <AssemblyName>Viasfora</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <DeployExtension Condition=" '$(AppVeyor)' != '' ">False</DeployExtension>
     <!--
          GeneratePkgDef is necessary so that the build will generatre
@@ -41,6 +41,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
   <!-- Look for the SDK specific to the current version of Visual Studio -->
   <!--
@@ -52,22 +53,8 @@
   <PropertyGroup>
     <VsSdkTargets>$(VsSDKInstall)\Microsoft.VsSDK.targets</VsSdkTargets>
   </PropertyGroup>
-  <!-- This is needed to prevent forced migrations when opening the project in Vs2012 -->
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '11.0' ">
-    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
-  </PropertyGroup>
-  <!-- This is needed to prevent forced migrations when opening the project in Vs2013 -->
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '12.0' ">
-    <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '14.0' ">
-    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '15.0' ">
-    <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '16.0' ">
-    <MinimumVisualStudioVersion>16.0</MinimumVisualStudioVersion>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '17.0' ">
+    <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -116,20 +103,20 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\VSSDK.CoreUtility.10.0.4\lib\net40\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.CoreUtility, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.CoreUtility.12.0.4\lib\net45\Microsoft.VisualStudio.CoreUtility.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Editor, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\VSSDK.Editor.10.0.4\lib\net40\Microsoft.VisualStudio.Editor.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.Editor, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.Editor.12.0.4\lib\net45\Microsoft.VisualStudio.Editor.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Language.Intellisense, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\VSSDK.Language.10.0.4\lib\net40\Microsoft.VisualStudio.Language.Intellisense.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.Language.Intellisense, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.Language.12.0.4\lib\net45\Microsoft.VisualStudio.Language.Intellisense.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Language.StandardClassification, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\VSSDK.Language.10.0.4\lib\net40\Microsoft.VisualStudio.Language.StandardClassification.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.Language.StandardClassification, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.Language.12.0.4\lib\net45\Microsoft.VisualStudio.Language.StandardClassification.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.OLE.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -137,23 +124,25 @@
       <Private>True</Private>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\VSSDK.Shell.10.10.0.4\lib\net40\Microsoft.VisualStudio.Shell.10.0.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.Shell.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.Shell.12.12.0.4\lib\net45\Microsoft.VisualStudio.Shell.12.0.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Immutable.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\VSSDK.Shell.Immutable.10.10.0.4\lib\net40\Microsoft.VisualStudio.Shell.Immutable.10.0.dll</HintPath>
-      <Private>True</Private>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.Shell.Immutable.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.Shell.Immutable.12.12.0.4\lib\net45\Microsoft.VisualStudio.Shell.Immutable.12.0.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <HintPath>..\..\packages\VSSDK.Shell.Interop.7.0.4\lib\net20\Microsoft.VisualStudio.Shell.Interop.dll</HintPath>
-      <Private>True</Private>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop.10.0, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.VisualStudio.Shell.Interop.12.0, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\..\packages\VSSDK.Shell.Interop.10.10.0.4\lib\net20\Microsoft.VisualStudio.Shell.Interop.10.0.dll</HintPath>
+      <HintPath>..\..\packages\VSSDK.Shell.Interop.12.12.0.4\lib\net20\Microsoft.VisualStudio.Shell.Interop.12.0.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Shell.Interop.8.0, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -166,20 +155,20 @@
       <Private>True</Private>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Text.Data, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\VSSDK.Text.10.0.4\lib\net40\Microsoft.VisualStudio.Text.Data.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.Text.Data, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.Text.12.0.4\lib\net45\Microsoft.VisualStudio.Text.Data.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Text.Logic, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\VSSDK.Text.10.0.4\lib\net40\Microsoft.VisualStudio.Text.Logic.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.Text.Logic, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.Text.12.0.4\lib\net45\Microsoft.VisualStudio.Text.Logic.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Text.UI, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\VSSDK.Text.10.0.4\lib\net40\Microsoft.VisualStudio.Text.UI.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.Text.UI, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.Text.12.0.4\lib\net45\Microsoft.VisualStudio.Text.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Microsoft.VisualStudio.Text.UI.Wpf, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\VSSDK.Text.10.0.4\lib\net40\Microsoft.VisualStudio.Text.UI.Wpf.dll</HintPath>
+    <Reference Include="Microsoft.VisualStudio.Text.UI.Wpf, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\VSSDK.Text.12.0.4\lib\net45\Microsoft.VisualStudio.Text.UI.Wpf.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TextManager.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -277,10 +266,10 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.props'))" />
-    <Error Condition="!Exists('..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.VSSDK.BuildTools.17.0.5232\build\Microsoft.VSSDK.BuildTools.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.VSSDK.BuildTools.17.0.5232\build\Microsoft.VSSDK.BuildTools.props'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.VSSDK.BuildTools.17.0.5232\build\Microsoft.VSSDK.BuildTools.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.VSSDK.BuildTools.17.0.5232\build\Microsoft.VSSDK.BuildTools.targets'))" />
   </Target>
-  <Import Project="..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\..\packages\Microsoft.VSSDK.BuildTools.15.0.26201\build\Microsoft.VSSDK.BuildTools.targets')" />
+  <Import Project="..\..\packages\Microsoft.VSSDK.BuildTools.17.0.5232\build\Microsoft.VSSDK.BuildTools.targets" Condition="Exists('..\..\packages\Microsoft.VSSDK.BuildTools.17.0.5232\build\Microsoft.VSSDK.BuildTools.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

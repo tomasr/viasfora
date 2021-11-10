@@ -17,10 +17,12 @@ namespace Winterdom.Viasfora.Options {
     public override void SaveSettingsToStorage() {
       base.SaveSettingsToStorage();
 
+#if VS2019
       // This call is necessary so that if the grid has the focus
       // it loses it so that changes to the data context are
       // propagated properly!
       MoveFocusToNext();
+#endif
 
       var settings = SettingsContext.GetSettings();
       settings.TextObfuscationRegexes = this.dialog.Entries.ListToJson();
