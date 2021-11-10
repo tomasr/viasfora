@@ -219,12 +219,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="license.txt">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Viasfora.Settings\Viasfora.Settings.csproj">
       <Project>{dd9ed7c5-417c-43a2-be13-14cd948566b4}</Project>
       <Name>Viasfora.Settings</Name>
