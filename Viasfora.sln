@@ -42,6 +42,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\Viasfora.Shared\Viasfora.Shared.projitems*{1758270d-7909-4e33-8e4d-789ebe65568d}*SharedItemsImports = 13
+		src\Viasfora.Shared\Viasfora.Shared.projitems*{ed05e9a0-b822-4925-81a5-721cbe04da37}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
