@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2003
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1038A55E-607B-4449-924E-1861530C2C56}"
 	ProjectSection(SolutionItems) = preProject
@@ -37,7 +37,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Rainbow", "src\Via
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viasfora.Settings", "src\Viasfora.Settings\Viasfora.Settings.csproj", "{DD9ED7C5-417C-43A2-BE13-14CD948566B4}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Viasfora.Shared", "src\Viasfora.Shared\Viasfora.Shared.shproj", "{1758270D-7909-4E33-8E4D-789EBE65568D}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Viasfora.Shared\Viasfora.Shared.projitems*{1758270d-7909-4e33-8e4d-789ebe65568d}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -83,6 +88,7 @@ Global
 		{3274163B-E647-40E2-8D9F-6DF7E7C50411} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
 		{944758A5-90A4-4DE7-8EF6-4FB2E7F4EFB3} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
 		{DD9ED7C5-417C-43A2-BE13-14CD948566B4} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
+		{1758270D-7909-4E33-8E4D-789EBE65568D} = {567EF174-A312-43D2-9955-2396CEA9E6DA}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A9497739-5303-4008-905D-EDFF9FC38583}
