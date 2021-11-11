@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Winterdom.Viasfora</RootNamespace>
     <AssemblyName>Viasfora</AssemblyName>
-    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <DeployExtension Condition=" '$(AppVeyor)' != '' ">False</DeployExtension>
     <!--
          GeneratePkgDef is necessary so that the build will generatre
@@ -38,6 +38,7 @@
     <OldToolsVersion>4.0</OldToolsVersion>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
@@ -156,72 +157,6 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VSSDK.BuildTools">
       <Version>17.0.5232</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.CoreUtility">
-      <Version>12.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.DTE">
-      <Version>7.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.DTE.10">
-      <Version>10.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.DTE.9">
-      <Version>9.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.DTE.8">
-      <Version>8.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.Editor">
-      <Version>12.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.IDE">
-      <Version>7.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.IDE.12">
-      <Version>12.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.IDE.10">
-      <Version>10.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.IDE.9">
-      <Version>9.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.IDE.8">
-      <Version>8.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.Language">
-      <Version>12.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.OLE.Interop">
-      <Version>7.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.Shell.12">
-      <Version>12.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.Shell.Interop">
-      <Version>7.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.Shell.Interop.12">
-      <Version>12.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.Shell.Interop.10">
-      <Version>10.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.Shell.Interop.9">
-      <Version>9.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.Shell.Interop.8">
-      <Version>8.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.Text">
-      <Version>12.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.TextManager.Interop">
-      <Version>7.0.4</Version>
-    </PackageReference>
-    <PackageReference Include="VSSDK.TextManager.Interop.8">
-      <Version>8.0.4</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="..\Viasfora.Shared\Viasfora.Shared.projitems" Label="Shared" />

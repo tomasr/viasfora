@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Winterdom.Viasfora</RootNamespace>
-    <AssemblyName>Viasfora</AssemblyName>
+    <AssemblyName>Viasfora2019</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <DeployExtension Condition=" '$(AppVeyor)' != '' ">False</DeployExtension>
     <!--

@@ -10,7 +10,7 @@
         <DisplayName>Viasfora</DisplayName>
         <Description xml:space="preserve">Add color to your Visual Studio Text Editor!</Description>
         <MoreInfo>http://viasfora.com/</MoreInfo>
-        <License>license.txt</License>
+        <License>..\Common\license.txt</License>
         <Icon>viasfora-icon.png</Icon>
         <PreviewImage>viasfora-preview.png</PreviewImage>
         <Tags>rainbow braces, text editor, xml editor, colorization, outlining</Tags>
