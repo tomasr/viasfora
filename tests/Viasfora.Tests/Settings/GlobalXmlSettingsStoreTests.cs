@@ -31,7 +31,7 @@ namespace Viasfora.Tests.Settings {
         Assert.True(File.Exists(path));
         Assert.True(new FileInfo(path).Length > 0, "File exists but it is 0 bytes");
         XDocument doc = XDocument.Load(path);
-        Assert.Equal(1, doc.Root.Elements().Count());
+        Assert.Single(doc.Root.Elements());
       } finally {
         Environment.SetEnvironmentVariable("VIASFORA_SETTINGS", "");
       }

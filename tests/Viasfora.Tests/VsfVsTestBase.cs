@@ -65,7 +65,7 @@ namespace Viasfora.Tests {
 
     private VsfEditorHost GetOrCreateEditorHost() {
       if ( cachedEditorHost == null ) {
-        var editorHostFactory = new EditorHostFactory();
+        var editorHostFactory = new EditorHostFactory(EditorVersion.Vs2015);
         var catalog = new AggregateCatalog(
           new AssemblyCatalog(typeof(IUpdatableSettings).Assembly), // Viasfora.Settings
           new AssemblyCatalog(typeof(LanguageFactory).Assembly), // Viasfora.Languages
