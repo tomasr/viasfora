@@ -35,14 +35,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json">
+    <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Sdk">
       <Version>17.0.31902.203</Version>
-    </PackageReference>
-    <PackageReference Include="EditorUtils2015">
-      <Version>1.5.0.1</Version>
     </PackageReference>
     <PackageReference Include="xunit">
       <Version>2.4.1</Version>
@@ -103,7 +100,7 @@
     <Compile Include="Settings\SolutionUserSettingsTests.cs" />
     <Compile Include="Settings\StorageConversionsTests.cs" />
     <Compile Include="StringScanners\RStringScannerTests.cs" />
-    <Compile Include="VS15AssemblyResolver.cs" />
+    <Compile Include="VSAssemblyResolver.cs" />
     <Compile Include="VsfEditorHost.cs" />
     <Compile Include="VsfVsTestBase.cs" />
     <Compile Include="VsSolutionTests.cs" />
