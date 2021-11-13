@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Editor;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Utilities;
@@ -19,8 +17,6 @@ namespace Winterdom.Viasfora.Rainbow {
     [Import]
     internal IVsEditorAdaptersFactoryService AdapterService { get; set; }
     [Import]
-    internal SVsServiceProvider ServiceProvider { get; set; }
-    [Import]
     internal IEditorOperationsFactoryService EditorOperationsFactory { get; set; }
 
     public void VsTextViewCreated(IVsTextView textViewAdapter) {
@@ -35,6 +31,8 @@ namespace Winterdom.Viasfora.Rainbow {
   }
 
   public class RainbowCommandHandler : IOleCommandTarget {
+    const int S_OK = 0x00000000;
+
     private RainbowCommandHandlerProvider provider;
     private IOleCommandTarget nextCommandHandler;
     private ITextView textView;
@@ -62,14 +60,14 @@ namespace Winterdom.Viasfora.Rainbow {
       }
       if ( enabled ) {
         prgCmds[0].cmdf = (uint)OLECMDF.OLECMDF_ENABLED | (uint)OLECMDF.OLECMDF_SUPPORTED;
-        return VSConstants.S_OK;
+        return S_OK;
       }
       return this.nextCommandHandler.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
     }
 
     public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut) {
       var mode = RainbowHighlightMode.TrackInsertionPoint;
-      int hr = VSConstants.S_OK;
+      int hr = S_OK;
       bool handled = false;
       if ( pguidCmdGroup == Guids.VsfTextEditorCmdSet ) {
         switch ( (int)nCmdID ) {
