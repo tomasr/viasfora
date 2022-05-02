@@ -50,7 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Sdk">
-      <Version>17.0.31902.203</Version>
+      <Version>17.1.32210.191</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

@@ -17,10 +17,10 @@ namespace Viasfora.Tests {
       vsInstallDir = TryFindVSInstallDir();
       if ( !String.IsNullOrEmpty(vsInstallDir) ) {
         assemblyLocations = new String[] {
+                Path.Combine(vsInstallDir, @"Common7\IDE\CommonExtensions\Microsoft\Editor"),
                 Path.Combine(vsInstallDir, @"Common7\IDE"),
                 Path.Combine(vsInstallDir, @"Common7\IDE\PrivateAssemblies"),
                 Path.Combine(vsInstallDir, @"Common7\IDE\PublicAsemblies"),
-                Path.Combine(vsInstallDir, @"Common7\IDE\CommonExtensions\Microsoft\Editor"),
             };
         AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
       }

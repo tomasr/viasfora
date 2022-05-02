@@ -1,23 +1,18 @@
 ﻿using Microsoft.VisualStudio.Text;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition.Hosting;
-using System.ComponentModel.Composition.Primitives;
 using System.IO;
-using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
 using Winterdom.Viasfora;
 using Winterdom.Viasfora.Languages;
-using Winterdom.Viasfora.Rainbow;
-using Winterdom.Viasfora.Xml;
 using Xunit;
 
 namespace Viasfora.Tests {
   [Collection("DependsOnVS")]
   public class VsfVsTestBase {
     private readonly VsfEditorHost editorHost;
-    private static VsfEditorHost cachedEditorHost;
+    private static ThreadLocal<VsfEditorHost> cachedEditorHost = new ThreadLocal<VsfEditorHost>();
     public const String CSharpContentType = "CSharp";
 
     public VsfEditorHost EditorHost => this.editorHost;
@@ -59,10 +54,10 @@ namespace Viasfora.Tests {
     }
 
     private VsfEditorHost GetOrCreateEditorHost() {
-      if ( cachedEditorHost == null ) {
-        cachedEditorHost = new VsfEditorHostFactory().CreateEditorHost();
+      if ( !cachedEditorHost.IsValueCreated ) {
+        cachedEditorHost.Value = new VsfEditorHostFactory().CreateEditorHost();
       }
-      return cachedEditorHost;
+      return cachedEditorHost.Value;
     }
 
   }

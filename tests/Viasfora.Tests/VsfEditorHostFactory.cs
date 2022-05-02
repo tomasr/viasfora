@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -43,11 +44,52 @@ namespace Viasfora.Tests {
 
     private CompositionContainer GetCompositionContainer() {
       var catalog = new AggregateCatalog(this.composablePartCatalogList.ToArray());
-      return new CompositionContainer(catalog, this.exportProviderList.ToArray());
+      try {
+        DumpExports(catalog);
+        return new CompositionContainer(catalog, this.exportProviderList.ToArray());
+      } catch ( ReflectionTypeLoadException ex ) {
+        StringBuilder sb = new StringBuilder();
+        foreach ( Exception exSub in ex.LoaderExceptions ) {
+          sb.AppendLine(exSub.Message);
+          FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
+          if ( exFileNotFound != null ) {
+            if ( !string.IsNullOrEmpty(exFileNotFound.FusionLog) ) {
+              sb.AppendLine("Fusion Log:");
+              sb.AppendLine(exFileNotFound.FusionLog);
+            }
+          }
+          sb.AppendLine();
+        }
+        string errorMessage = sb.ToString();
+        var asm = GetEditorAssembly("Microsoft.VisualStudio.CoreUtility");
+        Console.WriteLine(errorMessage);
+        throw;
+        //Display or log the error based on your application.
+      }
+    }
+
+    private void DumpExports(AggregateCatalog aggregateCatalog) {
+      var exportNames = new List<string>();
+      foreach ( var catalog in aggregateCatalog ) {
+        foreach ( var exportDefinition in catalog.ExportDefinitions ) {
+          exportNames.Add(exportDefinition.ContractName);
+        }
+      }
+
+      exportNames.Sort();
+      var groupedExportNames = exportNames
+          .GroupBy(x => x)
+          .Select(x => (Count: x.Count(), x.Key))
+          .OrderByDescending(x => x.Count)
+          .Select(x => $"{x.Count} {x.Key}")
+          .ToList();
+
+      Console.WriteLine(groupedExportNames.Count);
     }
 
     private void AddEditorAssemblies(IList<ComposablePartCatalog> catalogs) {
       var editorParts = new String[] {
+        "Microsoft.VisualStudio.CoreUtility",
         "Microsoft.VisualStudio.Platform.VSEditor",
         "Microsoft.VisualStudio.Text.Internal",
         "Microsoft.VisualStudio.Text.Logic",
