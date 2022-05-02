@@ -11,7 +11,7 @@ namespace Viasfora.Tests {
     static readonly String vsInstallDir;
     static readonly String[] assemblyLocations;
 
-    public const String VSVERSION = "17.0";
+    public const String VSVERSION = "17";
     public const String VSASMVERSION = "17.0.0.0";
     static VSAssemblyResolverFixture() {
       vsInstallDir = TryFindVSInstallDir();

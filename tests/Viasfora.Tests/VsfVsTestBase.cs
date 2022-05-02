@@ -60,49 +60,10 @@ namespace Viasfora.Tests {
 
     private VsfEditorHost GetOrCreateEditorHost() {
       if ( cachedEditorHost == null ) {
-        var compositionContainer = GetCompositionContainer();
-        cachedEditorHost = new VsfEditorHost(compositionContainer);
+        cachedEditorHost = new VsfEditorHostFactory().CreateEditorHost();
       }
       return cachedEditorHost;
     }
 
-    private CompositionContainer GetCompositionContainer() {
-      var catalogs = new List<ComposablePartCatalog> {
-        new AssemblyCatalog(typeof(IUpdatableSettings).Assembly), // Viasfora.Settings
-        new AssemblyCatalog(typeof(LanguageFactory).Assembly), // Viasfora.Languages
-        new AssemblyCatalog(typeof(Guids).Assembly), // Viasfora.Core
-        new AssemblyCatalog(typeof(TextBufferBraces).Assembly), // Viasfora.Rainbow
-        new AssemblyCatalog(typeof(XmlTaggerProvider).Assembly) // Viasfora.Xml
-      };
-      AddEditorAssemblies(catalogs);
-      var catalog = new AggregateCatalog(catalogs);
-      return new CompositionContainer(catalog);
-    }
-
-    private void AddEditorAssemblies(IList<ComposablePartCatalog> catalogs) {
-      var editorParts = new String[] {
-        "Microsoft.VisualStudio.Platform.VSEditor",
-        "Microsoft.VisualStudio.Text.Internal",
-        "Microsoft.VisualStudio.Text.Logic",
-        "Microsoft.VisualStudio.Text.UI",
-        "Microsoft.VisualStudio.Text.UI.Wpf",
-        "Microsoft.VisualStudio.Threading",
-      };
-      foreach ( var part in editorParts ) {
-        var asm = GetEditorAssembly(part);
-        catalogs.Add(new AssemblyCatalog(asm));
-        catalogs.Add(GetExports(asm));
-      }
-    }
-
-    private TypeCatalog GetExports(Assembly asm) {
-      var types = asm.GetTypes().OrderBy(x => x.Name).ToList();
-      return new TypeCatalog(types);
-    }
-
-    private Assembly GetEditorAssembly(String name) {
-      String assemblyName = $"{name}, Version={VSAssemblyResolverFixture.VSASMVERSION}, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a";
-      return Assembly.Load(assemblyName);
-    }
   }
 }
