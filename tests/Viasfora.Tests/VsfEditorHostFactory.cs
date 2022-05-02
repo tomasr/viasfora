@@ -117,23 +117,25 @@ namespace Viasfora.Tests {
       return Assembly.Load(assemblyName);
     }
   }
+
+  // Borrowed, as much of the test code, from JaredPar. Bless him.
   sealed class JoinableTaskContextExportProvider : ExportProvider {
     internal static string TypeFullName => typeof(JoinableTaskContext).FullName;
-    private readonly Export _export;
-    private readonly JoinableTaskContext _context;
+    private readonly Export export;
+    private readonly JoinableTaskContext context;
 
     internal JoinableTaskContextExportProvider() {
-      _export = new Export(TypeFullName, GetValue);
+      this.export = new Export(TypeFullName, GetValue);
 #pragma warning disable VSSDK005
-      _context = new JoinableTaskContext(Thread.CurrentThread, new DispatcherSynchronizationContext());
+      this.context = new JoinableTaskContext(Thread.CurrentThread, new DispatcherSynchronizationContext());
     }
 
     protected override IEnumerable<Export> GetExportsCore(ImportDefinition definition, AtomicComposition atomicComposition) {
       if ( definition.ContractName == TypeFullName ) {
-        yield return _export;
+        yield return export;
       }
     }
 
-    private object GetValue() => _context;
+    private object GetValue() => context;
   }
 }
