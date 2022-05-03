@@ -143,13 +143,6 @@ namespace Winterdom.Viasfora.Util {
       options.SetOptionValue(ViewOptions.WordWrapStyleId, WordWrapStyles.None);
       options.SetOptionValue(ViewOptions.ViewProhibitUserInput, true);
 
-      // only for VS2017 15.6 and up, where IIntellisensePresenter is
-      // not supported anymore (replaced by the tooltip APIs), we
-      // set the background to transparent so that it looks like regular
-      // intellisense popup
-      if ( this.provider.VsFeatures.IsSupported(KnownFeatures.TooltipApi) ) {
-        this.tipView.Background = Brushes.Transparent;
-      }
       this.tipView.ViewportWidthChanged += OnViewportWidthChanged;
 
       this.tipView.ZoomLevel = GetSourceZoomFactor() * ZoomFactor * 100;
