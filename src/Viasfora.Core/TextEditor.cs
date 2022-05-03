@@ -30,6 +30,9 @@ namespace Winterdom.Viasfora {
     public static ITextView GetCurrentView() {
       var textManager = (IVsTextManager)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsTextManager));
+      if (textManager == null) {
+        return null;
+      }
 
       int hr = textManager.GetActiveView(1, null, out IVsTextView textView);
       if ( hr != Constants.S_OK || textView == null )
