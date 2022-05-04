@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Utilities;
 using Newtonsoft.Json.Linq;
@@ -20,11 +21,13 @@ namespace Winterdom.Viasfora.Options {
     }
 
     public void Load(params Type[] classificationDefinitions) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var classificationNames = ExtractClassificationNames(classificationDefinitions);
       Load(classificationNames);
     }
 
     public void Load(params String[] classificationNames) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       this.classifications.Clear();
 
       Guid category = new Guid(FontsAndColorsCategories.TextEditorCategory);
@@ -45,6 +48,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     public void Save() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       Guid category = new Guid(FontsAndColorsCategories.TextEditorCategory);
       uint flags = (uint)(__FCSTORAGEFLAGS.FCSF_LOADDEFAULTS
                         | __FCSTORAGEFLAGS.FCSF_PROPAGATECHANGES);
@@ -90,6 +94,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     public void Import(String filepath) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       JObject list = JObject.Parse(File.ReadAllText(filepath));
       foreach ( var obj in list.Children() ) {
         var item = obj as JProperty;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.TextManager.Interop;
 using System;
@@ -39,6 +40,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     public void Load(ColorStorage colorStorage) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       ColorableItemInfo[] colors = new ColorableItemInfo[1];
       var hr = colorStorage.Storage.GetItem(this.classificationName, colors);
       ErrorHandler.ThrowOnFailure(hr);
@@ -62,6 +64,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     public void Save(ColorStorage colorStorage) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       if ( this.HasChanged() ) {
         ColorableItemInfo[] colors = new ColorableItemInfo[1];
         var hr = colorStorage.Storage.GetItem(this.classificationName, colors);
@@ -90,6 +93,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void AssignForSave(ColorStorage colorStorage, ColorableItemInfo[] colors) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       if ( this.foregroundChanged ) {
         if ( this.foreground == Color.Transparent ) {
           colors[0].crForeground = colorStorage.GetAutomaticColor();
@@ -119,6 +123,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private Color MapColor(ColorStorage storage, uint colorRef) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var hr = storage.Utilities.GetColorType(colorRef, out int type);
       switch ( (__VSCOLORTYPE)type ) {
         case __VSCOLORTYPE.CT_SYSCOLOR:
@@ -136,6 +141,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private Color FromVsColor(ColorStorage storage, uint colorRef) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var hr = storage.Utilities.GetEncodedVSColor(colorRef, out int vsColor);
       ErrorHandler.ThrowOnFailure(hr);
 
@@ -146,6 +152,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private Color FromColorIndex(ColorStorage storage, uint colorRef) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       COLORINDEX[] index = new COLORINDEX[1];
       var hr = storage.Utilities.GetEncodedIndex(colorRef, index);
       ErrorHandler.ThrowOnFailure(hr);

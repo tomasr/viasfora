@@ -119,7 +119,7 @@ namespace Winterdom.Viasfora.Design {
       this.BeginBulkOperation();
       this.Clear();
       foreach ( object entry in this.source ) {
-        this.Add(translator(entry));
+        this.Add(this.translator(entry));
       }
       this.EndBulkOperation();
     }
