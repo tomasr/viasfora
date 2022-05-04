@@ -104,7 +104,8 @@ namespace Winterdom.Viasfora.Text {
         // To avoid this, delay resetting the working flag
         // until after some small time has passed.
         Task.Delay(500).ContinueWith(
-          (parentTask) => this.working = false
+          (parentTask) => this.working = false,
+          TaskScheduler.Default
         );
       }
     }

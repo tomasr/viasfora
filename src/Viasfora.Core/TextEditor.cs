@@ -177,6 +177,9 @@ namespace Winterdom.Viasfora {
       IVsRunningDocumentTable docTable = (IVsRunningDocumentTable)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsRunningDocumentTable));
 
+      if ( docTable == null ) {
+        return;
+      }
       uint lockType = (uint)_VSRDTFLAGS.RDT_DontAddToMRU
                     | (uint)_VSRDTFLAGS.RDT_NonCreatable
                     | (uint)_VSRDTFLAGS.RDT_VirtualDocument
