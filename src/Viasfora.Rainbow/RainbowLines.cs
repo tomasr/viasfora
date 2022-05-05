@@ -135,7 +135,9 @@ namespace Winterdom.Viasfora.Rainbow {
 
     private void OnLayoutChanged(object sender, TextViewLayoutChangedEventArgs e) {
       var bufferPos = GetPosition(this.view.Caret.Position.BufferPosition);
-      RedrawVisuals(bufferPos, forceRedraw: true);
+      this.view.QueuePostLayoutAction(() => {
+        RedrawVisuals(bufferPos, forceRedraw: true);
+      });
     }
 
     private void OnViewportHeightChanged(object sender, EventArgs e) {
@@ -194,9 +196,10 @@ namespace Winterdom.Viasfora.Rainbow {
         }
         this.currentSpan = default(SnapshotSpan);
         var path = CreateVisuals(opening, closing, caret);
-        this.layer.RemoveAllAdornments();
         if ( path != null ) {
           var adornment = MakeAdornment(path, braces.Item1.Depth);
+          this.layer.RemoveAdornmentsByTag(TAG);
+          //this.layer.RemoveAllAdornments();
           this.layer.AddAdornment(
             AdornmentPositioningBehavior.OwnerControlled, newSpan,
             TAG, adornment, null
