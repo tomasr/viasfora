@@ -1,9 +1,6 @@
 ﻿using Microsoft.VisualStudio.Shell;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Winterdom.Viasfora.Compatibility {
 
@@ -15,8 +12,12 @@ namespace Winterdom.Viasfora.Compatibility {
     private object sComponentModel;
 
     public SComponentModel() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       this.sComponentModel = 
         ServiceProvider.GlobalProvider.GetService(new Guid(SComponentModelHost));
+      if ( this.sComponentModel == null ) {
+        throw new InvalidOperationException("SComponentModelHost not available");
+      }
     }
 
     public T GetService<T>() {

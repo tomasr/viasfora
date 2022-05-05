@@ -45,6 +45,7 @@ namespace Winterdom.Viasfora {
     private byte[] userOptions;
 
     protected override void Initialize() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       base.Initialize();
 
       if ( GetService(typeof(IMenuCommandService)) is OleMenuCommandService mcs ) {

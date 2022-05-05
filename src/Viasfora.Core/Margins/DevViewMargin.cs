@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Projection;
 using Microsoft.VisualStudio.Utilities;
@@ -104,6 +105,7 @@ namespace Winterdom.Viasfora.Margins {
     }
 
     private void OnViewBuffer(object sender, EventArgs e) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var buffer = GetSelectedBuffer();
       if ( buffer != null ) {
         OpenBufferInEditor(buffer);

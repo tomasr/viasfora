@@ -28,6 +28,7 @@ namespace Winterdom.Viasfora {
       return view.Selection;
     }
     public static ITextView GetCurrentView() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var textManager = (IVsTextManager)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsTextManager));
       if (textManager == null) {
@@ -53,6 +54,7 @@ namespace Winterdom.Viasfora {
     }
 
     public static String GetFileName(ITextBuffer buffer) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       if ( buffer.Properties.TryGetProperty(typeof(IVsTextBuffer), out IVsTextBuffer adapter) ) {
         if ( adapter is IPersistFileFormat pff ) {
           String filename;
@@ -125,6 +127,7 @@ namespace Winterdom.Viasfora {
     }
 
     public static void DisplayMessageInStatusBar(string message) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       IVsStatusbar bar = (IVsStatusbar)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsStatusbar));
       if ( bar != null ) {
@@ -142,6 +145,7 @@ namespace Winterdom.Viasfora {
       OpenBufferInEditorAsReadOnly(buffer, "txt");
     }
     public static void OpenBufferInEditorAsReadOnly(ITextBuffer buffer, String extension) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       String filepath = SaveBufferToTempPath(buffer, extension);
 
       var uiShell = (IVsUIShellOpenDocument)
@@ -174,6 +178,7 @@ namespace Winterdom.Viasfora {
     }
 
     private static void MarkDocumentAsTemporary(string moniker) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       IVsRunningDocumentTable docTable = (IVsRunningDocumentTable)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsRunningDocumentTable));
 

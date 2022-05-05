@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using Winterdom.Viasfora.Contracts;
@@ -44,6 +45,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void TurnOnCategory(FontCategory category, double zoomLevel) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       EnsureFontsAndColors();
       Guid categoryId = category.Id;
 
@@ -73,6 +75,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     private void TurnOffCategory(FontCategory category, bool notifyChanges) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       EnsureFontsAndColors();
       Guid categoryId = category.Id;
       var flags = __FCSTORAGEFLAGS.FCSF_LOADDEFAULTS;

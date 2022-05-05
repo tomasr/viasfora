@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Winterdom.Viasfora.Settings;
 
@@ -20,6 +21,7 @@ namespace Winterdom.Viasfora.Outlining {
     }
 
     protected override void OnSpanAdded(SnapshotSpan span) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       UpdateUserSettings(span.Snapshot.TextBuffer, span.Snapshot);
     }
     protected override void OnRegionRemoved(SnapshotPoint point) {

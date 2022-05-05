@@ -50,6 +50,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       bool enabled = false;
       if ( pguidCmdGroup == Guids.VsfTextEditorCmdSet ) {
         var cmdId = (int)prgCmds[0].cmdID;
@@ -68,6 +69,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var mode = RainbowHighlightMode.TrackInsertionPoint;
       int hr = VSConstants.S_OK;
       bool handled = false;
