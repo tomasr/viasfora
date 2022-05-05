@@ -60,11 +60,22 @@ namespace Winterdom.Viasfora.Text {
       // Delay activating until after the textView
       // gets focus. Otherwise, VS may crash/hang
       this.textView.GotAggregateFocus += OnTextViewFocus;
+      this.textView.Closed += OnTextViewClosed;
     }
 
     private void OnTextViewFocus(object sender, EventArgs e) {
       this.textView.GotAggregateFocus -= OnTextViewFocus;
       FixIt();
+    }
+
+    private void OnTextViewClosed(object sender, EventArgs e) {
+      if ( this.textView != null ) {
+        this.textView.Closed -= OnTextViewClosed;
+        this.textView.GotAggregateFocus -= OnTextViewFocus;
+        this.textView = null;
+        this.settings.SettingsChanged -= OnSettingsChanged;
+        this.formatMap.ClassificationFormatMappingChanged -= OnMappingChanged;
+      }
     }
 
     public void AddClassification(String name) {

@@ -80,6 +80,9 @@ namespace Winterdom.Viasfora.Text {
       }
       if ( this.view != null ) {
         this.view.Caret.PositionChanged -= OnCaretPositionChanged;
+        if ( this.view.Options != null ) {
+          this.view.Options.OptionChanged -= OnSettingsChanged;
+        }
         if ( this.view.TextViewModel?.EditBuffer != null ) {
           this.view.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
         }
