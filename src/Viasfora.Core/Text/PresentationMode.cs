@@ -61,7 +61,11 @@ namespace Winterdom.Viasfora.Text {
         if (this.state.PresentationModeTurnedOn) {
           if (!pmEnabled()) {
             textView.ZoomLevel = zoomLevel;
-            textView.Set(new PresentationModeViewState(true));
+            if ( textViewState != null ) {
+              textViewState.Enabled = true;
+            } else {
+              textView.Set(new PresentationModeViewState(true));
+            }
           }
         } else {
           if ( pmEnabled() ) {
