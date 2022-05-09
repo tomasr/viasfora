@@ -137,19 +137,22 @@ namespace Winterdom.Viasfora.Rainbow {
       if ( TextBuffer == null ) {
         return;
       }
-      if ( this.dispatcherTimer == null ) {
-        this.dispatcherTimer = new DispatcherTimer(DispatcherPriority.Background, this.Dispatcher);
-        this.dispatcherTimer.Interval = TimeSpan.FromMilliseconds(500);
-        this.dispatcherTimer.Tick += OnScheduledUpdate;
+      DispatcherTimer timer = null;
+      if ( timer == null ) {
+        timer = new DispatcherTimer(DispatcherPriority.Background, this.Dispatcher);
+        timer.Interval = TimeSpan.FromMilliseconds(500);
+        timer.Tick += OnScheduledUpdate;
       }
-      this.dispatcherTimer.Stop();
-      this.dispatcherTimer.Start();
+      timer.Stop();
+      timer.Start();
     }
 
     private void OnScheduledUpdate(object sender, EventArgs e) {
       if ( TextBuffer == null ) return;
       try {
-        this.dispatcherTimer.Stop();
+        var timer = (DispatcherTimer)sender;
+        timer.Stop();
+        timer.Tick -= OnScheduledUpdate;
         FireTagsChanged();
       } catch {
       }

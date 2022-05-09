@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
@@ -54,6 +55,7 @@ namespace Winterdom.Viasfora.Commands {
     }
 
     public int QueryStatus(ref Guid pguidCmdGroup, uint cCmds, OLECMD[] prgCmds, IntPtr pCmdText) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var cmdId = (int)prgCmds[0].cmdID;
       var handler = this.provider.FindHandler(pguidCmdGroup, cmdId);
       if ( handler != null ) {
@@ -87,6 +89,7 @@ namespace Winterdom.Viasfora.Commands {
     }
 
     public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       int hr = VSConstants.S_OK;
       var cmdId = (int)nCmdID;
       var handler = this.provider.FindHandler(pguidCmdGroup, cmdId);

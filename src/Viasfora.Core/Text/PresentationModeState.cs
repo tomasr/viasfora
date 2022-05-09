@@ -42,6 +42,7 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public T GetService<T>() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       return (T)ServiceProvider.GlobalProvider.GetService(typeof(T));
     }
 

@@ -1,20 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
+using System.Xml;
 using Microsoft.VisualStudio.Language.Intellisense;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Operations;
 using Microsoft.VisualStudio.Text.Tagging;
-using Winterdom.Viasfora.Util;
+using VsColors = Winterdom.Viasfora.Util.VsColors;
 
 namespace Winterdom.Viasfora.Xml {
-  internal class XmlQuickInfoSource : IQuickInfoSource {
+  internal class XmlQuickInfoSource : IAsyncQuickInfoSource {
     private ITextBuffer textBuffer;
     private XmlQuickInfoSourceProvider provider;
 
@@ -22,19 +24,21 @@ namespace Winterdom.Viasfora.Xml {
       this.textBuffer = buffer;
       this.provider = provider;
     }
+
     public void Dispose() {
     }
-    public void AugmentQuickInfoSession(
-        IQuickInfoSession session, IList<object> quickInfoContent,
-        out ITrackingSpan applicableToSpan) {
-      applicableToSpan = null;
+
+    public async Task<QuickInfoItem> GetQuickInfoItemAsync(IAsyncQuickInfoSession session, CancellationToken cancellationToken) {
+      ITrackingSpan applicableToSpan = null;
       SnapshotPoint? subjectTriggerPoint =
         session.GetTriggerPoint(this.textBuffer.CurrentSnapshot);
       if ( !subjectTriggerPoint.HasValue ) {
-        return;
+        return null;
       }
       ITextSnapshot currentSnapshot = subjectTriggerPoint.Value.Snapshot;
       SnapshotSpan querySpan = new SnapshotSpan(subjectTriggerPoint.Value, 0);
+
+      await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
       var tagAggregator = GetAggregator(session);
       TextExtent extent = FindExtentAtPoint(subjectTriggerPoint);
@@ -45,9 +49,11 @@ namespace Winterdom.Viasfora.Xml {
         applicableToSpan = currentSnapshot.CreateTrackingSpan(
           extent.Span, SpanTrackingMode.EdgeInclusive
         );
-        quickInfoContent.Add(CreateInfoText(prefix, url));
+        return new QuickInfoItem(applicableToSpan, CreateInfoText(prefix, url));
       }
+      return null;
     }
+
 
     private UIElement CreateInfoText(String xmlns, String url) {
       var textBlock = new TextBlock();
@@ -136,7 +142,7 @@ namespace Winterdom.Viasfora.Xml {
       return firstMatch.FirstOrDefault() != null;
     }
 
-    private ITagAggregator<IClassificationTag> GetAggregator(IQuickInfoSession session) {
+    private ITagAggregator<IClassificationTag> GetAggregator(IAsyncQuickInfoSession session) {
       return this.provider.AggregatorFactory.CreateTagAggregator<IClassificationTag>(
         session.TextView
       );

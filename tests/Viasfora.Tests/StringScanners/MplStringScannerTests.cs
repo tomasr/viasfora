@@ -10,7 +10,7 @@ namespace Viasfora.Tests.StringScanners {
     public void NoEscapesReturnsNull() {
       String input = "\"some string\"";
       var parser = new MplStringScanner(input);
-      Assert.Equal(null, parser.Next());
+      Assert.Null(parser.Next());
     }
 
     [Fact]
@@ -18,7 +18,7 @@ namespace Viasfora.Tests.StringScanners {
       String input = "\"" + @"some\\string" + "\"";
       var parser = new MplStringScanner(input);
       Assert.Equal(new StringPart(5,2), parser.Next());
-      Assert.Equal(null, parser.Next());
+      Assert.Null(parser.Next());
     }
 
     [Fact]
@@ -26,7 +26,7 @@ namespace Viasfora.Tests.StringScanners {
       String input = "\"some\\\"string\"";
       var parser = new MplStringScanner(input);
       Assert.Equal(new StringPart(5,2), parser.Next());
-      Assert.Equal(null, parser.Next());
+      Assert.Null(parser.Next());
     }
 
     [Fact]
@@ -35,7 +35,7 @@ namespace Viasfora.Tests.StringScanners {
       var parser = new MplStringScanner(input);
       Assert.Equal(new StringPart(5,2), parser.Next());
       Assert.Equal(new StringPart(7,2), parser.Next());
-      Assert.Equal(null, parser.Next());
+      Assert.Null(parser.Next());
     }
 
     [Fact]
@@ -44,7 +44,7 @@ namespace Viasfora.Tests.StringScanners {
       var parser = new MplStringScanner(input);
       Assert.Equal(new StringPart(5,2), parser.Next());
       Assert.Equal(new StringPart(12,2), parser.Next());
-      Assert.Equal(null, parser.Next());
+      Assert.Null(parser.Next());
     }
   }
 }

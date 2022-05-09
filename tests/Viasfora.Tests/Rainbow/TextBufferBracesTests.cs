@@ -112,7 +112,7 @@ namespace Viasfora.Tests.Rainbow {
       var snapshot = textBuffer.CurrentSnapshot;
       var cache = new TextBufferBraces(snapshot, GetLang(textBuffer), RainbowColoringMode.Unified);
       var span = snapshot.GetSpan();
-      Assert.Equal(0, cache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)).Count());
+      Assert.Empty(cache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)));
       Assert.True(cache.LastParsedPosition <= 0);
     }
   }

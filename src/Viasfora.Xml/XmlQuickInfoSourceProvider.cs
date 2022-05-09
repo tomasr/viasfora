@@ -7,18 +7,18 @@ using Microsoft.VisualStudio.Text.Tagging;
 using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Xml {
-  [Export(typeof(IQuickInfoSourceProvider))]
+  [Export(typeof(IAsyncQuickInfoSourceProvider))]
   [Name("Viasfora Xml QuickInfo Provider")]
   [Order(Before = "Default Quick Info Presenter")]
   [ContentType(XmlConstants.CT_XML)]
   [ContentType(XmlConstants.CT_XAML)]
-  internal class XmlQuickInfoSourceProvider : IQuickInfoSourceProvider {
+  internal class XmlQuickInfoSourceProvider : IAsyncQuickInfoSourceProvider {
     [Import]
     internal ITextStructureNavigatorSelectorService NavigatorService { get; set; }
     [Import]
     internal IViewTagAggregatorFactoryService AggregatorFactory { get; set; }
 
-    public IQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer) {
+    public IAsyncQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer) {
       return new XmlQuickInfoSource(textBuffer, this);
     }
   }

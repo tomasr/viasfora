@@ -11,6 +11,7 @@ namespace Winterdom.Viasfora.Options {
     private ClassificationList colors;
 
     public override void SaveSettingsToStorage() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var settings = SettingsContext.GetSettings();
 
       settings.CurrentLineHighlightEnabled = CurrentLineHighlightEnabled;
@@ -34,6 +35,7 @@ namespace Winterdom.Viasfora.Options {
       this.colors.Save();
     }
     public override void LoadSettingsFromStorage() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var settings = SettingsContext.GetSettings();
 
       CurrentLineHighlightEnabled = settings.CurrentLineHighlightEnabled;

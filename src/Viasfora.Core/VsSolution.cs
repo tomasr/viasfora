@@ -8,6 +8,7 @@ using Winterdom.Viasfora.Settings;
 namespace Winterdom.Viasfora {
   public static class VsSolution {
     public static String GetSolutionPath() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       IVsSolution solution = (IVsSolution)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsSolution));
       if ( solution == null ) {

@@ -11,6 +11,7 @@ namespace Winterdom.Viasfora.Options {
     private ClassificationList colors;
 
     public override void SaveSettingsToStorage() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var rainbowSettings = SettingsContext.GetService<IRainbowSettings>();
 
       rainbowSettings.RainbowDepth = RainbowDepth;
@@ -27,6 +28,7 @@ namespace Winterdom.Viasfora.Options {
       this.colors.Save();
     }
     public override void LoadSettingsFromStorage() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var rainbowSettings = SettingsContext.GetService<IRainbowSettings>();
 
       RainbowDepth = rainbowSettings.RainbowDepth;

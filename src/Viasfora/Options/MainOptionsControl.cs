@@ -7,6 +7,7 @@ using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Classifications;
 using Winterdom.Viasfora.Rainbow.Classifications;
 using Winterdom.Viasfora.Languages;
+using Microsoft.VisualStudio.Shell;
 
 namespace Winterdom.Viasfora.Options {
   public partial class MainOptionsControl : UserControl {
@@ -65,11 +66,13 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void ExportColors(ISettingsExport exporter) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       var list = GetClassifications();
       exporter.Export(list);
     }
 
     private ClassificationList GetClassifications() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       ClassificationList list = new ClassificationList(new ColorStorage(this.Site));
       list.Load(
         typeof(CodeClassificationDefinitions),
@@ -80,6 +83,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void SaveCurrentThemeButtonClick(object sender, EventArgs e) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       this.telemetry.WriteEvent("ExportTheme");
       String filename = GetSaveAsFilename(THEME_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {
@@ -98,6 +102,7 @@ namespace Winterdom.Viasfora.Options {
     }
 
     private void LoadThemeButtonClick(object sender, EventArgs e) {
+      ThreadHelper.ThrowIfNotOnUIThread();
       this.telemetry.WriteEvent("ImportTheme");
       String filename = GetOpenFilename(THEME_FILTER);
       if ( String.IsNullOrEmpty(filename) ) {

@@ -1,28 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.Language.Intellisense;
+using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Rainbow {
 
-  [Export(typeof(IQuickInfoSourceProvider))]
+  [Export(typeof(IAsyncQuickInfoSourceProvider))]
   [Name("viasfora.rainbow.tooltip.source")]
+  [Order]
   [ContentType(ContentTypes.Text)]
-  public class RainbowToolTipSourceProvider : IQuickInfoSourceProvider {
+  public class RainbowToolTipSourceProvider : IAsyncQuickInfoSourceProvider {
     [Import]
     public IToolTipWindowProvider ToolTipProvider { get; set; }
     [Import]
     public IRainbowSettings Settings { get; set; }
 
-    public IQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer) {
+    public IAsyncQuickInfoSource TryCreateQuickInfoSource(ITextBuffer textBuffer) {
       return new RainbowToolTipSource(textBuffer, this);
     }
   }
 
-  public sealed class RainbowToolTipSource : IQuickInfoSource {
+  public sealed class RainbowToolTipSource : IAsyncQuickInfoSource {
     private ITextBuffer textBuffer;
     private RainbowToolTipSourceProvider provider;
     private IToolTipWindow toolTipWindow;
@@ -32,28 +35,36 @@ namespace Winterdom.Viasfora.Rainbow {
       this.provider = provider;
     }
 
-    public void AugmentQuickInfoSession(IQuickInfoSession session, IList<object> quickInfoContent, out ITrackingSpan applicableToSpan) {
-      applicableToSpan = null;
+    public async Task<QuickInfoItem> GetQuickInfoItemAsync(IAsyncQuickInfoSession session, CancellationToken cancellationToken) {
+      ITrackingSpan applicableToSpan = null;
+      QuickInfoItem result = null;
       if ( !this.provider.Settings.RainbowToolTipsEnabled ) {
-        return;
+        return result;
       }
       SnapshotPoint? triggerPoint = session.GetTriggerPoint(this.textBuffer.CurrentSnapshot);
       if ( !triggerPoint.HasValue ) {
-        return;
+        return result;
       }
 
       SnapshotPoint? otherBrace;
       if ( !FindOtherBrace(triggerPoint.Value, out otherBrace) ) {
         // triggerPoint is not a brace
-        return;
+        return result;
       }
       if ( !otherBrace.HasValue ) {
         TextEditor.DisplayMessageInStatusBar("No matching brace found.");
-        return;
+        return result;
       }
       if ( IsTooClose(triggerPoint.Value, otherBrace.Value) ) {
-        return;
+        return result;
       }
+
+      session.StateChanged += OnQuickInfoSessionStateChanged;
+
+      var span = new SnapshotSpan(triggerPoint.Value, 1);
+      applicableToSpan = span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgePositive);
+
+      await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
       // IQuickInfoSession.Dismissed is never firing in VS2017 15.6
       // so if the tooltip window still exists, kill it
@@ -64,29 +75,27 @@ namespace Winterdom.Viasfora.Rainbow {
         this.toolTipWindow = null;
       }
 
-      session.Dismissed += OnSessionDismissed;
-
       if ( this.toolTipWindow == null ) {
         this.toolTipWindow = this.provider.ToolTipProvider.CreateToolTip(session.TextView);
         this.toolTipWindow.SetSize(60, 5);
       }
 
-      var span = new SnapshotSpan(triggerPoint.Value, 1);
-      applicableToSpan = span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgePositive);
-
       var element = this.toolTipWindow.GetWindow(otherBrace.Value);
       if ( element != null ) {
-        quickInfoContent.Add(element);
         session.Set(new RainbowToolTipContext());
+        result = new QuickInfoItem(applicableToSpan, element);
       }
+      return result;
     }
 
-    private void OnSessionDismissed(object sender, EventArgs e) {
-      IQuickInfoSession session = (IQuickInfoSession)sender;
-      session.Dismissed -= OnSessionDismissed;
-      if ( this.toolTipWindow != null ) {
-        this.toolTipWindow.Dispose();
-        this.toolTipWindow = null;
+    private void OnQuickInfoSessionStateChanged(object sender, QuickInfoSessionStateChangedEventArgs e) {
+      if ( e.NewState == QuickInfoSessionState.Dismissed ) {
+        IAsyncQuickInfoSession session = (IAsyncQuickInfoSession)sender;
+        session.StateChanged -= OnQuickInfoSessionStateChanged;
+        if ( this.toolTipWindow != null ) {
+          this.toolTipWindow.Dispose();
+          this.toolTipWindow = null;
+        }
       }
     }
 

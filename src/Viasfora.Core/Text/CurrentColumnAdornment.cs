@@ -80,6 +80,9 @@ namespace Winterdom.Viasfora.Text {
       }
       if ( this.view != null ) {
         this.view.Caret.PositionChanged -= OnCaretPositionChanged;
+        if ( this.view.Options != null ) {
+          this.view.Options.OptionChanged -= OnSettingsChanged;
+        }
         if ( this.view.TextViewModel?.EditBuffer != null ) {
           this.view.TextViewModel.EditBuffer.PostChanged -= OnBufferPostChanged;
         }
@@ -146,7 +149,7 @@ namespace Winterdom.Viasfora.Text {
       fill.StrokeThickness = 0;
     }
     private void RedrawAdornments() {
-      if ( this.view.TextViewLines != null ) {
+      if ( !this.view.InLayout && this.view.TextViewLines != null ) {
         this.layer.RemoveAllAdornments();
         var caret = this.view.Caret.Position;
         this.CreateVisuals(caret.VirtualBufferPosition);

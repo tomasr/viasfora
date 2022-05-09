@@ -11,6 +11,7 @@ namespace Winterdom.Viasfora {
     public static bool Installed => isInstalled.Value;
 
     private static bool GetInstalled() {
+      ThreadHelper.ThrowIfNotOnUIThread();
       IVsShell vsShell = (IVsShell)
         ServiceProvider.GlobalProvider.GetService(typeof(SVsShell));
       if ( vsShell != null ) {
