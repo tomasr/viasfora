@@ -13,6 +13,7 @@ namespace Winterdom.Viasfora.Xml {
   [ContentType(XmlConstants.CT_HTML)]
   [ContentType(XmlConstants.CT_HTMLX)]
   [ContentType(XmlConstants.CT_WEBFORMS)]
+  [ContentType(XmlConstants.CT_RAZOR)]
   [TagType(typeof(ClassificationTag))]
   public class XmlTaggerProvider : IViewTaggerProvider {
     [Import]

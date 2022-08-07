@@ -16,6 +16,7 @@ namespace Winterdom.Viasfora {
 
     // VS2022 Editors
     public const String CT_WEBFORMS = "WebForms";
+    public const String CT_RAZOR = "Razor";
 
     // I'd prefer "XML Delimiter" here, but no way to
     // use it effectively.
