@@ -19,7 +19,7 @@ namespace Winterdom.Viasfora.Rainbow {
   public class RainbowLinesProvider : IWpfTextViewCreationListener {
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(RainbowLines.LAYER)]
-    [Order(After = PredefinedAdornmentLayers.Text)]
+    [Order(After = PredefinedAdornmentLayers.BlockStructure)]
     public AdornmentLayerDefinition LinesLayer = null;
 
     [Import]
