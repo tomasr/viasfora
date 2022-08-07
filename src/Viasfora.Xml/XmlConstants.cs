@@ -13,6 +13,10 @@ namespace Winterdom.Viasfora {
     public const String XML_PREFIX = "viasfora.xml.prefix";
     public const String XML_CLOSING_PREFIX = "viasfora.xml.closing.prefix";
     public const String RAZOR_CLOSING = "viasfora.razor.closing.element";
+
+    // VS2022 Editors
+    public const String CT_WEBFORMS = "WebForms";
+
     // I'd prefer "XML Delimiter" here, but no way to
     // use it effectively.
     public const String DELIMITER = PredefinedClassificationTypeNames.Operator;

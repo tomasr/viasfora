@@ -56,7 +56,8 @@ namespace Winterdom.Viasfora.Xml {
           this.language = this.language ?? new XamlMarkup();
           return DoXAMLorHTML(spans);
         } else if ( fileType.IsOfType(XmlConstants.CT_HTML) 
-                 || fileType.IsOfType(XmlConstants.CT_HTMLX) ) {
+                 || fileType.IsOfType(XmlConstants.CT_HTMLX)
+                 || fileType.IsOfType(XmlConstants.CT_WEBFORMS) ) {
           this.language = this.language ?? new HtmlMarkup();
           return DoXAMLorHTML(spans);
         }
