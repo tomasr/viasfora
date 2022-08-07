@@ -51,11 +51,10 @@ namespace Winterdom.Viasfora.Languages.Sequences {
         if ( this.text.AtEnd || this.text.Char() == '\\' ) {
           break;
         }
-        len++;
-        if ( Char.IsLetter(this.text.Char()) ) {
-          this.text.Next();
+        if ( !IsAsciiLetterOrDigit(this.text.Char()) ) {
           break;
         }
+        len++;
         this.text.Next();
       }
       // if len == 1, then we found %"
@@ -64,6 +63,12 @@ namespace Winterdom.Viasfora.Languages.Sequences {
 
       result = new StringPart(start, len, StringPartType.FormatSpecifier);
       return true;
+    }
+
+    private static bool IsAsciiLetterOrDigit(char ch) {
+      return (ch >= 'A' && ch <= 'Z')
+          || (ch >= 'a' && ch <= 'z')
+          || (ch >= '0' && ch <= '9');
     }
   }
 }
