@@ -120,10 +120,10 @@
       <Version>13.0.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Sdk">
-      <Version>17.1.32210.191</Version>
+      <Version>17.2.32505.173</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop">
-      <Version>3.1.2196</Version>
+      <Version>3.2.2146</Version>
     </PackageReference>
     <PackageReference Include="xunit">
       <Version>2.4.1</Version>

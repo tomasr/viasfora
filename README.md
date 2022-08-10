@@ -1,11 +1,14 @@
 # Viasfora
 
-A Visual Studio 2020 extension that enhances the
+A Visual Studio 2022 extension that enhances the
 text editing experience!
 
 __Official Site__: http://viasfora.com/
 
 __Build Status__: [![Build Status](https://ci.appveyor.com/api/projects/status/u1mpx5mqkd0k39ao)](https://ci.appveyor.com/project/tomasr/viasfora/)
+
+Last version supporting Visual Studio 2019 and previous releases can be found
+[Here](https://github.com/tomasr/viasfora/releases/tag/v4.3).
 
 ## Rainbow Braces
 Colorize ()/[]/{} based on depth!<br/>
