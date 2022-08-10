@@ -1,7 +1,9 @@
 # Viasfora
 
-A Visual Studio 2020 extension that enhances the
-text editing experience!
+A Visual Studio extension that enhances the text editing experience!
+
+Current version only supports VS2022: [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=TomasRestrepo.Viasfora)<br>
+Last version for VS2019: [v4.3](https://github.com/tomasr/viasfora/releases/tag/v4.3)
 
 __Official Site__: http://viasfora.com/
 
