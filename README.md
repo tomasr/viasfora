@@ -79,4 +79,4 @@ Most features include support for the following languages
 * Fortran
 
 # Building
-Visual Studio 2017 is needed for building from source.
+Visual Studio 2022 is needed for building from source.
