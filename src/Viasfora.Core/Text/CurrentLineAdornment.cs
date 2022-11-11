@@ -138,7 +138,7 @@ namespace Winterdom.Viasfora.Text {
       if ( !IsEnabled() ) {
         return; // not enabled
       }
-      IWpfTextViewLineCollection textViewLines = view.TextViewLines;
+      IWpfTextViewLineCollection textViewLines = this.view.TextViewLines;
       if ( textViewLines == null )
         return; // not ready yet.
       SnapshotSpan span = line.Extent;
