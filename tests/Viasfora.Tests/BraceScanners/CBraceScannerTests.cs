@@ -41,6 +41,20 @@ namespace Viasfora.Tests.BraceScanners {
       Assert.Equal(4, chars.Count);
     }
     [Fact]
+    public void CanExtractBracesFollowingUtf8LiteralChar() {
+      String input = @"x = (u8' ')";
+      var extractor = new CBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2, chars.Count);
+    }
+    [Fact]
+    public void CanExtractBracesFollowingUtf8LiteralString() {
+      String input = "x = (u8\" \")";
+      var extractor = new CBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2, chars.Count);
+    }
+    [Fact]
     public void CanExtractBracesFollowingCpp14QuoteInIntLiteralHex() {
       String input = @"if ( x == 0x80'00 ) { }";
       var extractor = new CBraceScanner();

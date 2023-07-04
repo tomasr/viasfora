@@ -45,6 +45,14 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           this.status = stString;
           tc.Next();
           this.ParseString(tc);
+        } else if ( tc.Char() == 'u' && tc.NChar() == '8' && tc.NNChar() == '\'' ) {
+          this.status = stString;
+          tc.Skip(3);
+          this.ParseCharLiteral(tc);
+        } else if ( tc.Char() == 'u' && tc.NChar() == '8' && tc.NNChar() == '"' ) {
+          this.status = stString;
+          tc.Skip(3);
+          this.ParseString(tc);
         } else if ( IsHexDigit(tc.Char()) && tc.NChar() == '\'' ) {
           // this is a C++ 14 digit separator, such as 1'000'000 or 0xFFFF'0000
           tc.Skip(2);
