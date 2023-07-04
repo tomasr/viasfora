@@ -140,7 +140,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       this.status = stText;
     }
 
-    private void ParseMultiLineString(ITextChars tc) {
+    private void ParseRawString(ITextChars tc) {
       while ( !tc.AtEnd ) {
         if ( tc.Char() == '"' && tc.NChar() == '"' && tc.NNChar() == '"' ) {
           // done
@@ -152,7 +152,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
         }
       }
     }
-    private void ParseRawString(ITextChars tc) {
+    private void ParseMultiLineString(ITextChars tc) {
       while ( !tc.AtEnd ) {
         if ( tc.Char() == '"' && tc.NChar() == '"' ) {
           // means a single embedded double quote
