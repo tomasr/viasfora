@@ -100,10 +100,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.1</Version>
+      <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Sdk">
-      <Version>17.3.32804.24</Version>
+      <Version>17.6.36389</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

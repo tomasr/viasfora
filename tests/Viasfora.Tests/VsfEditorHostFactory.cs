@@ -61,7 +61,6 @@ namespace Viasfora.Tests {
           sb.AppendLine();
         }
         string errorMessage = sb.ToString();
-        var asm = GetEditorAssembly("Microsoft.VisualStudio.CoreUtility");
         Console.WriteLine(errorMessage);
         throw;
         //Display or log the error based on your application.
@@ -89,7 +88,6 @@ namespace Viasfora.Tests {
 
     private void AddEditorAssemblies(IList<ComposablePartCatalog> catalogs) {
       var editorParts = new String[] {
-        "Microsoft.VisualStudio.CoreUtility",
         "Microsoft.VisualStudio.Platform.VSEditor",
         "Microsoft.VisualStudio.Text.Internal",
         "Microsoft.VisualStudio.Text.Logic",

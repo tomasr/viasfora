@@ -20,7 +20,7 @@ namespace Viasfora.Tests {
                 Path.Combine(vsInstallDir, @"Common7\IDE\CommonExtensions\Microsoft\Editor"),
                 Path.Combine(vsInstallDir, @"Common7\IDE"),
                 Path.Combine(vsInstallDir, @"Common7\IDE\PrivateAssemblies"),
-                Path.Combine(vsInstallDir, @"Common7\IDE\PublicAsemblies"),
+                Path.Combine(vsInstallDir, @"Common7\IDE\PublicAssemblies"),
             };
         AppDomain.CurrentDomain.AssemblyResolve += OnAssemblyResolve;
       }
@@ -67,6 +67,7 @@ namespace Viasfora.Tests {
           return Assembly.LoadFrom(path);
         }
       }
+      Console.WriteLine("Could not resolve: {0}", name);
       return null;
     }
 
