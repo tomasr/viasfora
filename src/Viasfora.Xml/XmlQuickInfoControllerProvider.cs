@@ -13,7 +13,7 @@ namespace Winterdom.Viasfora.Xml {
   [ContentType(XmlConstants.CT_XAML)]
   internal class XmlQuickInfoControllerProvider : IIntellisenseControllerProvider {
     [Import]
-    internal IQuickInfoBroker QuickInfoBroker { get; set; }
+    internal IAsyncQuickInfoBroker QuickInfoBroker { get; set; }
 
     public IIntellisenseController TryCreateIntellisenseController(
         ITextView textView, IList<ITextBuffer> subjectBuffers) {
