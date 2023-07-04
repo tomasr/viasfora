@@ -7,7 +7,9 @@ using Xunit;
 
 namespace Viasfora.Tests.Rainbow {
   public class TextBufferBracesTests : VsfVsTestBase {
+#if VS_TESTS
     [Fact]
+#endif
     public void CanParseEntireFile() {
       var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -16,7 +18,9 @@ namespace Viasfora.Tests.Rainbow {
       Assert.Equal(32, cache.BracesInSpans(new NormalizedSnapshotSpanCollection(span)).Count());
     }
 
+#if VS_TESTS
     [Fact]
+#endif
     public void CanFindExtraClosingBraces() {
       var textBuffer = GetCSharpTextBuffer("RainbowErrors.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -25,7 +29,9 @@ namespace Viasfora.Tests.Rainbow {
       Assert.Equal(2, cache.ErrorBracesInSpans(new NormalizedSnapshotSpanCollection(span)).Count());
     }
 
+#if VS_TESTS
     [Fact]
+#endif
     public void CanInvalidate() {
       var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -42,7 +48,9 @@ namespace Viasfora.Tests.Rainbow {
       Assert.Equal(331, cache.LastParsedPosition);
     }
 
+#if VS_TESTS
     [Fact]
+#endif
     public void CanGetSurroundingBraces() {
       var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -62,7 +70,9 @@ namespace Viasfora.Tests.Rainbow {
       Assert.Equal('}', matchingBraces.Item2.Brace);
     }
 
+#if VS_TESTS
     [Fact]
+#endif
     public void CanGetSurroundingBraces_TrackNextScope() {
       var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -84,7 +94,9 @@ namespace Viasfora.Tests.Rainbow {
       Assert.Equal(openingBrace.Position, matchingBraces.Item1.Position);
     }
 
+#if VS_TESTS
     [Fact]
+#endif
     public void CanGetSurroundingBraces_TrackInsertionPoint() {
       var textBuffer = GetCSharpTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -106,7 +118,9 @@ namespace Viasfora.Tests.Rainbow {
       Assert.True(openingBrace.Position > matchingBraces.Item1.Position);
     }
 
+#if VS_TESTS
     [Fact]
+#endif
     public void ParsingPlainTextFileDoesntScanDocument() {
       var textBuffer = GetPlainTextBuffer("Rainbow1.txt");
       var snapshot = textBuffer.CurrentSnapshot;

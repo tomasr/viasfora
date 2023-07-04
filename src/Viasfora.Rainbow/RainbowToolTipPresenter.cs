@@ -9,10 +9,15 @@ using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Design;
 
 namespace Winterdom.Viasfora.Rainbow {
+  // Commenting this out, as I am not sure it's really needed anymore,
+  // and I can't find a way to convert the IQuickInfoSession usage
+  // to IAsyncQuickInfoSession since there's functionality missing there
+  /*
   [Export(typeof(IIntellisensePresenterProvider))]
   [Name("viasfora.rainbow.tooltip.presenter")]
   [Order(Before="Default Quick Info Presenter")]
   [ContentType(ContentTypes.Text)]
+  */
   public class RainbowToolTipPresenterProvider : IIntellisensePresenterProvider {
     [Import]
     public ITextEditorFactoryService EditorFactory { get; set; }

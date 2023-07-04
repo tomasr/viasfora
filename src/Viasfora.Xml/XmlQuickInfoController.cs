@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
@@ -8,7 +9,6 @@ namespace Winterdom.Viasfora.Xml {
   internal class XmlQuickInfoController : IIntellisenseController {
     private ITextView textView;
     private IList<ITextBuffer> textBuffers;
-    private IQuickInfoSession session;
     private XmlQuickInfoControllerProvider provider;
 
     internal XmlQuickInfoController(
@@ -44,9 +44,11 @@ namespace Winterdom.Viasfora.Xml {
         ITrackingPoint triggerPoint = point.Value.Snapshot.CreateTrackingPoint(
           point.Value.Position, PointTrackingMode.Positive);
         if ( this.provider.QuickInfoBroker.IsQuickInfoActive(this.textView) ) {
-          this.session = this.provider.QuickInfoBroker.TriggerQuickInfo(this.textView, triggerPoint, true);
+          Task task = this.provider.QuickInfoBroker.TriggerQuickInfoAsync(this.textView, triggerPoint);
+          // Can't wait until it's done. Just let it happen Async
         }
       }
     }
   }
+
 }

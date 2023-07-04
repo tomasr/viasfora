@@ -128,5 +128,13 @@ namespace Viasfora.Tests.StringScanners {
       Assert.Equal(new StringPart(6,3, StringPartType.FormatSpecifier), parser.Next());
       Assert.Null(parser.Next());
     }
+    [Fact]
+    public void MultiCharFormatSpecReturnsSomething() {
+      String input = "\"" + @"Read failed 0x%lx (%lu)" + "\"";
+      var parser = new CStringScanner(input);
+      Assert.Equal(new StringPart(15,3, StringPartType.FormatSpecifier), parser.Next());
+      Assert.Equal(new StringPart(20,3, StringPartType.FormatSpecifier), parser.Next());
+      Assert.Null(parser.Next());
+    }
   }
 }

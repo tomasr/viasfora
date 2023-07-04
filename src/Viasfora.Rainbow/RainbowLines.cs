@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Editor.Commanding.Commands;
 using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Utilities;
 
@@ -19,7 +20,7 @@ namespace Winterdom.Viasfora.Rainbow {
   public class RainbowLinesProvider : IWpfTextViewCreationListener {
     [Export(typeof(AdornmentLayerDefinition))]
     [Name(RainbowLines.LAYER)]
-    [Order(After = PredefinedAdornmentLayers.Text)]
+    [Order(After = PredefinedAdornmentLayers.BlockStructure)]
     public AdornmentLayerDefinition LinesLayer = null;
 
     [Import]
@@ -259,7 +260,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     private IList<LinePoint> MultiLineSpan(SnapshotPoint opening, SnapshotPoint closing) {
-      var indent = CalculateLeftOfFirstChar(opening, this.view.FormattedLineSource);
+      var indent = CalculateLeftIndent(opening, closing, this.view.FormattedLineSource);
       var lines = this.view.TextViewLines.GetTextViewLinesIntersectingSpan(new SnapshotSpan(opening, closing));
 
       // figure out where the vertical line goes
@@ -304,8 +305,17 @@ namespace Winterdom.Viasfora.Rainbow {
       return points;
     }
 
-    private double CalculateLeftOfFirstChar(SnapshotPoint open, IFormattedLineSource fls) {
-      var line = open.GetContainingLine();
+    private double CalculateLeftIndent(SnapshotPoint opening, SnapshotPoint closing, IFormattedLineSource fls) {
+      var openLine = opening.GetContainingLine();
+      var closeLine = closing.GetContainingLine();
+
+      var openIndent = CalculateLeftOfFirstChar(openLine, fls);
+      var closeIndent = CalculateLeftOfFirstChar(closeLine, fls);
+
+      return Math.Min(openIndent, closeIndent);
+    }
+
+    private double CalculateLeftOfFirstChar(ITextSnapshotLine line, IFormattedLineSource fls) {
       var x = 0d;
       var start = line.Start;
       int spacesSinceLastTab = 0;

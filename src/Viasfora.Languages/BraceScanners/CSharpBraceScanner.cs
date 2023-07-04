@@ -85,6 +85,12 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           this.parsingExpression = false;
           tc.Skip(3);
           return this.ParseInterpolatedString(tc, ref pos);
+        } else if ( tc.Char() == '"' && tc.NChar() == '"' && tc.NNChar() == '"' ) {
+          this.status = stString;
+          this.multiLine = true;
+          this.parsingExpression = false;
+          tc.Skip(3);
+          this.ParseRawString(tc);
         } else if ( tc.Char() == '"' ) {
           this.status = stString;
           tc.Next();
@@ -134,6 +140,18 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       this.status = stText;
     }
 
+    private void ParseRawString(ITextChars tc) {
+      while ( !tc.AtEnd ) {
+        if ( tc.Char() == '"' && tc.NChar() == '"' && tc.NNChar() == '"' ) {
+          // done
+          tc.Skip(3);
+          this.status = stText;
+          return;
+        } else {
+          tc.Next();
+        }
+      }
+    }
     private void ParseMultiLineString(ITextChars tc) {
       while ( !tc.AtEnd ) {
         if ( tc.Char() == '"' && tc.NChar() == '"' ) {

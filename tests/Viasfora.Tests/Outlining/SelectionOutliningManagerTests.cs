@@ -8,7 +8,9 @@ using Xunit;
 namespace Viasfora.Tests.Outlining {
   public class SelectionOutliningManagerTests : VsfVsTestBase {
 
+#if VS_TESTS
     [Fact]
+#endif
     public void GetTagsReturnsRegionsAdded() {
       var textBuffer = GetCSharpTextBuffer("Outlining1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -27,7 +29,9 @@ namespace Viasfora.Tests.Outlining {
       Assert.Equal(span2, tags.Last());
     }
 
+#if VS_TESTS
     [Fact]
+#endif
     public void RaisesTagsChangedEvent() {
       var textBuffer = GetCSharpTextBuffer("Outlining1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -49,7 +53,9 @@ namespace Viasfora.Tests.Outlining {
 
     // test that it creates the regions correctly when the
     // selection spans complete text lines
+#if VS_TESTS
     [Fact]
+#endif
     public void CreateRegionsAround_FullLines() {
       var textBuffer = GetCSharpTextBuffer("Outlining1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -71,7 +77,9 @@ namespace Viasfora.Tests.Outlining {
 
     // test that it creates the regions correctly when the
     // selection spans partial text lines
+#if VS_TESTS
     [Fact]
+#endif
     public void CreateRegionsAround_PartialLines() {
       var textBuffer = GetCSharpTextBuffer("Outlining1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -94,7 +102,9 @@ namespace Viasfora.Tests.Outlining {
 
     // test that it creates the regions correctly when the
     // selection starts at the beginning of the document
+#if VS_TESTS
     [Fact]
+#endif
     public void CreateRegionsAround_SelectionAtStartOfDocument() {
       var textBuffer = GetCSharpTextBuffer("Outlining1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
@@ -113,7 +123,9 @@ namespace Viasfora.Tests.Outlining {
 
     // test that it creates the regions correctly when the
     // selection ends at the end of the document
+#if VS_TESTS
     [Fact]
+#endif
     public void CreateRegionsAround_SelectionAtEndOfDocument() {
       var textBuffer = GetCSharpTextBuffer("Outlining1.txt");
       var snapshot = textBuffer.CurrentSnapshot;
