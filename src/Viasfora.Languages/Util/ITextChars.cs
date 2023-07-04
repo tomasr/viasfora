@@ -9,6 +9,8 @@ namespace Winterdom.Viasfora.Util {
     char Char();
     char NChar();
     char NNChar();
+    char NNNChar();
+    char NNNNChar();
     void Next();
     void Skip(int count);
     void SkipRemainder();

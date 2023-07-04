@@ -210,5 +210,23 @@ callCommented2(4);
       Assert.NotEqual(0, chars[1].State);
       Assert.NotEqual(0, chars[2].State);
     }
+
+    [Fact]
+    public void RawString1() {
+      String input = "\"\"\"some \r\n string with \r\n{\"quotes\"} \"\"\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = ExtractWithLines(extractor, input.Trim(), 0, 0);
+      Assert.Equal(0, chars.Count);
+    }
+    // TODO: Support later
+    /*
+    [Fact]
+    public void RawString2() {
+      String input = "$$\"\"\"class {call()}MyClass\r\n{{ }}\"\"\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = ExtractWithLines(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2, chars.Count);
+    }
+    */
   }
 }
