@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
@@ -13,6 +14,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
 
     private int status = stText;
     private int nestingLevel = 0;
+    private Stack<int> nestingLevelStack = new Stack<int>();
     private int istringNestLevel = 0;
     private bool parsingExpression = false;
     private bool multiLine = false;
@@ -78,12 +80,16 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           this.parsingExpression = false;
           this.status = stIString;
           tc.Skip(2);
+          this.istringNestLevel++;
+          this.nestingLevelStack.Push(this.nestingLevel);
           return this.ParseInterpolatedString(tc, ref pos);
         } else if ( tc.Char() == '$' && tc.NChar() == '@' && tc.NNChar() == '"' ) {
           this.status = stIString;
           this.multiLine = true;
           this.parsingExpression = false;
           tc.Skip(3);
+          this.istringNestLevel++;
+          this.nestingLevelStack.Push(this.nestingLevel);
           return this.ParseInterpolatedString(tc, ref pos);
         } else if ( tc.Char() == '"' && tc.NChar() == '"' && tc.NNChar() == '"' ) {
           this.status = stString;
@@ -193,6 +199,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
             tc.Skip(2);
             this.parsingExpression = false;
             this.istringNestLevel++;
+            this.nestingLevelStack.Push(this.nestingLevel);
             this.nestingLevel = 0;
             if ( this.ParseInterpolatedString(tc, ref pos) )
               return true;
@@ -254,15 +261,17 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
             // done parsing the interpolated string
             this.multiLine = false;
             this.istringNestLevel--;
+            this.nestingLevel = this.nestingLevelStack.Pop();
             if (this.istringNestLevel <= 0) {
               this.istringNestLevel = 0;
               this.status = stText;
+              tc.Next();
+              break;
             } else {
               this.status = stIString;
               this.parsingExpression = true;
+              tc.Next();
             }
-            tc.Next();
-            break;
           } else {
             tc.Next();
           }
