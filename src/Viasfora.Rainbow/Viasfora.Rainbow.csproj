@@ -103,7 +103,7 @@
       <Version>13.0.3</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Sdk">
-      <Version>17.6.36389</Version>
+      <Version>17.10.40171</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
