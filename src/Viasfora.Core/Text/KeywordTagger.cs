@@ -179,6 +179,11 @@ namespace Winterdom.Viasfora.Text {
     }
 
     public void Dispose() {
+      // If we don't do this, Dispose() ends up getting called
+      // recursively for some reason.
+      if (this.settings == null) {
+        return; // done already
+      }
       if ( this.settings != null ) {
         this.settings.SettingsChanged -= OnSettingsChanged;
         this.settings = null;

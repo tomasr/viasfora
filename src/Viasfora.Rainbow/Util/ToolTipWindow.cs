@@ -167,7 +167,6 @@ namespace Winterdom.Viasfora.Util {
     }
 
     private void ReleaseView() {
-      System.Diagnostics.Debug.WriteLine("Releasing tooltip view");
       if ( this.tipView != null ) {
         this.tipView.ViewportWidthChanged -= this.OnViewportWidthChanged;
         this.wrapper.Child = null;
@@ -179,7 +178,6 @@ namespace Winterdom.Viasfora.Util {
         }
         this.tipView = null;
       }
-      System.Diagnostics.Debug.WriteLine("Releasing tooltip view done");
     }
     
     // TextViewModel for our ToolTip window
@@ -231,6 +229,9 @@ namespace Winterdom.Viasfora.Util {
       // as we don't own the buffers; the source view will
       // dispose them.
       public void Dispose() {
+        this.DataBuffer = null;
+        this.DataModel = null;
+        this.EditBuffer = null;
       }
     }
   }
