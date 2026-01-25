@@ -10,9 +10,9 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Rainbow {
 
-  //[Export(typeof(IAsyncQuickInfoSourceProvider))]
+  [Export(typeof(IAsyncQuickInfoSourceProvider))]
   [Name("viasfora.rainbow.tooltip.source")]
-  [Order]
+  [Order(After = "Default")]
   [ContentType(ContentTypes.Text)]
   public class RainbowToolTipSourceProvider : IAsyncQuickInfoSourceProvider {
     [Import]
@@ -29,16 +29,18 @@ namespace Winterdom.Viasfora.Rainbow {
     private ITextBuffer textBuffer;
     private RainbowToolTipSourceProvider provider;
     private IToolTipWindow toolTipWindow;
+    private bool isRoslynBuffer;
 
     public RainbowToolTipSource(ITextBuffer textBuffer, RainbowToolTipSourceProvider provider) {
       this.textBuffer = textBuffer;
       this.provider = provider;
+      this.isRoslynBuffer = textBuffer.ContentType.IsOfType(ContentTypes.Roslyn);
     }
 
     public async Task<QuickInfoItem> GetQuickInfoItemAsync(IAsyncQuickInfoSession session, CancellationToken cancellationToken) {
       ITrackingSpan applicableToSpan = null;
       QuickInfoItem result = null;
-      if ( !this.provider.Settings.RainbowToolTipsEnabled ) {
+      if ( !this.provider.Settings.RainbowToolTipsEnabled || cancellationToken.IsCancellationRequested ) {
         return result;
       }
       SnapshotPoint? triggerPoint = session.GetTriggerPoint(this.textBuffer.CurrentSnapshot);
@@ -59,26 +61,21 @@ namespace Winterdom.Viasfora.Rainbow {
         return result;
       }
 
-      session.StateChanged += OnQuickInfoSessionStateChanged;
+      // It appears in VS2026, any attempt to dispose the tool window
+      // will result in a StackOverflowException somewhere deep in VS code.
+      // Given this, no point in attaching to the Dismissed event, since
+      // we will crash if we attempt to do anything on it.
+      //session.StateChanged += OnQuickInfoSessionStateChanged;
 
       var span = new SnapshotSpan(triggerPoint.Value, 1);
       applicableToSpan = span.Snapshot.CreateTrackingSpan(span, SpanTrackingMode.EdgePositive);
 
       await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
 
-      // IQuickInfoSession.Dismissed is never firing in VS2017 15.6
-      // so if the tooltip window still exists, kill it
-      // and hope to god leaving IQuickInfoSession.Dismissed hooked
-      // up doesn't end up in a memory leak
-      if ( this.toolTipWindow != null ) {
-        this.toolTipWindow.Dispose();
-        this.toolTipWindow = null;
-      }
-
       if ( this.toolTipWindow == null ) {
         this.toolTipWindow = this.provider.ToolTipProvider.CreateToolTip(session.TextView);
-        this.toolTipWindow.SetSize(60, 5);
       }
+      this.toolTipWindow.SetSize(60, 5);
 
       var element = this.toolTipWindow.GetWindow(otherBrace.Value);
       if ( element != null ) {
@@ -120,17 +117,27 @@ namespace Winterdom.Viasfora.Rainbow {
       }
       var bracePair = rainbow.BufferBraces.GetBracePair(possibleBrace);
       if ( bracePair == null ) {
-        return true;
+        return false;
       }
+      // The cursor position is on the closing brace. Visual Studio already has 
+      // decent support on Roslyn for showing tooltips on closing braces, so we just
+      // ignore it
       if ( possibleBrace.Position == bracePair.Item1.Position ) {
         otherBrace = bracePair.Item2.ToPoint(possibleBrace.Snapshot);
-      } else {
+        return true;
+      } else if ( !this.isRoslynBuffer ) {
         otherBrace = bracePair.Item1.ToPoint(possibleBrace.Snapshot);
+        return true;
       }
-      return true;
+      return false;
     }
 
     public void Dispose() {
+      this.textBuffer = null;
+      if ( this.toolTipWindow != null ) {
+        this.toolTipWindow.Dispose();
+        this.toolTipWindow = null;
+      }
     }
   }
 }
