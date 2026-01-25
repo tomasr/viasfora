@@ -34,6 +34,26 @@
         <InstallationTarget Version="[17.0,)" Id="Microsoft.VisualStudio.Premium">
             <ProductArchitecture>amd64</ProductArchitecture>
         </InstallationTarget>
+        <!-- arm64 versions -->
+        <InstallationTarget Version="[17.0,)" Id="Microsoft.VisualStudio.Community">
+            <ProductArchitecture>arm64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,)" Id="Microsoft.VisualStudio.Pro">
+            <ProductArchitecture>arm64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,)" Id="Microsoft.VisualStudio.Enterprise">
+            <ProductArchitecture>arm64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,)" Id="Microsoft.VisualStudio.VSWinExpress">
+            <ProductArchitecture>arm64</ProductArchitecture>
+        </InstallationTarget>
+        <InstallationTarget Version="[17.0,)" Id="Microsoft.VisualStudio.VSWinDesktopExpress">
+            <ProductArchitecture>arm64</ProductArchitecture>
+        </InstallationTarget>
+        <!-- SSMS -->
+        <InstallationTarget Version="[21.0,)" Id="Microsoft.VisualStudio.Ssms">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.7,)" />
