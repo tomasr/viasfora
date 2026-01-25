@@ -19,6 +19,9 @@
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '17.0' ">
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '18.0' ">
+    <MinimumVisualStudioVersion>18.0</MinimumVisualStudioVersion>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
