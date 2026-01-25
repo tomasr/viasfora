@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.Language.Intellisense;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Adornments;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Utilities;
 using Winterdom.Viasfora.Design;
 
 namespace Winterdom.Viasfora.Rainbow {

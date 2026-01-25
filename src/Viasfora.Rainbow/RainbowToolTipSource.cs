@@ -10,7 +10,7 @@ using Microsoft.VisualStudio.Utilities;
 
 namespace Winterdom.Viasfora.Rainbow {
 
-  [Export(typeof(IAsyncQuickInfoSourceProvider))]
+  //[Export(typeof(IAsyncQuickInfoSourceProvider))]
   [Name("viasfora.rainbow.tooltip.source")]
   [Order]
   [ContentType(ContentTypes.Text)]
