@@ -20,8 +20,7 @@ namespace Winterdom.Viasfora.Languages {
       => new CSharpStringScanner(text, classificationName);
 
     public override bool IsKeywordClassification(String classificationType) {
-      return base.IsKeywordClassification(classificationType)
-          || CompareClassification(classificationType, "keyword - control");
+      return base.HasClassificationType(classificationType, "Keyword");
 
     }
     [ImportingConstructor]
@@ -32,11 +31,8 @@ namespace Winterdom.Viasfora.Languages {
   }
 
   public class CSharpSettings : LanguageSettings {
-    protected override String[] ControlFlowDefaults => new String[] {
-         "if", "else", "while", "do", "for", "foreach",
-         "switch", "break", "continue", "return", "goto", "throw",
-         "yield"
-      };
+    protected override String[] ControlFlowDefaults => EMPTY;
+
     protected override String[] LinqDefaults => new String[] {
          "select", "let", "where", "join", "orderby", "group",
          "by", "on", "equals", "into", "from", "descending",
