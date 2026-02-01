@@ -2,6 +2,7 @@
 
 namespace Winterdom.Viasfora {
   public static class ContentTypes {
+    public const String Roslyn = "Roslyn Languages";
     public const String Any = "any";
     public const String Text = "text";
     public const String Projection = "projection";

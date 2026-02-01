@@ -229,6 +229,9 @@ namespace Winterdom.Viasfora.Util {
       // as we don't own the buffers; the source view will
       // dispose them.
       public void Dispose() {
+        this.DataBuffer = null;
+        this.DataModel = null;
+        this.EditBuffer = null;
       }
     }
   }

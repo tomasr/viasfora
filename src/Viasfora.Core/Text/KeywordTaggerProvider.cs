@@ -21,7 +21,9 @@ namespace Winterdom.Viasfora.Text {
     [Import]
     private IClassificationFormatMapService formatService = null;
     [Import]
-    public IBufferTagAggregatorFactoryService Aggregator { get; set; }
+    public IViewTagAggregatorFactoryService ViewAggregator { get; set; }
+    [Import]
+    public IBufferTagAggregatorFactoryService BufferAggregator { get; set; }
     [Import]
     public ILanguageFactory LanguageFactory { get; set; }
     [Import]
@@ -33,7 +35,9 @@ namespace Winterdom.Viasfora.Text {
           () => new ItalicsFormatter(textView, map, Settings)
         );
       italicsFixer.AddClassification(Constants.FLOW_CONTROL_CLASSIF_NAME);
-      return new KeywordTagger(buffer, this) as ITagger<T>;
+      return textView.Properties.GetOrCreateSingletonProperty(
+        () => new KeywordTagger(buffer, textView, this) as ITagger<T>
+      );
     }
 
     public KeywordTag GetTag(String name) {

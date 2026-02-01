@@ -160,6 +160,13 @@ callCommented2(4);
       var chars = Extract(extractor, input.Trim(), 0, 0);
       Assert.Equal(2+1+1+1+1+1+1+2, chars.Count);
     }
+    [Fact]
+    public void Bug344_InterpolatedStringEmbedded2() {
+      String input = "($\"{ $\"{a}\" }\")";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input.Trim(), 0, 0);
+      Assert.Equal(2+2+2, chars.Count);
+    }
 
 
     [Fact]

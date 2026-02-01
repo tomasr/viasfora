@@ -43,6 +43,10 @@ namespace Winterdom.Viasfora.Languages {
       return classificationType.Equals(name, StringComparison.OrdinalIgnoreCase);
     }
 
+    protected bool HasClassificationType(String classificationType, String name) {
+      return classificationType.IndexOf(name, StringComparison.OrdinalIgnoreCase) >= 0;
+    }
+
     public LanguageInfo() {
       this.NormalizationFunction = x => x;
     }
