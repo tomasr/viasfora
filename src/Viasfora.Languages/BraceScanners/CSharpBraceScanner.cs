@@ -75,7 +75,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           this.multiLine = true;
           tc.Skip(2);
           this.ParseMultiLineString(tc);
-        } else if ( tc.Char() == '$' && tc.NChar() == '"' ) {
+        } else if ( tc.Char() == '$' && tc.NChar() == '"' && tc.NNChar() != '"') {
           // Roslyn interpolated string
           this.parsingExpression = false;
           this.status = stIString;
