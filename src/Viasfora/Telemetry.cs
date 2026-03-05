@@ -4,7 +4,7 @@ namespace Winterdom.Viasfora {
   public class Telemetry {
     public bool Enabled { get; private set; }
 
-    public Telemetry(bool enabled, EnvDTE80.DTE2 dte = null) {
+    public Telemetry(bool enabled) {
     }
 
     public void WriteEvent(String eventName) {
