@@ -66,7 +66,15 @@ namespace Winterdom.Viasfora.Text {
         }
       } finally {
         this.formatMap.EndBatchUpdate();
-        this.working = false;
+        // If we change the formats, the corresponding
+        // format map update event could fire just after we leave
+        // this block, causing cascading calls.
+        // To avoid this, delay resetting the working flag
+        // until after some small time has passed.
+        System.Threading.Tasks.Task.Delay(500).ContinueWith(
+          (parentTask) => this.working = false,
+          System.Threading.Tasks.TaskScheduler.Default
+        );
       }
     }
     private void MakeItalicsIfApplies(IClassificationType classifierType) {

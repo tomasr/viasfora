@@ -88,6 +88,9 @@
     <Compile Include="VsfEditorHost.cs" />
     <Compile Include="VsfEditorHostFactory.cs" />
     <Compile Include="VsfVsTestBase.cs" />
+    <Compile Include="Text\TestDoubles.cs" />
+    <Compile Include="Text\ItalicsFormatterTests.cs" />
+    <Compile Include="Text\BoldAsItalicsFormatterTests.cs" />
     <Compile Include="VsSolutionTests.cs" />
   </ItemGroup>
   <ItemGroup>
