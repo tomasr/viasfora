@@ -128,7 +128,7 @@ namespace Winterdom.Viasfora.Text {
     private void SetItalics(IClassificationType classifierType, bool enable) {
       var tp = this.formatMap.GetTextProperties(classifierType);
 
-      if ( !tp.Italic ) {
+      if ( tp.Italic != enable ) {
         tp = tp.SetItalic(enable);
         this.formatMap.SetTextProperties(classifierType, tp);
       }
