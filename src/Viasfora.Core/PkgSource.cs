@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.VisualStudio.Shell;
 using Winterdom.Viasfora.Compatibility;
 using Winterdom.Viasfora.Contracts;
 
@@ -8,6 +9,9 @@ namespace Winterdom.Viasfora {
     private static Lazy<ILogger> logger = new Lazy<ILogger>(GetLogger);
 
     public static void LogError(String message, Exception ex) {
+      if ( !ThreadHelper.CheckAccess() ) {
+        return;
+      }
       if ( logger.Value != null ) {
         logger.Value.LogError(message, ex);
       }

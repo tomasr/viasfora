@@ -50,8 +50,7 @@ namespace Winterdom.Viasfora.Options {
     public void Save() {
       ThreadHelper.ThrowIfNotOnUIThread();
       Guid category = new Guid(FontsAndColorsCategories.TextEditorCategory);
-      uint flags = (uint)(__FCSTORAGEFLAGS.FCSF_LOADDEFAULTS
-                        | __FCSTORAGEFLAGS.FCSF_PROPAGATECHANGES);
+      uint flags = (uint)(__FCSTORAGEFLAGS.FCSF_PROPAGATECHANGES);
       var hr = this.storage.Storage.OpenCategory(ref category, flags);
       ErrorHandler.ThrowOnFailure(hr);
 

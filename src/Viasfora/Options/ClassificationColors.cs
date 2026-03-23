@@ -68,7 +68,9 @@ namespace Winterdom.Viasfora.Options {
       if ( this.HasChanged() ) {
         ColorableItemInfo[] colors = new ColorableItemInfo[1];
         var hr = colorStorage.Storage.GetItem(this.classificationName, colors);
-        ErrorHandler.ThrowOnFailure(hr);
+        if ( ErrorHandler.Failed(hr) ) {
+          colors[0] = new ColorableItemInfo();
+        }
 
         AssignForSave(colorStorage, colors);
 
