@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora.Options {
 
     public override void SaveSettingsToStorage() {
       ThreadHelper.ThrowIfNotOnUIThread();
+      if ( this.colors == null ) return;
       var rainbowSettings = SettingsContext.GetService<IRainbowSettings>();
 
       rainbowSettings.RainbowDepth = RainbowDepth;
