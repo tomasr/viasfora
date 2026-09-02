@@ -1,6 +1,4 @@
-﻿using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
-using System;
+﻿using System;
 using System.ComponentModel.Composition;
 using Winterdom.Viasfora.Contracts;
 using Winterdom.Viasfora.Settings;
@@ -13,12 +11,11 @@ namespace Winterdom.Viasfora {
     public bool Enabled  => this.telemetry.Enabled;
 
     [ImportingConstructor]
-    public TelemetryService(SVsServiceProvider serviceProvider, ITypedSettingsStore settings) {
+    public TelemetryService(ITypedSettingsStore settings) {
       // We can't ask for IVsfSettings here because we'd create a circular
       // dependency chain, which would cause MEF to fail.
       bool telemetryEnabled = false;//settings.GetBoolean(nameof(IVsfSettings.TelemetryEnabled), true);
-      var dte = (EnvDTE80.DTE2)serviceProvider.GetService(typeof(SDTE));
-      this.telemetry = new Telemetry(telemetryEnabled, dte);
+      this.telemetry = new Telemetry(telemetryEnabled);
     }
 
     public void WriteEvent(string eventName) {
