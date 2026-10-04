@@ -12,6 +12,7 @@ namespace Winterdom.Viasfora.Rainbow {
     public char Brace => this.charPos.Char;
     public int Depth => this.depth;
     public int Position => this.charPos.Position;
+    public int Length => this.charPos.Length;
     public int State => this.charPos.State;
 
     public BracePos(char ch, int pos, int depth) {
@@ -24,7 +25,7 @@ namespace Winterdom.Viasfora.Rainbow {
     }
 
     public ITagSpan<RainbowTag> ToSpan(ITextSnapshot snapshot, IClassificationType type) {
-      var span = new SnapshotSpan(snapshot, Position, 1);
+      var span = new SnapshotSpan(snapshot, Position, Length);
       return new TagSpan<RainbowTag>(span, new RainbowTag(type));
     }
 

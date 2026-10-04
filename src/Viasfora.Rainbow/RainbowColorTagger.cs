@@ -54,7 +54,7 @@ namespace Winterdom.Viasfora.Rainbow {
       }
       foreach ( var error in braceCache.ErrorBracesInSpans(spans) ) {
         yield return new TagSpan<RainbowTag>(
-          new SnapshotSpan(snapshot, error.Position, 1),
+          new SnapshotSpan(snapshot, error.Position, error.Length),
           new RainbowTag(this.rainbowError)
           );
       }

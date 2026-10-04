@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Winterdom.Viasfora.Languages.BraceScanners;
 using Xunit;
 
@@ -200,6 +201,23 @@ callCommented2(4);
     }
 
     [Fact]
+    public void InterpolatedAtStringStaysVerbatimAfterNestedInterpolatedString() {
+      String input = "$@\"{$\"{a}\"}\\{b}\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("{{}}{}", Braces(chars));
+    }
+    [Fact]
+    public void InterpolatedStringCanResumeFromBraceInExpression() {
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, "$\"{ a(", 0, 0);
+      Assert.Equal("{(", Braces(chars));
+      extractor.Reset(chars.Last().State);
+      chars = Extract(extractor, "b) }\" (x)", 0, 0, false);
+      Assert.Equal(")}()", Braces(chars));
+    }
+
+    [Fact]
     public void InterpolatedStringNonRestartable1() {
       String input = "$\"some {s";
       var extractor = new CSharpBraceScanner();
@@ -266,15 +284,91 @@ callCommented2(4);
       var chars = Extract(extractor, input, 0, 0);
       Assert.Equal("()", Braces(chars));
     }
-    // TODO: Support later
-    /*
     [Fact]
     public void RawString2() {
       String input = "$$\"\"\"class {call()}MyClass\r\n{{ }}\"\"\"";
       var extractor = new CSharpBraceScanner();
       var chars = ExtractWithLines(extractor, input.Trim(), 0, 0);
-      Assert.Equal(2, chars.Count);
+      Assert.Equal("{}", Braces(chars));
     }
-    */
+    [Fact]
+    public void InterpolatedRawStringWithQuotes() {
+      String input = "($\"\"\"x {a[\"k\"]} \"y\" \"\"\")";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("({[]})", Braces(chars));
+    }
+    [Fact]
+    public void InterpolatedRawStringMultiLine() {
+      String input = "($\"\"\"some \r\n string with \r\n{\"quotes\"} \"\"\")";
+      var extractor = new CSharpBraceScanner();
+      var chars = ExtractWithLines(extractor, input, 0, 0);
+      Assert.Equal("({})", Braces(chars));
+    }
+    [Fact]
+    public void InterpolatedRawStringIgnoresBracesShorterThanDelimiter() {
+      String input = "$$\"\"\"\r\n"
+                   + "  { \"a\": {{x[0]}} }\r\n"
+                   + "  \"\"\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = ExtractWithLines(extractor, input, 0, 0);
+      Assert.Equal("{[]}", Braces(chars));
+    }
+    [Fact]
+    public void InterpolatedRawStringUsesInnermostBracesForInterpolation() {
+      String input = "$$\"\"\"X{{{1+1}}}Z\"\"\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("{}", Braces(chars));
+      Assert.Equal(new[] { 7, 12 }, chars.Select(c => c.Position));
+      Assert.Equal(new[] { 2, 2 }, chars.Select(c => c.Length));
+    }
+    [Fact]
+    public void InterpolatedRawStringDelimitersSpanAllTheirBraces() {
+      String input = "$$$\"\"\"{{{a}}}\"\"\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("{}", Braces(chars));
+      Assert.Equal(new[] { 6, 10 }, chars.Select(c => c.Position));
+      Assert.Equal(new[] { 3, 3 }, chars.Select(c => c.Length));
+    }
+    [Fact]
+    public void BracesInInterpolatedRawStringExpressionAreSingleCharacters() {
+      String input = "$$\"\"\"{{ a(b) }}\"\"\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("{()}", Braces(chars));
+      Assert.Equal(new[] { 2, 1, 1, 2 }, chars.Select(c => c.Length));
+    }
+    [Fact]
+    public void InterpolatedRawStringWithBracesInExpression() {
+      String input = "$$\"\"\"{{ new[] { 1 }.Length }}\"\"\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("{[]{}}", Braces(chars));
+    }
+    [Fact]
+    public void InterpolatedRawStringWithLongerDelimiter() {
+      String input = "$\"\"\"\"a \"\"\" {x} \"\"\"\" (y)";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("{}()", Braces(chars));
+    }
+    [Fact]
+    public void InterpolatedRawStringNestedInInterpolatedString() {
+      String input = "$\"{ $$\"\"\"{{a}}\"\"\" }\"";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("{{}}", Braces(chars));
+    }
+    [Fact]
+    public void InterpolatedRawStringCanResumeFromBraceInExpression() {
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, "$$\"\"\"{{ a(", 0, 0);
+      Assert.Equal("{(", Braces(chars));
+      extractor.Reset(chars.Last().State);
+      chars = Extract(extractor, "b) }} {x} \"\"\" (y)", 0, 0, false);
+      Assert.Equal(")}()", Braces(chars));
+    }
   }
 }

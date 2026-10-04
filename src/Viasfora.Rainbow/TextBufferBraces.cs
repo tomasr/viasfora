@@ -257,7 +257,7 @@ namespace Winterdom.Viasfora.Rainbow {
         } else if ( pairs.Count(r.Brace) > 0 ) {
           pairs.Pop(r.Brace);
         }
-        startPosition = r.Position + 1;
+        startPosition = r.Position + r.Length;
         lastGoodBrace = i;
         lastState = r.State;
       }
