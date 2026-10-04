@@ -225,6 +225,47 @@ callCommented2(4);
       var chars = ExtractWithLines(extractor, input.Trim(), 0, 0);
       Assert.Equal(0, chars.Count);
     }
+    [Fact]
+    public void RawStringMultiLineWithQuotesAndBraces() {
+      String input = "(\"\"\"\r\n"
+                   + "  {\r\n"
+                   + "    \"version\": \"0.1\",\r\n"
+                   + "    \"issues\": [\r\n"
+                   + "      {\r\n"
+                   + "  }}}}}}}}\r\n"
+                   + "        \"uri\": \"C:\\\\agent\\\\Program.cs\",\r\n"
+                   + "        \"shortMessage\": \"It features \\\"quoted text\\\".\",\r\n"
+                   + "      }\r\n"
+                   + "    ]\r\n"
+                   + "  }\r\n"
+                   + "  \"\"\")";
+      var extractor = new CSharpBraceScanner();
+      var chars = ExtractWithLines(extractor, input, 0, 0);
+      Assert.Equal("()", Braces(chars));
+    }
+    [Fact]
+    public void RawStringSingleLineWithQuotes() {
+      String input = "(\"\"\"a \"b\" {c\"\" (\"\"\")";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("()", Braces(chars));
+    }
+    [Fact]
+    public void RawStringWithLongerDelimiter() {
+      String input = "(\"\"\"\"\r\n"
+                   + "  \"\"\" { \"\"\"\r\n"
+                   + "  \"\"\"\")";
+      var extractor = new CSharpBraceScanner();
+      var chars = ExtractWithLines(extractor, input, 0, 0);
+      Assert.Equal("()", Braces(chars));
+    }
+    [Fact]
+    public void RawStringWithLongerDelimiterSingleLine() {
+      String input = "(\"\"\"\"a \"\"\" { \"\"\"\")";
+      var extractor = new CSharpBraceScanner();
+      var chars = Extract(extractor, input, 0, 0);
+      Assert.Equal("()", Braces(chars));
+    }
     // TODO: Support later
     /*
     [Fact]

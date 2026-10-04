@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Winterdom.Viasfora.Rainbow;
 using Winterdom.Viasfora.Util;
 
@@ -32,6 +33,9 @@ namespace Viasfora.Tests.BraceScanners {
         }
       }
       return result;
+    }
+    protected static String Braces(IEnumerable<CharPos> chars) {
+      return new String(chars.Select(c => c.Char).ToArray());
     }
   }
 }

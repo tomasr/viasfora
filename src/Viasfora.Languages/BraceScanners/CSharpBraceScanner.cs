@@ -18,6 +18,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
     private int istringNestLevel = 0;
     private bool parsingExpression = false;
     private bool multiLine = false;
+    private int rawStringQuotes = 0;
 
     public String BraceList => "(){}[]";
 
@@ -30,6 +31,7 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       this.nestingLevel = (state & 0xFF0000) >> 24;
       this.multiLine = (state & 0x04000000) != 0;
       this.istringNestLevel = (state & 0xFF00) >> 16; 
+      this.rawStringQuotes = 0;
     }
 
     public bool CanResume(CharPos brace) {
@@ -40,7 +42,9 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       while ( !tc.AtEnd ) {
         switch ( this.status ) {
           case stString:
-            if ( this.multiLine ) {
+            if ( this.rawStringQuotes > 0 ) {
+              ParseRawString(tc);
+            } else if ( this.multiLine ) {
               ParseMultiLineString(tc);
             } else {
               ParseString(tc);
@@ -93,9 +97,8 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
           return this.ParseInterpolatedString(tc, ref pos);
         } else if ( tc.Char() == '"' && tc.NChar() == '"' && tc.NNChar() == '"' ) {
           this.status = stString;
-          this.multiLine = true;
           this.parsingExpression = false;
-          tc.Skip(3);
+          this.rawStringQuotes = SkipQuotes(tc);
           this.ParseRawString(tc);
         } else if ( tc.Char() == '"' ) {
           this.status = stString;
@@ -146,17 +149,29 @@ namespace Winterdom.Viasfora.Languages.BraceScanners {
       this.status = stText;
     }
 
+    // C# 11 raw string literal: closed by a run of quotes
+    // at least as long as the opening one
     private void ParseRawString(ITextChars tc) {
       while ( !tc.AtEnd ) {
-        if ( tc.Char() == '"' && tc.NChar() == '"' && tc.NNChar() == '"' ) {
-          // done
-          tc.Skip(3);
-          this.status = stText;
-          return;
+        if ( tc.Char() == '"' ) {
+          if ( SkipQuotes(tc) >= this.rawStringQuotes ) {
+            this.status = stText;
+            this.rawStringQuotes = 0;
+            return;
+          }
         } else {
           tc.Next();
         }
       }
+    }
+
+    private static int SkipQuotes(ITextChars tc) {
+      int count = 0;
+      while ( !tc.AtEnd && tc.Char() == '"' ) {
+        tc.Next();
+        count++;
+      }
+      return count;
     }
     private void ParseMultiLineString(ITextChars tc) {
       while ( !tc.AtEnd ) {
